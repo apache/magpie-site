@@ -1,0 +1,20 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { getCollection } from "astro:content";
+
+const all = await getCollection("docs");
+const first = all.find((e) => e.id === "README.md") ?? all[0];
+---
+
+<DocsLayout title="Documentation" currentSlug="">
+  <h1>Apache Magpie Documentation</h1>
+  <p>
+    Welcome. Source: <a href="https://github.com/apache/airflow-steward/tree/main/docs">apache/airflow-steward/docs</a>.
+  </p>
+  <p>Pick a topic from the sidebar to get started.</p>
+  {first && (
+    <p>
+      <a href={`/docs/${first.id.replace(/\.md$/, "")}`}>→ Start with {first.id.replace(/\.md$/, "")}</a>
+    </p>
+  )}
+</DocsLayout>

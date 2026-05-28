@@ -1,0 +1,87 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { SiteHeader } from "../components/landing/SiteHeader";
+import { SiteFooter } from "../components/landing/SiteFooter";
+
+interface Props {
+  title?: string;
+  currentSlug: string;
+}
+
+const { title, currentSlug } = Astro.props;
+const all = await getCollection("docs");
+
+type NavGroup = { name: string; items: { slug: string; label: string }[] };
+const groups = new Map<string, NavGroup>();
+for (const entry of all) {
+  const parts = entry.id.split("/");
+  const groupKey = parts.length > 1 ? parts[0] : "_root";
+  if (!groups.has(groupKey)) {
+    groups.set(groupKey, { name: groupKey, items: [] });
+  }
+  const label = entry.data.title ?? parts[parts.length - 1].replace(/\.md$/, "").replace(/-/g, " ");
+  groups.get(groupKey)!.items.push({ slug: entry.id.replace(/\.md$/, ""), label });
+}
+const sortedGroups = Array.from(groups.values()).sort((a, b) => {
+  if (a.name === "_root") return -1;
+  if (b.name === "_root") return 1;
+  return a.name.localeCompare(b.name);
+});
+---
+
+<BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"}>
+  <SiteHeader />
+  <div class="flex w-full">
+    <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
+      <a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a>
+      <nav class="flex flex-col gap-6">
+        {sortedGroups.map((group) => (
+          <div>
+            <div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">
+              {group.name === "_root" ? "Overview" : group.name.replace(/-/g, " ")}
+            </div>
+            <ul class="flex flex-col gap-1">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={`/docs/${item.slug}`}
+                    class={`block px-3 py-1.5 rounded-md text-body font-body capitalize ${currentSlug === item.slug ? "bg-brand-100 text-brand-800" : "text-default-font hover:bg-neutral-100"}`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </aside>
+    <main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8">
+      <article class="prose prose-neutral max-w-3xl mx-auto">
+        <slot />
+      </article>
+    </main>
+  </div>
+  <SiteFooter />
+</BaseLayout>
+
+<style is:global>
+  .prose h1 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--color-default-font); }
+  .prose h2 { font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--color-default-font); }
+  .prose h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-default-font); }
+  .prose p { margin: 0.75rem 0; color: var(--color-default-font); line-height: 1.7; }
+  .prose a { color: var(--color-brand-600); text-decoration: underline; }
+  .prose a:hover { color: var(--color-brand-700); }
+  .prose ul, .prose ol { margin: 0.75rem 0; padding-left: 1.5rem; color: var(--color-default-font); }
+  .prose li { margin: 0.25rem 0; }
+  .prose code { background: var(--color-neutral-100); padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875em; }
+  .prose pre { background: var(--color-neutral-900); color: var(--color-neutral-50); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; }
+  .prose pre code { background: transparent; padding: 0; color: inherit; }
+  .prose blockquote { border-left: 4px solid var(--color-brand-200); padding-left: 1rem; margin: 1rem 0; color: var(--color-subtext-color); font-style: italic; }
+  .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .prose th, .prose td { border: 1px solid var(--color-neutral-200); padding: 0.5rem 0.75rem; text-align: left; }
+  .prose th { background: var(--color-neutral-50); font-weight: 600; }
+  .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
+  .prose hr { border: none; border-top: 1px solid var(--color-neutral-200); margin: 2rem 0; }
+</style>

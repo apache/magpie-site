@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./website
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync docs from apache/airflow-steward
+        env:
+          MAGPIE_DOCS_REPO: https://github.com/apache/airflow-steward.git
+          MAGPIE_DOCS_BRANCH: main
+        run: npm run sync-docs
+
+      - name: Type check
+        run: npx astro check
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: website/dist
+          retention-days: 7
