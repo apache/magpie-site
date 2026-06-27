@@ -33,7 +33,7 @@ export function SiteFooter() {
             open-source maintainers.
           </span>
           <div className="flex items-center gap-2">
-            <a href="https://github.com/apache/airflow-steward" target="_blank" rel="noreferrer" aria-label="GitHub">
+            <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub">
               <IconButton icon={<GithubIcon />} />
             </a>
             <a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter">
@@ -49,15 +49,15 @@ export function SiteFooter() {
             <span className="text-body-bold font-body-bold text-default-font">Project</span>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href={`${withBase("/")}#features`}>Features</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")}>Documentation</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/issues">Roadmap</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/releases">Changelog</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Roadmap</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases">Changelog</a>
           </div>
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
             <span className="text-body-bold font-body-bold text-default-font">Community</span>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/blob/main/CONTRIBUTING.md">Contributing</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev-magpie@airflow.apache.org">Mailing Lists</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com">Slack Channel</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/issues">Issue Tracker</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a>
           </div>
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
             <span className="text-body-bold font-body-bold text-default-font">Foundation</span>

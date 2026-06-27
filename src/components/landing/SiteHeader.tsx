@@ -36,11 +36,11 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
       <div className="flex items-center gap-7 mobile:hidden">
         <a className="text-body font-body text-brand-600 hover:text-brand-700" href={`${withBase("/")}#features`}>Features</a>
         <a className="text-body font-body text-brand-600 hover:text-brand-700" href={withBase("/docs")}>Docs</a>
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://lists.apache.org/list.html?dev-magpie@airflow.apache.org">Community</a>
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://github.com/apache/airflow-steward">GitHub</a>
+        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Community</a>
+        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://github.com/apache/magpie">GitHub</a>
       </div>
       <div className="flex items-center gap-2">
-        <a href="https://github.com/apache/airflow-steward" target="_blank" rel="noreferrer" className="mobile:hidden">
+        <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" className="mobile:hidden">
           <Button className={ghBtnClass} variant="neutral-secondary" icon={<GithubIcon />}>
             Star on GitHub
           </Button>

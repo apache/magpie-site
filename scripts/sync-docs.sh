@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Sync docs from apache/airflow-steward into src/content/docs/
+# Sync docs from apache/magpie into src/content/docs/
 # Runs as prebuild step and locally via `npm run sync-docs`.
 set -euo pipefail
 
-REPO="${MAGPIE_DOCS_REPO:-https://github.com/apache/airflow-steward.git}"
+REPO="${MAGPIE_DOCS_REPO:-https://github.com/apache/magpie.git}"
 BRANCH="${MAGPIE_DOCS_BRANCH:-main}"
 DEST="$(dirname "$0")/../src/content/docs"
 

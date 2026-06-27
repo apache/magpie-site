@@ -1,8 +1,8 @@
 # Apache Magpie — Website
 
-Landing page and documentation hub for [Apache Magpie](https://github.com/apache/airflow-steward), an AI-powered assistant that helps open-source maintainers manage contributions more efficiently.
+Landing page and documentation hub for [Apache Magpie](https://github.com/apache/magpie), an AI assistant that helps open-source maintainers handle the repetitive parts of running a project — triage, mentoring, drafting fixes, and security-report handling — so they can focus on the work that needs a human.
 
-> Status: **incubating** under the Apache Software Foundation. Project source lives at [apache/airflow-steward](https://github.com/apache/airflow-steward); this repo holds the public website.
+> Status: **Apache Top-Level Project**. Project source lives at [apache/magpie](https://github.com/apache/magpie); this repo holds the public website.
 
 ## Stack
 
@@ -12,7 +12,7 @@ Landing page and documentation hub for [Apache Magpie](https://github.com/apache
 | UI | React 19 + [Tailwind CSS 4](https://tailwindcss.com) |
 | Animations | [Magic UI](https://magicui.design) (Particles, BorderBeam, BlurFade, TextAnimate, ShimmerButton) via `motion` |
 | Icons | [lucide-react](https://lucide.dev) + inline SVG for brand marks |
-| Docs | Astro content collections, markdown synced from [apache/airflow-steward/docs](https://github.com/apache/airflow-steward/tree/main/docs) |
+| Docs | Astro content collections, markdown synced from [apache/magpie/docs](https://github.com/apache/magpie/tree/main/docs) |
 
 Zero runtime dependency on closed-source design tooling. All components are owned in-tree.
 
@@ -20,7 +20,7 @@ Zero runtime dependency on closed-source design tooling. All components are owne
 
 ```bash
 npm install
-npm run sync-docs    # one-time fetch of markdown from apache/airflow-steward
+npm run sync-docs    # one-time fetch of markdown from apache/magpie
 npm run dev          # http://localhost:4321
 ```
 
@@ -31,7 +31,7 @@ The `prebuild` hook runs `sync-docs` automatically, so `npm run build` always pu
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Dev server with HMR |
-| `npm run sync-docs` | Clone `apache/airflow-steward` (sparse, `docs/` + `images/`) into `src/content/docs/` and `public/docs-assets/` |
+| `npm run sync-docs` | Clone `apache/magpie` (sparse, `docs/` + `images/`) into `src/content/docs/` and `public/docs-assets/` |
 | `npm run build` | Static build to `dist/` (runs sync-docs first) |
 | `npm run preview` | Serve the built site locally |
 | `npm run astro` | Astro CLI passthrough |
@@ -40,7 +40,7 @@ The `prebuild` hook runs `sync-docs` automatically, so `npm run build` always pu
 
 | Var | Default | Purpose |
 |---|---|---|
-| `MAGPIE_DOCS_REPO` | `https://github.com/apache/airflow-steward.git` | Source repo for markdown |
+| `MAGPIE_DOCS_REPO` | `https://github.com/apache/magpie.git` | Source repo for markdown |
 | `MAGPIE_DOCS_BRANCH` | `main` | Branch to sync from |
 
 ## Project structure
@@ -76,10 +76,10 @@ website/
 
 ## Docs pipeline
 
-The website is decoupled from the docs source. The markdown lives in [apache/airflow-steward/docs](https://github.com/apache/airflow-steward/tree/main/docs); this repo fetches it at build time and renders it through Astro content collections.
+The website is decoupled from the docs source. The markdown lives in [apache/magpie/docs](https://github.com/apache/magpie/tree/main/docs); this repo fetches it at build time and renders it through Astro content collections.
 
 ```
-apache/airflow-steward/docs/*.md
+apache/magpie/docs/*.md
         │
         ▼  scripts/sync-docs.sh (sparse clone)
 src/content/docs/*.md
@@ -98,15 +98,23 @@ GitHub Actions workflow `.github/workflows/build.yml` runs on every push and PR 
 2. Sync docs from the source repo
 3. `astro check` (warn-only)
 4. `astro build`
-5. Deploy to GitHub Pages (on `main`)
+5. On `main`: copy `.asf.yaml` into `dist/` and force-push the build to the `publish` branch
 
 ## Deployment
 
-The site deploys to GitHub Pages on every push to `main`. Production URL:
+The site is published by **ASF infrastructure**, not GitHub Pages. On every push to `main`, CI builds the static site and force-pushes `dist/` (an orphan, single-commit history) to the **`publish`** branch. The root [`.asf.yaml`](./.asf.yaml) — carried into that branch — tells ASF infra to serve it:
 
-**[andreahlert.github.io/magpie-site](https://andreahlert.github.io/magpie-site/)**
+```yaml
+publish:
+  whoami: publish
+  hostname: magpie.apache.org
+```
 
-When this repo moves to `apache/magpie-site`, the deploy target will switch to the ASF `asf-site` branch served by Apache infra at `magpie.apache.org`.
+Production URL: **[magpie.apache.org](https://magpie.apache.org/)** (served at the apex root).
+
+The site is built with `base: '/'` so all links and assets resolve against the apex domain. Set `SITE_BASE` / `SITE_URL` to preview under a subpath (e.g. GitHub Pages).
+
+> One-time infra setup (outside this repo): the `magpie.apache.org` hostname and its TLS must be registered with ASF Infra, and the `publish` branch created on first CI run.
 
 ## License
 

@@ -36,6 +36,6 @@ pnpm-debug.log*
 CLAUDE.md
 **/settings.local.json
 **/scheduled_tasks.lock
-.apache-steward/
+.apache-magpie/
 docs/superpowers/
 .subframe/

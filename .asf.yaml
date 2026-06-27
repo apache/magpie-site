@@ -1,0 +1,25 @@
+# Apache Software Foundation repository configuration.
+# https://cwiki.apache.org/confluence/display/INFRA/Git+-+.asf.yaml+features
+#
+# The `github:` block below is applied from the default branch (main).
+# The `publish:` block is what serves the website: ASF infra publishes the
+# branch named in `whoami` to the given hostname. CI builds the site and
+# force-pushes the generated output (this file included) to the `publish`
+# branch, where `whoami: publish` matches and the site goes live at
+# https://magpie.apache.org/. On `main`, `whoami` does not match the branch
+# name, so nothing is published from here.
+
+github:
+  description: "Website for Apache Magpie — agent-assisted repository maintainership and development."
+  homepage: https://magpie.apache.org/
+  labels:
+    - apache
+    - magpie
+    - website
+    - astro
+  features:
+    issues: true
+
+publish:
+  whoami: publish
+  hostname: magpie.apache.org

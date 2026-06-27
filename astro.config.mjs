@@ -3,10 +3,15 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
+// Production is served directly at the apex https://magpie.apache.org/ (root path).
+// Override SITE_URL / SITE_BASE if you ever need to preview under a subpath.
+const site = process.env.SITE_URL ?? 'https://magpie.apache.org';
+const base = process.env.SITE_BASE ?? '/';
+
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://andreahlert.github.io',
-  base: '/magpie-site',
+  site,
+  base,
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],

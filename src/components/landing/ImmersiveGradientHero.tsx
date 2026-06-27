@@ -29,9 +29,7 @@ import {
   Lock as FeatherLock,
   Menu as FeatherMenu,
   PenTool as FeatherPenTool,
-  RefreshCw as FeatherRefreshCw,
   Shield as FeatherShield,
-  Users as FeatherUsers,
 } from "lucide-react";
 
 const FeatherGithub = (props: React.SVGProps<SVGSVGElement>) => (
@@ -51,6 +49,58 @@ const FeatherSlack = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z" />
   </svg>
 );
+
+const SKILL_FAMILIES = [
+  {
+    name: "setup",
+    icon: FeatherLayers,
+    modes: "Infrastructure",
+    count: "6 skills",
+    desc: "Isolated agent setup, framework adoption & maintenance, shared-config sync. The prerequisite every adopter starts from.",
+  },
+  {
+    name: "security",
+    icon: FeatherShield,
+    modes: "Triage · Drafting",
+    count: "9 skills",
+    desc: "The 16-step security-issue lifecycle — from security@ import through CVE allocation and publication, with state sync. Maintainer-only.",
+  },
+  {
+    name: "pr-management",
+    icon: FeatherGitPullRequest,
+    modes: "Triage",
+    count: "3 skills",
+    desc: "Maintainer-facing PR-queue management — triage, queue stats, and deep code review.",
+  },
+  {
+    name: "issue",
+    icon: FeatherFilter,
+    modes: "Triage · Drafting",
+    count: "5 skills",
+    desc: "Issue lifecycle — triage, bug reproduction, fix drafting, and backlog re-assessment against the current branch.",
+  },
+  {
+    name: "release-management",
+    icon: FeatherGitMerge,
+    modes: "Triage · Drafting",
+    count: "10 skills · proposed",
+    desc: "The 14-step ASF release lifecycle — planning, RC cut & sign, [VOTE], tally, promote, [ANNOUNCE], archive, audit. The agent never holds the signing key or publishes.",
+  },
+  {
+    name: "mentoring",
+    icon: FeatherBookOpen,
+    modes: "Mentoring",
+    count: "1 skill · experimental",
+    desc: "Contributor mentoring — spec and tone guide in place; first skill (pr-management-mentor) shipping.",
+  },
+  {
+    name: "utilities",
+    icon: FeatherPenTool,
+    modes: "Meta",
+    count: "2 skills",
+    desc: "Framework meta-skills — author or update skills (write-skill) and print a live index of every skill (list-skills).",
+  },
+];
 
 function ImmersiveGradientHero() {
   return (
@@ -79,11 +129,11 @@ function ImmersiveGradientHero() {
           <div className="flex items-center gap-7 mobile:hidden">
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#features">Features</a>
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href={withBase("/docs")}>Docs</a>
-            <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://lists.apache.org/list.html?dev-magpie@airflow.apache.org">Community</a>
-            <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://github.com/apache/airflow-steward">GitHub</a>
+            <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Community</a>
+            <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://github.com/apache/magpie">GitHub</a>
           </div>
           <div className="flex items-center gap-2">
-            <a href="https://github.com/apache/airflow-steward" target="_blank" rel="noreferrer" className="mobile:hidden">
+            <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" className="mobile:hidden">
               <Button
                 className="border border-white/20 bg-white/10 text-white hover:bg-white/20"
                 variant="neutral-secondary"
@@ -107,7 +157,7 @@ function ImmersiveGradientHero() {
             <div className="flex items-center gap-2 rounded-full px-4 py-1.5 border border-brand-400/40 bg-brand-700/60">
               <FeatherFeather className="text-caption font-caption text-brand-200" />
               <span className="text-caption font-caption text-brand-200">
-                Apache Software Foundation Incubating
+                Apache Top-Level Project
               </span>
             </div>
             <div className="flex flex-col items-start gap-5">
@@ -122,10 +172,12 @@ function ImmersiveGradientHero() {
               </TextAnimate>
               <BlurFade delay={0.4} inView>
                 <span className="font-['Inter'] text-[17px] font-[400] leading-[27px] text-brand-200 -tracking-[0.01em]">
-                  Apache Magpie is an AI-powered assistant that helps open-source
-                  maintainers manage contributions more efficiently. From triage
-                  to auto-merge, Magpie learns your project and scales your review
-                  capacity.
+                  Apache Magpie handles the repetitive parts of running an
+                  open-source project — triaging issues and PRs, mentoring
+                  contributors, drafting fixes, managing security reports — so
+                  maintainers can spend their time on design, relationships, and
+                  the work that needs a human. The agent proposes; the human
+                  decides.
                 </span>
               </BlurFade>
             </div>
@@ -175,7 +227,7 @@ function ImmersiveGradientHero() {
           <div className="flex grow shrink-0 basis-0 flex-col items-center justify-center self-stretch rounded-2xl border border-solid border-[#b3d1ff] bg-[#f0f5ff] px-8 py-8 min-w-[380px]">
             <div className="flex w-full flex-col items-center py-4">
               <div className="flex w-full flex-col items-center">
-                <div className="flex w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <FeatherGitPullRequest className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -196,7 +248,7 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <FeatherFilter className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -209,7 +261,7 @@ function ImmersiveGradientHero() {
                     </span>
                   </div>
                   <Badge variant="success" icon={<FeatherCheck />}>
-                    Active
+                    Stable
                   </Badge>
                 </div>
                 <div className="flex flex-col items-center py-1">
@@ -217,7 +269,7 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <FeatherBookOpen className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -229,8 +281,8 @@ function ImmersiveGradientHero() {
                       Guide contributors with feedback
                     </span>
                   </div>
-                  <Badge variant="success" icon={<FeatherCheck />}>
-                    Active
+                  <Badge variant="warning" icon={<FeatherClock />}>
+                    Experimental
                   </Badge>
                 </div>
                 <div className="flex flex-col items-center py-1">
@@ -238,7 +290,7 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex w-full items-center gap-3 rounded-xl border border-solid border-[#b3d1ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#b3d1ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <FeatherPenTool className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -250,8 +302,8 @@ function ImmersiveGradientHero() {
                       Generate review comments &amp; notes
                     </span>
                   </div>
-                  <Badge variant="warning" icon={<FeatherClock />}>
-                    Beta
+                  <Badge variant="success" icon={<FeatherCheck />}>
+                    Stable
                   </Badge>
                 </div>
                 <div className="flex flex-col items-center py-1">
@@ -259,21 +311,21 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="relative flex w-full items-center gap-3 rounded-xl border-2 border-solid border-[#004aad] px-5 py-4 shadow-lg bg-gradient-to-br from-[#e6f0ff] to-[#b3d1ff] max-w-[360px] overflow-hidden">
+                <div className="relative flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#004aad] px-5 py-3 shadow-md bg-gradient-to-br from-[#e6f0ff] to-[#b3d1ff] max-w-[360px] overflow-hidden">
                   <BorderBeam size={120} duration={6} colorFrom="#004aad" colorTo="#80b3ff" />
-                  <div className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#004aad] shadow-sm">
-                    <FeatherGitMerge className="text-heading-2 font-heading-2 text-white" />
+                  <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#004aad] shadow-sm">
+                    <FeatherGitMerge className="text-heading-3 font-heading-3 text-white" />
                   </div>
                   <div className="flex grow shrink-0 basis-0 flex-col items-start">
                     <span className="text-body-bold font-body-bold text-[#002654]">
                       Auto-merge
                     </span>
                     <span className="text-caption font-caption text-[#004aad]">
-                      Merge when all checks pass
+                      Off by design until earlier modes prove out
                     </span>
                   </div>
                   <Badge variant="neutral" icon={<FeatherLock />}>
-                    Planned
+                    Off
                   </Badge>
                 </div>
               </div>
@@ -312,7 +364,7 @@ function ImmersiveGradientHero() {
                     Triage Mode
                   </span>
                   <Badge variant="success" icon={<FeatherCheck />}>
-                    Active
+                    Stable
                   </Badge>
                 </div>
                 <span className="text-body font-body text-subtext-color">
@@ -337,16 +389,16 @@ function ImmersiveGradientHero() {
                     Mentoring Mode
                   </span>
                   <Badge variant="warning" icon={<FeatherClock />}>
-                    Beta
+                    Experimental
                   </Badge>
                 </div>
                 <span className="text-body font-body text-subtext-color">
-                  Guide first-time contributors with contextual suggestions and
-                  code style feedback.
+                  Joins issue and PR threads in a teaching register — clarifying
+                  questions, pointers to conventions, examples from prior PRs.
                 </span>
                 <div className="flex flex-wrap items-start gap-2 pt-1">
-                  <Badge variant="neutral">Style guides</Badge>
-                  <Badge variant="neutral">Doc links</Badge>
+                  <Badge variant="neutral">Conventions</Badge>
+                  <Badge variant="neutral">Prior PRs</Badge>
                 </div>
               </div>
             </div>
@@ -364,16 +416,16 @@ function ImmersiveGradientHero() {
                     Drafting Mode
                   </span>
                   <Badge variant="success" icon={<FeatherCheck />}>
-                    Active
+                    Stable (security)
                   </Badge>
                 </div>
                 <span className="text-body font-body text-subtext-color">
-                  Generate review comments, changelogs, and release notes from
-                  PR context and commit history.
+                  Draft a fix for a well-scoped problem and open a PR — every PR
+                  reviewed and merged by a human committer, never the agent.
                 </span>
                 <div className="flex flex-wrap items-start gap-2 pt-1">
-                  <Badge variant="neutral">Review drafts</Badge>
-                  <Badge variant="neutral">Changelogs</Badge>
+                  <Badge variant="neutral">Fix PRs</Badge>
+                  <Badge variant="neutral">Human-merged</Badge>
                 </div>
               </div>
             </div>
@@ -389,16 +441,16 @@ function ImmersiveGradientHero() {
                     Pairing Mode
                   </span>
                   <Badge variant="warning" icon={<FeatherClock />}>
-                    Beta
+                    Experimental
                   </Badge>
                 </div>
                 <span className="text-body font-body text-subtext-color">
-                  Work alongside maintainers in real-time, suggesting fixes and
-                  identifying edge cases before review.
+                  Developer-side skills you run in your own dev loop — multi-agent
+                  review pipelines and self-review before you open a PR.
                 </span>
                 <div className="flex flex-wrap items-start gap-2 pt-1">
-                  <Badge variant="neutral">Real-time assist</Badge>
-                  <Badge variant="neutral">Pre-checks</Badge>
+                  <Badge variant="neutral">Self-review</Badge>
+                  <Badge variant="neutral">Pre-flight</Badge>
                 </div>
               </div>
             </div>
@@ -416,13 +468,14 @@ function ImmersiveGradientHero() {
                   Auto-merge Mode
                 </span>
                 <Badge variant="neutral" icon={<FeatherLock />}>
-                  Planned
+                  Off
                 </Badge>
               </div>
               <span className="text-body font-body text-subtext-color max-w-[640px]">
-                For trusted, well-tested contributions that pass all checks,
-                Magpie can autonomously approve and merge with full audit trails
-                and rollback capability.
+                Narrowly-scoped fix-and-merge for objectively boring changes —
+                lint, allow-listed dependency bumps, formatting. Deliberately
+                off until the earlier modes have proven out, and never for
+                security-class changes.
               </span>
               <div className="flex flex-wrap items-start gap-2 pt-1">
                 <Badge variant="brand">Auto-approve</Badge>
@@ -432,6 +485,49 @@ function ImmersiveGradientHero() {
             </div>
             <FeatherGitMerge className="text-heading-2 font-heading-2 text-brand-400 mobile:hidden" />
           </div>
+        </div>
+      </div>
+      <div id="skills" className="flex w-full flex-col items-center bg-default-background px-8 pb-24 mobile:px-4 mobile:pb-14">
+        <BlurFade inView className="flex flex-col items-center gap-4 max-w-[640px] pb-12 mobile:pb-8">
+          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
+            <FeatherLayers className="text-caption font-caption text-brand-600" />
+            <span className="text-caption font-caption text-brand-600">
+              7 Skill Families
+            </span>
+          </div>
+          <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
+            Pick the families your project needs
+          </span>
+          <span className="text-body font-body text-subtext-color text-center">
+            Modes describe what the agent can do; skill families are how those
+            capabilities ship. Adopt only the families that fit — symlinks for
+            the picked families land in your skill directory.
+          </span>
+        </BlurFade>
+        <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr max-w-[1100px] mobile:grid-cols-1">
+          {SKILL_FAMILIES.map((family) => {
+            const Icon = family.icon;
+            return (
+              <div
+                key={family.name}
+                className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+              >
+                <div className="flex w-full items-center justify-between">
+                  <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                    <Icon className="text-body-bold font-body-bold text-brand-700" />
+                  </div>
+                  <Badge variant="neutral">{family.count}</Badge>
+                </div>
+                <span className="font-mono text-body-bold font-body-bold text-default-font">
+                  {family.name}
+                </span>
+                <Badge variant="brand">{family.modes}</Badge>
+                <span className="text-caption font-caption text-subtext-color">
+                  {family.desc}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="flex w-full flex-col items-center border-y border-solid border-neutral-100 bg-neutral-50">
@@ -451,77 +547,77 @@ function ImmersiveGradientHero() {
               every action respects the principle of least privilege.
             </span>
           </div>
-          <div className="w-full items-start gap-4 grid grid-cols-3 mobile:grid mobile:grid-cols-1">
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-                <FeatherKey className="text-body-bold font-body-bold text-brand-700" />
-              </div>
-              <span className="text-body-bold font-body-bold text-default-font">
-                Token Scoping
-              </span>
-              <span className="text-caption font-caption text-subtext-color">
-                Minimal permissions per operation. Magpie never requests more
-                access than needed.
-              </span>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-                <FeatherFileText className="text-body-bold font-body-bold text-brand-700" />
-              </div>
-              <span className="text-body-bold font-body-bold text-default-font">
-                Full Audit Logs
-              </span>
-              <span className="text-caption font-caption text-subtext-color">
-                Every AI decision logged with reasoning, context, and
-                timestamps. Full traceability.
-              </span>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-                <FeatherEyeOff className="text-body-bold font-body-bold text-brand-700" />
-              </div>
-              <span className="text-body-bold font-body-bold text-default-font">
-                No Data Retention
-              </span>
-              <span className="text-caption font-caption text-subtext-color">
-                Code processed in-memory, never stored. Your intellectual
-                property stays yours.
-              </span>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-                <FeatherRefreshCw className="text-body-bold font-body-bold text-brand-700" />
-              </div>
-              <span className="text-body-bold font-body-bold text-default-font">
-                Rollback Support
-              </span>
-              <span className="text-caption font-caption text-subtext-color">
-                Any automated action can be instantly reversed. Humans always
-                retain the final say.
-              </span>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-                <FeatherUsers className="text-body-bold font-body-bold text-brand-700" />
-              </div>
-              <span className="text-body-bold font-body-bold text-default-font">
-                Role-Based Access
-              </span>
-              <span className="text-caption font-caption text-subtext-color">
-                Granular permissions aligned with project governance. Distinct
-                access for PMC and contributors.
-              </span>
-            </div>
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+          <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr mobile:grid mobile:grid-cols-1">
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
                 <FeatherShield className="text-body-bold font-body-bold text-brand-700" />
               </div>
               <span className="text-body-bold font-body-bold text-default-font">
-                ASF Compliance
+                Sandboxed by Default
               </span>
               <span className="text-caption font-caption text-subtext-color">
-                Built to meet Apache Software Foundation standards for security
-                and governance.
+                Filesystem, network, and tool-permission rules enforced at the
+                harness layer. Sandbox bypasses warn loudly, never silently.
+              </span>
+            </div>
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                <FeatherLock className="text-body-bold font-body-bold text-brand-700" />
+              </div>
+              <span className="text-body-bold font-body-bold text-default-font">
+                Privacy-Aware Routing
+              </span>
+              <span className="text-caption font-caption text-subtext-color">
+                Private content flows only to LLMs your PMC has explicitly
+                approved, with a recorded data-residency contract.
+              </span>
+            </div>
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                <FeatherEyeOff className="text-body-bold font-body-bold text-brand-700" />
+              </div>
+              <span className="text-body-bold font-body-bold text-default-font">
+                PII Redaction
+              </span>
+              <span className="text-caption font-caption text-subtext-color">
+                Third-party PII is redacted to stable identifiers before any
+                content reaches an LLM context.
+              </span>
+            </div>
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                <FeatherFileText className="text-body-bold font-body-bold text-brand-700" />
+              </div>
+              <span className="text-body-bold font-body-bold text-default-font">
+                Full Audit Log
+              </span>
+              <span className="text-caption font-caption text-subtext-color">
+                Every agent-authored action — comment, label, draft, PR — is
+                logged and reversible where possible.
+              </span>
+            </div>
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                <FeatherKey className="text-body-bold font-body-bold text-brand-700" />
+              </div>
+              <span className="text-body-bold font-body-bold text-default-font">
+                Pinned &amp; Signed Deps
+              </span>
+              <span className="text-caption font-caption text-subtext-color">
+                Every system tool is pinned and aged through a cooldown window.
+                Version bumps are reviewed PRs, not silent updates.
+              </span>
+            </div>
+            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                <FeatherCheckCircle className="text-body-bold font-body-bold text-brand-700" />
+              </div>
+              <span className="text-body-bold font-body-bold text-default-font">
+                Human-in-the-Loop
+              </span>
+              <span className="text-caption font-caption text-subtext-color">
+                Every outward action needs explicit maintainer confirmation.
+                External content is treated as data, never instructions.
               </span>
             </div>
           </div>
@@ -608,10 +704,10 @@ function ImmersiveGradientHero() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a href={withBase("/docs")}>
               <Button size="large" icon={<FeatherArrowRight />}>
-                Get Started Free
+                Get Started
               </Button>
             </a>
-            <a href="https://github.com/apache/airflow-steward" target="_blank" rel="noreferrer">
+            <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer">
               <Button
                 className="border border-white/20 bg-white/10 text-white hover:bg-white/20"
                 size="large"
@@ -636,7 +732,7 @@ function ImmersiveGradientHero() {
               open-source maintainers.
             </span>
             <div className="flex items-center gap-2">
-              <a href="https://github.com/apache/airflow-steward" target="_blank" rel="noreferrer" aria-label="GitHub">
+              <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub">
                 <IconButton icon={<FeatherGithub />} />
               </a>
               <a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter">
@@ -652,15 +748,15 @@ function ImmersiveGradientHero() {
               <span className="text-body-bold font-body-bold text-default-font">Project</span>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="#features">Features</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")}>Documentation</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/issues">Roadmap</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/releases">Changelog</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Roadmap</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases">Changelog</a>
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Community</span>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/blob/main/CONTRIBUTING.md">Contributing</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev-magpie@airflow.apache.org">Mailing Lists</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com">Slack Channel</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/airflow-steward/issues">Issue Tracker</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a>
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Foundation</span>

@@ -10,7 +10,15 @@ interface Props {
 }
 
 const { title, currentSlug } = Astro.props;
-const all = await getCollection("docs");
+
+// Internal governance drafts that should not appear on the public site.
+const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+// Quick-start entry pinned to the top of the docs sidebar.
+const QUICK_START = { slug: "setup/install-recipes", label: "Quick Start" };
+
+const all = (await getCollection("docs")).filter(
+  (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
+);
 
 type NavGroup = { name: string; items: { slug: string; label: string }[] };
 const groups = new Map<string, NavGroup>();
@@ -37,6 +45,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   <div class="flex w-full">
     <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
       <a href={`${base}/`} class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a>
+      <a
+        href={`${base}/docs/${QUICK_START.slug}`}
+        class={`block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
+      >
+        ⚡ {QUICK_START.label}
+      </a>
       <nav class="flex flex-col gap-6">
         {sortedGroups.map((group) => (
           <div>

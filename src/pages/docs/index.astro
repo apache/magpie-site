@@ -1,20 +1,38 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import { getCollection } from "astro:content";
 
-const all = await getCollection("docs");
-const first = all.find((e) => e.id === "README.md") ?? all[0];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const QUICK_START = `${base}/docs/setup/install-recipes`;
+const OVERVIEW = `${base}/docs/index`;
 ---
 
 <DocsLayout title="Documentation" currentSlug="">
   <h1>Apache Magpie Documentation</h1>
   <p>
-    Welcome. Source: <a href="https://github.com/apache/airflow-steward/tree/main/docs">apache/airflow-steward/docs</a>.
+    Apache Magpie is an AI assistant for open-source project maintainers. It
+    handles the repetitive parts of running a project — triaging issues,
+    reviewing PRs, onboarding contributors, managing security reports, cutting
+    releases — so maintainers can spend their time on the work that needs a
+    human. <strong>The agent proposes; the human decides.</strong>
   </p>
-  <p>Pick a topic from the sidebar to get started.</p>
-  {first && (
-    <p>
-      <a href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/docs/${first.id.replace(/\.md$/, "")}`}>→ Start with {first.id.replace(/\.md$/, "")}</a>
-    </p>
-  )}
+
+  <h2>Quick Start</h2>
+  <p>
+    Adopt Magpie in your repo with a single copy-pasteable bootstrap, then let
+    the <code>setup</code> skill wire up the rest. Pick an install method and
+    follow the verbatim recipe:
+  </p>
+  <p>
+    <a href={QUICK_START}><strong>⚡ Quick Start → Install recipes</strong></a>
+    &nbsp;·&nbsp;
+    <a href={`${base}/docs/prerequisites`}>Prerequisites</a>
+    &nbsp;·&nbsp;
+    <a href={OVERVIEW}>What is Apache Magpie?</a>
+  </p>
+
+  <p>
+    These pages are synced from
+    <a href="https://github.com/apache/magpie/tree/main/docs">apache/magpie/docs</a>.
+    Browse the full set from the sidebar.
+  </p>
 </DocsLayout>
