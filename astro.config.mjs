@@ -8,6 +8,9 @@ import tailwindcss from '@tailwindcss/vite';
 const site = process.env.SITE_URL ?? 'https://magpie.apache.org';
 const base = process.env.SITE_BASE ?? '/';
 
+// Internal `.md` links in the synced docs are rewritten to site routes by
+// scripts/rewrite-doc-links.mjs (run from scripts/sync-docs.sh at build time).
+
 // https://astro.build/config
 export default defineConfig({
   site,
