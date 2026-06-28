@@ -22,5 +22,11 @@ github:
   features:
     issues: true
 
+notifications:
+  commits: commits@magpie.apache.org
+  issues: commits@magpie.apache.org
+  pullrequests: commits@magpie.apache.org
+  discussions: dev@magpie.apache.org
+
 publish:
   whoami: publish
