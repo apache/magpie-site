@@ -19,7 +19,6 @@ import {
   CheckCircle as FeatherCheckCircle,
   Clock as FeatherClock,
   EyeOff as FeatherEyeOff,
-  Feather as FeatherFeather,
   FileText as FeatherFileText,
   Filter as FeatherFilter,
   GitMerge as FeatherGitMerge,
@@ -55,6 +54,19 @@ const FeatherSlack = (props: React.SVGProps<SVGSVGElement>) => (
 // build time (scripts/gen-skill-counts.mjs, run by scripts/sync-docs.sh) so
 // they never drift from the framework. Only `status` and copy live here.
 const SKILL_COUNTS = (skillCounts as { counts: Record<string, number> }).counts;
+
+// The Apache Software Foundation's current "oak leaf" mark (apache.org).
+const AsfOakLeaf = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 800 1231" fill="none" {...props}>
+    <path d="M340.565 490.125C371.984 412.419 407.04 334.865 444.655 266.127C388.506 224.415 334.59 134.468 312.439 94.616C304.483 103.656 299.318 114.069 296.976 122.539C276.107 197.903 350.394 288.909 290.56 255.659C240.706 227.952 128.448 167.276 85.6282 227.583C133.585 289.214 259.016 444.273 340.565 490.125Z" fill="#DD552C" />
+    <path d="M444.655 266.127C481.103 199.523 519.944 141.19 560.214 99.1643C560.214 99.1643 520.049 157.313 462.68 273.555C497.424 283.125 596.373 302.762 734.199 267.154C737.588 242.103 720.749 214.548 636.838 205.323C582.057 199.307 702.592 74.4897 615.272 15.4582C612.453 13.549 609.682 11.8645 606.967 10.3564C604.04 9.30555 600.948 8.34295 597.648 7.48463C495.667 -19.1313 481.532 153.824 440.837 116.644C375.076 56.5612 333.568 70.5992 312.439 94.616C334.59 134.468 388.506 224.415 444.655 266.127Z" fill="#F79A23" />
+    <path d="M258.543 714.009C281.565 645.031 309.259 567.534 340.565 490.125C259.016 444.273 133.585 289.214 85.6282 227.583C77.0666 239.632 71.2159 256.437 69.267 279.419C58.8087 402.865 186.137 494.256 160.753 510.949C127.177 533.032 60.3486 457.902 34.0103 505.638C72.1864 554.691 149.95 643.322 258.543 714.009Z" fill="#D22128" />
+    <path d="M611.342 447.778C546.872 424.78 678.712 363.101 721.523 297.669C727.001 289.302 732.663 278.489 734.199 267.154C596.373 302.762 497.424 283.125 462.68 273.555C432.982 333.742 398.687 409.587 362.922 501.034C400.171 516.965 552.266 575.812 767.094 576.117C803.213 482.023 672.528 469.597 611.342 447.778Z" fill="#DD552C" />
+    <path d="M283.454 726.427C321.337 738.235 446.861 773.506 580.172 768.196C598.081 719.697 531.124 714.964 525.671 676.067C521.448 645.97 701.878 701.359 759.932 591.92C762.867 586.385 765.157 581.163 767.094 576.117C552.266 575.812 400.171 516.965 362.921 501.034C336.784 567.863 309.896 642.865 283.454 726.427Z" fill="#D22128" />
+    <path d="M283.454 726.427C266.431 780.212 249.637 837.672 233.336 898.396C227.553 919.926 221.839 941.857 216.205 964.27C342.735 1006.05 459.248 964.366 463.198 912.706C463.23 912.297 463.154 911.992 463.178 911.599C466.189 856.883 384.195 887.213 386.136 854.317C388.085 821.179 529.284 854.124 572.95 783.076C576.298 777.629 578.48 772.792 580.172 768.196C446.861 773.506 321.337 738.235 283.454 726.427Z" fill="#7C297D" />
+    <path d="M34.0104 505.638C32.1657 508.983 30.5015 512.85 29.082 517.47C4.56029 597.182 177.956 704.263 154.365 727.606C133.1 748.639 105.386 700.573 71.2119 720.427C67.4665 722.609 63.6649 725.36 59.7631 729.363C21.1139 768.966 59.1576 883.058 168.813 943.959C143.225 1029.89 117.749 1125.91 92.8102 1226.31C101.857 1223.14 112.684 1219.97 115.379 1211.43C119.425 1194.8 144.432 1093.56 185.034 956.224C185.034 956.224 192.445 928.092 206.011 881.743C218.554 838.883 236.379 780.429 258.543 714.009C149.95 643.322 72.1864 554.691 34.0104 505.638Z" fill="#7C297D" />
+  </svg>
+);
 
 const SKILL_FAMILIES = [
   {
@@ -161,7 +173,7 @@ function ImmersiveGradientHero() {
         <div className="relative z-10 flex w-full max-w-[1280px] items-center gap-16 px-8 pt-16 pb-24 mobile:flex-col mobile:gap-10 mobile:px-4 mobile:pt-10 mobile:pb-16">
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-7 max-w-[540px] mobile:max-w-none">
             <div className="flex items-center gap-2 rounded-full px-4 py-1.5 border border-brand-400/40 bg-brand-700/60">
-              <FeatherFeather className="text-caption font-caption text-brand-200" />
+              <AsfOakLeaf className="h-4 w-auto" aria-hidden="true" />
               <span className="text-caption font-caption text-brand-200">
                 Apache Top-Level Project
               </span>
@@ -766,20 +778,26 @@ function ImmersiveGradientHero() {
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Foundation</span>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://apache.org/">Apache Home</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/LICENSE-2.0">License</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
             </div>
           </div>
         </div>
-        <div className="flex w-full items-center justify-between border-t border-solid border-neutral-100 pt-6 max-w-[1100px] mobile:flex-col mobile:gap-3">
-          <span className="text-caption font-caption text-subtext-color">
-            Copyright © 2026 The Apache Software Foundation. All rights
-            reserved.
+        <div className="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]">
+          <span className="text-caption font-caption text-subtext-color text-center">
+            Copyright © 2026 The Apache Software Foundation, Licensed under the
+            Apache License, Version 2.0.
           </span>
-          <span className="text-caption font-caption text-subtext-color">
-            Apache Magpie is an effort undergoing at The ASF.
+          <span className="text-caption font-caption text-subtext-color text-center max-w-[860px]">
+            Apache Magpie, Magpie, and Apache are either registered trademarks or
+            trademarks of The Apache Software Foundation in the United States
+            and other countries. All other marks mentioned may be trademarks or
+            registered trademarks of their respective owners.
           </span>
         </div>
       </footer>

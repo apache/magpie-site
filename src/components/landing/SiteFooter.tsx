@@ -61,19 +61,22 @@ export function SiteFooter() {
           </div>
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
             <span className="text-body-bold font-body-bold text-default-font">Foundation</span>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://apache.org/">Apache Home</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/LICENSE-2.0">License</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
           </div>
         </div>
       </div>
-      <div className="flex w-full items-center justify-between border-t border-solid border-neutral-100 pt-6 max-w-[1100px] mobile:flex-col mobile:gap-3">
-        <span className="text-caption font-caption text-subtext-color">
-          Copyright © 2026 The Apache Software Foundation. All rights reserved.
+      <div className="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]">
+        <span className="text-caption font-caption text-subtext-color text-center">
+          Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.
         </span>
-        <span className="text-caption font-caption text-subtext-color">
-          Apache Magpie is an effort undergoing at The ASF.
+        <span className="text-caption font-caption text-subtext-color text-center max-w-[860px]">
+          Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.
         </span>
       </div>
     </footer>
