@@ -35,6 +35,9 @@ find "$DEST" -name '*.md' -exec perl -pi -e '
   s{\(images/}{(/docs-assets/}g;
 ' {} +
 
+echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
+node "$(dirname "$0")/rewrite-doc-links.mjs" "$DEST" "${SITE_BASE:-/}"
+
 count=$(find "$DEST" -name '*.md' | wc -l)
 echo "✓ Synced $count markdown files into $DEST"
 
