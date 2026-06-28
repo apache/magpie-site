@@ -7,9 +7,11 @@ import { SiteFooter } from "../components/landing/SiteFooter";
 interface Props {
   title?: string;
   currentSlug: string;
+  /** GitHub edit URL for this page's source (forwarded to BaseLayout). */
+  editUrl?: string;
 }
 
-const { title, currentSlug } = Astro.props;
+const { title, currentSlug, editUrl } = Astro.props;
 
 // Internal governance drafts that should not appear on the public site.
 const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
@@ -40,7 +42,7 @@ const sortedGroups = Array.from(groups.values()).sort((a, b) => {
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
-<BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"}>
+<BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"} editUrl={editUrl}>
   <SiteHeader />
   <div class="flex w-full">
     <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
