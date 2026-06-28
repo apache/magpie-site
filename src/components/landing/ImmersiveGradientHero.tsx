@@ -12,6 +12,7 @@ import { TextAnimate } from "@/ui/components/ui/text-animate";
 import { withBase } from "@/ui/lib/utils";
 import skillCounts from "@/data/skill-counts.json";
 import {
+  Activity as FeatherActivity,
   ArrowDown as FeatherArrowDown,
   ArrowRight as FeatherArrowRight,
   BookOpen as FeatherBookOpen,
@@ -30,6 +31,7 @@ import {
   Menu as FeatherMenu,
   PenTool as FeatherPenTool,
   Shield as FeatherShield,
+  Users as FeatherUsers,
 } from "lucide-react";
 
 const FeatherGithub = (props: React.SVGProps<SVGSVGElement>) => (
@@ -94,6 +96,13 @@ const SKILL_FAMILIES = [
     desc: "Issue lifecycle — triage, bug reproduction, fix drafting, and backlog re-assessment against the current branch.",
   },
   {
+    name: "repo-health",
+    icon: FeatherActivity,
+    modes: "Triage",
+    status: "experimental",
+    desc: "Read-only maintenance audits — CI runner obsolescence, workflow security, stale or vulnerable dependencies, license/NOTICE drift, and flaky tests. Each proposes remedies for the maintainer to apply.",
+  },
+  {
     name: "release-management",
     icon: FeatherGitMerge,
     modes: "Triage · Drafting",
@@ -105,6 +114,12 @@ const SKILL_FAMILIES = [
     modes: "Mentoring",
     status: "experimental",
     desc: "Contributor mentoring — spec and tone guide in place; first skill (pr-management-mentor) shipping.",
+  },
+  {
+    name: "contributor-growth",
+    icon: FeatherUsers,
+    modes: "Mentoring · Triage",
+    desc: "The contributor-to-committer path — welcome first-timers, keep the backlog newcomer-ready, track activity, assemble nomination evidence, and run post-vote onboarding.",
   },
   {
     name: "utilities",
