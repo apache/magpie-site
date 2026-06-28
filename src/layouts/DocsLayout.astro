@@ -18,26 +18,73 @@ const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
 // Quick-start entry pinned to the top of the docs sidebar.
 const QUICK_START = { slug: "setup/install-recipes", label: "Quick Start" };
 
+// Curated nav grouping — mirrors the landing's skill families. "_root" holds
+// the top-level getting-started docs. Unlisted groups fall to the end.
+const GROUP_META: Record<string, { label: string; order: number }> = {
+  _root: { label: "Getting Started", order: 0 },
+  setup: { label: "Setup", order: 1 },
+  security: { label: "Security", order: 2 },
+  "pr-management": { label: "PR Management", order: 3 },
+  "issue-management": { label: "Issue Management", order: 4 },
+  "repo-health": { label: "Repo Health", order: 5 },
+  "release-management": { label: "Release Management", order: 6 },
+  mentoring: { label: "Mentoring", order: 7 },
+  "contributor-growth": { label: "Contributor Growth", order: 8 },
+  pairing: { label: "Pairing", order: 9 },
+  rfcs: { label: "RFCs", order: 10 },
+};
+
+// Logical page order within a group (by last path segment). The Overview
+// (index / README) always leads; unlisted pages follow alphabetically.
+const PAGE_ORDER: Record<string, string[]> = {
+  _root: ["index", "prerequisites", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
+  setup: ["readme", "install-recipes", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "unadopt"],
+  security: ["readme", "roles", "process", "threat-model", "new-members-onboarding", "how-to-fix-a-security-issue", "forwarder-routing-policy"],
+  "release-management": ["readme", "process", "spec"],
+  mentoring: ["readme", "spec"],
+};
+
+const prettify = (s: string) => s.replace(/-/g, " ");
+const lastSeg = (id: string) => id.split("/").pop()!.replace(/\.md$/, "");
+const pageLabel = (entry: { id: string; data: { title?: string } }) => {
+  const seg = lastSeg(entry.id);
+  if (seg === "index" || seg === "readme") return "Overview";
+  return entry.data.title ?? prettify(seg);
+};
+const pageRank = (groupKey: string, slug: string) => {
+  const seg = lastSeg(slug);
+  if (seg === "index" || seg === "readme") return -1;
+  const i = (PAGE_ORDER[groupKey] ?? []).indexOf(seg);
+  return i === -1 ? 999 : i;
+};
+
 const all = (await getCollection("docs")).filter(
   (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
 );
 
-type NavGroup = { name: string; items: { slug: string; label: string }[] };
+type NavItem = { slug: string; label: string; rank: number };
+type NavGroup = { name: string; label: string; order: number; items: NavItem[] };
 const groups = new Map<string, NavGroup>();
 for (const entry of all) {
   const parts = entry.id.split("/");
   const groupKey = parts.length > 1 ? parts[0] : "_root";
   if (!groups.has(groupKey)) {
-    groups.set(groupKey, { name: groupKey, items: [] });
+    groups.set(groupKey, {
+      name: groupKey,
+      label: GROUP_META[groupKey]?.label ?? prettify(groupKey),
+      order: GROUP_META[groupKey]?.order ?? 99,
+      items: [],
+    });
   }
-  const label = entry.data.title ?? parts[parts.length - 1].replace(/\.md$/, "").replace(/-/g, " ");
-  groups.get(groupKey)!.items.push({ slug: entry.id.replace(/\.md$/, ""), label });
+  const slug = entry.id.replace(/\.md$/, "");
+  groups.get(groupKey)!.items.push({ slug, label: pageLabel(entry), rank: pageRank(groupKey, slug) });
 }
-const sortedGroups = Array.from(groups.values()).sort((a, b) => {
-  if (a.name === "_root") return -1;
-  if (b.name === "_root") return 1;
-  return a.name.localeCompare(b.name);
-});
+const sortedGroups = Array.from(groups.values()).sort(
+  (a, b) => a.order - b.order || a.name.localeCompare(b.name),
+);
+for (const g of sortedGroups) {
+  g.items.sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
+}
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
@@ -57,7 +104,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         {sortedGroups.map((group) => (
           <div>
             <div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">
-              {group.name === "_root" ? "Overview" : group.name.replace(/-/g, " ")}
+              {group.label}
             </div>
             <ul class="flex flex-col gap-1">
               {group.items.map((item) => (
