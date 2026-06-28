@@ -10,6 +10,7 @@ import { ShimmerButton } from "@/ui/components/ui/shimmer-button";
 import { BlurFade } from "@/ui/components/ui/blur-fade";
 import { TextAnimate } from "@/ui/components/ui/text-animate";
 import { withBase } from "@/ui/lib/utils";
+import skillCounts from "@/data/skill-counts.json";
 import {
   ArrowDown as FeatherArrowDown,
   ArrowRight as FeatherArrowRight,
@@ -50,57 +51,62 @@ const FeatherSlack = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// Skill counts are generated from the apache/magpie `skills/` directory at
+// build time (scripts/gen-skill-counts.mjs, run by scripts/sync-docs.sh) so
+// they never drift from the framework. Only `status` and copy live here.
+const SKILL_COUNTS = (skillCounts as { counts: Record<string, number> }).counts;
+
 const SKILL_FAMILIES = [
   {
     name: "setup",
     icon: FeatherLayers,
     modes: "Infrastructure",
-    count: "6 skills",
     desc: "Isolated agent setup, framework adoption & maintenance, shared-config sync. The prerequisite every adopter starts from.",
   },
   {
     name: "security",
     icon: FeatherShield,
     modes: "Triage · Drafting",
-    count: "9 skills",
     desc: "The 16-step security-issue lifecycle — from security@ import through CVE allocation and publication, with state sync. Maintainer-only.",
   },
   {
     name: "pr-management",
     icon: FeatherGitPullRequest,
     modes: "Triage",
-    count: "3 skills",
     desc: "Maintainer-facing PR-queue management — triage, queue stats, and deep code review.",
   },
   {
     name: "issue",
     icon: FeatherFilter,
     modes: "Triage · Drafting",
-    count: "5 skills",
     desc: "Issue lifecycle — triage, bug reproduction, fix drafting, and backlog re-assessment against the current branch.",
   },
   {
     name: "release-management",
     icon: FeatherGitMerge,
     modes: "Triage · Drafting",
-    count: "10 skills · proposed",
     desc: "The 14-step ASF release lifecycle — planning, RC cut & sign, [VOTE], tally, promote, [ANNOUNCE], archive, audit. The agent never holds the signing key or publishes.",
   },
   {
     name: "mentoring",
     icon: FeatherBookOpen,
     modes: "Mentoring",
-    count: "1 skill · experimental",
+    status: "experimental",
     desc: "Contributor mentoring — spec and tone guide in place; first skill (pr-management-mentor) shipping.",
   },
   {
     name: "utilities",
     icon: FeatherPenTool,
     modes: "Meta",
-    count: "2 skills",
     desc: "Framework meta-skills — author or update skills (write-skill) and print a live index of every skill (list-skills).",
   },
 ];
+
+const skillCountLabel = (family: { name: string; status?: string }) => {
+  const n = SKILL_COUNTS[family.name] ?? 0;
+  const base = `${n} skill${n === 1 ? "" : "s"}`;
+  return family.status ? `${base} · ${family.status}` : base;
+};
 
 function ImmersiveGradientHero() {
   return (
@@ -492,7 +498,7 @@ function ImmersiveGradientHero() {
           <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
             <FeatherLayers className="text-caption font-caption text-brand-600" />
             <span className="text-caption font-caption text-brand-600">
-              7 Skill Families
+              {SKILL_FAMILIES.length} Skill Families
             </span>
           </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
@@ -516,7 +522,7 @@ function ImmersiveGradientHero() {
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
                     <Icon className="text-body-bold font-body-bold text-brand-700" />
                   </div>
-                  <Badge variant="neutral">{family.count}</Badge>
+                  <Badge variant="neutral">{skillCountLabel(family)}</Badge>
                 </div>
                 <span className="font-mono text-body-bold font-body-bold text-default-font">
                   {family.name}

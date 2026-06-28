@@ -10,9 +10,9 @@ DEST="$(dirname "$0")/../src/content/docs"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/)"
+echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/)"
 git clone --depth 1 --branch "$BRANCH" --filter=blob:none --sparse "$REPO" "$TMP" >/dev/null 2>&1
-(cd "$TMP" && git sparse-checkout set docs images >/dev/null)
+(cd "$TMP" && git sparse-checkout set docs images skills >/dev/null)
 
 echo "→ Replacing $DEST"
 rm -rf "$DEST"
@@ -28,11 +28,21 @@ if [ -d "$TMP/images" ]; then
 fi
 
 echo "→ Rewriting image refs in markdown (../../images → /docs-assets, ../images → /docs-assets)"
-find "$DEST" -name '*.md' -exec sed -i \
-  -e 's|\.\./\.\./images/|/docs-assets/|g' \
-  -e 's|\.\./images/|/docs-assets/|g' \
-  -e 's|(images/|(/docs-assets/|g' \
-  {} +
+# perl -i is portable across GNU/Linux and BSD/macOS (sed -i differs between them)
+find "$DEST" -name '*.md' -exec perl -pi -e '
+  s{\.\./\.\./images/}{/docs-assets/}g;
+  s{\.\./images/}{/docs-assets/}g;
+  s{\(images/}{(/docs-assets/}g;
+' {} +
 
 count=$(find "$DEST" -name '*.md' | wc -l)
 echo "✓ Synced $count markdown files into $DEST"
+
+COUNTS_OUT="$(dirname "$0")/../src/data/skill-counts.json"
+echo "→ Generating skill-family counts → $COUNTS_OUT"
+mkdir -p "$(dirname "$COUNTS_OUT")"
+if [ -d "$TMP/skills" ]; then
+  node "$(dirname "$0")/gen-skill-counts.mjs" "$TMP/skills" "$COUNTS_OUT"
+else
+  echo "⚠ no skills/ in framework checkout; leaving existing $COUNTS_OUT untouched"
+fi
