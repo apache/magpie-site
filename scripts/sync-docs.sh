@@ -7,7 +7,11 @@ REPO="${MAGPIE_DOCS_REPO:-https://github.com/apache/magpie.git}"
 BRANCH="${MAGPIE_DOCS_BRANCH:-main}"
 DEST="$(dirname "$0")/../src/content/docs"
 
-TMP="$(mktemp -d)"
+# macOS's `mktemp -d` (with no template) ignores $TMPDIR and forces a dir under
+# /var/folders, which sandboxed environments often disallow. Passing an explicit
+# template rooted at $TMPDIR keeps the temp dir inside a writable location on
+# both BSD/macOS and GNU/Linux.
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/magpie-docs.XXXXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
 echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/)"
