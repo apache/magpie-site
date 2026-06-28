@@ -3,6 +3,17 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+/* Self-hosted Inter + Jost (were loaded from fonts.googleapis.com, which the
+   site CSP blocks — see apache/magpie-site#11). Static weights keep the
+   "Inter"/"Jost" family names the components already use. */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/jost/400.css";
+@import "@fontsource/jost/500.css";
+@import "@fontsource/jost/600.css";
+@import "@fontsource/jost/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
