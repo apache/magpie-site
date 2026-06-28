@@ -49,3 +49,18 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+  - repo: local
+    hooks:
+      # Refresh the committer/PMC roster + GitHub avatars served by the landing
+      # page (src/data/community.json + public/community-avatars/). Manual stage
+      # only: it calls the GitHub API and writes binary avatars, so it is run on
+      # demand rather than on every commit:
+      #   prek run sync-community --hook-stage manual --all-files
+      # Needs a GitHub token with read:org (GH_TOKEN / GITHUB_TOKEN env or
+      # `gh auth login`); a run without a token is a graceful no-op.
+      - id: sync-community
+        name: Sync community roster + GitHub avatars
+        entry: node scripts/sync-community.mjs
+        language: system
+        pass_filenames: false
+        stages: [manual]

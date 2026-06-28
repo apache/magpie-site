@@ -1,9 +1,126 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
+import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const QUICK_START = `${base}/docs/setup/install-recipes`;
 const OVERVIEW = `${base}/docs/index`;
+
+// Internal governance drafts that should not appear on the public site.
+const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+
+const all = (await getCollection("docs")).filter(
+  (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
+);
+
+type DocItem = { slug: string; label: string; description?: string };
+const groups = new Map<string, DocItem[]>();
+for (const entry of all) {
+  const parts = entry.id.split("/");
+  const key = parts.length > 1 ? parts[0] : "_root";
+  const slug = entry.id.replace(/\.md$/, "");
+  const leaf = parts[parts.length - 1].replace(/\.md$/, "");
+  // README/index pages represent the family overview; label them as such.
+  const isReadme = /^(readme|index)$/i.test(leaf);
+  const label =
+    entry.data.title ??
+    (isReadme ? "Overview" : leaf.replace(/-/g, " "));
+  if (!groups.has(key)) groups.set(key, []);
+  groups.get(key)!.push({ slug, label, description: entry.data.description });
+}
+
+// Friendly names + one-line summaries for each docs group.
+const GROUP_META: Record<string, { name: string; blurb: string }> = {
+  _root: {
+    name: "Overview & concepts",
+    blurb:
+      "What Magpie is, how it works, and the cross-cutting concepts — modes, design principles, confidentiality, labels, and editorial guidelines.",
+  },
+  setup: {
+    name: "Setup",
+    blurb:
+      "Adopt Magpie in your repo and run agents safely — install recipes, prerequisites, sandboxing, privacy/LLM routing, and unadopting.",
+  },
+  security: {
+    name: "Security",
+    blurb:
+      "The security-issue lifecycle — process, roles, forwarder routing policy, onboarding, and the threat model. Maintainer-only.",
+  },
+  "pr-management": {
+    name: "PR management",
+    blurb: "Maintainer-facing PR-queue triage, stats, and deep code review.",
+  },
+  "issue-management": {
+    name: "Issue management",
+    blurb:
+      "Issue triage, bug reproduction, fix drafting, and backlog re-assessment.",
+  },
+  mentoring: {
+    name: "Mentoring",
+    blurb: "Contributor mentoring — the spec, tone guide, and first skills.",
+  },
+  "contributor-growth": {
+    name: "Contributor growth",
+    blurb:
+      "The contributor-to-committer path — welcoming, activity tracking, and nomination evidence.",
+  },
+  "repo-health": {
+    name: "Repo health",
+    blurb:
+      "Read-only maintenance audits — CI, dependencies, licenses, and flaky tests.",
+  },
+  pairing: {
+    name: "Pairing",
+    blurb: "Developer-side skills you run in your own dev loop.",
+  },
+  "release-management": {
+    name: "Release management",
+    blurb: "The ASF release lifecycle — plan, cut, vote, promote, announce.",
+  },
+  utilities: {
+    name: "Utilities",
+    blurb: "Framework meta-skills — author skills and list every skill.",
+  },
+  rfcs: {
+    name: "RFCs",
+    blurb: "Design proposals under discussion.",
+  },
+};
+
+const ORDER = [
+  "_root",
+  "setup",
+  "pr-management",
+  "issue-management",
+  "mentoring",
+  "contributor-growth",
+  "repo-health",
+  "pairing",
+  "release-management",
+  "security",
+  "utilities",
+  "rfcs",
+];
+
+const sortedGroups = Array.from(groups.entries())
+  .map(([key, items]) => ({
+    key,
+    meta: GROUP_META[key] ?? { name: key.replace(/-/g, " "), blurb: "" },
+    items: items.sort((a, b) => {
+      // Overview/README first, then alphabetical.
+      const aOv = a.label === "Overview";
+      const bOv = b.label === "Overview";
+      if (aOv !== bOv) return aOv ? -1 : 1;
+      return a.label.localeCompare(b.label);
+    }),
+  }))
+  .sort((a, b) => {
+    const ai = ORDER.indexOf(a.key);
+    const bi = ORDER.indexOf(b.key);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
+
+const totalPages = all.length;
 ---
 
 <DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/docs/index.astro">
@@ -30,9 +147,25 @@ const OVERVIEW = `${base}/docs/index`;
     <a href={OVERVIEW}>What is Apache Magpie?</a>
   </p>
 
+  <h2>Explore the docs</h2>
   <p>
-    These pages are synced from
-    <a href="https://github.com/apache/magpie/tree/main/docs">apache/magpie/docs</a>.
-    Browse the full set from the sidebar.
+    {totalPages} pages, synced from
+    <a href="https://github.com/apache/magpie/tree/main/docs">apache/magpie/docs</a>
+    and grouped by area. Every page is also in the sidebar.
   </p>
+
+  {sortedGroups.map((group) => (
+    <section>
+      <h3>{group.meta.name}</h3>
+      {group.meta.blurb && <p>{group.meta.blurb}</p>}
+      <ul>
+        {group.items.map((item) => (
+          <li>
+            <a href={`${base}/docs/${item.slug}`}>{item.label}</a>
+            {item.description ? ` — ${item.description}` : ""}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 </DocsLayout>

@@ -23,6 +23,15 @@ rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -r "$TMP/docs/." "$DEST/"
 
+# Publish the root-level design principles as a docs page (/docs/principles) so
+# the site can link to them locally instead of to GitHub.
+if [ -f "$TMP/PRINCIPLES.md" ]; then
+  echo "→ Publishing PRINCIPLES.md → $DEST/principles.md"
+  cp "$TMP/PRINCIPLES.md" "$DEST/principles.md"
+else
+  echo "⚠ no PRINCIPLES.md in framework checkout; /docs/principles will be missing"
+fi
+
 ASSET_DEST="$(dirname "$0")/../public/docs-assets"
 echo "→ Syncing images to $ASSET_DEST"
 rm -rf "$ASSET_DEST"

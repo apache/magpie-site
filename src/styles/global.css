@@ -154,5 +154,8 @@
     }
   html {
     @apply font-sans;
+    /* Account for the sticky top bar when jumping to in-page anchors. */
+    scroll-padding-top: 5rem;
+    scroll-behavior: smooth;
     }
 }
