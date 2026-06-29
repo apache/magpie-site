@@ -14,9 +14,9 @@ DEST="$(dirname "$0")/../src/content/docs"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/magpie-docs.XXXXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/ + tools/)"
+echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/ + tools/ + organizations/)"
 git clone --depth 1 --branch "$BRANCH" --filter=blob:none --sparse "$REPO" "$TMP" >/dev/null 2>&1
-(cd "$TMP" && git sparse-checkout set docs images skills tools >/dev/null)
+(cd "$TMP" && git sparse-checkout set docs images skills tools organizations >/dev/null)
 
 echo "→ Replacing $DEST"
 rm -rf "$DEST"
@@ -30,6 +30,16 @@ if [ -f "$TMP/PRINCIPLES.md" ]; then
   cp "$TMP/PRINCIPLES.md" "$DEST/principles.md"
 else
   echo "⚠ no PRINCIPLES.md in framework checkout; /docs/principles will be missing"
+fi
+
+# Publish each tool's README as an on-site docs page (/docs/tools/<name>) so the
+# website links to tools internally instead of GitHub. Done before the generic
+# link rewrite, which then leaves the absolute GitHub URLs these emit untouched.
+echo "→ Publishing tool READMEs → $DEST/tools/<name>/readme.md"
+if [ -d "$TMP/tools" ]; then
+  node "$(dirname "$0")/sync-tool-docs.mjs" "$TMP" "$DEST"
+else
+  echo "⚠ no tools/ in framework checkout; /docs/tools/* will be missing"
 fi
 
 ASSET_DEST="$(dirname "$0")/../public/docs-assets"

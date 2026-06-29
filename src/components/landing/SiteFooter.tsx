@@ -49,9 +49,9 @@ export function SiteFooter() {
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
             <span className="text-body-bold font-body-bold text-default-font">Project</span>
             <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
-            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools &amp; Capabilities<ArrowUpRight className="size-3.5" /></a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Roadmap</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases">Changelog</a>
+            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools<ArrowUpRight className="size-3.5" /></a>
+            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<ArrowUpRight className="size-3.5" /></a>
+            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<ArrowUpRight className="size-3.5" /></a>
           </div>
           <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
             <span className="text-body-bold font-body-bold text-default-font">Community</span>

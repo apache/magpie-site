@@ -211,15 +211,16 @@ function ImmersiveGradientHero() {
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#skill-families">Skill Families</a>
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#privacy-security">Privacy &amp; Security</a>
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#vendor-neutrality">Vendor Neutrality</a>
+            <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#organisation-agnostic">Organisations</a>
             <a className="text-body font-body text-brand-600 hover:text-brand-700" href="#community">Community</a>
             <a
               className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100"
               href={withBase("/docs")}
               target="_blank"
               rel="noreferrer"
-              title="Open the documentation in a new tab"
+              title="Open the skill documentation in a new tab"
             >
-              Docs
+              Skills
               <ArrowUpRight className="size-3.5" />
             </a>
             <a
@@ -227,7 +228,7 @@ function ImmersiveGradientHero() {
               href={withBase("/tools")}
               target="_blank"
               rel="noreferrer"
-              title="Open Tools & Capabilities in a new tab"
+              title="Open the Tools page in a new tab"
             >
               Tools
               <ArrowUpRight className="size-3.5" />
@@ -492,69 +493,69 @@ function ImmersiveGradientHero() {
           </span>
         </BlurFade>
         <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr max-w-[1100px] mobile:grid-cols-1">
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+          <a
+            href={withBase("/docs/principles#6-the-human-is-always-in-the-loop-until-they-choose-otherwise")}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+          >
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <CheckCircle className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Human-in-the-Loop
             </span>
             <span className="text-caption font-caption text-subtext-color">
               Every outward action needs explicit maintainer confirmation.
               External content is treated as data, never instructions.
             </span>
-            <a
-              href={withBase("/docs/principles#6-the-human-is-always-in-the-loop-until-they-choose-otherwise")}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            >
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
               Principle
               <ArrowUpRight className="size-3.5" />
-            </a>
-          </div>
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            </span>
+          </a>
+          <a
+            href={withBase("/docs/principles#16-audit-every-agent-authored-action-reverse-it-where-possible")}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+          >
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <FileText className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Full Audit Log
             </span>
             <span className="text-caption font-caption text-subtext-color">
               Every agent-authored action — comment, label, draft, PR — is
               logged and reversible where possible.
             </span>
-            <a
-              href={withBase("/docs/principles#16-audit-every-agent-authored-action-reverse-it-where-possible")}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            >
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
               Principle
               <ArrowUpRight className="size-3.5" />
-            </a>
-          </div>
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            </span>
+          </a>
+          <a
+            href={withBase("/docs/principles#1-privacy-security-and-supply-chain-integrity-ship-before-features")}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+          >
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <Key className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Controlled Maintainer Development Environment
             </span>
             <span className="text-caption font-caption text-subtext-color">
               Every system tool is pinned and aged through a cooldown window.
               Version bumps are reviewed PRs, not silent updates.
             </span>
-            <a
-              href={withBase("/docs/principles#1-privacy-security-and-supply-chain-integrity-ship-before-features")}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            >
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
               Principle
               <ArrowUpRight className="size-3.5" />
-            </a>
-          </div>
+            </span>
+          </a>
         </div>
       </div>
       <div id="agentic-automations" className="flex w-full flex-col items-center gap-16 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
@@ -575,7 +576,8 @@ function ImmersiveGradientHero() {
         </BlurFade>
         <div className="flex w-full flex-col items-start gap-3 max-w-[1100px]">
           <div className="flex w-full items-start gap-3 mobile:flex-col">
-            <div className="flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+            <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#triage")} target="_blank" rel="noreferrer" aria-label="Agentic Triage Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-600 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   1
@@ -609,7 +611,8 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
             </div>
-            <div className="flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+            <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#drafting")} target="_blank" rel="noreferrer" aria-label="Agentic Drafting Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-500 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   2
@@ -645,7 +648,8 @@ function ImmersiveGradientHero() {
             </div>
           </div>
           <div className="flex w-full items-start gap-3 mobile:flex-col">
-            <div className="flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+            <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#mentoring")} target="_blank" rel="noreferrer" aria-label="Agentic Mentoring Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-400 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   3
@@ -679,7 +683,8 @@ function ImmersiveGradientHero() {
                 </div>
               </div>
             </div>
-            <div className="flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+            <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#pairing")} target="_blank" rel="noreferrer" aria-label="Agentic Pairing Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-300 text-brand-900 font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-brand-900">
                   4
@@ -714,8 +719,9 @@ function ImmersiveGradientHero() {
               </div>
             </div>
           </div>
-          <div className="relative flex w-full items-start gap-5 rounded-2xl border-2 border-solid border-brand-200 px-6 py-6 shadow-sm bg-gradient-to-r from-brand-50 to-brand-100/60 overflow-hidden">
+          <div className="group relative flex w-full items-start gap-5 rounded-2xl border-2 border-solid border-brand-200 px-6 py-6 shadow-sm bg-gradient-to-r from-brand-50 to-brand-100/60 overflow-hidden">
             <BorderBeam size={150} duration={8} colorFrom="#004aad" colorTo="#80b3ff" />
+            <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#auto-merge")} target="_blank" rel="noreferrer" aria-label="Agentic Autonomous Mode docs" />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-600 text-white font-['Inter'] text-[16px] font-[700]">
               <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                 5
@@ -863,69 +869,69 @@ function ImmersiveGradientHero() {
             </div>
           </div>
           <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr mobile:grid mobile:grid-cols-1">
-            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            <a
+              href={withBase("/docs/setup/secure-agent-setup")}
+              target="_blank"
+              rel="noreferrer"
+              className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            >
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
                 <Shield className="text-body-bold font-body-bold text-brand-700" />
               </div>
-              <span className="text-body-bold font-body-bold text-default-font">
+              <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
                 Sandboxed by Default
               </span>
               <span className="text-caption font-caption text-subtext-color">
                 Filesystem, network, and tool-permission rules enforced at the
                 harness layer. Sandbox bypasses warn loudly, never silently.
               </span>
-              <a
-                href={withBase("/docs/setup/secure-agent-setup")}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              >
+              <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
                 Docs
                 <ArrowUpRight className="size-3.5" />
-              </a>
-            </div>
-            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              </span>
+            </a>
+            <a
+              href={withBase("/docs/security/forwarder-routing-policy")}
+              target="_blank"
+              rel="noreferrer"
+              className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            >
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
                 <Lock className="text-body-bold font-body-bold text-brand-700" />
               </div>
-              <span className="text-body-bold font-body-bold text-default-font">
+              <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
                 Privacy-Aware Routing
               </span>
               <span className="text-caption font-caption text-subtext-color">
                 Private content flows only to LLMs your PMC has explicitly
                 approved, with a recorded data-residency contract.
               </span>
-              <a
-                href={withBase("/docs/security/forwarder-routing-policy")}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              >
+              <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
                 Docs
                 <ArrowUpRight className="size-3.5" />
-              </a>
-            </div>
-            <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+              </span>
+            </a>
+            <a
+              href={withBase("/docs/confidentiality")}
+              target="_blank"
+              rel="noreferrer"
+              className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            >
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
                 <EyeOff className="text-body-bold font-body-bold text-brand-700" />
               </div>
-              <span className="text-body-bold font-body-bold text-default-font">
+              <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
                 PII Redaction
               </span>
               <span className="text-caption font-caption text-subtext-color">
                 Third-party PII is redacted to stable identifiers before any
                 content reaches an LLM context.
               </span>
-              <a
-                href={withBase("/docs/confidentiality")}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              >
+              <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
                 Docs
                 <ArrowUpRight className="size-3.5" />
-              </a>
-            </div>
+              </span>
+            </a>
           </div>
         </div>
       </div>
@@ -935,29 +941,23 @@ function ImmersiveGradientHero() {
           <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
             <Globe className="text-caption font-caption text-brand-600" />
             <span className="text-caption font-caption text-brand-600">
-              Open Governance
+              Vendor neutral
             </span>
           </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Truly vendor neutral
           </span>
           <span className="text-body font-body text-subtext-color">
-            Apache Magpie is developed under the Apache Software Foundation
-            umbrella, ensuring no single company controls the project direction.
-            Decisions are made by the community, for the community.
-          </span>
-          <span className="text-body font-body text-subtext-color">
-            How we achieve it, concretely:{" "}
-            <span className="font-body-bold text-default-font">skills</span> are
-            generic English workflows that never name a vendor — they declare a{" "}
-            <span className="font-body-bold text-default-font">capability</span>,
-            and a{" "}
-            <span className="font-body-bold text-default-font">tool</span>{" "}
-            fulfils it. Every vendor binding lives in a tool behind a capability
-            contract, across six independent axes — LLM backend, agentic
-            runtime, forge/tracker, communication channels, source control, and
-            project governance. Swapping a backend is a config change, never a
-            rewrite of the workflows.
+            Magpie&apos;s workflows never name a vendor.{" "}
+            <span className="font-body-bold text-default-font">Skills</span>{" "}
+            declare a{" "}
+            <span className="font-body-bold text-default-font">capability</span>;
+            a <span className="font-body-bold text-default-font">tool</span>{" "}
+            fulfils it; every vendor binding lives in a tool behind a contract —
+            across six independent axes: LLM backend, agentic runtime,
+            forge/tracker, communication channels, source control, and project
+            governance. Swapping a backend is a config change, never a rewrite of
+            the workflows.
           </span>
           <div className="flex flex-wrap gap-3">
             <a
@@ -975,7 +975,7 @@ function ImmersiveGradientHero() {
               target="_blank"
               rel="noreferrer"
             >
-              Browse tools, capabilities &amp; status
+              Browse tools &amp; capabilities
               <ArrowUpRight className="size-3.5" />
             </a>
           </div>
@@ -989,8 +989,8 @@ function ImmersiveGradientHero() {
                   Swap LLM providers freely
                 </span>
                 <span className="text-caption font-caption text-subtext-color">
-                  Use OpenAI, Anthropic, local models, or any provider. No
-                  lock-in.
+                  Anthropic, OpenAI, Bedrock, or local Ollama/vLLM — skills target
+                  a capability floor, not a provider SDK. No lock-in.
                 </span>
               </div>
             </div>
@@ -1015,25 +1015,12 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex flex-col items-start gap-1">
                 <span className="text-body-bold font-body-bold text-default-font">
-                  Community-driven roadmap
+                  Forge, tracker &amp; VCS behind contracts
                 </span>
                 <span className="text-caption font-caption text-subtext-color">
-                  Every feature is proposed, discussed, and voted on in the
-                  open.
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-brand-100">
-                <Check className="text-caption font-caption text-brand-700" />
-              </div>
-              <div className="flex flex-col items-start gap-1">
-                <span className="text-body-bold font-body-bold text-default-font">
-                  Apache 2.0 Licensed
-                </span>
-                <span className="text-caption font-caption text-subtext-color">
-                  Permissive licensing that works for individuals, startups, and
-                  enterprises.
+                  GitHub and Jira today; GitLab, Gitea, Bugzilla, and non-Git VCS
+                  (SVN, Mercurial, …) are documented, labelled extension points —
+                  each one adapter, not a fork.
                 </span>
               </div>
             </div>
@@ -1043,6 +1030,145 @@ function ImmersiveGradientHero() {
           className="w-80 flex-none"
           src="https://www.apache.org/foundation/press/kit/img/the-apache-way-badge/ASF_Badge_apacheway-blue.png"
         />
+        </div>
+      </div>
+      <div id="organisation-agnostic" className="flex w-full flex-col items-center bg-default-background px-8 py-24 mobile:px-4 mobile:py-14">
+        <BlurFade inView className="flex flex-col items-center gap-4 max-w-[760px] pb-12 mobile:pb-8">
+          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
+            <Users className="text-caption font-caption text-brand-600" />
+            <span className="text-caption font-caption text-brand-600">
+              Organisation agnostic
+            </span>
+          </div>
+          <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
+            All organisations are welcome
+          </span>
+          <span className="text-body font-body text-subtext-color text-center">
+            Magpie isn&apos;t hardwired to the Apache Software Foundation. A
+            governing body — a foundation, a company, or an informal maintainer
+            collective — is an{" "}
+            <span className="font-body-bold text-default-font">organization</span>{" "}
+            that bundles its governance vocabulary, backend defaults, and identity
+            (logo included). A project declares{" "}
+            <span className="font-mono text-default-font">organization: ASF</span>{" "}
+            (or <span className="font-mono text-default-font">independent</span>,
+            or your own) once and inherits the rest — so the{" "}
+            <span className="font-body-bold text-default-font">same skill</span>{" "}
+            runs unchanged for an ASF project and a non-ASF one.
+          </span>
+        </BlurFade>
+        <div className="grid w-full grid-cols-2 gap-4 max-w-[1000px] mobile:grid-cols-1">
+          <a
+            className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            href={withBase("/tools")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+              <Globe className="text-body-bold font-body-bold text-brand-700" />
+            </div>
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
+              Organizations, not a hardcoded ASF
+            </span>
+            <span className="text-caption font-caption text-subtext-color">
+              <span className="font-mono">ASF</span> and{" "}
+              <span className="font-mono">independent</span> ship in-tree; author
+              your own for your foundation or company. Governance vocabulary,
+              backend choices, and identity live once and every project inherits
+              them.
+            </span>
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
+              See the organizations
+              <ArrowUpRight className="size-3.5" />
+            </span>
+          </a>
+          <a
+            className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            href={withBase("/docs/vendor-neutrality")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+              <Heart className="text-body-bold font-body-bold text-brand-700" />
+            </div>
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
+              Non-ASF adopters are first-class
+            </span>
+            <span className="text-caption font-caption text-subtext-color">
+              The <span className="font-mono">independent</span> baseline needs no
+              foundation: DCO sign-off, GitHub-native security and releases, no
+              mailing-list backends. It&apos;s a starting point, not an
+              afterthought.
+            </span>
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
+              How neutrality works
+              <ArrowUpRight className="size-3.5" />
+            </span>
+          </a>
+          <a
+            className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            href={withBase("/docs/extending")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+              <Layers className="text-body-bold font-body-bold text-brand-700" />
+            </div>
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
+              Three homes for every extension
+            </span>
+            <span className="text-caption font-caption text-subtext-color">
+              A skill, adapter, or whole organization can live in-tree (upstreamed
+              to everyone), in your adopter repo, or in an external repo you
+              reference — wired in deliberately, never auto-installed.
+            </span>
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
+              The three homes
+              <ArrowUpRight className="size-3.5" />
+            </span>
+          </a>
+          <a
+            className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+            href={withBase("/docs/extending")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+              <PenTool className="text-body-bold font-body-bold text-brand-700" />
+            </div>
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
+              Extend by project, org, or individual
+            </span>
+            <span className="text-caption font-caption text-subtext-color">
+              Add a backend by writing one adapter against a documented contract;
+              the workflows never change. Keep it private or contribute it back
+              under Apache-2.0 — one PR away.
+            </span>
+            <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
+              Who extends what
+              <ArrowUpRight className="size-3.5" />
+            </span>
+          </a>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-10">
+          <a
+            className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+            href={withBase("/docs/extending")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Extending Magpie (project / org / individual)
+            <ArrowUpRight className="size-3.5" />
+          </a>
+          <a
+            className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+            href={withBase("/tools")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Organizations, tools &amp; capabilities
+            <ArrowUpRight className="size-3.5" />
+          </a>
         </div>
       </div>
       <div id="community" className="flex w-full flex-col items-center gap-14 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
@@ -1129,11 +1255,18 @@ function ImmersiveGradientHero() {
           </a>
         </div>
         <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr max-w-[1100px] mobile:grid-cols-1">
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <div className="group relative flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all">
+            <a
+              className="absolute inset-0 z-0 rounded-2xl"
+              href="https://lists.apache.org/list.html?dev@magpie.apache.org"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Browse the developer mailing list archive"
+            />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <Mail className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Developer mailing list
             </span>
             <span className="text-caption font-caption text-subtext-color">
@@ -1141,7 +1274,7 @@ function ImmersiveGradientHero() {
               consensus all happen on dev@magpie.apache.org. If it didn&apos;t
               happen on the list, it didn&apos;t happen.
             </span>
-            <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
+            <div className="relative z-10 mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
               <a
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
                 href="mailto:dev-subscribe@magpie.apache.org"
@@ -1160,11 +1293,18 @@ function ImmersiveGradientHero() {
               </a>
             </div>
           </div>
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <div className="group relative flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all">
+            <a
+              className="absolute inset-0 z-0 rounded-2xl"
+              href="https://the-asf.slack.com/archives/C0BD1EBMVEJ"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open the #magpie channel on the ASF Slack"
+            />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <Slack className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Slack — #magpie
             </span>
             <span className="text-caption font-caption text-subtext-color">
@@ -1172,7 +1312,7 @@ function ImmersiveGradientHero() {
               channel on the ASF Slack — questions, pairing, and quick design
               back-and-forth.
             </span>
-            <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
+            <div className="relative z-10 mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
               <a
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
                 href="https://s.apache.org/slack-invite"
@@ -1193,11 +1333,18 @@ function ImmersiveGradientHero() {
               </a>
             </div>
           </div>
-          <div className="flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <div className="group relative flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all">
+            <a
+              className="absolute inset-0 z-0 rounded-2xl"
+              href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Read the contributing guide"
+            />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
               <Heart className="text-body-bold font-body-bold text-brand-700" />
             </div>
-            <span className="text-body-bold font-body-bold text-default-font">
+            <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
               Start contributing
             </span>
             <span className="text-caption font-caption text-subtext-color">
@@ -1205,16 +1352,7 @@ function ImmersiveGradientHero() {
               and your first pull request. The agent proposes; humans review and
               merge — and we mentor newcomers along the way.
             </span>
-            <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
-              <a
-                className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Contributing guide
-                <ArrowRight className="size-3.5" />
-              </a>
+            <div className="relative z-10 mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
               <a
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
                 href="https://github.com/apache/magpie/issues"
@@ -1222,6 +1360,15 @@ function ImmersiveGradientHero() {
                 rel="noreferrer"
               >
                 Browse issues
+                <ArrowRight className="size-3.5" />
+              </a>
+              <a
+                className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+                href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Contributing guide
                 <ArrowRight className="size-3.5" />
               </a>
             </div>
@@ -1339,9 +1486,9 @@ function ImmersiveGradientHero() {
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Project</span>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
-              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools &amp; Capabilities<ArrowUpRight className="size-3.5" /></a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Roadmap</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases">Changelog</a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<ArrowUpRight className="size-3.5" /></a>
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Community</span>

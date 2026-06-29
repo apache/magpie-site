@@ -59,12 +59,39 @@ const isDir = (p) => {
   }
 };
 
-// --- capability taxonomy -------------------------------------------------
-// Parse the `| `capability:x` | definition |` table rows from the labels doc.
+// --- taxonomy (two axes, per RFC-AI-0005) --------------------------------
+// Skills carry `capability:*`; tools carry `contract:*` / `substrate:*`.
+// Parse all three vocabularies from docs/labels-and-capabilities.md.
+const labels = read(labelsDoc);
+//  Skill axis:  | `capability:x` | definition |
 const capabilities = {};
-for (const line of read(labelsDoc).split("\n")) {
-  const m = line.match(/^\|\s*`capability:([a-z]+)`\s*\|\s*(.+?)\s*\|\s*$/);
-  if (m) capabilities[m[1]] = m[2].trim();
+//  Tool axis:   | `contract:x`/`substrate:x` | kind | definition |
+const contracts = {};
+const substrates = {};
+for (const line of labels.split("\n")) {
+  const cap = line.match(/^\|\s*`capability:([a-z]+)`\s*\|\s*(.+?)\s*\|\s*$/);
+  if (cap) {
+    capabilities[cap[1]] = cap[2].trim();
+    continue;
+  }
+  const tool = line.match(
+    /^\|\s*`(contract|substrate):([a-z-]+)`\s*\|\s*[a-z]+\s*\|\s*(.+?)\s*\|\s*$/,
+  );
+  if (tool) {
+    (tool[1] === "contract" ? contracts : substrates)[tool[2]] = tool[3].trim();
+  }
+}
+
+// MCP servers a tool wraps, from the "MCP servers, classified by capability"
+// table: | <server> | `<prefix>` | [`tools/<name>`](..) | <capability> | <org> |.
+// An MCP is just a transport behind a capability contract — classify the
+// wrapping tool, and badge it so the site can explain the relationship.
+const mcpByTool = {};
+for (const line of labels.split("\n")) {
+  const m = line.match(
+    /^\|\s*([^|]+?)\s*\|\s*`(mcp__[^`]+)`\s*\|\s*\[`tools\/([a-z0-9-]+)`\]/,
+  );
+  if (m) mcpByTool[m[3]] = { server: m[1].trim().replace(/`/g, ""), prefix: m[2].trim() };
 }
 
 // --- spec maturity per tool ---------------------------------------------
@@ -133,14 +160,30 @@ function firstParagraph(md) {
 function title(md, name) {
   const cleaned = md.replace(/<!--[\s\S]*?-->/g, "");
   const m = cleaned.match(/^#\s+(.+?)\s*$/m);
-  if (m) return m[1].replace(/^Tool:\s*/i, "").trim();
-  return name;
+  if (!m) return name;
+  const h1 = m[1]
+    .replace(/^Tool:\s*/i, "")
+    .replace(/`/g, "")
+    .trim();
+  // Newer tool READMEs use a path-like H1 (e.g. `tools/github/`); fall back to
+  // the directory name in that case so the card shows a clean title.
+  if (/^tools\//.test(h1) || h1.includes("/")) return name;
+  return h1;
 }
 
-function capabilitiesOf(md) {
+// The tool `**Capability:**` line now carries contract:/substrate: labels.
+function toolLabelsOf(md) {
   const m = md.match(/^\*\*Capability:\*\*\s*(.+?)\s*$/m);
   if (!m) return [];
-  return [...m[1].matchAll(/capability:([a-z]+)/g)].map((x) => x[1]);
+  return [...m[1].matchAll(/(contract|substrate):([a-z-]+)/g)].map((x) => ({
+    kind: x[1],
+    name: x[2],
+  }));
+}
+// Tools/skills/families can declare membership of an organization.
+function organizationOf(md) {
+  const m = md.match(/^\*\*Organization:\*\*\s*([A-Za-z0-9_-]+)/m);
+  return m ? m[1] : null;
 }
 
 const tools = [];
@@ -153,39 +196,91 @@ for (const name of readdirSync(toolsDir).sort()) {
     existsSync(join(dir, "pyproject.toml")) &&
     isDir(join(dir, "src")) &&
     isDir(join(dir, "tests"));
+  const tlabels = toolLabelsOf(readme);
   tools.push({
     name,
     title: title(readme, name),
     description: firstParagraph(readme),
-    capabilities: capabilitiesOf(readme),
+    labels: tlabels,
+    kind: tlabels.some((l) => l.kind === "contract") ? "contract" : "substrate",
+    organization: organizationOf(readme),
+    mcp: mcpByTool[name] ?? null,
     hasCode,
     maturity: toolMaturity[name] ?? null,
-    // objective, human-readable state combining both signals
     state: hasCode ? "implemented" : "adapter",
     docUrl: `https://github.com/apache/magpie/tree/main/tools/${name}`,
   });
 }
 
-// --- ASF-specific families ----------------------------------------------
-// Each skill family's docs/<family>/README.md declares its scope with a
-// marker line: `> **Scope — `asf: true` · 🪶 ASF-specific.**` (or `asf: false`).
-// Derive the set of ASF-specific families from that metadata so the website's
-// oak-leaf badge is data-driven, not hardcoded.
+// --- organization membership of skill families ---------------------------
+// Each family's docs/<family>/README.md declares its scope with a marker
+// line: `> **Scope — `organization: ASF` · 🪶 ASF-specific.**` (or
+// `organization: independent`, or no marker for org-agnostic families).
+// Derive the family→organization map (and the ASF subset for the oak leaf)
+// from that metadata so the website badge stays data-driven.
 const docsDir = join(root, "docs");
-const asfFamilies = [];
+const orgFamilies = {};
 if (isDir(docsDir)) {
   for (const fam of readdirSync(docsDir)) {
     const readme = join(docsDir, fam, "README.md");
     if (!existsSync(readme)) continue;
-    const m = read(readme).match(/Scope\s*[—-]\s*`asf:\s*(true|false)`/i);
-    if (m && m[1].toLowerCase() === "true") asfFamilies.push(fam);
+    const m = read(readme).match(
+      /Scope\s*[—-]\s*`organization:\s*([A-Za-z0-9_-]+)`/i,
+    );
+    if (m) orgFamilies[fam] = m[1];
   }
-  asfFamilies.sort();
+}
+const asfFamilies = Object.keys(orgFamilies)
+  .filter((f) => orgFamilies[f] === "ASF")
+  .sort();
+
+// --- organizations -------------------------------------------------------
+// Each organizations/<org>/organization.md carries a fenced `yaml` block:
+//   organization_identity:
+//     id: ASF
+//     name: "Apache Software Foundation"
+//     url: https://www.apache.org/
+//     logo: https://www.apache.org/.../asf_logo.svg
+const orgsDir = join(root, "organizations");
+const organizations = [];
+const cleanVal = (v) =>
+  v
+    .replace(/#.*$/, "") // strip trailing yaml comment
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+if (isDir(orgsDir)) {
+  for (const id of readdirSync(orgsDir).sort()) {
+    if (id === "_template") continue;
+    const orgFile = join(orgsDir, id, "organization.md");
+    if (!existsSync(orgFile)) continue;
+    const body = read(orgFile);
+    const ident = {};
+    const block = body.match(/organization_identity:\s*\n([\s\S]*?)(\n```|\n#|\n\S)/);
+    const src = block ? block[1] : "";
+    for (const line of src.split("\n")) {
+      const km = line.match(/^\s+(id|name|url|logo):\s*(.*)$/);
+      if (!km) continue;
+      const val = cleanVal(km[2]);
+      ident[km[1]] = val === "null" || val === "" ? null : val;
+    }
+    organizations.push({
+      id: ident.id || id,
+      name: ident.name || id,
+      url: ident.url || null,
+      logo: ident.logo || null,
+      tools: tools.filter((t) => t.organization === id).map((t) => t.name),
+      families: Object.keys(orgFamilies)
+        .filter((f) => orgFamilies[f] === id)
+        .sort(),
+    });
+  }
 }
 
-// --- skills summary (for the ASF mark on skill families) -----------------
+// --- skills summary ------------------------------------------------------
 let skillTotal = 0;
 let apacheLicensed = 0;
+const skillsByOrg = {};
 if (isDir(skillsDir)) {
   for (const name of readdirSync(skillsDir)) {
     const sp = join(skillsDir, name, "SKILL.md");
@@ -193,28 +288,41 @@ if (isDir(skillsDir)) {
     skillTotal++;
     const fm = read(sp).split(/^---\s*$/m)[1] ?? "";
     if (/^license:\s*Apache-2\.0/m.test(fm)) apacheLicensed++;
+    const om = fm.match(/^organization:\s*([A-Za-z0-9_-]+)/m);
+    if (om) skillsByOrg[om[1]] = (skillsByOrg[om[1]] || 0) + 1;
   }
 }
 
 const out = {
   _comment:
-    "GENERATED by scripts/gen-tools.mjs — do not edit by hand. Derives from apache/magpie tools/, spec-loop specs, and skills/.",
-  capabilities,
+    "GENERATED by scripts/gen-tools.mjs — do not edit by hand. Derives from apache/magpie tools/, spec-loop specs, skills/, docs/, and organizations/.",
+  // Two-axis taxonomy (RFC-AI-0005)
+  capabilities, // skill axis (capability:*)
+  contracts, // tool axis — capability contracts (contract:*)
+  substrates, // tool axis — framework substrate (substrate:*)
   tools,
   toolsTotal: tools.length,
   implementedTotal: tools.filter((t) => t.hasCode).length,
+  contractsTotal: tools.filter((t) => t.kind === "contract").length,
+  substratesTotal: tools.filter((t) => t.kind === "substrate").length,
+  mcpTotal: tools.filter((t) => t.mcp).length,
+  organizations,
+  orgFamilies,
   asfFamilies,
   skills: {
     total: skillTotal,
     apacheLicensed,
     allApache: skillTotal > 0 && apacheLicensed === skillTotal,
     license: "Apache-2.0",
+    byOrg: skillsByOrg,
   },
 };
 
 writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n");
 console.log(
-  `✓ tools → ${outPath}: ${tools.length} tools (${out.implementedTotal} with code), ` +
-    `${Object.keys(capabilities).length} capabilities, ${skillTotal} skills, ` +
-    `ASF families: ${asfFamilies.join(", ") || "(none)"}`,
+  `✓ tools → ${outPath}: ${tools.length} tools ` +
+    `(${out.contractsTotal} contract, ${out.substratesTotal} substrate, ${out.implementedTotal} with code), ` +
+    `${Object.keys(capabilities).length} skill-capabilities, ` +
+    `${Object.keys(contracts).length} contracts, ${Object.keys(substrates).length} substrates, ` +
+    `${organizations.length} orgs, ${skillTotal} skills`,
 );

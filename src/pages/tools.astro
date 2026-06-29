@@ -6,54 +6,109 @@ import toolsData from "@/data/tools.json";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+type Label = { kind: "contract" | "substrate"; name: string };
 type Tool = {
   name: string;
   title: string;
   description: string;
-  capabilities: string[];
+  labels: Label[];
+  kind: string;
+  organization: string | null;
+  mcp: { server: string; prefix: string } | null;
   hasCode: boolean;
   maturity: string | null;
   state: string;
   docUrl: string;
 };
+type Org = {
+  id: string;
+  name: string;
+  url: string | null;
+  logo: string | null;
+  tools: string[];
+  families: string[];
+};
 
 const data = toolsData as {
   capabilities: Record<string, string>;
+  contracts: Record<string, string>;
+  substrates: Record<string, string>;
   tools: Tool[];
   toolsTotal: number;
   implementedTotal: number;
-  skills: { total: number; allApache: boolean; license: string };
+  contractsTotal: number;
+  substratesTotal: number;
+  mcpTotal: number;
+  organizations: Org[];
+  skills: { total: number; byOrg: Record<string, number>; license: string };
 };
 
-// Stable display order for the capability buckets (matches the taxonomy doc).
 const CAP_ORDER = [
-  "triage",
-  "review",
-  "fix",
-  "intake",
-  "reconciliation",
-  "resolve",
-  "reassess",
-  "stats",
-  "setup",
+  "triage", "review", "fix", "intake", "reconciliation",
+  "resolve", "reassess", "stats", "platform", "authoring",
 ];
-const caps = CAP_ORDER.filter((c) => c in data.capabilities).map((c) => ({
+const skillCaps = CAP_ORDER.filter((c) => c in data.capabilities).map((c) => ({
   key: c,
   def: data.capabilities[c],
-  count: data.tools.filter((t) => t.capabilities.includes(c)).length,
+}));
+const contractList = Object.keys(data.contracts).map((c) => ({
+  key: c,
+  def: data.contracts[c],
+  count: data.tools.filter((t) => t.labels.some((l) => l.kind === "contract" && l.name === c)).length,
+}));
+const substrateList = Object.keys(data.substrates).map((s) => ({
+  key: s,
+  def: data.substrates[s],
+  count: data.tools.filter((t) => t.labels.some((l) => l.kind === "substrate" && l.name === s)).length,
 }));
 
 const tools = [...data.tools].sort((a, b) => a.name.localeCompare(b.name));
+const orgById = Object.fromEntries(data.organizations.map((o) => [o.id, o]));
+
+// Organization filter dimension: every org that actually labels a tool, plus
+// an "agnostic" bucket for tools that declare no organization.
+const AGNOSTIC = "__agnostic";
+const orgCounts: Record<string, number> = {};
+for (const t of tools) {
+  const k = t.organization ?? AGNOSTIC;
+  orgCounts[k] = (orgCounts[k] ?? 0) + 1;
+}
+const orgChips = Object.keys(orgCounts)
+  .filter((k) => k !== AGNOSTIC)
+  .sort()
+  .map((id) => ({
+    id,
+    label: orgById[id]?.name ?? id,
+    logo: orgById[id]?.logo ?? null,
+    count: orgCounts[id],
+  }));
+const agnosticCount = orgCounts[AGNOSTIC] ?? 0;
+
+// label → definition, for the filter explanation
+const labelDefs: Record<string, string> = {};
+for (const [k, v] of Object.entries(data.contracts)) labelDefs[`contract:${k}`] = v;
+for (const [k, v] of Object.entries(data.substrates)) labelDefs[`substrate:${k}`] = v;
 
 const VENDOR_NEUTRALITY = `${base}/docs/vendor-neutrality`;
+const EXTENDING = `${base}/docs/extending`;
 const TAXONOMY = `${base}/docs/labels-and-capabilities`;
-const PREREQS = `${base}/docs/prerequisites`;
+const ADAPTERS = `${base}/docs/adapters/registry`;
+const ORGANIZATIONS = "https://github.com/apache/magpie/tree/main/organizations";
 
-// Badge palettes by implementation state / maturity.
+// In-page section navigation
+const SECTIONS = [
+  { id: "model", label: "The model" },
+  { id: "skill-capabilities", label: "Skill capabilities" },
+  { id: "tool-capabilities", label: "Tool capabilities" },
+  { id: "tools", label: "Tools" },
+  { id: "organizations", label: "Organizations" },
+  { id: "extend", label: "Extending" },
+];
+
 const stateBadge = (t: Tool) =>
   t.hasCode
     ? { label: "Implemented", cls: "bg-success-50 text-success-700 border-success-200" }
-    : { label: "Adapter contract", cls: "bg-brand-50 text-brand-700 border-brand-200" };
+    : { label: "Adapter / spec", cls: "bg-brand-50 text-brand-700 border-brand-200" };
 const maturityBadge = (m: string | null) => {
   if (!m) return null;
   const map: Record<string, string> = {
@@ -64,154 +119,220 @@ const maturityBadge = (m: string | null) => {
   };
   return { label: m, cls: map[m] ?? map.proposed };
 };
+const labelCls = (kind: string) =>
+  kind === "contract"
+    ? "bg-brand-50 text-brand-700"
+    : "bg-neutral-100 text-neutral-700";
+
+// Full-bleed section band; alternating background for visual rhythm.
+const band = "w-full px-8 py-16 mobile:px-4 mobile:py-12";
+const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
 ---
 
 <BaseLayout
-  title="Tools & Capabilities — Apache Magpie"
-  description="Every Apache Magpie tool, the capability it provides, and its implementation state — derived directly from the apache/magpie framework."
+  title="Tools — How Magpie is built"
+  description="Apache Magpie's tools: skills declare capabilities, tools provide contract and substrate interfaces, adapters implement them, and organizations bundle the defaults. Generated from the framework repo."
   editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/tools.astro"
 >
   <SiteHeader />
 
-  <main class="flex w-full flex-col items-center bg-default-background px-8 py-16 mobile:px-4 mobile:py-10">
-    <div class="flex w-full max-w-[1100px] flex-col gap-12">
-      <!-- Header -->
-      <header class="flex flex-col gap-4">
+  <main class="flex w-full flex-col items-center">
+    <!-- Header band -->
+    <div class="w-full bg-default-background px-8 pt-16 pb-10 mobile:px-4 mobile:pt-10">
+      <header class="mx-auto flex w-full max-w-[1100px] flex-col gap-4">
         <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to home</a>
         <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-          <span class="text-caption font-caption text-brand-600">Tools &amp; Capabilities</span>
+          <span class="text-caption font-caption text-brand-600">Tools</span>
         </div>
         <h1 class="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:text-[28px]">
-          Every tool, capability, and where it stands today
+          How Magpie is built
         </h1>
-        <p class="text-body font-body text-subtext-color max-w-[760px]">
-          Magpie's workflows (<strong>skills</strong>) never talk to a vendor directly — they declare a
-          <strong>capability</strong>, and a <strong>tool</strong> fulfils it. This page lists every tool in the
-          framework, the capabilities it provides, and its implementation state. It is generated directly from
-          <a class="text-brand-600 hover:text-brand-700 underline" href="https://github.com/apache/magpie/tree/main/tools" target="_blank" rel="noreferrer">apache/magpie/tools</a>,
-          so it never drifts from the code.
+        <p class="text-body font-body text-subtext-color max-w-[800px]">
+          Four layers, one rule: <strong>workflows never name a vendor</strong>. Skills declare the{" "}
+          <strong>capabilities</strong> they need; tools provide <strong>contract</strong> and{" "}
+          <strong>substrate</strong> interfaces; <strong>adapters</strong> implement a contract for one backend;
+          and <strong>organizations</strong> bundle the defaults a whole foundation or company shares. Everything
+          on this page is generated directly from{" "}
+          <a class="text-brand-600 hover:text-brand-700 underline" href="https://github.com/apache/magpie" target="_blank" rel="noreferrer">apache/magpie</a>,
+          so it never drifts from the framework.
         </p>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-caption font-caption text-subtext-color">
-          <span><strong class="text-default-font">{data.toolsTotal}</strong> tools</span>
-          <span><strong class="text-default-font">{data.implementedTotal}</strong> with a landed code implementation</span>
-          <span><strong class="text-default-font">{caps.length}</strong> capabilities</span>
-          <span><strong class="text-default-font">{data.skills.total}</strong> skills, all {data.skills.license}</span>
+          <span><strong class="text-default-font">{skillCaps.length}</strong> skill capabilities</span>
+          <span><strong class="text-default-font">{data.contractsTotal}</strong> tools across {Object.keys(data.contracts).length} contracts</span>
+          <span><strong class="text-default-font">{data.substratesTotal}</strong> substrate tools</span>
+          <span><strong class="text-default-font">{data.organizations.length}</strong> organizations</span>
+          <span><strong class="text-default-font">{data.skills.total}</strong> skills</span>
         </div>
       </header>
+    </div>
 
-      <!-- Vendor-neutrality callout -->
-      <section class="flex flex-col gap-3 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6">
-        <h2 class="text-heading-3 font-heading-3 text-default-font">Why this matters: vendor neutrality</h2>
-        <p class="text-body font-body text-subtext-color max-w-[820px]">
-          Because every vendor binding lives in a tool behind a capability contract, swapping a backend — a different
-          forge, tracker, mailing list, VCS, or LLM — is a config change, never a rewrite of the workflows. The full
-          per-axis status (LLM backend, agentic runtime, forge/tracker, communication channels, source control,
-          governance) lives in the framework's own write-up.
-        </p>
-        <div class="flex flex-wrap gap-3 pt-1">
-          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={VENDOR_NEUTRALITY}>
-            How Magpie achieves vendor neutrality →
-          </a>
-          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={TAXONOMY}>
-            Skill / tool / capability taxonomy →
-          </a>
-          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={PREREQS}>
-            Prerequisites →
-          </a>
-        </div>
-      </section>
+    <!-- Sticky section navigation -->
+    <nav class="sticky top-0 z-40 w-full border-y border-solid border-neutral-100 bg-default-background/95 px-8 py-3 backdrop-blur-md mobile:px-4">
+      <div class="mx-auto flex w-full max-w-[1100px] flex-wrap items-center gap-x-5 gap-y-1.5 text-caption font-caption">
+        <span class="text-caption-bold font-caption-bold text-default-font">On this page:</span>
+        {SECTIONS.map((s) => (
+          <a class="text-brand-600 hover:text-brand-700" href={`#${s.id}`}>{s.label}</a>
+        ))}
+      </div>
+    </nav>
 
-      <!-- Capability taxonomy -->
-      <section class="flex flex-col gap-5">
+    <!-- The model -->
+    <section id="model" class={`${band} bg-neutral-50 scroll-mt-14`}>
+      <div class={inner}>
         <div class="flex flex-col gap-1">
-          <h2 class="text-heading-2 font-heading-2 text-default-font">The 9 capabilities</h2>
-          <p class="text-body font-body text-subtext-color max-w-[760px]">
-            A capability is the stable verb a workflow depends on, independent of which vendor fulfils it. Every tool
-            declares the capabilities it provides; every skill declares the ones it needs.
+          <h2 class="text-heading-2 font-heading-2 text-default-font">The model</h2>
+          <p class="text-body font-body text-subtext-color max-w-[800px]">
+            The four layers and how they connect. The seam between a workflow and a vendor is always a
+            capability — so swapping a backend is a config change, never a rewrite.
           </p>
         </div>
-        <div class="grid grid-cols-3 gap-4 mobile:grid-cols-1">
-          {caps.map((c) => (
-            <div class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-mono text-body-bold font-body-bold text-brand-700">capability:{c.key}</span>
-                <span class="rounded-full bg-neutral-100 px-2 py-0.5 text-caption font-caption text-subtext-color">{c.count}</span>
-              </div>
+        <div class="grid grid-cols-4 gap-4 mobile:grid-cols-1">
+          <div class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            <span class="text-body-bold font-body-bold text-default-font">1 · Skills</span>
+            <span class="text-caption font-caption text-subtext-color">Generic English workflows the agent follows. They name a <span class="font-mono">capability:*</span> they need — never a vendor.</span>
+          </div>
+          <div class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            <span class="text-body-bold font-body-bold text-default-font">2 · Capabilities</span>
+            <span class="text-caption font-caption text-subtext-color">The contract between skills and tools. <span class="font-mono">capability:*</span> on skills; <span class="font-mono">contract:*</span> / <span class="font-mono">substrate:*</span> on tools.</span>
+          </div>
+          <div class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            <span class="text-body-bold font-body-bold text-default-font">3 · Tools &amp; adapters</span>
+            <span class="text-caption font-caption text-subtext-color">The only layer that knows a vendor. A <strong>contract</strong> is a pure interface; an <strong>adapter</strong> implements it for one backend.</span>
+          </div>
+          <div class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm">
+            <span class="text-body-bold font-body-bold text-default-font">4 · Organizations</span>
+            <span class="text-caption font-caption text-subtext-color">Bundle the defaults a whole foundation or company shares — governance vocabulary, backend choices, identity. Projects inherit them.</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-5">
+          <pre class="font-mono text-caption text-subtext-color leading-relaxed">{`  SKILL  ──declares──▶  capability:triage ┐
+                                          │  the capability is the only coupling
+  TOOL   ──provides──▶  contract:tracker ─┘  (skills never branch on the backend)
+            │
+            ├─ contract:*   one per capability seam → an ADAPTER implements it for a vendor
+            └─ substrate:*  framework plumbing (sandbox, privacy, analytics, …)
+
+  ORGANIZATION (ASF, independent, …)  ──bundles──▶  which adapter fulfils each capability
+                                                    + governance vocabulary + identity/logo`}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skill capabilities -->
+    <section id="skill-capabilities" class={`${band} bg-default-background scroll-mt-14`}>
+      <div class={inner}>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Skill capabilities</h2>
+          <p class="text-body font-body text-subtext-color max-w-[800px]">
+            The workflow-lifecycle phase a skill performs (<span class="font-mono">capability:*</span>). A skill may carry more than one.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mobile:grid-cols-1">
+          {skillCaps.map((c) => (
+            <div class="flex flex-col gap-1 rounded-xl border border-solid border-neutral-200 bg-default-background px-4 py-3">
+              <span class="font-mono text-body-bold font-body-bold text-brand-700">capability:{c.key}</span>
               <span class="text-caption font-caption text-subtext-color">{c.def}</span>
             </div>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Implementation-state legend -->
-      <section class="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-solid border-neutral-200 bg-neutral-50 px-6 py-4">
-        <span class="text-caption-bold font-caption-bold text-default-font">Reading the badges:</span>
-        <span class="inline-flex items-center gap-2 text-caption font-caption text-subtext-color">
-          <span class="rounded-full border border-solid border-success-200 bg-success-50 px-2 py-0.5 text-success-700">Implemented</span>
-          landed code (package + tests)
-        </span>
-        <span class="inline-flex items-center gap-2 text-caption font-caption text-subtext-color">
-          <span class="rounded-full border border-solid border-brand-200 bg-brand-50 px-2 py-0.5 text-brand-700">Adapter contract</span>
-          a documented contract with pluggable backends
-        </span>
-        <span class="inline-flex items-center gap-2 text-caption font-caption text-subtext-color">
-          <span class="rounded-full border border-solid border-success-200 bg-success-50 px-2 py-0.5 text-success-700">stable</span>
-          /
-          <span class="rounded-full border border-solid border-warning-200 bg-warning-50 px-2 py-0.5 text-warning-700">experimental</span>
-          /
-          <span class="rounded-full border border-solid border-neutral-200 bg-neutral-100 px-2 py-0.5 text-neutral-700">proposed</span>
-          spec maturity
-        </span>
-      </section>
+    <!-- Tool capabilities: contracts + substrates -->
+    <section id="tool-capabilities" class={`${band} bg-neutral-50 scroll-mt-14`}>
+      <div class={inner}>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Tool capabilities</h2>
+          <p class="text-body font-body text-subtext-color max-w-[800px]">
+            What a tool provides. A <strong>contract</strong> is a capability seam with pluggable backends (where vendor
+            neutrality is delivered); a <strong>substrate</strong> is framework plumbing shared by everything.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-6 mobile:grid-cols-1">
+          <div class="flex flex-col gap-3">
+            <h3 class="text-heading-3 font-heading-3 text-default-font">Contracts <span class="text-subtext-color">({contractList.length})</span></h3>
+            {contractList.map((c) => (
+              <div class="flex flex-col gap-1 rounded-xl border border-solid border-brand-200 bg-brand-50 px-4 py-3">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="font-mono text-body-bold font-body-bold text-brand-700">contract:{c.key}</span>
+                  <span class="rounded-full bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color">{c.count} tool{c.count === 1 ? "" : "s"}</span>
+                </div>
+                <span class="text-caption font-caption text-subtext-color">{c.def}</span>
+              </div>
+            ))}
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-heading-3 font-heading-3 text-default-font">Substrates <span class="text-subtext-color">({substrateList.length})</span></h3>
+            {substrateList.map((s) => (
+              <div class="flex flex-col gap-1 rounded-xl border border-solid border-neutral-200 bg-default-background px-4 py-3">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="font-mono text-body-bold font-body-bold text-neutral-700">substrate:{s.key}</span>
+                  <span class="rounded-full bg-neutral-100 px-2 py-0.5 text-caption font-caption text-subtext-color">{s.count} tool{s.count === 1 ? "" : "s"}</span>
+                </div>
+                <span class="text-caption font-caption text-subtext-color">{s.def}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <!-- Tools grid + capability filter -->
-      <section class="flex flex-col gap-5">
+    <!-- Tools grid + filter -->
+    <section id="tools" class={`${band} bg-default-background scroll-mt-14`}>
+      <div class={inner}>
         <div class="flex flex-col gap-1">
           <h2 class="text-heading-2 font-heading-2 text-default-font">Browse the {tools.length} tools</h2>
-          <p class="text-body font-body text-subtext-color max-w-[760px]">
-            Filter by the capability a tool provides. Pick more than one to widen the view —
-            a tool is shown if it provides <strong>any</strong> selected capability.
+          <p class="text-body font-body text-subtext-color max-w-[800px]">
+            Filter by the contract or substrate a tool provides, by organization, or by whether it wraps an MCP
+            server — the dimensions combine. Within a dimension, pick more than one to widen the view.
           </p>
         </div>
 
-        <!-- filter chips -->
-        <div id="cap-filters" class="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            data-cap="__all"
-            aria-pressed="true"
-            class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption font-caption transition-colors"
-          >
-            All
-            <span class="rounded-full bg-neutral-100 px-1.5 text-caption font-caption text-subtext-color">{tools.length}</span>
-          </button>
-          {caps.map((c) => (
-            <button
-              type="button"
-              data-cap={c.key}
-              aria-pressed="false"
-              title={c.def}
-              class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 font-mono text-caption font-caption transition-colors"
-            >
-              capability:{c.key}
-              <span class="rounded-full bg-neutral-100 px-1.5 text-caption font-caption text-subtext-color">{c.count}</span>
+        <div id="cap-filters" class="flex flex-col gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" data-cap="__all" aria-pressed="true" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption font-caption transition-colors">
+              All <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{tools.length}</span>
             </button>
-          ))}
-          <button
-            type="button"
-            id="cap-clear"
-            hidden
-            class="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-caption font-caption text-subtext-color underline hover:text-brand-700"
-          >
-            Clear filter ✕
-          </button>
+            <span class="text-caption font-caption text-subtext-color">contracts:</span>
+            {contractList.map((c) => (
+              <button type="button" data-cap={`contract:${c.key}`} aria-pressed="false" title={c.def} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 font-mono text-caption transition-colors">
+                {c.key} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{c.count}</span>
+              </button>
+            ))}
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-caption font-caption text-subtext-color">substrates:</span>
+            {substrateList.map((s) => (
+              <button type="button" data-cap={`substrate:${s.key}`} aria-pressed="false" title={s.def} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 font-mono text-caption transition-colors">
+                {s.key} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{s.count}</span>
+              </button>
+            ))}
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-caption font-caption text-subtext-color">organization:</span>
+            {orgChips.map((o) => (
+              <button type="button" data-org={o.id} aria-pressed="false" title={`Tools that declare organization: ${o.id} (${o.label})`} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
+                {o.logo
+                  ? <img src={o.logo} alt={o.id} class="h-3.5 w-auto" loading="lazy" />
+                  : <span class="font-mono">{o.id}</span>}
+                <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{o.count}</span>
+              </button>
+            ))}
+            <button type="button" data-org="__agnostic" aria-pressed="false" title="Organization-agnostic tools (no organization declared)" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
+              agnostic <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{agnosticCount}</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-caption font-caption text-subtext-color">backend:</span>
+            <button type="button" data-mcp="1" aria-pressed="false" title="Tools that wrap a Model Context Protocol (MCP) server as their backend" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
+              wraps an MCP <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{data.mcpTotal}</span>
+            </button>
+            <button type="button" id="cap-clear" hidden class="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-caption font-caption text-subtext-color underline hover:text-brand-700">Clear filter ✕</button>
+          </div>
         </div>
 
-        <!-- explanation / status -->
         <div id="cap-status" class="flex flex-col gap-1 rounded-2xl border border-solid border-neutral-200 bg-neutral-50 px-4 py-3">
-          <span id="cap-status-text" class="text-caption-bold font-caption-bold text-default-font">
-            Showing all {tools.length} tools.
-          </span>
+          <span id="cap-status-text" class="text-caption-bold font-caption-bold text-default-font">Showing all {tools.length} tools.</span>
           <div id="cap-status-defs" class="flex flex-col gap-0.5"></div>
         </div>
 
@@ -219,12 +340,13 @@ const maturityBadge = (m: string | null) => {
           {tools.map((t) => {
             const sb = stateBadge(t);
             const mb = maturityBadge(t.maturity);
+            const org = t.organization ? orgById[t.organization] : null;
             return (
               <a
-                href={t.docUrl}
-                target="_blank"
-                rel="noreferrer"
-                data-caps={t.capabilities.join(" ")}
+                href={`${base}/docs/tools/${t.name}/readme`}
+                data-caps={t.labels.map((l) => `${l.kind}:${l.name}`).join(" ")}
+                data-org={t.organization ?? "__agnostic"}
+                data-mcp={t.mcp ? "1" : "0"}
                 class="tool-card group flex h-full flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
               >
                 <div class="flex items-start justify-between gap-3">
@@ -233,34 +355,120 @@ const maturityBadge = (m: string | null) => {
                     <span class="font-mono text-caption font-caption text-subtext-color">tools/{t.name}</span>
                   </div>
                   <div class="flex flex-none flex-wrap justify-end gap-1.5">
+                    {org && (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`Organization: ${org.name}`}>
+                        {org.logo
+                          ? <img src={org.logo} alt={org.name} class="h-3.5 w-auto" loading="lazy" />
+                          : org.id}
+                      </span>
+                    )}
+                    {t.mcp && (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-solid border-brand-300 bg-brand-100 px-2 py-0.5 text-caption font-caption text-brand-700" title={`Wraps ${t.mcp.server} (${t.mcp.prefix})`}>
+                        <span aria-hidden="true">🔌</span> MCP
+                      </span>
+                    )}
                     <span class={`rounded-full border border-solid px-2 py-0.5 text-caption font-caption ${sb.cls}`}>{sb.label}</span>
                     {mb && <span class={`rounded-full border border-solid px-2 py-0.5 text-caption font-caption ${mb.cls}`}>{mb.label}</span>}
                   </div>
                 </div>
                 <p class="text-caption font-caption text-subtext-color">{t.description}</p>
+                {t.mcp && (
+                  <p class="rounded-md bg-brand-50 px-2.5 py-1.5 text-caption font-caption text-brand-700">
+                    Wraps the <strong>{t.mcp.server}</strong> via{" "}
+                    <span class="font-mono">{t.mcp.prefix}</span> — the MCP is just the transport behind the
+                    contract; a CLI or REST backend can fulfil the same capability.
+                  </p>
+                )}
                 <div class="mt-auto flex flex-wrap gap-1.5 pt-1">
-                  {t.capabilities.map((c) => (
-                    <span class="rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-caption font-caption text-neutral-700">{c}</span>
+                  {t.labels.map((l) => (
+                    <span class={`rounded-md px-2 py-0.5 font-mono text-caption font-caption ${labelCls(l.kind)}`}>{l.kind}:{l.name}</span>
                   ))}
                 </div>
               </a>
             );
           })}
         </div>
-
         <p id="tools-empty" hidden class="rounded-2xl border border-dashed border-neutral-300 px-4 py-6 text-center text-body font-body text-subtext-color">
-          No tools match the selected capabilities.
+          No tools match the selected filters.
         </p>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <!-- Organizations -->
+    <section id="organizations" class={`${band} bg-neutral-50 scroll-mt-14`}>
+      <div class={inner}>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Organizations</h2>
+          <p class="text-body font-body text-subtext-color max-w-[800px]">
+            An organization bundles the defaults every project under it shares — which adapter fulfils each
+            capability, the governance vocabulary, and the identity (incl. logo) the site renders. A project says{" "}
+            <span class="font-mono">organization: &lt;id&gt;</span> once and inherits the rest. This is what lets the{" "}
+            <em>same</em> skill run for an ASF project and a non-ASF one.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mobile:grid-cols-1">
+          {data.organizations.map((o) => (
+            <div class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+              <div class="flex items-center gap-3">
+                {o.logo
+                  ? <img src={o.logo} alt={`${o.name} logo`} class="h-8 w-auto" loading="lazy" />
+                  : <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 font-mono text-caption text-neutral-600">{o.id.slice(0, 2)}</div>}
+                <div class="flex flex-col">
+                  <span class="text-body-bold font-body-bold text-default-font">{o.name}</span>
+                  <span class="font-mono text-caption font-caption text-subtext-color">organization: {o.id}</span>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-x-5 gap-y-1 text-caption font-caption text-subtext-color">
+                <span><strong class="text-default-font">{data.skills.byOrg[o.id] ?? 0}</strong> skills</span>
+                <span><strong class="text-default-font">{o.tools.length}</strong> org-specific tools</span>
+                <span><strong class="text-default-font">{o.families.length}</strong> skill families</span>
+              </div>
+              {o.families.length > 0 && (
+                <div class="flex flex-wrap gap-1.5">
+                  {o.families.map((f) => (
+                    <span class="rounded-md bg-brand-50 px-2 py-0.5 text-caption font-caption text-brand-700">{f}</span>
+                  ))}
+                </div>
+              )}
+              {o.url && (
+                <a class="mt-auto inline-flex items-center gap-1 self-start text-caption font-caption text-brand-600 hover:text-brand-700" href={o.url} target="_blank" rel="noreferrer">{o.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} →</a>
+              )}
+            </div>
+          ))}
+        </div>
+        <a class="inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={ORGANIZATIONS} target="_blank" rel="noreferrer">
+          Organizations in the framework repo →
+        </a>
+      </div>
+    </section>
+
+    <!-- Go deeper / extending -->
+    <section id="extend" class={`${band} bg-default-background scroll-mt-14`}>
+      <div class={`${inner} rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6`}>
+        <h2 class="text-heading-3 font-heading-3 text-default-font">Go deeper</h2>
+        <p class="text-body font-body text-subtext-color max-w-[820px]">
+          This page is the at-a-glance map. The detailed write-ups — the six axes of neutrality, the
+          contract-plus-adapter split, organizations, and the three "homes" an extension can live in — are in the
+          framework docs.
+        </p>
+        <div class="flex flex-wrap gap-3 pt-1">
+          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={VENDOR_NEUTRALITY}>How Magpie achieves vendor neutrality →</a>
+          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={EXTENDING}>Extending Magpie (project / org / individual) →</a>
+          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={ADAPTERS}>Adapter registry →</a>
+          <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={TAXONOMY}>Labels &amp; capabilities taxonomy →</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <SiteFooter />
 
-  <script is:inline define:vars={{ capDefs: data.capabilities, total: tools.length }}>
+  <script is:inline define:vars={{ labelDefs, total: tools.length }}>
     const filters = document.getElementById("cap-filters");
     if (filters) {
-      const chips = [...filters.querySelectorAll("button[data-cap]")];
+      const capChipEls = [...filters.querySelectorAll("button[data-cap]")];
+      const orgChipEls = [...filters.querySelectorAll("button[data-org]")];
+      const mcpChip = filters.querySelector("button[data-mcp]");
       const allChip = filters.querySelector('button[data-cap="__all"]');
       const clearBtn = document.getElementById("cap-clear");
       const cards = [...document.querySelectorAll("#tools-grid .tool-card")];
@@ -268,65 +476,83 @@ const maturityBadge = (m: string | null) => {
       const statusDefs = document.getElementById("cap-status-defs");
       const empty = document.getElementById("tools-empty");
 
-      // class sets for active / inactive chips (Tailwind tokens used elsewhere)
       const ACTIVE = ["border-brand-300", "bg-brand-50", "text-brand-700"];
       const INACTIVE = ["border-neutral-200", "bg-default-background", "text-default-font"];
-      const active = new Set();
+      // Two independent dimensions, combined with AND: a tool must match the
+      // capability filter (any selected) AND the organization filter (any
+      // selected). Empty dimension = no constraint.
+      const activeCaps = new Set();
+      const activeOrgs = new Set();
+      let mcpOnly = false;
 
       function styleChip(chip, on) {
         chip.classList.remove(...ACTIVE, ...INACTIVE);
         chip.classList.add(...(on ? ACTIVE : INACTIVE));
         chip.setAttribute("aria-pressed", on ? "true" : "false");
       }
+      const orgLabel = (id) => (id === "__agnostic" ? "agnostic" : id);
 
       function apply() {
-        const sel = [...active];
-        // cards
+        const caps = [...activeCaps];
+        const orgs = [...activeOrgs];
+        const none = caps.length === 0 && orgs.length === 0 && !mcpOnly;
         let shown = 0;
         for (const card of cards) {
-          const caps = (card.dataset.caps || "").split(" ").filter(Boolean);
-          const match = sel.length === 0 || sel.some((c) => caps.includes(c));
+          const cardCaps = (card.dataset.caps || "").split(" ").filter(Boolean);
+          const capMatch = caps.length === 0 || caps.some((c) => cardCaps.includes(c));
+          const orgMatch = orgs.length === 0 || orgs.includes(card.dataset.org);
+          const mcpMatch = !mcpOnly || card.dataset.mcp === "1";
+          const match = capMatch && orgMatch && mcpMatch;
           card.hidden = !match;
           if (match) shown++;
         }
-        // chips
-        styleChip(allChip, sel.length === 0);
-        for (const chip of chips) {
+        styleChip(allChip, none);
+        for (const chip of capChipEls) {
           if (chip === allChip) continue;
-          styleChip(chip, active.has(chip.dataset.cap));
+          styleChip(chip, activeCaps.has(chip.dataset.cap));
         }
-        clearBtn.hidden = sel.length === 0;
+        for (const chip of orgChipEls) styleChip(chip, activeOrgs.has(chip.dataset.org));
+        if (mcpChip) styleChip(mcpChip, mcpOnly);
+        clearBtn.hidden = none;
         empty.hidden = shown !== 0;
-        // status text + definitions
-        if (sel.length === 0) {
+
+        if (none) {
           statusText.textContent = `Showing all ${total} tools.`;
           statusDefs.innerHTML = "";
-        } else {
-          const names = sel.map((c) => "capability:" + c).join(", ");
-          statusText.textContent =
-            `Showing ${shown} of ${total} tools that provide ${sel.length === 1 ? "" : "any of "}${names}.`;
-          statusDefs.innerHTML = sel
-            .map(
-              (c) =>
-                `<span class="text-caption font-caption text-subtext-color"><span class="font-mono text-default-font">capability:${c}</span> — ${capDefs[c] || ""}</span>`,
-            )
-            .join("");
+          return;
         }
+        const parts = [];
+        if (caps.length) parts.push(`provide ${caps.length === 1 ? "" : "any of "}${caps.join(", ")}`);
+        if (orgs.length) parts.push(`belong to ${orgs.map(orgLabel).join(" / ")}`);
+        if (mcpOnly) parts.push("wrap an MCP server");
+        statusText.textContent = `Showing ${shown} of ${total} tools that ${parts.join(" and ")}.`;
+        statusDefs.innerHTML = caps
+          .map(
+            (c) =>
+              `<span class="text-caption font-caption text-subtext-color"><span class="font-mono text-default-font">${c}</span> — ${labelDefs[c] || ""}</span>`,
+          )
+          .join("");
       }
 
-      for (const chip of chips) {
+      for (const chip of capChipEls) {
         chip.addEventListener("click", () => {
           const cap = chip.dataset.cap;
-          if (cap === "__all") active.clear();
-          else if (active.has(cap)) active.delete(cap);
-          else active.add(cap);
+          if (cap === "__all") { activeCaps.clear(); activeOrgs.clear(); mcpOnly = false; }
+          else if (activeCaps.has(cap)) activeCaps.delete(cap);
+          else activeCaps.add(cap);
           apply();
         });
       }
-      clearBtn.addEventListener("click", () => {
-        active.clear();
-        apply();
-      });
+      for (const chip of orgChipEls) {
+        chip.addEventListener("click", () => {
+          const org = chip.dataset.org;
+          if (activeOrgs.has(org)) activeOrgs.delete(org);
+          else activeOrgs.add(org);
+          apply();
+        });
+      }
+      if (mcpChip) mcpChip.addEventListener("click", () => { mcpOnly = !mcpOnly; apply(); });
+      clearBtn.addEventListener("click", () => { activeCaps.clear(); activeOrgs.clear(); mcpOnly = false; apply(); });
       apply();
     }
   </script>

@@ -42,6 +42,11 @@ const OVERRIDES = {
   "contributor-nomination": "contributor-growth",
   "contributor-to-committer": "contributor-growth",
   "good-first-issue-author": "contributor-growth",
+  "good-first-issue-sweep": "contributor-growth",
+  // utilities — framework meta-skills
+  "skill-reconciler": "utilities",
+  // pr-management — reviewer routing for the PR queue
+  "reviewer-routing": "pr-management",
 };
 
 // Name-prefix -> family. Checked in order; first match wins.

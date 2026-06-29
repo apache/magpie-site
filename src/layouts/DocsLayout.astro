@@ -31,13 +31,15 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
   mentoring: { label: "Mentoring", order: 7 },
   "contributor-growth": { label: "Contributor Growth", order: 8 },
   pairing: { label: "Pairing", order: 9 },
-  rfcs: { label: "RFCs", order: 10 },
+  adapters: { label: "Adapters", order: 10 },
+  tools: { label: "Tools", order: 11 },
+  rfcs: { label: "RFCs", order: 12 },
 };
 
 // Logical page order within a group (by last path segment). The Overview
 // (index / README) always leads; unlisted pages follow alphabetically.
 const PAGE_ORDER: Record<string, string[]> = {
-  _root: ["index", "prerequisites", "vendor-neutrality", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
+  _root: ["index", "prerequisites", "vendor-neutrality", "extending", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
   setup: ["readme", "install-recipes", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "unadopt"],
   security: ["readme", "roles", "process", "threat-model", "new-members-onboarding", "how-to-fix-a-security-issue", "forwarder-routing-policy"],
   "release-management": ["readme", "process", "spec"],
@@ -77,7 +79,10 @@ for (const entry of all) {
     });
   }
   const slug = entry.id.replace(/\.md$/, "");
-  groups.get(groupKey)!.items.push({ slug, label: pageLabel(entry), rank: pageRank(groupKey, slug) });
+  // Tool pages (tools/<name>/readme) are one overview per tool — label them by
+  // the tool name, not the generic "Overview".
+  const label = groupKey === "tools" ? (parts[1] ?? pageLabel(entry)) : pageLabel(entry);
+  groups.get(groupKey)!.items.push({ slug, label, rank: pageRank(groupKey, slug) });
 }
 const sortedGroups = Array.from(groups.values()).sort(
   (a, b) => a.order - b.order || a.name.localeCompare(b.name),
