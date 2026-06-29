@@ -39,7 +39,7 @@ export function SiteFooter() {
             <a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter">
               <IconButton icon={<TwitterIcon />} />
             </a>
-            <a href="https://the-asf.slack.com" target="_blank" rel="noreferrer" aria-label="Slack">
+            <a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack">
               <IconButton icon={<SlackIcon />} />
             </a>
           </div>
@@ -56,7 +56,7 @@ export function SiteFooter() {
             <span className="text-body-bold font-body-bold text-default-font">Community</span>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com">Slack Channel</a>
+            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a>
             <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a>
           </div>

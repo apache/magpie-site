@@ -1130,7 +1130,7 @@ function ImmersiveGradientHero() {
               </a>
               <a
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                href="https://the-asf.slack.com/"
+                href="https://the-asf.slack.com/archives/C0BD1EBMVEJ"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -1276,7 +1276,7 @@ function ImmersiveGradientHero() {
               <a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter">
                 <IconButton icon={<Twitter />} />
               </a>
-              <a href="https://the-asf.slack.com" target="_blank" rel="noreferrer" aria-label="Slack">
+              <a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack">
                 <IconButton icon={<Slack />} />
               </a>
             </div>
@@ -1292,7 +1292,7 @@ function ImmersiveGradientHero() {
               <span className="text-body-bold font-body-bold text-default-font">Community</span>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com">Slack Channel</a>
+              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a>
             </div>
