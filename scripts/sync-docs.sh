@@ -14,9 +14,9 @@ DEST="$(dirname "$0")/../src/content/docs"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/magpie-docs.XXXXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/)"
+echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/ + tools/)"
 git clone --depth 1 --branch "$BRANCH" --filter=blob:none --sparse "$REPO" "$TMP" >/dev/null 2>&1
-(cd "$TMP" && git sparse-checkout set docs images skills >/dev/null)
+(cd "$TMP" && git sparse-checkout set docs images skills tools >/dev/null)
 
 echo "→ Replacing $DEST"
 rm -rf "$DEST"
@@ -61,4 +61,12 @@ if [ -d "$TMP/skills" ]; then
   node "$(dirname "$0")/gen-skill-counts.mjs" "$TMP/skills" "$COUNTS_OUT"
 else
   echo "⚠ no skills/ in framework checkout; leaving existing $COUNTS_OUT untouched"
+fi
+
+TOOLS_OUT="$(dirname "$0")/../src/data/tools.json"
+echo "→ Generating Tools & Capabilities summary → $TOOLS_OUT"
+if [ -d "$TMP/tools" ]; then
+  node "$(dirname "$0")/gen-tools.mjs" "$TMP" "$TOOLS_OUT"
+else
+  echo "⚠ no tools/ in framework checkout; leaving existing $TOOLS_OUT untouched"
 fi
