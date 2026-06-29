@@ -266,7 +266,7 @@ function ImmersiveGradientHero() {
               </BlurFade>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <a href={withBase("/docs/setup/install-recipes")}>
+              <a href={withBase("/docs/setup/install-recipes")} target="_blank" rel="noreferrer">
                 <ShimmerButton
                   shimmerColor="#ffffff"
                   background="rgb(0 74 173)"
@@ -274,14 +274,15 @@ function ImmersiveGradientHero() {
                   className="!text-white px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 [&_svg]:size-4"
                 >
                   <span className="!text-white">Start Using Magpie</span>
-                  <ArrowRight className="!text-white" />
+                  <ArrowUpRight className="!text-white" />
                 </ShimmerButton>
               </a>
-              <a href={withBase("/docs")}>
+              <a href={withBase("/docs")} target="_blank" rel="noreferrer">
                 <Button
                   className="border border-white/20 bg-white/10 text-white hover:bg-white/20"
                   size="large"
                   icon={<BookOpen />}
+                  iconRight={<ArrowUpRight />}
                 >
                   Read the Docs
                 </Button>

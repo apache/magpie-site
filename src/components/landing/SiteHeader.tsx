@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@/ui/components/Button";
-import { IconButton } from "@/ui/components/IconButton";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -33,12 +32,6 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
           alt="Magpie"
         />
       </a>
-      <div className="flex items-center gap-7 mobile:hidden">
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href={`${withBase("/")}#features`}>Features</a>
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href={withBase("/docs")}>Docs</a>
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Community</a>
-        <a className="text-body font-body text-brand-600 hover:text-brand-700" href="https://github.com/apache/magpie">GitHub</a>
-      </div>
       <div className="flex items-center gap-2">
         <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" className="mobile:hidden">
           <Button className={ghBtnClass} variant="neutral-secondary" icon={<GithubIcon />}>
@@ -48,11 +41,6 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
         <a href={withBase("/docs")}>
           <Button icon={<ArrowRight />}>Get Started</Button>
         </a>
-        <IconButton
-          className={tone === "hero" ? "hidden text-white mobile:flex" : "hidden mobile:flex"}
-          icon={<Menu />}
-          aria-label="Open menu"
-        />
       </div>
     </nav>
   );
