@@ -10,6 +10,7 @@ import { ShimmerButton } from "@/ui/components/ui/shimmer-button";
 import { BlurFade } from "@/ui/components/ui/blur-fade";
 import { withBase } from "@/ui/lib/utils";
 import skillCounts from "@/data/skill-counts.json";
+import toolsData from "@/data/tools.json";
 import community from "@/data/community.json";
 import {
   Activity,
@@ -59,6 +60,17 @@ const Slack = (props: React.SVGProps<SVGSVGElement>) => (
 // build time (scripts/gen-skill-counts.mjs, run by scripts/sync-docs.sh) so
 // they never drift from the framework. Only `status` and copy live here.
 const SKILL_COUNTS = (skillCounts as { counts: Record<string, number> }).counts;
+
+// Which skill families are ASF-specific is derived from each family's
+// docs/<family>/README.md `asf: true|false` scope marker by
+// scripts/gen-tools.mjs — so the oak-leaf badge below is metadata-driven, not
+// hardcoded. A family's docs directory is the 3rd path segment of its overview
+// link (e.g. "/docs/release-management/readme" → "release-management").
+const ASF_FAMILIES = new Set(
+  (toolsData as { asfFamilies: string[] }).asfFamilies,
+);
+const isAsfFamily = (family: { overview: string }) =>
+  ASF_FAMILIES.has(family.overview.split("/")[2] ?? "");
 
 // Committer / PMC roster + locally-served GitHub avatars. Regenerated from the
 // apache/magpie GitHub team by scripts/sync-community.mjs (the `sync-community`
@@ -140,7 +152,6 @@ const SKILL_FAMILIES = [
     icon: GitMerge,
     modes: "Triage · Drafting",
     overview: "/docs/release-management/readme",
-    asf: true,
     cta: "Cutting a release is a manual, error-prone slog?",
     desc: "The 14-step ASF release lifecycle — planning, RC cut & sign, [VOTE], tally, promote, [ANNOUNCE], archive, audit. The agent never holds the signing key or publishes.",
   },
@@ -158,7 +169,6 @@ const SKILL_FAMILIES = [
     icon: Users,
     modes: "Mentoring · Triage",
     overview: "/docs/contributor-growth/readme",
-    asf: true,
     cta: "Hard to grow contributors into committers?",
     desc: "The contributor-to-committer path — welcome first-timers, keep the backlog newcomer-ready, track activity, assemble nomination evidence, and run post-vote onboarding.",
   },
@@ -210,6 +220,16 @@ function ImmersiveGradientHero() {
               title="Open the documentation in a new tab"
             >
               Docs
+              <ArrowUpRight className="size-3.5" />
+            </a>
+            <a
+              className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+              href={withBase("/tools")}
+              target="_blank"
+              rel="noreferrer"
+              title="Open Tools & Capabilities in a new tab"
+            >
+              Tools
               <ArrowUpRight className="size-3.5" />
             </a>
           </div>
@@ -777,7 +797,7 @@ function ImmersiveGradientHero() {
                     <Icon className="text-body-bold font-body-bold text-brand-700" />
                   </div>
                   <div className="flex items-center gap-2">
-                    {(family as { asf?: boolean }).asf && (
+                    {isAsfFamily(family) && (
                       <span
                         title="ASF-specific — built around the Apache Way"
                         aria-label="ASF-specific skill family"
@@ -926,6 +946,39 @@ function ImmersiveGradientHero() {
             umbrella, ensuring no single company controls the project direction.
             Decisions are made by the community, for the community.
           </span>
+          <span className="text-body font-body text-subtext-color">
+            How we achieve it, concretely:{" "}
+            <span className="font-body-bold text-default-font">skills</span> are
+            generic English workflows that never name a vendor — they declare a{" "}
+            <span className="font-body-bold text-default-font">capability</span>,
+            and a{" "}
+            <span className="font-body-bold text-default-font">tool</span>{" "}
+            fulfils it. Every vendor binding lives in a tool behind a capability
+            contract, across six independent axes — LLM backend, agentic
+            runtime, forge/tracker, communication channels, source control, and
+            project governance. Swapping a backend is a config change, never a
+            rewrite of the workflows.
+          </span>
+          <div className="flex flex-wrap gap-3">
+            <a
+              className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+              href={withBase("/docs/vendor-neutrality")}
+              target="_blank"
+              rel="noreferrer"
+            >
+              How Magpie achieves vendor neutrality
+              <ArrowUpRight className="size-3.5" />
+            </a>
+            <a
+              className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+              href={withBase("/tools")}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Browse tools, capabilities &amp; status
+              <ArrowUpRight className="size-3.5" />
+            </a>
+          </div>
           <div className="flex flex-col items-start gap-5 pt-2">
             <div className="flex items-start gap-4">
               <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-brand-100">
@@ -1285,7 +1338,8 @@ function ImmersiveGradientHero() {
           <div className="flex grow shrink-0 basis-0 flex-wrap items-start gap-8">
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Project</span>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")}>Documentation</a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools &amp; Capabilities<ArrowUpRight className="size-3.5" /></a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Roadmap</a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases">Changelog</a>
             </div>
