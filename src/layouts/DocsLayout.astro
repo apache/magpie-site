@@ -53,6 +53,19 @@ const pageLabel = (entry: { id: string; data: { title?: string } }) => {
   if (seg === "index" || seg === "readme") return "Overview";
   return entry.data.title ?? prettify(seg);
 };
+// RFC nav labels: a bit more than the bare number, but short enough to fit the
+// sidebar — "<num> · <short title>" derived from the page H1.
+const firstH1 = (body: string | undefined): string | null => {
+  const m = (body ?? "").replace(/<!--[\s\S]*?-->/g, "").match(/^#\s+(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+};
+const shortRfc = (entry: { id: string; body?: string }) => {
+  const m = (firstH1(entry.body) ?? "").match(/RFC-[A-Z]+-(\d+):\s*(.+)/);
+  if (!m) return prettify(lastSeg(entry.id));
+  let title = m[2].trim();
+  if (title.length > 24) title = title.slice(0, 23).replace(/\s\S*$/, "") + "…";
+  return `${m[1]} · ${title}`;
+};
 const pageRank = (groupKey: string, slug: string) => {
   const seg = lastSeg(slug);
   if (seg === "index" || seg === "readme") return -1;
@@ -81,7 +94,12 @@ for (const entry of all) {
   const slug = entry.id.replace(/\.md$/, "");
   // Tool pages (tools/<name>/readme) are one overview per tool — label them by
   // the tool name, not the generic "Overview".
-  const label = groupKey === "tools" ? (parts[1] ?? pageLabel(entry)) : pageLabel(entry);
+  const label =
+    groupKey === "tools"
+      ? (parts[1] ?? pageLabel(entry))
+      : groupKey === "rfcs"
+        ? shortRfc(entry)
+        : pageLabel(entry);
   groups.get(groupKey)!.items.push({ slug, label, rank: pageRank(groupKey, slug) });
 }
 const sortedGroups = Array.from(groups.values()).sort(
@@ -100,7 +118,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
       <a href={`${base}/`} class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a>
       <a
-        href={`${base}/docs/${QUICK_START.slug}`}
+        href={`${base}/skills/${QUICK_START.slug}`}
+        aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
         class={`block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
       >
         ⚡ {QUICK_START.label}
@@ -115,7 +134,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
               {group.items.map((item) => (
                 <li>
                   <a
-                    href={`${base}/docs/${item.slug}`}
+                    href={`${base}/skills/${item.slug}`}
+                    aria-current={currentSlug === item.slug ? "page" : undefined}
                     class={`block px-3 py-1.5 rounded-md text-body font-body capitalize ${currentSlug === item.slug ? "bg-brand-100 text-brand-800" : "text-default-font hover:bg-neutral-100"}`}
                   >
                     {item.label}
@@ -134,6 +154,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     </main>
   </div>
   <SiteFooter />
+
+  {/* On a long sidebar the active page can be scrolled out of view after a
+      full-page navigation. Bring it back into the sidebar viewport (scrolling
+      only the <aside>, not the window) so you keep your place. */}
+  <script is:inline>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script>
 </BaseLayout>
 
 <style is:global>

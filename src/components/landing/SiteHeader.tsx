@@ -38,7 +38,7 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
             Star on GitHub
           </Button>
         </a>
-        <a href={withBase("/docs")}>
+        <a href={withBase("/skills")}>
           <Button icon={<ArrowRight />}>Get Started</Button>
         </a>
       </div>

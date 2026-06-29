@@ -35,7 +35,7 @@ function rewriteTarget(target, currentDir) {
       .slice("docs/".length)
       .replace(/\.md$/i, "")
       .toLowerCase();
-    return `${base}/docs/${slug}${hash}`;
+    return `${base}/skills/${slug}${hash}`;
   }
   return `${GITHUB_BLOB}/${repoPath}${hash}`;
 }
