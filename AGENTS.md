@@ -95,6 +95,25 @@ Links that leave the site (or open the docs from the landing hero) use
 (`ArrowUpRight`) as the visual new-tab cue. Match that convention for new
 outbound links.
 
+### Whitespace around inline elements in `.astro` / JSX
+
+In Astro/JSX templates, the whitespace (including the newline + indentation)
+between a text run and an inline element on the **next line** is collapsed to
+nothing at render time. So this:
+
+```astro
+{count} pages, synced from
+<a href="...">apache/magpie/docs</a>
+and grouped by area.
+```
+
+renders as "synced from**apache/magpie/docs**and grouped" — the spaces are
+gone. When an inline element (`<a>`, `<code>`, `<strong>`, …) sits on its own
+line next to surrounding text, insert an **explicit** `{" "}` spacer at each
+boundary (or use an `&nbsp;`-style separator). Verify by building and grepping
+the rendered HTML in `dist/`. (Fixed once in `src/pages/docs/index.astro` —
+issue #10.)
+
 ## Commit and PR conventions
 
 - **Do not** add `Co-Authored-By:` trailers for AI agents. Instead, record
