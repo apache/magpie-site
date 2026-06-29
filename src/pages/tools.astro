@@ -89,10 +89,10 @@ const labelDefs: Record<string, string> = {};
 for (const [k, v] of Object.entries(data.contracts)) labelDefs[`contract:${k}`] = v;
 for (const [k, v] of Object.entries(data.substrates)) labelDefs[`substrate:${k}`] = v;
 
-const VENDOR_NEUTRALITY = `${base}/docs/vendor-neutrality`;
-const EXTENDING = `${base}/docs/extending`;
-const TAXONOMY = `${base}/docs/labels-and-capabilities`;
-const ADAPTERS = `${base}/docs/adapters/registry`;
+const VENDOR_NEUTRALITY = `${base}/skills/vendor-neutrality`;
+const EXTENDING = `${base}/skills/extending`;
+const TAXONOMY = `${base}/skills/labels-and-capabilities`;
+const ADAPTERS = `${base}/skills/adapters/registry`;
 const ORGANIZATIONS = "https://github.com/apache/magpie/tree/main/organizations";
 
 // In-page section navigation
@@ -343,7 +343,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
             const org = t.organization ? orgById[t.organization] : null;
             return (
               <a
-                href={`${base}/docs/tools/${t.name}/readme`}
+                href={`${base}/skills/tools/${t.name}/readme`}
                 data-caps={t.labels.map((l) => `${l.kind}:${l.name}`).join(" ")}
                 data-org={t.organization ?? "__agnostic"}
                 data-mcp={t.mcp ? "1" : "0"}

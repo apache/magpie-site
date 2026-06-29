@@ -3,8 +3,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const QUICK_START = `${base}/docs/setup/install-recipes`;
-const OVERVIEW = `${base}/docs/index`;
+const QUICK_START = `${base}/skills/setup/install-recipes`;
+const OVERVIEW = `${base}/skills/index`;
 
 // Internal governance drafts that should not appear on the public site.
 const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
@@ -13,20 +13,44 @@ const all = (await getCollection("docs")).filter(
   (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
 );
 
+// First markdown H1 of a page body (skipping doctoc/SPDX HTML comments) — used
+// to give RFC entries their full descriptive titles.
+const firstH1 = (body: string | undefined): string | null => {
+  const m = (body ?? "").replace(/<!--[\s\S]*?-->/g, "").match(/^#\s+(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+};
+
 type DocItem = { slug: string; label: string; description?: string };
-const groups = new Map<string, DocItem[]>();
+type Group = { items: DocItem[]; overview?: string };
+const groups = new Map<string, Group>();
 for (const entry of all) {
   const parts = entry.id.split("/");
   const key = parts.length > 1 ? parts[0] : "_root";
   const slug = entry.id.replace(/\.md$/, "");
   const leaf = parts[parts.length - 1].replace(/\.md$/, "");
-  // README/index pages represent the family overview; label them as such.
   const isReadme = /^(readme|index)$/i.test(leaf);
+  // A family/group's own README/index (direct child) is the group overview;
+  // tool pages (tools/<name>/readme, deeper) are normal items.
+  const isGroupOverview = isReadme && parts.length <= 2;
+
+  if (!groups.has(key)) groups.set(key, { items: [] });
+  const group = groups.get(key)!;
+
+  if (isGroupOverview) {
+    // Hoist the overview onto the section heading instead of listing it.
+    group.overview = slug;
+    continue;
+  }
+
+  // Match the sidebar navigation: tool pages are labelled by tool name; RFCs
+  // get their full H1 title; everything else uses its title / prettified slug.
   const label =
-    entry.data.title ??
-    (isReadme ? "Overview" : leaf.replace(/-/g, " "));
-  if (!groups.has(key)) groups.set(key, []);
-  groups.get(key)!.push({ slug, label, description: entry.data.description });
+    key === "tools"
+      ? (parts[1] ?? leaf)
+      : key === "rfcs"
+        ? (entry.data.title ?? firstH1(entry.body) ?? leaf.replace(/-/g, " "))
+        : entry.data.title ?? leaf.replace(/-/g, " ");
+  group.items.push({ slug, label, description: entry.data.description });
 }
 
 // Friendly names + one-line summaries for each docs group.
@@ -81,6 +105,16 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
     name: "Utilities",
     blurb: "Framework meta-skills — author skills and list every skill.",
   },
+  adapters: {
+    name: "Adapters",
+    blurb:
+      "Authoring adapters and the discovery registry of in-tree and external backends.",
+  },
+  tools: {
+    name: "Tools",
+    blurb:
+      "Every framework tool — the contract or substrate it provides, with per-tool docs.",
+  },
   rfcs: {
     name: "RFCs",
     blurb: "Design proposals under discussion.",
@@ -99,20 +133,22 @@ const ORDER = [
   "release-management",
   "security",
   "utilities",
+  "adapters",
+  "tools",
   "rfcs",
 ];
 
 const sortedGroups = Array.from(groups.entries())
-  .map(([key, items]) => ({
+  .map(([key, group]) => ({
     key,
-    meta: GROUP_META[key] ?? { name: key.replace(/-/g, " "), blurb: "" },
-    items: items.sort((a, b) => {
-      // Overview/README first, then alphabetical.
-      const aOv = a.label === "Overview";
-      const bOv = b.label === "Overview";
-      if (aOv !== bOv) return aOv ? -1 : 1;
-      return a.label.localeCompare(b.label);
-    }),
+    meta: GROUP_META[key] ?? {
+      name: key
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
+      blurb: "",
+    },
+    overview: group.overview,
+    items: group.items.sort((a, b) => a.label.localeCompare(b.label)),
   }))
   .sort((a, b) => {
     const ai = ORDER.indexOf(a.key);
@@ -123,7 +159,7 @@ const sortedGroups = Array.from(groups.entries())
 const totalPages = all.length;
 ---
 
-<DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/docs/index.astro">
+<DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/skills/index.astro">
   <h1>Apache Magpie Documentation</h1>
   <p>
     Apache Magpie is an AI assistant for open-source project maintainers. It
@@ -142,7 +178,7 @@ const totalPages = all.length;
   <p>
     <a href={QUICK_START}><strong>⚡ Quick Start → Install recipes</strong></a>
     &nbsp;·&nbsp;
-    <a href={`${base}/docs/prerequisites`}>Prerequisites</a>
+    <a href={`${base}/skills/prerequisites`}>Prerequisites</a>
     &nbsp;·&nbsp;
     <a href={OVERVIEW}>What is Apache Magpie?</a>
     &nbsp;·&nbsp;
@@ -158,12 +194,18 @@ const totalPages = all.length;
 
   {sortedGroups.map((group) => (
     <section>
-      <h3>{group.meta.name}</h3>
+      <h3>
+        {group.overview ? (
+          <a href={`${base}/skills/${group.overview}`}>{group.meta.name}</a>
+        ) : (
+          group.meta.name
+        )}
+      </h3>
       {group.meta.blurb && <p>{group.meta.blurb}</p>}
       <ul>
         {group.items.map((item) => (
           <li>
-            <a href={`${base}/docs/${item.slug}`}>{item.label}</a>
+            <a class="capitalize" href={`${base}/skills/${item.slug}`}>{item.label}</a>
             {item.description ? ` — ${item.description}` : ""}
           </li>
         ))}
