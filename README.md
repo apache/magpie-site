@@ -24,13 +24,15 @@ npm run sync-docs    # one-time fetch of markdown from apache/magpie
 npm run dev          # http://localhost:4321
 ```
 
+Always start the dev server with `npm run dev` — it runs `scripts/dev.sh`, which sets `ASTRO_TELEMETRY_DISABLED=1` before launching `astro dev`. Without that, Astro tries to write to its telemetry config dir (e.g. `~/Library/Preferences/astro`) and the dev server fails to start in sandboxed environments. Pass extra flags through, e.g. `npm run dev -- --port 3000`.
+
 The `prebuild` hook runs `sync-docs` automatically, so `npm run build` always pulls a fresh copy of docs before generating the static site.
 
 ### Available commands
 
 | Command | Purpose |
 |---|---|
-| `npm run dev` | Dev server with HMR |
+| `npm run dev` | Dev server with HMR (telemetry disabled via `scripts/dev.sh`) |
 | `npm run sync-docs` | Clone `apache/magpie` (sparse, `docs/` + `images/`) into `src/content/docs/` and `public/docs-assets/` |
 | `npm run build` | Static build to `dist/` (runs sync-docs first) |
 | `npm run preview` | Serve the built site locally |

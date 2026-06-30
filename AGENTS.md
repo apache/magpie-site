@@ -58,15 +58,19 @@ continue with the original task.
 ## Local setup
 
 - `npm install` — install dependencies.
-- `npm run dev` — local dev server.
+- `npm run dev` — local dev server. **Always start the dev server this way.**
+  It runs `scripts/dev.sh`, which sets `ASTRO_TELEMETRY_DISABLED=1` before
+  launching `astro dev`. Do **not** invoke `astro dev` / `npx astro dev`
+  directly: Astro otherwise tries to write to its telemetry config dir (e.g.
+  `~/Library/Preferences/astro`), and that write fails — aborting the server —
+  in sandboxed environments. Extra args are forwarded, e.g.
+  `npm run dev -- --port 3000`.
 - `npm run build` — production build. A `prebuild` step
   (`scripts/sync-docs.sh`) clones `apache/magpie` and copies `docs/`, `images/`,
   and `skills/` into `src/content/docs/`. This needs network access and
   **overwrites** `src/content/docs/`.
 - To rebuild without re-cloning (docs already synced), run `npx astro build`
   directly, skipping the `prebuild` step.
-- Set `ASTRO_TELEMETRY_DISABLED=1` to stop Astro writing to its telemetry
-  config dir (useful in sandboxes).
 
 ## Site conventions
 

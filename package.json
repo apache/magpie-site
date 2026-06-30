@@ -9,7 +9,7 @@
     "sync-docs": "bash scripts/sync-docs.sh",
     "sync-community": "node scripts/sync-community.mjs",
     "prebuild": "npm run sync-docs",
-    "dev": "astro dev",
+    "dev": "bash scripts/dev.sh",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
