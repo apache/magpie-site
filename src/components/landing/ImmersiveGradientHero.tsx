@@ -455,10 +455,16 @@ function ImmersiveGradientHero() {
               </div>
             </div>
           </div>
-          <div className="flex grow shrink-0 basis-0 flex-col items-center justify-center self-stretch rounded-2xl border border-solid border-[#b3d1ff] bg-[#f0f5ff] px-8 py-8 min-w-[380px]">
+          <div className="flex grow shrink-0 basis-0 flex-col items-center justify-center self-stretch rounded-2xl border border-solid border-[#b3d1ff] bg-[#f0f5ff] px-6 py-8 min-w-[300px] max-w-[400px]">
             <div className="flex w-full flex-col items-center py-4">
               <div className="flex w-full flex-col items-center">
-                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <a
+                  href={withBase("/skills/modes")}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="How a PR flows through the agentic modes"
+                  className="flex min-h-[76px] w-full max-w-[340px] items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md transition-all hover:border-[#004aad] hover:shadow-lg"
+                >
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <GitPullRequest className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -473,13 +479,19 @@ function ImmersiveGradientHero() {
                   <Badge variant="success" icon={<Check />}>
                     Done
                   </Badge>
-                </div>
+                </a>
                 <div className="flex flex-col items-center py-1">
                   <ArrowDown className="text-body font-body text-[#80b3ff]" />
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <a
+                  href={withBase("/skills/modes#triage")}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Agentic Triage Mode docs"
+                  className="flex min-h-[76px] w-full max-w-[340px] items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md transition-all hover:border-[#004aad] hover:shadow-lg"
+                >
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <Filter className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -494,13 +506,19 @@ function ImmersiveGradientHero() {
                   <Badge variant="success" icon={<Check />}>
                     Stable
                   </Badge>
-                </div>
+                </a>
                 <div className="flex flex-col items-center py-1">
                   <ArrowDown className="text-body font-body text-[#80b3ff]" />
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <a
+                  href={withBase("/skills/modes#mentoring")}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Agentic Mentoring Mode docs"
+                  className="flex min-h-[76px] w-full max-w-[340px] items-center gap-3 rounded-xl border border-solid border-[#80b3ff] bg-white px-5 py-3 shadow-md transition-all hover:border-[#004aad] hover:shadow-lg"
+                >
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <BookOpen className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -515,13 +533,19 @@ function ImmersiveGradientHero() {
                   <Badge variant="warning" icon={<Clock />}>
                     Experimental
                   </Badge>
-                </div>
+                </a>
                 <div className="flex flex-col items-center py-1">
                   <ArrowDown className="text-body font-body text-[#80b3ff]" />
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#b3d1ff] bg-white px-5 py-3 shadow-md max-w-[360px]">
+                <a
+                  href={withBase("/skills/modes#drafting")}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Agentic Drafting Mode docs"
+                  className="flex min-h-[76px] w-full max-w-[340px] items-center gap-3 rounded-xl border border-solid border-[#b3d1ff] bg-white px-5 py-3 shadow-md transition-all hover:border-[#004aad] hover:shadow-lg"
+                >
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#e6f0ff]">
                     <PenTool className="text-heading-3 font-heading-3 text-[#004aad]" />
                   </div>
@@ -536,13 +560,19 @@ function ImmersiveGradientHero() {
                   <Badge variant="success" icon={<Check />}>
                     Stable
                   </Badge>
-                </div>
+                </a>
                 <div className="flex flex-col items-center py-1">
                   <ArrowDown className="text-body font-body text-[#80b3ff]" />
                 </div>
               </div>
               <div className="flex w-full flex-col items-center">
-                <div className="relative flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-solid border-[#004aad] px-5 py-3 shadow-md bg-gradient-to-br from-[#e6f0ff] to-[#b3d1ff] max-w-[360px] overflow-hidden">
+                <a
+                  href={withBase("/skills/modes#auto-merge")}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Agentic Autonomous Mode docs"
+                  className="relative flex min-h-[76px] w-full max-w-[340px] items-center gap-3 overflow-hidden rounded-xl border border-solid border-[#004aad] px-5 py-3 shadow-md bg-gradient-to-br from-[#e6f0ff] to-[#b3d1ff] transition-all hover:shadow-lg"
+                >
                   <BorderBeam size={120} duration={6} colorFrom="#004aad" colorTo="#80b3ff" />
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#004aad] shadow-sm">
                     <GitMerge className="text-heading-3 font-heading-3 text-white" />
@@ -558,9 +588,18 @@ function ImmersiveGradientHero() {
                   <Badge variant="neutral" icon={<Lock />}>
                     Off
                   </Badge>
-                </div>
+                </a>
               </div>
             </div>
+            <a
+              href={withBase("/skills/modes")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+            >
+              Explore the agentic modes
+              <ArrowUpRight className="size-3.5" />
+            </a>
           </div>
         </div>
       </div>
