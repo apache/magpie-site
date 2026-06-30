@@ -202,10 +202,11 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: "community", label: "Community" },
 ];
 
-// Floating scroll-spy section navigation. Shown only on wide (lg+) screens
-// where there is room beside the content; the section links collapse into the
-// top-bar menu below that. Tracks the section currently in view via an
-// IntersectionObserver and highlights it.
+// Floating scroll-spy section navigation. Shown in the lg–2xl band: wide
+// enough for a side rail, but where the full inline section menu does not fit
+// in the top bar. Below lg the sections live in the hamburger menu; at 2xl+
+// the inline top menu takes over and this is hidden. Tracks the section
+// currently in view via an IntersectionObserver and highlights it.
 function SectionNav() {
   const [active, setActive] = React.useState<string>(SECTIONS[0].id);
 
@@ -232,7 +233,7 @@ function SectionNav() {
   return (
     <nav
       aria-label="Page sections"
-      className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-1.5 lg:flex"
+      className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-1.5 lg:flex 2xl:hidden"
     >
       {SECTIONS.map((s) => {
         const isActive = active === s.id;
@@ -283,9 +284,25 @@ function ImmersiveGradientHero() {
               alt="Magpie"
             />
           </a>
+          {/* Inline section menu — shown only on screens wide enough to fit the
+              full list (2xl+). Compact (caption-size, tight gaps, no wrap) so
+              eight labels plus the actions fit without overflowing. Below 2xl
+              the same links live in the hamburger menu, so the bar always offers
+              either this menu or the hamburger. */}
+          <div className="hidden items-center gap-4 2xl:flex">
+            {SECTIONS.map((s) => (
+              <a
+                key={s.id}
+                className="whitespace-nowrap text-caption font-caption text-brand-600 hover:text-brand-700"
+                href={`#${s.id}`}
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
           <div className="flex items-center gap-2">
             <a
-              className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 lg:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 2xl:inline-flex"
               href={withBase("/skills")}
               target="_blank"
               rel="noreferrer"
@@ -295,7 +312,7 @@ function ImmersiveGradientHero() {
               <ArrowUpRight className="size-3.5" />
             </a>
             <a
-              className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 lg:inline-flex"
+              className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 2xl:inline-flex"
               href={withBase("/tools")}
               target="_blank"
               rel="noreferrer"
@@ -317,7 +334,7 @@ function ImmersiveGradientHero() {
               <Button icon={<ArrowRight />}>Get Started</Button>
             </a>
             <IconButton
-              className="lg:hidden"
+              className="2xl:hidden"
               icon={<Menu />}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
@@ -325,7 +342,7 @@ function ImmersiveGradientHero() {
             />
           </div>
           {menuOpen && (
-            <div className="absolute inset-x-0 top-full z-50 flex flex-col gap-1 border-b border-solid border-neutral-100 bg-default-background px-6 py-4 shadow-md lg:hidden">
+            <div className="absolute inset-x-0 top-full z-50 flex flex-col gap-1 border-b border-solid border-neutral-100 bg-default-background px-6 py-4 shadow-md 2xl:hidden">
               {SECTIONS.map((s) => (
                 <a
                   key={s.id}
