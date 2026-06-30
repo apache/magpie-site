@@ -27,6 +27,30 @@ const {
     {/* Inter, Jost and Geist are self-hosted via Fontsource (src/styles/global.css);
         no external font CDN is loaded (apache/magpie-site#11). */}
     <title>{title}</title>
+    {/* ASF Matomo analytics (site id 89), as issued by the ASF Privacy team
+        (privacy@apache.org). Cookieless and Do-Not-Track-respecting per ASF
+        policy; the tracker is self-hosted at analytics.apache.org. The Privacy
+        team recommends placing this immediately before </head>. is:inline keeps
+        it verbatim so Astro does not bundle/transform it. */}
+    <script is:inline>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
   </head>
   <body>
     <slot />
