@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/ui/components/Button";
-import { ArrowRight } from "lucide-react";
+import { IconButton } from "@/ui/components/IconButton";
+import { ArrowRight, Download } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -33,6 +34,9 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
         />
       </a>
       <div className="flex items-center gap-2">
+        <a href={withBase("/downloads")} aria-label="Downloads" title="Downloads">
+          <IconButton icon={<Download />} aria-label="Downloads" />
+        </a>
         <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" className="mobile:hidden">
           <Button className={ghBtnClass} variant="neutral-secondary" icon={<GithubIcon />}>
             Star on GitHub
