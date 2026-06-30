@@ -585,7 +585,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-heading-3 font-heading-3 text-default-font">
+                  <span className="text-heading-3 font-body-bold text-default-font">
                     Agentic Triage Mode
                   </span>
                   <Badge variant="success" icon={<Check />}>
@@ -620,7 +620,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-heading-3 font-heading-3 text-default-font">
+                  <span className="text-heading-3 font-body-bold text-default-font">
                     Agentic Drafting Mode
                   </span>
                   <Badge variant="success" icon={<Check />}>
@@ -657,7 +657,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-heading-3 font-heading-3 text-default-font">
+                  <span className="text-heading-3 font-body-bold text-default-font">
                     Agentic Mentoring Mode
                   </span>
                   <Badge variant="warning" icon={<Clock />}>
@@ -692,7 +692,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-heading-3 font-heading-3 text-default-font">
+                  <span className="text-heading-3 font-body-bold text-default-font">
                     Agentic Pairing Mode
                   </span>
                   <Badge variant="warning" icon={<Clock />}>
@@ -729,7 +729,7 @@ function ImmersiveGradientHero() {
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-1.5">
               <div className="flex items-center gap-2">
-                <span className="text-heading-3 font-heading-3 text-default-font">
+                <span className="text-heading-3 font-body-bold text-default-font">
                   Agentic Autonomous Mode
                 </span>
                 <Badge variant="neutral" icon={<Lock />}>
