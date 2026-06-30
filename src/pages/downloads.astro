@@ -51,7 +51,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
           </p>
         </section>
 
-        <!-- Install today: GitHub -->
         <!-- Installation methods -->
         <section class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
@@ -59,10 +58,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
             <p class="text-body font-body text-subtext-color">
               Magpie is bootstrapped into an adopter repo with one of the{" "}
               <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/skills/setup/install-recipes`} target="_blank" rel="noreferrer">install recipes</a>.
-              Today the only <strong>Ready</strong> path is fetching the framework directly from
-              GitHub; the signed Apache release is <strong>Coming</strong> with the first release.
+              The signed release from the Apache distribution is the recommended method and is
+              <strong>Coming</strong> with the first release; until then, the only <strong>Ready</strong>{" "}
+              path is fetching the framework directly from GitHub.
             </p>
           </div>
+
+          <!-- Method: ASF release zip (SVN dist) — Coming -->
+          <a
+            href={`${base}/skills/setup/install-recipes#method-1--released-zip-from-asf-distribution`}
+            target="_blank"
+            rel="noreferrer"
+            class="group flex items-start justify-between gap-4 rounded-xl border border-solid border-neutral-200 bg-default-background px-5 py-4 shadow-sm transition-all hover:border-brand-200 hover:shadow-md"
+          >
+            <div class="flex flex-col gap-1">
+              <span class="inline-flex items-center gap-1.5 text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
+                Signed release zip from the Apache distribution (SVN)
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
+              </span>
+              <span class="text-caption font-caption text-subtext-color">
+                The official source release, and the recommended method: a signed, checksummed zip
+                published to the Apache distribution SVN (<code class="font-mono">dist.apache.org</code>)
+                and mirrored from <code class="font-mono">downloads.apache.org</code>. Available once
+                Magpie ships its first Apache release.
+              </span>
+            </div>
+            <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-warning-200 bg-warning-50 px-2.5 py-0.5 text-caption font-caption text-warning-700">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" /></svg>
+              Coming
+            </span>
+          </a>
 
           <!-- Method: git branch (main) — Ready -->
           <a
@@ -102,31 +127,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
               <span class="text-caption font-caption text-subtext-color">
                 Pin a specific framework version by git tag — available once tagged releases or
                 release candidates exist.
-              </span>
-            </div>
-            <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-warning-200 bg-warning-50 px-2.5 py-0.5 text-caption font-caption text-warning-700">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" /></svg>
-              Coming
-            </span>
-          </a>
-
-          <!-- Method: ASF release zip (SVN dist) — Coming -->
-          <a
-            href={`${base}/skills/setup/install-recipes#method-1--released-zip-from-asf-distribution`}
-            target="_blank"
-            rel="noreferrer"
-            class="group flex items-start justify-between gap-4 rounded-xl border border-solid border-neutral-200 bg-default-background px-5 py-4 shadow-sm transition-all hover:border-brand-200 hover:shadow-md"
-          >
-            <div class="flex flex-col gap-1">
-              <span class="inline-flex items-center gap-1.5 text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
-                Signed release zip from the Apache distribution (SVN)
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
-              </span>
-              <span class="text-caption font-caption text-subtext-color">
-                The official source release: a signed, checksummed zip published to the Apache
-                distribution SVN (<code class="font-mono">dist.apache.org</code>) and mirrored from{" "}
-                <code class="font-mono">downloads.apache.org</code>. The recommended path once
-                Magpie ships its first Apache release.
               </span>
             </div>
             <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-warning-200 bg-warning-50 px-2.5 py-0.5 text-caption font-caption text-warning-700">
