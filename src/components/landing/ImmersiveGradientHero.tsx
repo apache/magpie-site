@@ -622,12 +622,6 @@ function ImmersiveGradientHero() {
       <div className="flex h-24 w-full flex-none items-start bg-gradient-to-b from-brand-600 to-brand-50" />
       <div id="why-magpie" className="flex w-full flex-col items-center bg-default-background px-8 pt-20 pb-4 mobile:px-4 mobile:pt-12">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[660px] pb-12 mobile:pb-8">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <CheckCircle className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              Why Magpie
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Why would you like to use Magpie?
           </span>
@@ -658,12 +652,6 @@ function ImmersiveGradientHero() {
       </div>
       <div id="maintainer-first" className="flex w-full flex-col items-center bg-warning-50 px-8 py-24 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[640px] pb-12 mobile:pb-8">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Heart className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              Maintainers first
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Maintainers first
           </span>
@@ -740,12 +728,6 @@ function ImmersiveGradientHero() {
       </div>
       <div id="agentic-automations" className="flex w-full flex-col items-center gap-16 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[600px]">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Layers className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              5 Agentic Operation Modes
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Progressive Agentic Modes
           </span>
@@ -943,12 +925,6 @@ function ImmersiveGradientHero() {
       </div>
       <div id="skill-families" className="flex w-full flex-col items-center bg-warning-50 px-8 py-24 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[640px] pb-12 mobile:pb-8">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Layers className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              {SKILL_FAMILIES.length} Skill Families
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Pick the skill families you need
           </span>
@@ -1014,12 +990,6 @@ function ImmersiveGradientHero() {
       <div id="privacy-security" className="flex w-full flex-col items-center bg-default-background">
         <div className="flex w-full flex-col items-center gap-14 px-8 py-24 max-w-[1100px] mobile:gap-8 mobile:px-4 mobile:py-14">
           <div className="flex flex-col items-center gap-4 max-w-[600px]">
-            <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-              <Shield className="text-caption font-caption text-brand-600" />
-              <span className="text-caption font-caption text-brand-600">
-                Privacy and Security First
-              </span>
-            </div>
             <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
               Privacy and Security at every level
             </span>
@@ -1118,12 +1088,6 @@ function ImmersiveGradientHero() {
       <div id="vendor-neutrality" className="flex w-full flex-col items-center bg-warning-50">
         <div className="flex w-full items-center gap-16 px-8 py-24 max-w-[1100px] mobile:flex-col mobile:gap-10 mobile:px-4 mobile:py-14">
         <div className="flex grow shrink-0 basis-0 flex-col items-start gap-6">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Globe className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              Vendor neutral
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Vendor neutral
             <sup className="text-[0.5em] font-[700] text-brand-600 align-super">*</sup>
@@ -1223,12 +1187,6 @@ function ImmersiveGradientHero() {
       </div>
       <div id="organisation-agnostic" className="flex w-full flex-col items-center bg-default-background px-8 py-24 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[760px] pb-12 mobile:pb-8">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Users className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              Organisation agnostic
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             All organisations
             <sup className="text-[0.5em] font-[700] text-brand-600 align-super">*</sup>{" "}
@@ -1372,12 +1330,6 @@ function ImmersiveGradientHero() {
       </div>
       <div id="community" className="flex w-full flex-col items-center gap-14 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[680px]">
-          <div className="flex items-center gap-2 rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-            <Users className="text-caption font-caption text-brand-600" />
-            <span className="text-caption font-caption text-brand-600">
-              Community
-            </span>
-          </div>
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Built in the open, the Apache Way
           </span>
