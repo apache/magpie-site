@@ -266,9 +266,6 @@ function SectionNav() {
       })}
     </nav>
   );
-
-
-  
 }
 
 function ImmersiveGradientHero() {
