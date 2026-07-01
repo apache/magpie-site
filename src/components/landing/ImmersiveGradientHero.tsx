@@ -1307,6 +1307,23 @@ function ImmersiveGradientHero() {
             </span>
           </a>
         </div>
+        <div className="mt-12 flex w-full max-w-[760px] flex-col items-center gap-3 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6 text-center">
+          <span className="text-heading-3 font-heading-3 text-default-font">
+            Add your organization
+          </span>
+          <span className="text-body font-body text-subtext-color">
+            Running Magpie under a different foundation or company? Propose an
+            organization bundle so every project under it inherits your defaults
+            — start the conversation on the developer mailing list.
+          </span>
+          <a
+            className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-300 bg-default-background px-4 py-2 text-body-bold font-body-bold text-brand-700 hover:border-brand-400 hover:bg-brand-100"
+            href="mailto:dev@magpie.apache.org?subject=Adding%20my%20organization%20to%20Apache%20Magpie"
+          >
+            <Mail className="size-4" />
+            Email the dev list
+          </a>
+        </div>
         <div className="flex flex-wrap items-center justify-center gap-3 pt-10">
           <a
             className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"

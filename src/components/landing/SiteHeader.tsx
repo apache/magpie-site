@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/ui/components/Button";
 import { IconButton } from "@/ui/components/IconButton";
-import { ArrowRight, Building2, Download } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -41,15 +41,6 @@ export function SiteHeader() {
           title="Star Apache Magpie on GitHub"
         >
           <IconButton icon={<GithubIcon />} aria-label="Star Apache Magpie on GitHub" />
-        </a>
-        <a
-          href="mailto:dev@magpie.apache.org?subject=Adding%20my%20organization%20to%20Apache%20Magpie"
-          className="mobile:hidden"
-          title="Email the Magpie dev list about adding your organization"
-        >
-          <Button variant="neutral-secondary" icon={<Building2 />}>
-            Add your organization
-          </Button>
         </a>
         <a href={withBase("/skills")}>
           <Button icon={<ArrowRight />}>Get Started</Button>
