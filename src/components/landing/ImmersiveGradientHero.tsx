@@ -1328,7 +1328,7 @@ function ImmersiveGradientHero() {
           </a>
         </div>
       </div>
-      <div id="community" className="flex w-full flex-col items-center gap-14 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
+      <div id="community" className="flex w-full flex-col items-center gap-14 bg-warning-50 px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[680px]">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Built in the open, the Apache Way
