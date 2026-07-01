@@ -266,6 +266,9 @@ function SectionNav() {
       })}
     </nav>
   );
+
+
+  
 }
 
 function ImmersiveGradientHero() {
@@ -418,7 +421,8 @@ function ImmersiveGradientHero() {
               </h1>
               <BlurFade delay={0.4} inView>
                 <span className="font-['Inter'] text-[17px] font-[400] leading-[27px] text-brand-200 -tracking-[0.01em]">
-                  Apache Magpie handles the repetitive parts of running an
+                  Apache Magpie is a carefully curated set of AI agent recipes,
+                  specially designed to handle the repetitive parts of running an 
                   open-source project — triaging issues and PRs, mentoring
                   contributors, drafting fixes, managing security reports — so
                   maintainers can spend their time on design, relationships, and
