@@ -15,7 +15,7 @@
   "contracts": {
     "tracker": "Issue / PR / board / label backend.",
     "source-control": "Branch / commit / diff / push (VCS).",
-    "mail-archive": "Public mailing-list / forum archive reads.",
+    "mail-archive": "Mailing-list / forum archive reads.",
     "mail-source": "Inbound-mail ingestion (mbox / IMAP / …).",
     "mail-draft": "Outbound mail composition (draft, never send).",
     "cve-authority": "CVE allocation / record management / publication.",
@@ -222,6 +222,10 @@
         {
           "kind": "contract",
           "name": "tracker"
+        },
+        {
+          "kind": "contract",
+          "name": "source-control"
         }
       ],
       "kind": "contract",
@@ -283,6 +287,10 @@
         {
           "kind": "contract",
           "name": "mail-draft"
+        },
+        {
+          "kind": "contract",
+          "name": "mail-archive"
         }
       ],
       "kind": "contract",
@@ -367,6 +375,24 @@
       "maturity": null,
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/permission-audit"
+    },
+    {
+      "name": "pilot-report-validator",
+      "title": "pilot-report-validator",
+      "description": "Validates adopter pilot-report files against the required schema defined in docs/pilot-report-template.md. Pilot reports are the feedback artefact that documents an adopter's end-to-end run of an experimental skill family, and are the…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "framework-dev"
+        }
+      ],
+      "kind": "substrate",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/pilot-report-validator"
     },
     {
       "name": "ponymail",
@@ -577,6 +603,10 @@
         {
           "kind": "substrate",
           "name": "framework-dev"
+        },
+        {
+          "kind": "substrate",
+          "name": "analytics"
         }
       ],
       "kind": "substrate",
@@ -624,10 +654,10 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/vcs"
     }
   ],
-  "toolsTotal": 32,
-  "implementedTotal": 15,
+  "toolsTotal": 33,
+  "implementedTotal": 16,
   "contractsTotal": 15,
-  "substratesTotal": 17,
+  "substratesTotal": 18,
   "mcpTotal": 4,
   "organizations": [
     {
