@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/ui/components/Button";
 import { IconButton } from "@/ui/components/IconButton";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Building2, Download } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -10,11 +10,7 @@ const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) {
-  const ghBtnClass =
-    tone === "hero"
-      ? "border border-white/20 bg-white/10 text-white hover:bg-white/20"
-      : "";
+export function SiteHeader() {
   return (
     <nav className="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4">
       <a
@@ -37,9 +33,22 @@ export function SiteHeader({ tone = "default" }: { tone?: "default" | "hero" }) 
         <a href={withBase("/downloads")} aria-label="Downloads" title="Downloads">
           <IconButton icon={<Download />} aria-label="Downloads" />
         </a>
-        <a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" className="mobile:hidden">
-          <Button className={ghBtnClass} variant="neutral-secondary" icon={<GithubIcon />}>
-            Star on GitHub
+        <a
+          href="https://github.com/apache/magpie"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Star Apache Magpie on GitHub"
+          title="Star Apache Magpie on GitHub"
+        >
+          <IconButton icon={<GithubIcon />} aria-label="Star Apache Magpie on GitHub" />
+        </a>
+        <a
+          href="mailto:dev@magpie.apache.org?subject=Adding%20my%20organization%20to%20Apache%20Magpie"
+          className="mobile:hidden"
+          title="Email the Magpie dev list about adding your organization"
+        >
+          <Button variant="neutral-secondary" icon={<Building2 />}>
+            Add your organization
           </Button>
         </a>
         <a href={withBase("/skills")}>
