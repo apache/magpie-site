@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>svn release runbook — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#svn-source-release-runbook-signed-zip-to-distdev">SVN source-release runbook (signed <code>.zip</code> to <code>dist/dev/</code>)</a>
+<ul>
+<li><a href="#what-a-release-is">What a “release” is</a></li>
+<li><a href="#where-this-fits-in-the-14-step-lifecycle">Where this fits in the 14-step lifecycle</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#step-1-set-the-release-variables">Step 1: Set the release variables</a></li>
+<li><a href="#step-2-tag-the-release-candidate">Step 2: Tag the release candidate</a></li>
+<li><a href="#step-3-build-the-source-zip-from-the-tag">Step 3: Build the source <code>.zip</code> from the tag</a></li>
+<li><a href="#step-4-sign-the-zip-detached-asc">Step 4: Sign the <code>.zip</code> (detached <code>.asc</code>)</a></li>
+<li><a href="#step-5-generate-the-sha-512-checksum">Step 5: Generate the SHA-512 checksum</a></li>
+<li><a href="#step-6-verify-your-own-artefacts-before-staging">Step 6: Verify your own artefacts before staging</a></li>
+<li><a href="#step-7-stage-to-distdev-over-svn">Step 7: Stage to <code>dist/dev/</code> over SVN</a></li>
+<li><a href="#what-happens-after-staging">What happens after staging</a></li>
+<li><a href="#release-manager-checklist">Release Manager checklist</a></li>
+<li><a href="#cross-references">Cross-references</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="svn-source-release-runbook-signed-zip-to-distdev">SVN source-release runbook (signed <code>.zip</code> to <code>dist/dev/</code>)</h1>
+<p>A copy-paste command sequence for the <strong>mechanical core</strong> of an
+Apache release on the <code>svnpubsub</code> distribution backend: take a
+tagged revision, package it as a source <code>.zip</code>, sign it, checksum
+it, and stage it to <code>dist.apache.org/repos/dist/dev/</code> for the
+<code>[VOTE]</code>.</p>
+<p>This runbook is the hands-on companion to the
+<a href="https://github.com/apache/magpie/blob/main/skills/release-rc-cut/SKILL.md"><code>release-rc-cut</code></a> skill
+(lifecycle Steps 4–5). The skill <em>emits</em> this command set tailored
+to the adopter’s <a href="https://github.com/apache/magpie/blob/main/projects/_template/release-build.md"><code>release-build.md</code></a>;
+this document is the same set written out longhand so a Release
+Manager (RM) can run a release by hand, or sanity-check what the
+skill produced. Every command runs <strong>on the RM’s own machine, with
+the RM’s own signing key, under the RM’s own ASF credentials</strong> — the
+agent never holds the key and never publishes
+(<a href="/skills/release-management/spec">spec § Boundary 1 / Boundary 2</a>).</p>
+<h2 id="what-a-release-is">What a “release” is</h2>
+<p>Per the
+<a href="https://www.apache.org/legal/release-policy.html#release-definition">ASF release policy § what is a release</a>:</p>
+<ul>
+<li><strong>The source package is the release.</strong> Everything else
+(convenience binaries, wheels, images) is just that —
+<em>convenience</em>. The <code>[VOTE]</code> votes on the source <code>.zip</code>.</li>
+<li>It must be a <strong>clean source snapshot of a tagged revision</strong> — the
+exact tree at <code>&lt;version&gt;-rcN</code>, with no VCS metadata and no
+compiled output.</li>
+<li>It must contain <strong><code>LICENSE</code></strong> and <strong><code>NOTICE</code></strong> at the artefact
+root (this repo already carries both — <code>git archive</code> includes
+them automatically).</li>
+<li>It must be <strong>cryptographically signed</strong> by the RM with a
+<strong>detached</strong> signature (<code>.asc</code>), and accompanied by a <strong>SHA-512</strong>
+checksum. <code>MD5</code> and <code>SHA-1</code> are prohibited for new releases per
+<a href="https://infra.apache.org/release-distribution.html#sigs-and-sums">release-distribution § sigs-and-sums</a>.</li>
+<li>It must be <strong>distributed via <code>dist.apache.org</code></strong> (svnpubsub),
+staged under <code>dist/dev/</code> for the vote and only moved to
+<code>dist/release/</code> after the vote passes.</li>
+</ul>
+<h2 id="where-this-fits-in-the-14-step-lifecycle">Where this fits in the 14-step lifecycle</h2>
+<p>This runbook covers Steps 4–5 of the
+<a href="/skills/release-management/process">14-step process</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Owner skill</th>
+<th>This runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–2 Plan + version bump</td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-prepare/SKILL.md"><code>release-prepare</code></a></td>
+<td>prerequisite</td>
+</tr>
+<tr>
+<td>3 <code>KEYS</code> reconciliation</td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-keys-sync/SKILL.md"><code>release-keys-sync</code></a></td>
+<td>prerequisite</td>
+</tr>
+<tr>
+<td><strong>4 Cut RC: tag + build + sign</strong></td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-rc-cut/SKILL.md"><code>release-rc-cut</code></a></td>
+<td><strong>Steps 2–6 below</strong></td>
+</tr>
+<tr>
+<td><strong>5 Stage to <code>dist/dev/</code></strong></td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-rc-cut/SKILL.md"><code>release-rc-cut</code></a></td>
+<td><strong>Step 7 below</strong></td>
+</tr>
+<tr>
+<td>6 Pre-flight verify</td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-verify-rc/SKILL.md"><code>release-verify-rc</code></a></td>
+<td>downstream</td>
+</tr>
+<tr>
+<td>7–9 Vote + tally</td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-vote-draft/SKILL.md"><code>release-vote-draft</code></a>, <a href="https://github.com/apache/magpie/blob/main/skills/release-vote-tally/SKILL.md"><code>release-vote-tally</code></a></td>
+<td>downstream</td>
+</tr>
+<tr>
+<td>10 Promote <code>dist/dev/ → dist/release/</code></td>
+<td><a href="https://github.com/apache/magpie/blob/main/skills/release-promote/SKILL.md"><code>release-promote</code></a></td>
+<td>downstream</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!IMPORTANT]
+This runbook stops at <code>dist/dev/</code>. Moving the artefacts to
+<code>dist/release/</code> is <strong>the moment of release</strong> and happens <strong>only
+after the vote passes</strong> — see
+<a href="https://github.com/apache/magpie/blob/main/skills/release-promote/SKILL.md"><code>release-promote</code></a>. Never
+<code>svn import</code>/<code>svn mv</code> into a <code>dist/release/</code> path from here; that
+path is on a hard denylist in the release skills for good reason.</p>
+</blockquote>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before you start, confirm:</p>
+<ul>
+<li><strong>Your GPG key is in the project <code>KEYS</code> file</strong> at
+<code>https://dist.apache.org/repos/dist/release/magpie/KEYS</code>, and the
+matching public key is on a keyserver
+(<a href="https://infra.apache.org/release-signing.html">release-signing FAQ</a>).
+If this is your first release, run
+<a href="https://github.com/apache/magpie/blob/main/skills/release-keys-sync/SKILL.md"><code>release-keys-sync</code></a>
+(Step 3) first.</li>
+<li><strong>You can write to the project’s SVN dist area.</strong> ASF committers
+can write to <code>dist/dev/</code>; <code>dist/release/</code> is PMC-only (that gate
+bites at promote time, not here).</li>
+<li><strong>The prep PR is merged</strong> — version strings, <code>CHANGELOG</code>,
+<code>NOTICE</code>/<code>LICENSE</code> reflect <code>&lt;version&gt;</code>
+(<a href="https://github.com/apache/magpie/blob/main/skills/release-prepare/SKILL.md"><code>release-prepare prep</code></a>,
+Step 2).</li>
+<li><strong><code>git</code>, <code>gpg</code>, <code>svn</code>, and a SHA-512 tool</strong> are installed locally.</li>
+</ul>
+<h2 id="step-1-set-the-release-variables">Step 1: Set the release variables</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># --- edit these three lines, then paste the rest verbatim ---</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> VERSION</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.1.0</span><span style="color:#6A737D">            # the release version, no rc suffix</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> RC</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">rc1                   </span><span style="color:#6A737D"># the release-candidate number</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ASF_ID</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">yourapacheid      </span><span style="color:#6A737D"># your committer id (for svn auth)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Derived names — do not edit.</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> RC_TAG</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">}-${</span><span style="color:#E1E4E8">RC</span><span style="color:#9ECBFF">}"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> ARTIFACT</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"apache-magpie-${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">}-source.zip"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> STAGE_DIR</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"$(</span><span style="color:#79B8FF">pwd</span><span style="color:#9ECBFF">)/stage/${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}"</span></span></code></pre>
+<h2 id="step-2-tag-the-release-candidate">Step 2: Tag the release candidate</h2>
+<p>Cut a <strong>signed</strong> tag at the commit you are releasing, and push it.
+(If the <a href="https://github.com/apache/magpie/blob/main/skills/release-rc-cut/SKILL.md"><code>release-rc-cut</code></a>
+skill already emitted and you already pushed this tag, skip to Step
+3.)</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> tag</span><span style="color:#79B8FF"> -s</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}"</span><span style="color:#79B8FF"> -m</span><span style="color:#9ECBFF"> "Apache Magpie ${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">} ${</span><span style="color:#E1E4E8">RC</span><span style="color:#9ECBFF">}"</span><span style="color:#9ECBFF"> HEAD</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#9ECBFF"> origin</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}"</span><span style="color:#6A737D">      # 'origin' = your remote for apache/magpie</span></span></code></pre>
+<blockquote>
+<p>Tagging from <code>HEAD</code> assumes you are on the exact release commit.
+Double-check <code>git log -1</code> first.</p>
+</blockquote>
+<h2 id="step-3-build-the-source-zip-from-the-tag">Step 3: Build the source <code>.zip</code> from the tag</h2>
+<p><code>git archive</code> produces a deterministic snapshot of <strong>only the
+tracked files</strong> at the tag — no <code>.git/</code> directory, no untracked
+build output. The <code>--prefix</code> puts everything under a versioned top
+folder so the unpacked tree is <code>apache-magpie-&lt;version&gt;/</code>.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> archive</span><span style="color:#79B8FF"> --format=zip</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --prefix=</span><span style="color:#9ECBFF">"apache-magpie-${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">}/"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -o</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  "${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}"</span></span></code></pre>
+<p>Quick sanity check that <code>LICENSE</code> and <code>NOTICE</code> are present at the
+root:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">unzip</span><span style="color:#79B8FF"> -l</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> grep</span><span style="color:#79B8FF"> -E</span><span style="color:#9ECBFF"> "apache-magpie-${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">}/(LICENSE|NOTICE)$"</span></span></code></pre>
+<blockquote>
+<p>[!NOTE]
+To keep files like <code>.github/</code> or CI config out of the source
+release, mark them <code>export-ignore</code> in <code>.gitattributes</code> — <code>git archive</code> honours it. The license-header pass
+(<a href="https://creadur.apache.org/rat/">Apache RAT</a>, run by
+<a href="https://github.com/apache/magpie/blob/main/skills/release-verify-rc/SKILL.md"><code>release-verify-rc</code></a> in
+Step 6) is the authoritative check on what the artefact must
+contain.</p>
+</blockquote>
+<h2 id="step-4-sign-the-zip-detached-asc">Step 4: Sign the <code>.zip</code> (detached <code>.asc</code>)</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gpg</span><span style="color:#79B8FF"> --armor</span><span style="color:#79B8FF"> --detach-sign</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span></span>
+<span class="line"><span style="color:#6A737D"># produces ${ARTIFACT}.asc</span></span></code></pre>
+<p>No <code>--passphrase</code> on the command line — let your GPG agent prompt.
+The signature must be <strong>detached</strong> and <strong>armored</strong> (<code>.asc</code>), never
+an inline or binary <code>.sig</code>.</p>
+<h2 id="step-5-generate-the-sha-512-checksum">Step 5: Generate the SHA-512 checksum</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Linux / coreutils:</span></span>
+<span class="line"><span style="color:#B392F0">sha512sum</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span><span style="color:#F97583"> ></span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}.sha512"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># macOS (produces a -c-compatible file):</span></span>
+<span class="line"><span style="color:#6A737D"># shasum -a 512 "${ARTIFACT}" > "${ARTIFACT}.sha512"</span></span></code></pre>
+<p>SHA-512 is the baseline. Do <strong>not</strong> generate <code>md5</code> or <code>sha1</code> — they
+are prohibited for new ASF releases.</p>
+<h2 id="step-6-verify-your-own-artefacts-before-staging">Step 6: Verify your own artefacts before staging</h2>
+<p>Catch a bad signature or a typo’d checksum before voters do:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">gpg</span><span style="color:#79B8FF"> --verify</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}.asc"</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span></span>
+<span class="line"><span style="color:#B392F0">sha512sum</span><span style="color:#79B8FF"> -c</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}.sha512"</span><span style="color:#6A737D">     # macOS: shasum -a 512 -c</span></span></code></pre>
+<p>Both must report success (<code>Good signature</code> / <code>OK</code>).</p>
+<h2 id="step-7-stage-to-distdev-over-svn">Step 7: Stage to <code>dist/dev/</code> over SVN</h2>
+<p>Assemble the three files into a clean staging directory, then
+import that directory to the RC path under <code>dist/dev/</code>. The svnpubsub
+machinery mirrors it to the public <code>dist.apache.org</code> host
+automatically.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">STAGE_DIR</span><span style="color:#9ECBFF">}"</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}"</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}.asc"</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ARTIFACT</span><span style="color:#9ECBFF">}.sha512"</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">STAGE_DIR</span><span style="color:#9ECBFF">}/"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">svn</span><span style="color:#9ECBFF"> import</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">STAGE_DIR</span><span style="color:#9ECBFF">}"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">  "https://dist.apache.org/repos/dist/dev/magpie/${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}/"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --username</span><span style="color:#9ECBFF"> "${</span><span style="color:#E1E4E8">ASF_ID</span><span style="color:#9ECBFF">}"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -m</span><span style="color:#9ECBFF"> "Stage Apache Magpie ${</span><span style="color:#E1E4E8">VERSION</span><span style="color:#9ECBFF">} ${</span><span style="color:#E1E4E8">RC</span><span style="color:#9ECBFF">} for vote"</span></span></code></pre>
+<p>Confirm it landed:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">svn</span><span style="color:#9ECBFF"> list</span><span style="color:#9ECBFF"> "https://dist.apache.org/repos/dist/dev/magpie/${</span><span style="color:#E1E4E8">RC_TAG</span><span style="color:#9ECBFF">}/"</span></span>
+<span class="line"><span style="color:#6A737D"># expect: apache-magpie-&#x3C;version>-source.zip(.asc)(.sha512)</span></span></code></pre>
+<p>The staging URL the <code>[VOTE]</code> email points voters at is:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>https://dist.apache.org/repos/dist/dev/magpie/&#x3C;VERSION>-&#x3C;RC>/</span></span></code></pre>
+<blockquote>
+<p>[!IMPORTANT]
+The target URL <strong>must</strong> contain <code>dist/dev/</code>. Never stage to a
+<code>dist/release/</code> path here — promotion is a separate, post-vote,
+PMC-gated step (<a href="https://github.com/apache/magpie/blob/main/skills/release-promote/SKILL.md"><code>release-promote</code></a>).</p>
+</blockquote>
+<h2 id="what-happens-after-staging">What happens after staging</h2>
+<ol>
+<li><strong>Verify</strong> the staged RC end-to-end — signatures against the
+project <code>KEYS</code> (not your keyring), checksums, license headers,
+<code>NOTICE</code>/<code>LICENSE</code> presence:
+<a href="https://github.com/apache/magpie/blob/main/skills/release-verify-rc/SKILL.md"><code>release-verify-rc</code></a>
+(Step 6).</li>
+<li><strong>Open the <code>[VOTE]</code></strong> thread on <code>dev@magpie.apache.org</code>:
+<a href="https://github.com/apache/magpie/blob/main/skills/release-vote-draft/SKILL.md"><code>release-vote-draft</code></a>
+(Step 7). Voting window ≥ 72 h, needs 3 binding <code>+1</code> and more
+<code>+1</code> than <code>-1</code>
+(<a href="https://www.apache.org/legal/release-policy.html#release-approval">release-policy § approval</a>).</li>
+<li><strong>Tally</strong> the result:
+<a href="https://github.com/apache/magpie/blob/main/skills/release-vote-tally/SKILL.md"><code>release-vote-tally</code></a>
+(Step 9). On failure, bump the RC number and rerun this runbook
+from Step 2.</li>
+<li><strong>Promote</strong> <code>dist/dev/ → dist/release/</code> once the vote passes —
+the moment of release:
+<a href="https://github.com/apache/magpie/blob/main/skills/release-promote/SKILL.md"><code>release-promote</code></a>
+(Step 10).</li>
+</ol>
+<h2 id="release-manager-checklist">Release Manager checklist</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> GPG key present in <code>dist/release/magpie/KEYS</code> and on a keyserver</li>
+<li class="task-list-item"><input type="checkbox" disabled> Prep PR merged; version strings, <code>CHANGELOG</code>, <code>NOTICE</code>/<code>LICENSE</code> correct</li>
+<li class="task-list-item"><input type="checkbox" disabled> Signed tag <code>&lt;version&gt;-&lt;rc&gt;</code> created and pushed</li>
+<li class="task-list-item"><input type="checkbox" disabled> Source <code>.zip</code> built from the tag (<code>git archive</code>, no <code>.git/</code>, no binaries)</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>LICENSE</code> + <code>NOTICE</code> present at artefact root</li>
+<li class="task-list-item"><input type="checkbox" disabled> Detached <code>.asc</code> signature created</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>.sha512</code> checksum created (no <code>md5</code>/<code>sha1</code>)</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>gpg --verify</code> and <code>sha512sum -c</code> both pass locally</li>
+<li class="task-list-item"><input type="checkbox" disabled> Artefacts imported to <code>dist/dev/magpie/&lt;version&gt;-&lt;rc&gt;/</code></li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>svn list</code> confirms the three files landed</li>
+<li class="task-list-item"><input type="checkbox" disabled> <strong>Did not</strong> touch any <code>dist/release/</code> path</li>
+<li class="task-list-item"><input type="checkbox" disabled> Staging URL handed to <code>release-verify-rc</code> / <code>release-vote-draft</code></li>
+</ul>
+<h2 id="cross-references">Cross-references</h2>
+<ul>
+<li><a href="/skills/release-management/process"><code>process.md</code></a> — the 14-step lifecycle this runbook
+covers Steps 4–5 of.</li>
+<li><a href="/skills/release-management/spec"><code>spec.md</code></a> — the state-change boundaries (agent never
+holds the key, never publishes).</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/release-rc-cut/SKILL.md"><code>release-rc-cut</code></a> — the
+skill that emits this command set from
+<a href="https://github.com/apache/magpie/blob/main/projects/_template/release-build.md"><code>release-build.md</code></a>.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/release-keys-sync/SKILL.md"><code>release-keys-sync</code></a>,
+<a href="https://github.com/apache/magpie/blob/main/skills/release-verify-rc/SKILL.md"><code>release-verify-rc</code></a>,
+<a href="https://github.com/apache/magpie/blob/main/skills/release-promote/SKILL.md"><code>release-promote</code></a> — the
+upstream and downstream skills.</li>
+<li><a href="https://www.apache.org/legal/release-policy.html">ASF release policy</a>
+— canonical; § <a href="https://www.apache.org/legal/release-policy.html#release-definition">what is a release</a>
+and § <a href="https://www.apache.org/legal/release-policy.html#release-approval">release approval</a>.</li>
+<li><a href="https://infra.apache.org/release-distribution.html">ASF release distribution</a>
+— <code>dist/dev/</code> + <code>dist/release/</code> mechanics, mirror propagation,
+§ <a href="https://infra.apache.org/release-distribution.html#sigs-and-sums">sigs-and-sums</a>.</li>
+<li><a href="https://infra.apache.org/release-signing.html">ASF release signing</a>
+— <code>KEYS</code> file and signing-key onboarding.</li>
+</ul>
+</content>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/release-management/svn-release-runbook.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>

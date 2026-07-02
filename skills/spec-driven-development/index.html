@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>spec driven development — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#spec-driven-development">Spec-driven development</a>
+<ul>
+<li><a href="#the-idea">The idea</a></li>
+<li><a href="#three-phases-four-beats-one-loop">Three phases, four beats, one loop</a></li>
+<li><a href="#specs-are-not-rfcs">Specs are not RFCs</a></li>
+<li><a href="#a-branch-per-fix-or-feature">A branch per fix or feature</a></li>
+<li><a href="#why-it-never-pushes">Why it never pushes</a></li>
+<li><a href="#security-and-the-dangerously-skip-permissions-flag">Security and the dangerously-skip-permissions flag</a></li>
+<li><a href="#keeping-specs-honest-the-update-beat">Keeping specs honest: the update beat</a></li>
+<li><a href="#layout">Layout</a></li>
+<li><a href="#quick-start">Quick start</a></li>
+<li><a href="#how-this-composes-with-the-frameworks-principles">How this composes with the framework’s principles</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="spec-driven-development">Spec-driven development</h1>
+<p>This document explains the <strong>spec-driven build loop</strong> that lives in
+<a href="../tools/spec-loop/"><code>tools/spec-loop/</code></a>. It is how this framework can be
+developed and maintained against a written description of what it does,
+rather than against whatever happens to be in someone’s head on a given
+afternoon.</p>
+<h2 id="the-idea">The idea</h2>
+<p>The loop is a small instance of the general
+<a href="https://ghuntley.com/ralph/">Ralph</a> technique: run a fresh agent context
+against a fixed prompt, let it do one well-scoped thing, then run it
+again with a clean context. The power is in the funnel that feeds it —
+not “a loop that codes,” but a pipeline from <em>what the product should do</em>
+to <em>one reviewable change at a time</em>.</p>
+<p>Two artefacts carry the state between iterations, so nothing depends on a
+long-lived context window:</p>
+<ul>
+<li><strong>Specs</strong> (<a href="../tools/spec-loop/specs/"><code>tools/spec-loop/specs/</code></a>) — a
+faithful, plain-Markdown description of each functional area of the
+product: what it does, where it lives in the code, the contract it must
+honour, and its known gaps. The specs are the <em>desired state</em>.</li>
+<li><strong>The implementation plan</strong>
+(<a href="https://github.com/apache/magpie/blob/main/tools/spec-loop/IMPLEMENTATION_PLAN.md"><code>tools/spec-loop/IMPLEMENTATION_PLAN.md</code></a>)
+— the prioritised list of <em>work items</em>: the gaps between the specs and
+the code. Each work item is sized to one branch and one PR.</li>
+</ul>
+<h2 id="three-phases-four-beats-one-loop">Three phases, four beats, one loop</h2>
+<p>Phase one is a human (or a planning conversation) writing the specs.
+Phases two and three are the loop, swapping prompts:</p>
+<table>
+<thead>
+<tr>
+<th>Beat</th>
+<th>Command</th>
+<th>What it does</th>
+<th>Commits?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>plan</strong></td>
+<td><code>loop.sh plan</code></td>
+<td>Compares specs against the code; rewrites the plan as prioritised work items.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>build</strong></td>
+<td><code>loop.sh</code></td>
+<td>Implements the single highest-priority work item on its own branch; validates; commits there.</td>
+<td>Yes, on a work-item branch</td>
+</tr>
+<tr>
+<td><strong>update</strong></td>
+<td><code>loop.sh update</code></td>
+<td>Inverse of plan: finds functionality the code has but the specs don’t, and brings the specs back in sync.</td>
+<td>Yes, on <code>spec/sync-specs</code></td>
+</tr>
+<tr>
+<td><strong>consolidate</strong></td>
+<td><code>loop.sh consolidate</code></td>
+<td>Shrinks the plan when it grows too long, without dropping planned work.</td>
+<td>Yes, the plan only</td>
+</tr>
+</tbody>
+</table>
+<p>Every beat loads the same operational context —
+<a href="https://github.com/apache/magpie/blob/main/tools/spec-loop/AGENTS.md"><code>tools/spec-loop/AGENTS.md</code></a> (repo map,
+validation commands, branch and hard-limit rules) layered on top of the
+repository-wide <a href="https://github.com/apache/magpie/blob/main/AGENTS.md"><code>AGENTS.md</code></a>. Each build iteration reads
+only the spec and source files relevant to its one work item, so a fresh
+context never drowns in the whole tree.</p>
+<h2 id="specs-are-not-rfcs">Specs are not RFCs</h2>
+<p>The framework already has <a href="rfcs/"><code>docs/rfcs/</code></a> — normative principle
+documents that say <em>why</em> and define the trust posture. Those are the
+<strong>constitution</strong>. The specs are the <strong>work orders</strong>: discrete, concrete,
+grounded in the actual code. The loop <strong>respects</strong> an RFC principle as a
+constraint (it never pushes, it stays in the sandbox), but it never reads,
+edits, or restates an RFC, and no spec ever lives under <code>docs/rfcs/</code>. The
+two formats and lifecycles are deliberately separate; see
+<a href="https://github.com/apache/magpie/blob/main/tools/spec-loop/specs/README.md"><code>tools/spec-loop/specs/README.md</code></a>.</p>
+<p>Spec filenames are <strong>topics, not numbers</strong> — <code>triage-mode.md</code>,
+<code>pairing-mode.md</code>, <code>security-issue-lifecycle.md</code>. There is no numeric
+prefix, because numbering implies a priority the specs don’t carry.
+Priority lives only in the implementation plan.</p>
+<h2 id="a-branch-per-fix-or-feature">A branch per fix or feature</h2>
+<p>The defining constraint of this loop: <strong>one work item, one branch, one
+PR</strong>. Before plan/build iterations, the runner snapshots open PRs so the
+plan beat does not add work already in flight and the build beat skips
+planned items that an open PR already covers. The build beat returns to
+the integration base, then carves out a
+<code>spec/&lt;slug&gt;</code> branch for the single work item it is about to implement. It
+never commits feature work to the base branch, and <code>loop.sh</code> stops if it
+detects that happening. The result of a run is a fan of independent
+branches, each carrying exactly one change — each independently
+reviewable and independently revertible.</p>
+<p>This is the same discipline the framework asks of every state change,
+applied to the framework’s own development. It is also what makes the
+loop safe to run unattended: the blast radius of any one iteration is a
+single local branch.</p>
+<h2 id="why-it-never-pushes">Why it never pushes</h2>
+<p><code>git push</code> and <code>gh pr create</code> are in the <code>ask</code> list of
+<a href="../.claude/settings.json"><code>.claude/settings.json</code></a> — they require a human
+confirmation. The loop honours that: it ends every iteration at a <strong>local
+commit</strong> and prints the exact commands for the human to run:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#79B8FF"> -u</span><span style="color:#9ECBFF"> origin</span><span style="color:#9ECBFF"> spec/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">slu</span><span style="color:#E1E4E8">g</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#B392F0">gh</span><span style="color:#9ECBFF"> pr</span><span style="color:#9ECBFF"> create</span><span style="color:#79B8FF"> --web</span><span style="color:#79B8FF"> --base</span><span style="color:#9ECBFF"> main</span><span style="color:#79B8FF"> --head</span><span style="color:#9ECBFF"> spec/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">slu</span><span style="color:#E1E4E8">g</span><span style="color:#F97583">></span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  --title</span><span style="color:#9ECBFF"> "&#x3C;subject>"</span><span style="color:#79B8FF"> --body-file</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">prepared-bod</span><span style="color:#E1E4E8">y</span><span style="color:#F97583">></span></span></code></pre>
+<p>Opening the PR with <code>--web</code> is the framework’s convention so the reviewer
+sees the title, body, and generative-AI disclosure in the browser before
+submitting. The agent drafts; the human presses the button.</p>
+<h2 id="security-and-the-dangerously-skip-permissions-flag">Security and the dangerously-skip-permissions flag</h2>
+<p>The loop runs the agent headless with <code>--dangerously-skip-permissions</code>.
+That deserves a direct explanation, because it looks, at a glance, like
+it throws away the framework’s permission gates.</p>
+<p><strong>Why the flag is there.</strong> Headless iterations have no human to answer a
+per-tool-call prompt. Without the flag, the agent would stall (or, in
+non-interactive mode, deny) the moment it tried to edit a file or run a
+validation command. The flag lets the loop do its job — edit, validate,
+commit — unattended.</p>
+<p><strong>What it bypasses, and what it does not.</strong> The framework’s sandbox is
+layered (see <a href="/skills/rfcs/rfc-ai-0004"><code>docs/rfcs/RFC-AI-0004.md</code></a> for the
+normative statement and <code>docs/setup/secure-agent-internals.md</code> for the
+mechanism). <code>--dangerously-skip-permissions</code> only reaches the top two:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>Bypassed by the flag?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Clean environment</td>
+<td>wrapper strips credential-shaped env vars before exec</td>
+<td><strong>No</strong> — it is the launching wrapper, not the agent</td>
+</tr>
+<tr>
+<td>1. Filesystem + network sandbox</td>
+<td><code>bubblewrap</code> + SNI proxy (Linux) / <code>sandbox-exec</code> (macOS); default-deny egress</td>
+<td><strong>No</strong> — enforced by the OS, not the agent</td>
+</tr>
+<tr>
+<td>2. Tool permissions</td>
+<td><code>.claude/settings.json</code> <code>permissions.deny</code></td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>3. Forced confirmation</td>
+<td><code>.claude/settings.json</code> <code>permissions.ask</code> on <code>git push</code>, <code>gh …</code></td>
+<td><strong>Yes</strong></td>
+</tr>
+</tbody>
+</table>
+<p>So the flag removes the <em>agent-level</em> gate (Layers 2–3), but the
+<em>OS-level</em> boundary (Layers 0–1) is untouched — it is enforced beneath
+the agent and cannot be turned off from inside it. This is exactly the
+posture the flag’s own guidance assumes: it is <em>“recommended only for
+sandboxes with no internet access.”</em></p>
+<p><strong>How the loop stays safe anyway.</strong> Three things, in order of
+importance:</p>
+<ol>
+<li><strong>Run it only inside the sandbox harness.</strong> The OS layers the flag
+cannot bypass are the real boundary. Never run the loop on a bare
+machine — launch it through the project’s <code>claude-iso</code>/sandbox wrapper
+so the filesystem and network allow-lists are in force.</li>
+<li><strong>Run it with no push/write credentials in the environment.</strong> The
+clean-env wrapper already strips them; keep it that way. <code>github.com</code>
+is on the network allow-list, but a <code>git push</code> or <code>gh pr create</code> with
+no token cannot authenticate, so it fails closed. As defence in depth
+the loop also passes
+<code>--disallowedTools "Bash(git push *)" "Bash(gh *)"</code>.</li>
+<li><strong>Structural containment.</strong> Every iteration works on its own
+<code>spec/&lt;slug&gt;</code> branch, the loop guards against commits landing on the
+base branch, and the prompts forbid push/PR. The human-in-the-loop
+gate is not removed — it is <em>relocated</em> from per-tool-call to the
+push / PR / merge boundary, where the human reviews a finished branch.</li>
+</ol>
+<p><strong>Net effect.</strong> During a run the per-call confirmation gate is traded for
+autonomy, but credentials are absent, egress is fenced, and the blast
+radius of any iteration is a single local branch the human has not yet
+pushed. That is the same reason the loop is the project’s <em>manual-loop
+evidence</em> and must never be promoted to auto-merge: the autonomy is
+bounded to producing local branches, nothing more. An operator who wants
+the per-call gate back can drop the flag and pre-authorise the loop’s
+tools with <code>--allowedTools</code> instead — at the cost of the loop pausing on
+anything it was not pre-authorised to do.</p>
+<h2 id="keeping-specs-honest-the-update-beat">Keeping specs honest: the update beat</h2>
+<p>Not every contribution comes through the loop — people land new skills and
+tools the normal way. When that happens the specs fall behind the code.
+The <strong>update</strong> beat is the fix: it inventories <code>.claude/skills/</code>,
+<code>tools/</code>, and <code>docs/modes.md</code>, diffs that against the specs, and back-fills
+or corrects the specs (a <code>proposed</code> area that now has a shipped skill
+becomes <code>experimental</code>; a drifted <em>Where it lives</em> is corrected; genuinely
+new functionality gets a new topic-named spec). It edits <strong>only</strong> the spec
+directory — it documents reality, it doesn’t change it — and lands as one
+reviewable <code>spec/sync-specs</code> PR. Run it after a batch of normal PRs merges,
+or on a schedule.</p>
+<h2 id="layout">Layout</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>tools/spec-loop/</span></span>
+<span class="line"><span>├── README.md              operator quickstart</span></span>
+<span class="line"><span>├── AGENTS.md              loop-scoped operational context</span></span>
+<span class="line"><span>├── loop.sh                the runner (plan / build / update / consolidate)</span></span>
+<span class="line"><span>├── PROMPT_plan.md         gap analysis → plan</span></span>
+<span class="line"><span>├── PROMPT_build.md        implement one work item on its own branch</span></span>
+<span class="line"><span>├── PROMPT_update.md       back-fill specs from contributed code</span></span>
+<span class="line"><span>├── PROMPT_consolidate.md  shrink the plan</span></span>
+<span class="line"><span>├── IMPLEMENTATION_PLAN.md prioritised work items (the gaps)</span></span>
+<span class="line"><span>└── specs/                 functional description of the product</span></span>
+<span class="line"><span>    ├── overview.md</span></span>
+<span class="line"><span>    ├── triage-mode.md     mentoring-mode.md   drafting-mode.md   pairing-mode.md</span></span>
+<span class="line"><span>    ├── security-issue-lifecycle.md            privacy-llm-gate.md</span></span>
+<span class="line"><span>    ├── agent-isolation-sandbox.md             cve-tooling.md</span></span>
+<span class="line"><span>    ├── adoption-and-setup.md                  adapters.md</span></span>
+<span class="line"><span>    └── meta-and-quality-tooling.md</span></span></code></pre>
+<h2 id="quick-start">Quick start</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 1. See what's out of sync, then read the plan it writes.</span></span>
+<span class="line"><span style="color:#B392F0">./tools/spec-loop/loop.sh</span><span style="color:#9ECBFF"> plan</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#E1E4E8">$EDITOR tools/spec-loop/IMPLEMENTATION_PLAN.md</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. Build the top work item (one branch, one commit) and stop.</span></span>
+<span class="line"><span style="color:#B392F0">./tools/spec-loop/loop.sh</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 3. Review the branch it produced, then push + open the PR yourself.</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> log</span><span style="color:#79B8FF"> --oneline</span><span style="color:#79B8FF"> -1</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#79B8FF"> -u</span><span style="color:#9ECBFF"> origin</span><span style="color:#9ECBFF"> spec/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">slu</span><span style="color:#E1E4E8">g</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#B392F0">gh</span><span style="color:#9ECBFF"> pr</span><span style="color:#9ECBFF"> create</span><span style="color:#79B8FF"> --web</span><span style="color:#79B8FF"> --base</span><span style="color:#9ECBFF"> main</span><span style="color:#79B8FF"> --head</span><span style="color:#9ECBFF"> spec/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">slu</span><span style="color:#E1E4E8">g</span><span style="color:#F97583">></span><span style="color:#79B8FF"> --title</span><span style="color:#9ECBFF"> "…"</span><span style="color:#79B8FF"> --body-file</span><span style="color:#9ECBFF"> …</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Later: someone merged skills outside the loop — resync the specs.</span></span>
+<span class="line"><span style="color:#B392F0">./tools/spec-loop/loop.sh</span><span style="color:#9ECBFF"> update</span><span style="color:#79B8FF"> 1</span></span></code></pre>
+<p>Stop any run with <code>Ctrl+C</code> or <code>touch STOP</code>. By default the loop forks
+work items from the branch you start it on (typically <code>main</code>); set
+<code>SPEC_LOOP_BASE</code> to build on top of a different branch. Set
+<code>SPEC_LOOP_AGENT</code> when the Claude-compatible agent CLI is installed
+under a command name other than <code>claude</code>. Set <code>SPEC_LOOP_PR_LIMIT</code> to
+change how many open PRs are included in the duplicate-work check.</p>
+<h2 id="how-this-composes-with-the-frameworks-principles">How this composes with the framework’s principles</h2>
+<p>A loop that runs an agent unattended sounds, at first, like the opposite
+of human-in-the-loop. The branch-per-feature constraint is the
+reconciliation: the loop’s autonomy is bounded to <em>producing local
+branches</em>, and the human gate sits exactly where the framework always
+puts it — at push, at PR, at merge. Nothing the loop does is visible
+outside the maintainer’s machine until a human chooses to push it. The
+loop is the <em>manual</em> development cycle the framework can later point to as
+evidence; it is not, and must not become, an auto-merge.</p>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/spec-driven-development.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>

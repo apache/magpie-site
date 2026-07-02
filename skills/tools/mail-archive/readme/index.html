@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>readme — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#toolsmail-archive">tools/mail-archive/</a>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#todays-adapters">Today’s adapters</a></li>
+<li><a href="#interface">Interface</a>
+<ul>
+<li><a href="#search_thread_urllist-year-month-query-to-string"><code>search_thread_url(list, year, month, query) to string</code></a></li>
+<li><a href="#fetch_thread_by_urlurl-to-thread_data--null"><code>fetch_thread_by_url(url) to thread_data | null</code></a></li>
+<li><a href="#list_recent_threadslist-since-to-thread_summary"><code>list_recent_threads(list, since) to [thread_summary]</code></a></li>
+<li><a href="#resolve_advisory_announcement_urllist-advisory_id-to-string--null"><code>resolve_advisory_announcement_url(list, advisory_id) to string | null</code></a></li>
+<li><a href="#publication_signal_urllist-to-string"><code>publication_signal_url(list) to string</code></a></li>
+</ul>
+</li>
+<li><a href="#skills-that-consume-this-contract">Skills that consume this contract</a></li>
+<li><a href="#asf-default--ponymail">ASF default — PonyMail</a></li>
+<li><a href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="toolsmail-archive">tools/mail-archive/</h1>
+<p><strong>Capability:</strong> contract:mail-archive</p>
+<p><strong>Kind:</strong> interface</p>
+<p><strong>Vendor:</strong> agnostic</p>
+<p>This file defines the adapter contract for <strong>public mail-archive
+backends</strong> — the seam that lets adopting projects plug a non-ASF
+archive system (Hyperkitty, Discourse, Google Groups, GitHub
+Discussions, or none at all) into the same skills that today reach
+straight into <code>lists.apache.org</code> via the PonyMail MCP. The contract
+declares <em>verbs</em> that the generic skill bodies call, with input and
+output shapes that every backend must satisfy; the concrete URL
+construction, authentication model, and search syntax stay inside
+each adapter directory.</p>
+<p>The contract exists because the skills currently hard-code two
+ASF-specific assumptions in their step bodies:</p>
+<ol>
+<li>They call <code>mcp__ponymail__search_list</code>, <code>mcp__ponymail__get_thread</code>,
+<code>mcp__ponymail__list_recent_threads</code>, and friends by name — the
+<code>mcp__ponymail__*</code> prefix is woven into roughly two dozen step
+bodies across <code>security-issue-import</code>, <code>security-issue-sync</code>, and
+<code>security-issue-invalidate</code>.</li>
+<li>They construct <code>https://lists.apache.org/...</code> URLs inline (the
+<code>list?&lt;list&gt;:YYYY-M:&lt;query&gt;</code> search form, the
+<code>api/thread.lua?...</code> JSON form, the
+<code>thread/&lt;hash&gt;?&lt;list&gt;</code> resolved form, and the
+<code>list.html?&lt;users-list&gt;</code> advisory-published form) from
+<code>&lt;list&gt;</code> / <code>&lt;list-domain&gt;</code> / <code>&lt;month&gt;</code> placeholders that come
+from the project manifest.</li>
+</ol>
+<p>Both assumptions are documented today in
+<a href="https://github.com/apache/magpie/blob/main/tools/gmail/ponymail-archive.md"><code>tools/gmail/ponymail-archive.md</code></a> and
+in <a href="https://github.com/apache/magpie/blob/main/tools/ponymail/operations.md"><code>tools/ponymail/operations.md</code></a>. PR1
+introduces this contract so that PR3 can rename <code>tools/ponymail/</code>
+to <code>tools/mail-archive-ponymail/</code> without disturbing the skills, and
+so that later PRs can refactor every <code>mcp__ponymail__*</code> call site
+and every <code>lists.apache.org</code> URL template to flow through the verbs
+declared here.</p>
+<p>ASF projects keep the existing PonyMail behaviour by default. A
+non-ASF adopter declares a different <code>archive_system.kind</code> in
+<code>projects/&lt;project&gt;/project.md</code> and the adapter for that kind is
+loaded in place of PonyMail. Skills do not change.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Runtime:</strong> None of its own — this file is an adapter-contract
+<em>specification</em> (pure Markdown). Concrete prerequisites belong to
+whichever adapter the project declares.</li>
+<li><strong>CLIs:</strong> None for the contract itself.</li>
+<li><strong>Credentials / auth:</strong> Per adapter. The shipping <code>ponymail</code>
+adapter needs ASF LDAP OAuth for private lists (<code>security@</code>,
+<code>private@</code>) and anonymous read for public lists; the placeholder
+adapters (Hyperkitty / Discourse / Google Groups / GitHub
+Discussions / none) each bring their own auth model.</li>
+<li><strong>Network:</strong> Per adapter. The ASF default reaches
+<code>lists.apache.org</code>; the <code>none</code> adapter performs no network access.</li>
+</ul>
+<h2 id="todays-adapters">Today’s adapters</h2>
+<table>
+<thead>
+<tr>
+<th>Adapter</th>
+<th>Status</th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ponymail</code></td>
+<td>shipping</td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/ponymail/"><code>tools/ponymail/</code></a> (will be renamed to <code>tools/mail-archive-ponymail/</code> in PR3)</td>
+<td>ASF’s <code>lists.apache.org</code> deployment; PMC LDAP OAuth for private lists; anonymous read for public lists; load-bearing for the <code>security-issue-import</code>, <code>security-issue-sync</code>, and <code>security-issue-invalidate</code> skills today.</td>
+</tr>
+<tr>
+<td><code>hyperkitty</code></td>
+<td>placeholder</td>
+<td>not implemented</td>
+<td>Mailman 3’s archive UI. Same conceptual surface as PonyMail (per-list archive, search by month + query, per-thread permalink) but a different URL grammar and a different JSON API.</td>
+</tr>
+<tr>
+<td><code>discourse</code></td>
+<td>placeholder</td>
+<td>not implemented</td>
+<td>Topic-based forum, with mailing-list-mode bridging. The verbs map onto Discourse’s <code>/search.json</code> and <code>/t/&lt;slug&gt;/&lt;id&gt;.json</code> endpoints.</td>
+</tr>
+<tr>
+<td><code>google-groups</code></td>
+<td>placeholder</td>
+<td>not implemented</td>
+<td><code>groups.google.com</code> archives. Lacks a stable JSON read API; an adapter likely degrades to user-paste for the per-thread URL, the same way PonyMail does for private lists.</td>
+</tr>
+<tr>
+<td><code>github-discussions</code></td>
+<td>placeholder</td>
+<td>not implemented</td>
+<td>GitHub’s discussions feature, accessed via the GraphQL API the <code>gh</code> CLI already wraps. Useful for projects whose announcement channel is a <code>discussions</code> category rather than a mailing list.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>placeholder</td>
+<td>not implemented</td>
+<td>Explicit <em>“no archive backend”</em> declaration. Every verb returns <code>null</code> / no-op; the consuming skill falls back to user-paste or to a <em>“not available”</em> note in the tracker body field. Useful for projects that do not host their security discussions on an archived list at all (private-only intake forms, chat-channel intake).</td>
+</tr>
+</tbody>
+</table>
+<p>The ASF default adapter is the only one that ships today. Every
+placeholder above is named, with a one-paragraph justification, so
+that an adopter who needs that backend can author the adapter
+without re-inventing the contract.</p>
+<p>The PonyMail adapter’s <code>search_thread_url</code> template,
+<code>fetch_thread_by_url</code> recipes, <code>list_recent_threads</code> filter, and
+<code>publication_signal_url</code> all live in
+<a href="https://github.com/apache/magpie/tree/main/tools/ponymail/"><code>tools/ponymail/</code></a>. This is the only mail-archive
+adapter shipping today; the contract above describes the interface
+for additional adapters (Hyperkitty / Discourse / Google Groups /
+GitHub Discussions / none).</p>
+<p>The skills that consume this contract today are:</p>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-import/SKILL.md"><code>security-issue-import</code></a>
+— PonyMail URL construction at receipt time (Step 5: per-month
+search URL + per-thread permalink verification).</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-sync/SKILL.md"><code>security-issue-sync</code></a>
+— Step 1c / 1e / 1h / 2b — thread lookup and advisory-published
+signal scan.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-invalidate/SKILL.md"><code>security-issue-invalidate</code></a>
+— relay-thread search for the closing-reply step.</li>
+</ul>
+<h2 id="interface">Interface</h2>
+<p>Every adapter exposes the verbs below. Each verb declares:</p>
+<ul>
+<li><strong>When it fires</strong> — the skill lifecycle point that calls the verb.</li>
+<li><strong>Inputs</strong> — the typed arguments.</li>
+<li><strong>Output shape</strong> — the return type, including the <code>null</code> / no-op
+shape when the backend cannot resolve the request.</li>
+</ul>
+<p>The output shapes are documented in conceptual terms rather than as
+a strict JSON schema; an adapter is free to return a language-native
+object as long as the consuming skill can read the named fields.</p>
+<h3 id="search_thread_urllist-year-month-query-to-string"><code>search_thread_url(list, year, month, query) to string</code></h3>
+<p><strong>When it fires.</strong> Step 5 of <code>security-issue-import</code> — the skill
+needs a one-click URL the user can open in their authenticated
+browser to land on the inbound report’s archive page. Also fires
+inside <code>security-issue-invalidate</code> when the relay-rewritten
+inbound thread needs to be located for the closing reply.</p>
+<p><strong>Inputs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>string</td>
+<td>The fully-qualified mailing-list address. For ASF: <code>security@&lt;project&gt;.apache.org</code>. Adapters that don’t use email addresses (Discourse, GitHub Discussions) interpret this as the channel identifier.</td>
+</tr>
+<tr>
+<td><code>year</code></td>
+<td>integer</td>
+<td>Four-digit Gregorian year, e.g. <code>2026</code>.</td>
+</tr>
+<tr>
+<td><code>month</code></td>
+<td>integer</td>
+<td>1–12. The adapter is responsible for formatting (PonyMail wants <code>YYYY-M</code>, no leading zero; Hyperkitty wants <code>YYYY-MM</code>).</td>
+</tr>
+<tr>
+<td><code>query</code></td>
+<td>string</td>
+<td>The search query in the adapter’s native dialect — typically the report subject for <code>security-issue-import</code>, the CVE ID for advisory scans. The adapter is free to URL-encode, escape, or transform as needed.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output.</strong> A complete URL string that a human can open in a
+browser to land on the search results. The skill proposes this URL
+to the user at Step 5 of <code>security-issue-import</code> and waits for the
+user to paste back the resolved per-thread URL.</p>
+<p><strong>No-op case.</strong> Adapters that cannot generate a search URL (the
+<code>none</code> adapter, or a backend that gates search behind an interactive
+session) return an empty string. The skill treats an empty return
+as <em>“no search URL available, fall back to user-paste with no
+prompt URL”</em>.</p>
+<h3 id="fetch_thread_by_urlurl-to-thread_data--null"><code>fetch_thread_by_url(url) to thread_data | null</code></h3>
+<p><strong>When it fires.</strong> Step 1c / 1e / 1h / 2b of <code>security-issue-sync</code>
+— when the tracker already carries an archive thread URL and the
+sync skill wants to re-read the discussion for new mailing-list
+activity since the last sync. Also fires inside <code>security-issue-import</code>
+when the user pastes a URL back and the skill wants to verify the
+URL resolves before recording it in the tracker body field.</p>
+<p><strong>Inputs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td>A URL the adapter previously produced via <code>search_thread_url</code> or via <code>resolve_advisory_announcement_url</code>. The adapter is responsible for parsing its own URL grammar.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output.</strong> A <code>thread_data</code> object with at least:</p>
+<ul>
+<li><code>thread_id</code> — the adapter’s opaque per-thread identifier.</li>
+<li><code>list</code> — the list address (echoed from the URL for adapter consistency).</li>
+<li><code>subject</code> — the thread subject.</li>
+<li><code>messages[]</code> — an array of <code>{message_id, from, date, body, in_reply_to}</code> records, ordered by date.</li>
+<li><code>participant_handles[]</code> — every distinct sender, formatted as the adapter’s native handle (email address for mailing-list adapters; <code>@user</code> for Discourse; <code>@user</code> for GitHub Discussions).</li>
+</ul>
+<p><strong>No-op case.</strong> Returns <code>null</code> when:</p>
+<ul>
+<li>The URL is well-formed but the thread no longer exists (deleted /
+retracted / archive purged).</li>
+<li>The URL is well-formed but requires authentication the adapter
+doesn’t have (the <code>ponymail</code> adapter against a private list when
+the user has not run <code>mcp__ponymail__login</code>).</li>
+<li>The URL is malformed (parsing failure).</li>
+</ul>
+<p>Skills handle a <code>null</code> return by surfacing the gap to the user at
+the next sync — they do not retry automatically.</p>
+<h3 id="list_recent_threadslist-since-to-thread_summary"><code>list_recent_threads(list, since) to [thread_summary]</code></h3>
+<p><strong>When it fires.</strong> Periodic-sweep bodies (<code>security-issue-import</code>
+when it scans <code>security@</code> for unimported threads;
+<code>security-issue-sync</code> when it scans <code>users@</code> for <code>[RESULT][VOTE]</code>
+announcements). Also fires on the <em>“check for new activity on this
+list”</em> shortcut path used by triage sweeps.</p>
+<p><strong>Inputs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>string</td>
+<td>The fully-qualified list address.</td>
+</tr>
+<tr>
+<td><code>since</code></td>
+<td>ISO-8601 date or relative duration string</td>
+<td>The lower bound for the scan window. Adapters that don’t accept a free-form <code>since</code> are expected to translate (PonyMail takes a <code>d=lte=</code> / <code>d=gte=</code> syntax; Hyperkitty takes a <code>?date=</code> param; Discourse takes an <code>after:</code> operator).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output.</strong> An array of <code>thread_summary</code> records, each at minimum:</p>
+<ul>
+<li><code>thread_id</code></li>
+<li><code>subject</code></li>
+<li><code>first_message_date</code></li>
+<li><code>last_message_date</code></li>
+<li><code>message_count</code></li>
+<li><code>permalink</code> — the URL <code>fetch_thread_by_url</code> would accept.</li>
+</ul>
+<p>Ordering is <em>newest-first by <code>last_message_date</code></em>. Adapters that
+return an unordered set internally must sort before returning.</p>
+<p><strong>No-op case.</strong> Returns <code>[]</code> (empty array) when the list has no
+activity in the requested window, or when authentication is
+missing and the list is private. Empty <code>[]</code> and <em>“no access”</em> are
+indistinguishable from the skill’s perspective by design — the
+skill surfaces the gap without distinguishing reason.</p>
+<h3 id="resolve_advisory_announcement_urllist-advisory_id-to-string--null"><code>resolve_advisory_announcement_url(list, advisory_id) to string | null</code></h3>
+<p><strong>When it fires.</strong> Step 1h / Step 2b of <code>security-issue-sync</code> — the
+sync skill polls for the <em>“advisory archived on <code>&lt;users-list&gt;</code>”</em>
+signal that flips the tracker from <code>fix released</code> to <code>announced</code>.
+Today the ASF adapter resolves this by curling
+<code>https://lists.apache.org/list.html?&lt;users-list&gt;:YYYY:&lt;CVE-ID&gt;</code> and
+checking for a 200 response with a thread hit; other adapters
+implement the equivalent against their own search APIs.</p>
+<p><strong>Inputs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>string</td>
+<td>The public announcement list address (<code>&lt;users-list&gt;</code> or <code>&lt;announce-list&gt;</code> for ASF).</td>
+</tr>
+<tr>
+<td><code>advisory_id</code></td>
+<td>string</td>
+<td>The advisory identifier the skill is scanning for — typically the CVE ID once <code>cve_authority.publish</code> has fired, but could equally be a GHSA ID for projects using GHSA as their <code>cve_authority.tool</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output.</strong> The resolved permalink for the advisory thread
+(equivalent to the return shape of <code>search_thread_url</code> but already
+narrowed to the single matched thread), or <code>null</code> when no thread
+matches.</p>
+<p><strong>No-op case.</strong> Returns <code>null</code> when:</p>
+<ul>
+<li>No thread mentions the advisory ID on the named list within the
+adapter’s default scan window.</li>
+<li>The list is private and the adapter has no access (the
+announcement list should always be public, so this is an
+adapter-misconfiguration signal — the skill flags it but does
+not retry).</li>
+<li>The adapter is <code>none</code> (no archive backend declared).</li>
+</ul>
+<p>The skill treats <code>null</code> as <em>“not yet archived”</em> and re-checks on the
+next sync run. A non-null return is a load-bearing signal — it
+triggers the multi-step <code>fix released to announced</code> close-out flow
+in <code>security-issue-sync</code> Step 4 (label flips, CVE JSON
+regeneration, Vulnogram <code>REVIEW to PUBLIC</code> push, milestone close,
+board archival, RM hand-off comment).</p>
+<h3 id="publication_signal_urllist-to-string"><code>publication_signal_url(list) to string</code></h3>
+<p><strong>When it fires.</strong> On every <code>security-issue-sync</code> run that has the
+<em>“public-advisory-url not yet populated”</em> condition — the skill
+needs the URL that <em>flips visible</em> when a release-announcement is
+archived, so it can present it to the user as a one-click verify
+URL alongside the <code>resolve_advisory_announcement_url</code> programmatic
+scan.</p>
+<p><strong>Inputs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>string</td>
+<td>The announcement list address.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output.</strong> A URL pointing at the list’s <em>most-recent-activity</em>
+view. For PonyMail this is
+<code>https://lists.apache.org/list.html?&lt;users-list&gt;</code> (the unfiltered
+list-index page that updates as new messages arrive). For
+Hyperkitty this is <code>https://&lt;archive-host&gt;/archives/list/&lt;list&gt;/</code>.
+For Discourse this is the category permalink. The skill embeds the
+URL in informational comments and in the <em>“check for advisory
+archive”</em> sync prompt.</p>
+<p><strong>No-op case.</strong> Adapters that have no concept of <em>“most-recent-
+activity page”</em> (the <code>none</code> adapter; some Discourse configurations)
+return an empty string. The skill omits the verify-URL line from
+its sync prompt when this happens.</p>
+<h2 id="skills-that-consume-this-contract">Skills that consume this contract</h2>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Where the call lives today</th>
+<th>Verb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>security-issue-import</code></td>
+<td>Step 5 — <em>“PonyMail URL construction”</em> — the skill builds the per-month search URL from the project manifest’s <code>&lt;security-list&gt;</code> value plus the inbound message’s received-month, proposes it to the user, and waits for the resolved per-thread URL to be pasted back.</td>
+<td><code>search_thread_url(list=&lt;security-list&gt;, year, month, query=&lt;subject&gt;)</code> for the prompt URL; <code>fetch_thread_by_url(url=&lt;pasted-url&gt;)</code> for the verification step.</td>
+</tr>
+<tr>
+<td><code>security-issue-sync</code></td>
+<td>Step 1c — <em>“check the mailing-list thread for new activity since last sync”</em>.</td>
+<td><code>fetch_thread_by_url(url=&lt;security-thread-field&gt;)</code> re-read; the skill diffs participants and message dates against the previous sync.</td>
+</tr>
+<tr>
+<td><code>security-issue-sync</code></td>
+<td>Step 1e — <em>“locate the <code>[RESULT][VOTE]</code> thread for the release that ships this CVE”</em>.</td>
+<td><code>list_recent_threads(list=&lt;dev-list&gt;, since=&lt;vote-window-start&gt;)</code> filtered for <code>[RESULT][VOTE]</code> subject prefix.</td>
+</tr>
+<tr>
+<td><code>security-issue-sync</code></td>
+<td>Step 1h — <em>“has the advisory been archived on <code>&lt;users-list&gt;</code> yet?”</em>.</td>
+<td><code>resolve_advisory_announcement_url(list=&lt;users-list&gt;, advisory_id=&lt;CVE-ID&gt;)</code>; non-null return triggers the close-out flow.</td>
+</tr>
+<tr>
+<td><code>security-issue-sync</code></td>
+<td>Step 2b — <em>“present the verify URL to the user alongside the programmatic scan result”</em>.</td>
+<td><code>publication_signal_url(list=&lt;users-list&gt;)</code>.</td>
+</tr>
+<tr>
+<td><code>security-issue-invalidate</code></td>
+<td>Closing-reply step — <em>“locate the original relay-rewritten inbound thread so the polite-but-firm rejection lands on the right archive entry”</em>.</td>
+<td><code>search_thread_url(list=&lt;security-list&gt;, year, month, query=&lt;subject&gt;)</code>; the skill cross-checks against the tracker’s <em>security-thread</em> body field.</td>
+</tr>
+</tbody>
+</table>
+<p>Every call site listed above currently hard-codes <code>mcp__ponymail__*</code>
+or constructs a <code>https://lists.apache.org/...</code> URL inline. PR3
+refactors the call sites to flow through the verbs declared in this
+contract; PR1 (this PR) only declares the contract.</p>
+<h2 id="asf-default--ponymail">ASF default — PonyMail</h2>
+<p>The ASF default adapter is documented today at
+<a href="https://github.com/apache/magpie/tree/main/tools/ponymail/"><code>tools/ponymail/</code></a> (read-side via the
+<a href="https://github.com/apache/comdev/tree/main/mcp/ponymail-mcp"><code>apache/comdev</code> <code>mcp/ponymail-mcp/</code></a>
+MCP server) and <a href="https://github.com/apache/magpie/blob/main/tools/gmail/ponymail-archive.md"><code>tools/gmail/ponymail-archive.md</code></a>
+(URL-template form used for in-tracker cross-links).</p>
+<p>URL-construction shape that the ASF adapter satisfies:</p>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>URL template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_thread_url</code></td>
+<td><code>https://lists.apache.org/list?&lt;list&gt;:YYYY-M:&lt;url-encoded query&gt;</code></td>
+</tr>
+<tr>
+<td><code>fetch_thread_by_url</code></td>
+<td><code>https://lists.apache.org/api/thread.lua?list=&lt;list-local&gt;&amp;domain=&lt;list-domain&gt;&amp;q=&lt;search&gt;</code> (JSON read), backed by <code>https://lists.apache.org/thread/&lt;hash&gt;?&lt;list&gt;</code> (the canonical per-thread permalink the skill stores in tracker body fields)</td>
+</tr>
+<tr>
+<td><code>list_recent_threads</code></td>
+<td><code>https://lists.apache.org/api/stats.lua?list=&lt;list-local&gt;&amp;domain=&lt;list-domain&gt;&amp;d=lte=&lt;since&gt;</code></td>
+</tr>
+<tr>
+<td><code>resolve_advisory_announcement_url</code></td>
+<td><code>https://lists.apache.org/list.html?&lt;users-list&gt;:YYYY:&lt;CVE-ID&gt;</code> (text-mode existence check), resolving to <code>https://lists.apache.org/thread/&lt;hash&gt;?&lt;users-list&gt;</code> on a hit</td>
+</tr>
+<tr>
+<td><code>publication_signal_url</code></td>
+<td><code>https://lists.apache.org/list.html?&lt;users-list&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Month-token format note: the PonyMail search URL takes the month
+<strong>without a leading zero</strong> (<code>2026-4</code>, not <code>2026-04</code>). Adapters that
+front-end a backend with a different convention (Hyperkitty uses
+<code>2026-04</code>) must normalise at the boundary.</p>
+<p>Auth note: private-list reads (<code>security@&lt;project&gt;.apache.org</code>,
+<code>private@&lt;project&gt;.apache.org</code>) require an authenticated PonyMail
+MCP session (PMC LDAP OAuth). The first-login flow is documented
+in <a href="https://github.com/apache/magpie/blob/main/tools/ponymail/tool.md#setup"><code>tools/ponymail/tool.md</code></a> and is run
+once per workstation; the session cookie is cached at
+<code>~/.ponymail-mcp/session.json</code>.</p>
+<p><strong>Rename plan.</strong> PR3 of this refactor renames <code>tools/ponymail/</code> to
+<code>tools/mail-archive-ponymail/</code> and updates every cross-link. The
+directory contents stay the same — only the path moves. PR1 (this
+PR) keeps the existing path so the diff stays minimal and reviewable.</p>
+<h2 id="configuration">Configuration</h2>
+<p>The adapter selection lives in <code>projects/&lt;project&gt;/project.md</code>
+under the <code>archive_system</code> block:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># archive_system — public mail-archive backend</span></span>
+<span class="line"><span style="color:#6A737D"># ASF default: ponymail (lists.apache.org)</span></span>
+<span class="line"><span style="color:#85E89D">archive_system</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  kind</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ponymail</span><span style="color:#6A737D">               # ASF default; override per-adopter for hyperkitty | discourse | google-groups | github-discussions | none</span></span>
+<span class="line"><span style="color:#85E89D">  list_domain</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&#x3C;project>.apache.org</span><span style="color:#6A737D">   # ASF default; the list's domain component</span></span>
+<span class="line"><span style="color:#85E89D">  search_url_template</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">https://lists.apache.org/list?{list}:{year}-{month}:{query}</span></span>
+<span class="line"><span style="color:#6A737D">                                # ASF default; the URL `search_thread_url` returns</span></span>
+<span class="line"><span style="color:#85E89D">  api_query_url_template</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">https://lists.apache.org/api/thread.lua?list={list_local}&#x26;domain={list_domain}&#x26;q={query}</span></span>
+<span class="line"><span style="color:#6A737D">                                # ASF default; the URL `fetch_thread_by_url` reads</span></span>
+<span class="line"><span style="color:#85E89D">  advisory_publication_signal_url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">https://lists.apache.org/list.html?&#x3C;users-list></span></span>
+<span class="line"><span style="color:#6A737D">                                # ASF default; the URL `publication_signal_url` returns</span></span></code></pre>
+<p>Adopters override per-field. A Hyperkitty deployment would set
+<code>kind: hyperkitty</code>, point <code>search_url_template</code> at
+<code>https://&lt;archive-host&gt;/hyperkitty/list/{list}/{year}/{month}/?q={query}</code>,
+and the rest follows. A project that has no archive backend at all
+declares <code>kind: none</code> and the skills degrade — <code>search_thread_url</code>
+returns empty, <code>fetch_thread_by_url</code> returns <code>null</code>, and the
+tracker body fields fall back to the <em>“not available, see Gmail
+thread <code>&lt;threadId&gt;</code>”</em> textual note.</p>
+<p>Adapter selection is <em>purely declarative</em>. The skill bodies do not
+branch on <code>kind</code> — they call the verbs, and the dispatch into the
+adapter happens at the contract boundary. This is the property that
+makes the contract a stable seam: adding <code>discourse</code> later is a
+new directory under <code>tools/mail-archive-&lt;name&gt;/</code>, not a change to
+the skills.</p>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/tools/mail-archive/readme.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>

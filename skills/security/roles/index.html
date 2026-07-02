@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>roles — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#security-workflow--roles-conventions-and-role-guides">Security workflow — roles, conventions, and role guides</a>
+<ul>
+<li><a href="#who-this-guide-is-for">Who this guide is for</a></li>
+<li><a href="#shared-conventions">Shared conventions</a>
+<ul>
+<li><a href="#keeping-the-reporter-informed">Keeping the reporter informed</a></li>
+<li><a href="#recording-status-transitions-on-the-tracker">Recording status transitions on the tracker</a></li>
+<li><a href="#confidentiality">Confidentiality</a></li>
+</ul>
+</li>
+<li><a href="#for-issue-triagers--steps-16">For issue triagers — Steps 1–6</a>
+<ul>
+<li><a href="#daily-triage-loop">Daily triage loop</a></li>
+<li><a href="#assessing-a-report">Assessing a report</a></li>
+<li><a href="#allocating-the-cve">Allocating the CVE</a></li>
+<li><a href="#tools-you-use-most">Tools you use most</a></li>
+</ul>
+</li>
+<li><a href="#for-remediation-developers--steps-711">For remediation developers — Steps 7–11</a>
+<ul>
+<li><a href="#picking-up-a-tracker">Picking up a tracker</a></li>
+<li><a href="#attempting-an-automated-fix">Attempting an automated fix</a></li>
+<li><a href="#opening-the-public-fix-pr-manually">Opening the public fix PR manually</a></li>
+<li><a href="#private-pr-fallback">Private-PR fallback</a></li>
+<li><a href="#handoff-to-the-release-manager">Handoff to the release manager</a></li>
+<li><a href="#tools-you-use-most-1">Tools you use most</a></li>
+</ul>
+</li>
+<li><a href="#for-release-managers--steps-1215">For release managers — Steps 12–15</a>
+<ul>
+<li><a href="#handoff-from-the-remediation-developer">Handoff from the remediation developer</a></li>
+<li><a href="#sending-the-advisory">Sending the advisory</a></li>
+<li><a href="#capturing-the-public-archive-url-and-closing-out">Capturing the public archive URL and closing out</a></li>
+<li><a href="#publishing-the-cve-and-closing-the-issue">Publishing the CVE and closing the issue</a></li>
+<li><a href="#post-release-credit-corrections">Post-release credit corrections</a></li>
+<li><a href="#tools-you-use-most-2">Tools you use most</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="security-workflow--roles-conventions-and-role-guides">Security workflow — roles, conventions, and role guides</h1>
+<p>Three roles share the security-issue handling process —
+issue triager (Steps 1–6), remediation developer (Steps 7–11),
+and release manager (Steps 12–15). This document covers who
+owns what, the shared conventions every role observes, and
+the per-role workflow. The detailed step descriptions live
+in <a href="/skills/security/process"><code>process.md</code></a>.</p>
+<h2 id="who-this-guide-is-for">Who this guide is for</h2>
+<p>Three roles share the handling process. Any security-team member can take on
+any of them for a given issue, and in practice people rotate — but at any
+moment a given tracking issue has exactly one person who owns the next move.</p>
+<p>Pick whichever applies to you now:</p>
+<ul>
+<li><strong>I am new to the security team, or I mostly just want to comment on
+issues.</strong> Read <a href="#shared-conventions">Shared conventions</a> below. The
+adopting project’s security-issues board — see
+<code>&lt;project-config&gt;/project.md → GitHub project board</code> — is the main
+view. You do not need an agent for commenting.</li>
+<li><strong>I am a rotational triager</strong> — running <code>import new reports</code> and
+<code>sync all</code> a few times a week. Jump to
+<a href="#for-issue-triagers--steps-16">For issue triagers — Steps 1–6</a>.</li>
+<li><strong>I picked up a tracker and am about to open a fix PR.</strong> Jump to
+<a href="#for-remediation-developers--steps-711">For remediation developers — Steps 7–11</a>.</li>
+<li><strong>I am the release manager for a cut containing a security fix.</strong> Jump to
+<a href="#for-release-managers--steps-1215">For release managers — Steps 12–15</a>.</li>
+<li><strong>I am looking up a specific step or label.</strong> Go straight to
+<a href="/skills/security/process#process-reference-the-16-steps">Process reference</a> or
+<a href="/skills/security/process#label-lifecycle">Label lifecycle</a>.</li>
+</ul>
+<h2 id="shared-conventions">Shared conventions</h2>
+<p>These conventions bind every role. If you are unsure whether a rule applies to
+you, it does.</p>
+<h3 id="keeping-the-reporter-informed">Keeping the reporter informed</h3>
+<p>The security team commits to keeping the original reporter informed about the
+state of their report <strong>at every status transition</strong>, on the original mail
+thread (not on the GitHub-notifications mirror thread). A short status update
+should be sent to the reporter whenever any of the following happens:</p>
+<ul>
+<li>the report has been acknowledged or assessed (valid / invalid);</li>
+<li>a CVE has been allocated;</li>
+<li>a fix PR has been opened;</li>
+<li>a fix PR has been <strong>merged</strong>;</li>
+<li>the issue has been scheduled for a specific release (milestone set);</li>
+<li>the release has shipped and the public advisory has been sent;</li>
+<li>the CVE record has been published on cve.org (completes the disclosure);</li>
+<li>any credits or fields visible in the eventual public advisory have changed.</li>
+</ul>
+<p>Each status update should plainly state what has changed, link to the relevant
+artifact (PR URL, CVE ID, advisory link), and state what comes next. If the
+reporter has not yet replied with their preferred credit, ask the
+credit-preference question — but <strong>do not re-ask it if it has already been
+asked</strong> on the same thread and is still awaiting a reply. Pinging the reporter
+twice about the same open question is rude and gets us blocklisted; default to
+the reporter’s full name from the original email if they do not respond
+before publication.</p>
+<p>Reusable wording for the common cases lives in
+<a href="/skills/security/%3Cproject-config%3E/canned-responses"><code>&lt;project-config&gt;/canned-responses.md</code></a> — consult it before drafting a
+reply from scratch.</p>
+<p><strong>When there’s no direct reporter contact</strong> (ASF-relay reports,
+read-only GHSA, anonymous tips), the team communicates with the
+<em>forwarder</em> instead — the security-team member or relay service
+that delivered the report. In that <strong>via-forwarder mode</strong>, only
+the five lifecycle milestones (report accepted as valid, report
+invalidated, CVE allocated, advisory sent, additional information
+requested) are relayed. Regular workflow status (label flips,
+PR-opened, PR-merged) and credit-confirmation questions are
+<strong>not</strong> sent to the forwarder — they would burn the forwarder’s
+goodwill with low-signal updates. See
+<a href="/skills/security/forwarder-routing-policy"><code>forwarder-routing-policy.md</code></a> for
+detection rules, the full milestone list, and the negative space.</p>
+<h3 id="recording-status-transitions-on-the-tracker">Recording status transitions on the tracker</h3>
+<p><strong>Every status transition must also be recorded as a comment on the GitHub
+issue in <code>&lt;tracker&gt;</code></strong>, not only sent by email. The two channels
+serve different audiences: the email keeps the reporter informed; the issue
+comment keeps the rest of the security team and the release manager informed
+without forcing them to reconstruct the state from labels and timestamps. The
+comment should briefly state what changed, link to the artifact (PR URL, CVE
+ID, advisory link), and indicate whether the reporter has been notified.</p>
+<h3 id="confidentiality">Confidentiality</h3>
+<p>Confidentiality of the private tracker (<code>&lt;tracker&gt;</code> for the
+adopting project) is both a <strong>lifecycle rule</strong> and a <strong>writing rule</strong>:
+every transition you record on a tracker, every status comment, every
+email draft has to respect it. The full rule set — forbidden surfaces,
+allowed surfaces, scrubbing guidance, the exception buckets for private
+<code>security@</code> / <code>private@</code> threads and in-repo <code>gh issue comment</code> calls —
+lives in
+<a href="https://github.com/apache/magpie/blob/main/AGENTS.md#confidentiality-of-the-tracker-repository"><code>AGENTS.md</code> — Confidentiality of the tracker repository</a>.
+Read it before editing anything that might be seen outside the team.</p>
+<p>The <a href="/skills/security/threat-model">threat model</a> enumerates the trust boundaries
+this rule defends and the adversaries each role should expect on
+those boundaries.</p>
+<h2 id="for-issue-triagers--steps-16">For issue triagers — Steps 1–6</h2>
+<p>You own the tracker from an inbound report on <code>&lt;security-list&gt;</code>
+through to a CVE allocated, a scope label applied, and the issue ready for a
+remediation developer to pick up. Step 6 (the CVE allocation itself) is
+PMC-gated: <strong>only the adopting project’s PMC members can submit the
+CVE-tool allocation form</strong>. If you are not on the PMC you relay a
+pre-drafted request to a PMC
+member — either way you are the one who lands the resulting CVE ID back into
+the tracker.</p>
+<h3 id="daily-triage-loop">Daily triage loop</h3>
+<p>A typical triage sweep runs three skills in order:</p>
+<ol>
+<li><strong><code>import new reports</code></strong> —
+<a href="https://github.com/apache/magpie/blob/main/skills/security-issue-import/SKILL.md"><code>security-issue-import</code></a>
+scans <code>&lt;security-list&gt;</code> for threads not yet imported,
+classifies each candidate (real report vs. automated-scan / consolidated /
+media / spam), and proposes a tracker per valid report plus a
+receipt-of-confirmation Gmail draft. See
+<a href="/skills/security/process#step-2--import-the-report">Step 2</a>.</li>
+<li><strong><code>sync all</code></strong> —
+<a href="https://github.com/apache/magpie/blob/main/skills/security-issue-sync/SKILL.md"><code>security-issue-sync</code></a>
+reconciles every open tracker against its mail thread, the fix PR, the
+release train, and the users@ archive. Proposes label / milestone /
+assignee / body changes in one pass.</li>
+<li><strong><code>allocate CVE for issue #N</code></strong> —
+<a href="https://github.com/apache/magpie/blob/main/skills/security-cve-allocate/SKILL.md"><code>security-cve-allocate</code></a> when a report has
+been assessed as valid. See <a href="/skills/security/process#step-6--allocate-the-cve">Step 6</a>.</li>
+</ol>
+<p>Nothing is applied without an explicit confirmation — each skill is a
+proposal engine, not an auto-pilot.</p>
+<h3 id="assessing-a-report">Assessing a report</h3>
+<p>For each <code>needs triage</code> tracker, drive the validity assessment in comments,
+pulling at least one other security-team member into the discussion. Use the
+canned-response templates from <a href="/skills/security/%3Cproject-config%3E/canned-responses"><code>&lt;project-config&gt;/canned-responses.md</code></a>
+for negative assessments so the tone stays polite-but-firm.</p>
+<p>When the report is confirmed valid, apply exactly one scope label from
+the project’s scope set (declared in
+<a href="/skills/security/%3Cproject-config%3E/scope-labels"><code>&lt;project-config&gt;/scope-labels.md</code></a>).
+If a report affects more than one scope, split into per-scope trackers
+before allocation — the <code>security-issue-sync</code> skill surfaces this as
+a blocker. See
+<a href="/skills/security/process#step-5--land-the-validinvalid-consensus">Step 5</a>.</p>
+<p>If discussion stalls for about 30 days, escalate to a broader audience per
+<a href="/skills/security/process#step-4--escalate-stalled-discussions">Step 4</a>.</p>
+<h3 id="allocating-the-cve">Allocating the CVE</h3>
+<p>Use <a href="https://github.com/apache/magpie/blob/main/skills/security-cve-allocate/SKILL.md"><code>security-cve-allocate</code></a>. The skill asks up
+front whether you are on the PMC; if not, it reshapes the recipe into an
+<code>@</code>-mention relay message you forward to a PMC member on the tracker or on
+the <code>&lt;security-list&gt;</code> thread. Once the allocated <code>CVE-YYYY-NNNNN</code>
+is pasted back, the skill wires it into the tracker in one pass (the <em>CVE
+tool link</em> body field, the <code>cve allocated</code> label, a status-change comment, a
+refreshed CVE-JSON attachment) and hands off to <code>security-issue-sync</code> to
+reconcile the rest of the tracker. See <a href="/skills/security/process#step-6--allocate-the-cve">Step 6</a>
+for the full detail.</p>
+<h3 id="tools-you-use-most">Tools you use most</h3>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-import/SKILL.md"><code>security-issue-import</code></a> —
+<em>“import new reports”</em> at the start of each triage sweep. The entry point
+into the process for <code>&lt;security-list&gt;</code> reports.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-import-from-pr/SKILL.md"><code>security-issue-import-from-pr</code></a> —
+<em>“import a tracker from PR <N>”</em> when a security-relevant fix landed
+publicly without going through <code>&lt;security-list&gt;</code> and the team has agreed
+it warrants a CVE. Lands directly in the <code>Assessed</code> column.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-sync/SKILL.md"><code>security-issue-sync</code></a> —
+<em>“sync <issue-ref>”</em> or <em>“sync all”</em>. Surfaces stalled issues, missing
+fields, credit replies, and scope-split requirements in one combined
+proposal.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-cve-allocate/SKILL.md"><code>security-cve-allocate</code></a> — <em>“allocate a CVE
+for <issue-ref>”</em>.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/tools/cve-tool-vulnogram/generate-cve-json/SKILL.md"><code>generate-cve-json</code></a> — to
+refresh the paste-ready JSON embedded in the issue body on demand.
+(The named example here is the Vulnogram adapter under
+<code>tools/cve-tool-vulnogram/</code>; resolved from <code>cve_authority.tool</code> in
+<a href="https://github.com/apache/magpie/blob/main/%3Cproject-config%3E/project.md#cve-authority"><code>&lt;project-config&gt;/project.md</code></a>
+— adopters running a different CNA tool point at their own
+<code>&lt;cve-tool&gt;/</code> adapter.)</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-deduplicate/SKILL.md"><code>security-issue-deduplicate</code></a> —
+when two trackers describe the same root-cause bug discovered
+independently.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-invalidate/SKILL.md"><code>security-issue-invalidate</code></a> —
+<em>“close NN as invalid”</em> once Step 5 lands a consensus-invalid
+decision. Applies the <code>invalid</code> label, archives the project-board
+item, and (for <code>&lt;security-list&gt;</code>-imported trackers) drafts a reply
+to the reporter explaining the reasoning.</li>
+</ul>
+<h2 id="for-remediation-developers--steps-711">For remediation developers — Steps 7–11</h2>
+<p>You own the tracker from a CVE allocated to a merged public fix PR in
+<code>&lt;upstream&gt;</code> (including the <code>pr merged</code> hand-off where the tracker sits
+waiting for the release train to ship). The role name matches the
+<code>remediation developer</code> credit you receive in the published CVE record (see
+<code>credits[]</code> with <code>type: "remediation developer"</code> in the generated CVE JSON).</p>
+<h3 id="picking-up-a-tracker">Picking up a tracker</h3>
+<p>Pick a tracker that has a scope label, <code>cve allocated</code>, and clear consensus
+on the fix shape. Self-assign yourself on GitHub so the board reflects
+ownership. See <a href="/skills/security/process#step-7--self-assign-and-implement-the-fix">Step 7</a>.</p>
+<h3 id="attempting-an-automated-fix">Attempting an automated fix</h3>
+<p>Before writing the fix by hand, consider letting the
+<a href="https://github.com/apache/magpie/blob/main/skills/security-issue-fix/SKILL.md"><code>security-issue-fix</code></a> skill try
+it first. Invoked as <em>“try to fix issue #N”</em> (or <em>“draft a PR for #N”</em>), the
+skill:</p>
+<ul>
+<li>runs <code>security-issue-sync</code> first to make sure the tracker’s state is
+current;</li>
+<li>reads the full tracker discussion and the linked <code>security@</code> mail
+thread and decides whether the issue is <em>easily fixable</em> — clear
+consensus on the fix shape, small scope, known location in
+<code>&lt;upstream&gt;</code>. If it is not, the skill stops and tells you what
+more the tracker needs before it is safe to attempt;</li>
+<li>if it is, proposes an implementation plan (which file(s) to touch,
+what to change, what tests to add) and <strong>waits for your explicit
+confirmation</strong> before making any edits;</li>
+<li>writes the change in your local <code>&lt;upstream&gt;</code> clone, runs the
+local static checks and tests, and iterates on failures;</li>
+<li>opens the public PR from your fork via <code>gh pr create --web</code> with a
+scrubbed title and body — every public surface (commit message,
+branch name, PR title, PR body, newsfragment) is grep-checked for
+<code>CVE-</code>, the <code>&lt;tracker&gt;</code> repo slug, <code>vulnerability</code>, <em>“security fix”</em>
+and similar leakage before being written or pushed;</li>
+<li>updates the <code>&lt;tracker&gt;</code> tracking issue with the new PR
+link and applies the <code>pr created</code> label, handing back off to
+<code>security-issue-sync</code>.</li>
+</ul>
+<p>The skill refuses to proceed in cases where a human decision still
+needs to happen: reports that are still being assessed, reports not
+yet classified as valid vulnerabilities, and changes that require the
+private-PR fallback in
+<a href="/skills/security/process#step-9--open-a-private-pr-exceptional-cases">Step 9</a>. If it refuses,
+fall back to the manual flow below.</p>
+<p>Even when the skill succeeds end-to-end, you remain the PR’s author
+and reviewer-facing contact on the public <code>&lt;upstream&gt;</code> PR. Stay
+on the PR through review and merge.</p>
+<h3 id="opening-the-public-fix-pr-manually">Opening the public fix PR manually</h3>
+<p>If you are writing the fix by hand, write the code change in your local
+<code>&lt;upstream&gt;</code> clone, run the local checks and tests, and open the PR
+via <code>gh pr create --web</code>. The PR description <strong>must not</strong> reveal the CVE,
+the security nature of the change, or link back to <code>&lt;tracker&gt;</code> —
+see <a href="/skills/security/process#step-8--open-a-public-pr-straightforward-cases">Step 8</a> and the
+confidentiality rules in
+<a href="https://github.com/apache/magpie/blob/main/AGENTS.md#confidentiality-of-the-tracker-repository"><code>AGENTS.md</code></a>.</p>
+<p>Request a <code>backport-to-v3-2-test</code> (or equivalent) label on the public PR
+when the fix should ship on a patch train.</p>
+<h3 id="private-pr-fallback">Private-PR fallback</h3>
+<p>In exceptional cases — highly critical fixes, or code that needs private
+review — open the PR against the <code>main</code> branch of <code>&lt;tracker&gt;</code>
+instead of <code>&lt;upstream&gt;</code>. CI does not run there, so run static checks and
+tests manually before asking for review. Once approved, re-open the PR in
+<code>&lt;upstream&gt;</code> by pushing the branch public. See
+<a href="/skills/security/process#step-9--open-a-private-pr-exceptional-cases">Step 9</a>.</p>
+<h3 id="handoff-to-the-release-manager">Handoff to the release manager</h3>
+<p>Once the <code>&lt;upstream&gt;</code> PR merges, <code>security-issue-sync</code> moves the tracker
+from <code>pr created</code> to <code>pr merged</code> and sets the milestone of the release the
+fix will ship in. The tracker then waits for the release train.</p>
+<p>The <code>pr merged</code> → <code>fix released</code> hand-off is <strong>gated</strong>: every one of the six
+mandatory CVE body fields must be populated (<em>CWE</em>, <em>Affected versions</em>,
+<em>Severity</em>, <em>Reporter credited as</em>, <em>Short public summary for publish</em>,
+<em>PR with the fix</em>) <strong>and</strong> the CVE record must have been promoted from
+<code>allocated</code> to <code>review-ready</code> in the project’s CVE tool — the adapter
+named in <code>cve_authority.tool</code> (for the airflow-s adopter, the Vulnogram
+adapter, where <code>review-ready</code> corresponds to the <code>REVIEW</code> state). If any
+field is still empty when the PR merges (Step 11) or when the release
+ships (Step 12), sync posts a <strong>Remediation-developer fill-fields
+comment</strong> on the tracker @-mentioning you with the specific missing
+fields. The tracker stays assigned to you and the RM hand-off is <strong>not</strong>
+posted until you fill them in. See
+<a href="/skills/security/process#step-11--pr-merged">Step 11</a> and <a href="/skills/security/process#step-12--fix-released">Step 12</a>.</p>
+<h3 id="tools-you-use-most-1">Tools you use most</h3>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-fix/SKILL.md"><code>security-issue-fix</code></a> —
+<em>“try to fix issue #N”</em>. Proposes a plan, writes the code, runs local
+tests, and opens a <code>--web</code> PR with a scrubbed title/body. See
+<a href="#attempting-an-automated-fix">Attempting an automated fix</a> above for
+the full flow and the cases where the skill refuses to proceed.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-sync/SKILL.md"><code>security-issue-sync</code></a> — to
+keep the tracker’s labels, milestone, and assignee aligned with the PR
+state as it moves through review and merge.</li>
+</ul>
+<h2 id="for-release-managers--steps-1215">For release managers — Steps 12–15</h2>
+<p>You own the tracker from the moment the fix actually ships (<code>fix released</code>)
+to a closed tracking issue with a PUBLISHED CVE record. The hand-off from
+the remediation developer is automatic: <code>security-issue-sync</code> detects the
+milestone version on PyPI / the Helm registry, swaps <code>pr merged</code> →
+<code>fix released</code>, and assigns the advisory-send to you.</p>
+<h3 id="handoff-from-the-remediation-developer">Handoff from the remediation developer</h3>
+<p>Watch your <code>fix released</code> queue on the board. Until the <code>pr merged</code> →
+<code>fix released</code> swap fires, the tracker is still the remediation developer’s
+(Step 11 territory). Once it fires, it is yours. See
+<a href="/skills/security/process#step-12--fix-released">Step 12</a>.</p>
+<h3 id="sending-the-advisory">Sending the advisory</h3>
+<p>By the time the hand-off comment lands, every mandatory body field is
+already populated (Step 12’s gate) and the regenerated CVE JSON has been
+pushed to the project’s CVE tool (the adapter named in <code>cve_authority.tool</code>)
+in <code>review-ready</code> state. Your three actions are the numbered list in the
+hand-off comment, all single clicks in the CVE tool — <strong>no shell
+commands, no JSON paste:</strong></p>
+<ol>
+<li><strong>Address reviewer feedback (if any) and promote the record from
+<code>review-ready</code> to <code>publish-ready</code>.</strong> Open the record in the CVE tool —
+the URL is built from <code>cve_authority.record_url_template</code> substituted
+with the CVE ID; for adapters that expose a raw-state view, sync also
+includes the <code>cve_authority.source_tab_url_template</code> link in the
+hand-off comment. If the CVE reviewer has posted comments, work
+through them on the same thread; when it is clear, promote the
+record to <code>publish-ready</code> and save. (For the Vulnogram adapter, that
+is the State dropdown going <code>REVIEW → READY</code> on the <code>#source</code> tab.)
+Most CVEs go through <code>review-ready</code> with no reviewer comments and
+the promotion is immediate.</li>
+<li><strong>Preview and send.</strong> The hand-off comment links the CVE tool’s
+advisory-email preview — for the Vulnogram adapter, the <code>#email</code> tab
+on the record. Verify recipients (<code>&lt;users-list&gt;</code> and
+<code>&lt;announce-list&gt;</code>) and body, then click the send action.</li>
+<li><strong>Stop.</strong> Sync drives the rest at the archive-URL trigger
+(<a href="/skills/security/process#step-14--capture-the-public-advisory-url-and-close-out">Step 14</a>).</li>
+</ol>
+<p>Sync does the <code>fix released → announced - emails sent</code> flip at Step 14,
+not here — you do not touch labels. <strong>Do not close the issue</strong> — sync
+does that too, in the same Step 14 combined apply.</p>
+<h3 id="capturing-the-public-archive-url-and-closing-out">Capturing the public archive URL and closing out</h3>
+<p>This is a handoff the sync skill handles for you. Once the advisory has
+been archived on the users@ list, the next <code>security-issue-sync</code> run
+fires a <strong>single combined apply</strong> that:</p>
+<ul>
+<li>writes the URL into the <em>Public advisory URL</em> body field;</li>
+<li>extracts the short public summary from the archived advisory email and
+writes it back to the <em>Short public summary for publish</em> body field;</li>
+<li>flips labels <code>fix released → announced - emails sent + announced</code>;</li>
+<li>regenerates and re-pushes the CVE JSON;</li>
+<li>promotes the record from <code>publish-ready</code> to <code>public</code> in the project’s
+CVE tool (the adapter named in <code>cve_authority.tool</code>) — the act that
+dispatches the record onto the public CNA feed at
+<a href="https://cve.org"><code>cve.org</code></a>. (For the Vulnogram adapter, that is the
+State dropdown going <code>READY → PUBLIC</code> on the record.)</li>
+<li>moves the project board to the <code>Announced</code> column;</li>
+<li>closes the tracker;</li>
+<li>archives the tracker from the <code>Announced</code> column;</li>
+<li>if every milestone-sibling is also closed at that moment, closes the
+milestone too.</li>
+</ul>
+<p>See
+<a href="/skills/security/process#step-14--capture-the-public-advisory-url-and-close-out">Step 14</a>
+for the full sequence.</p>
+<h3 id="publishing-the-cve-and-closing-the-issue">Publishing the CVE and closing the issue</h3>
+<p><strong>Nothing to do.</strong> Step 14 above already promoted the CVE record to
+<code>public</code> in the project’s CVE tool, closed the tracker, and archived it
+from the board. You receive a purely-informational wrap-up comment as a
+timeline marker that the lifecycle is complete. See
+<a href="/skills/security/process#step-15--rm-verifies-the-close-out-landed">Step 15</a>.</p>
+<p>A tracker that sits on <code>announced - emails sent</code> without <code>announced</code> for
+more than a day or two is a signal that sync did not see the advisory
+in the <code>&lt;users-list&gt;</code> archive yet — re-run sync or wait for the next
+scheduled pass.</p>
+<h3 id="post-release-credit-corrections">Post-release credit corrections</h3>
+<p>If credits need correction after announcement, respond to the announcement
+emails with the missing credits, update the record in the project’s CVE
+tool (open the URL built from <code>cve_authority.record_url_template</code>), and —
+where the adapter requires it — ask the upstream CNA/relay to push the
+information to <code>cve.org</code>. (For the airflow-s adopter on Vulnogram, that
+relay is the ASF security team.) See
+<a href="/skills/security/process#step-16--credit-corrections">Step 16</a>.</p>
+<h3 id="tools-you-use-most-2">Tools you use most</h3>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/skills/security-issue-sync/SKILL.md"><code>security-issue-sync</code></a> —
+<em>“sync CVE-YYYY-NNNN”</em> to drill into one specific CVE before sending the
+advisory (confirms the hand-off comment was posted and reflects the
+current record state). Subsequent syncs by the security team drive the
+post-advisory close-out automatically when the archive URL appears on
+<code>&lt;users-list&gt;</code>.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/tools/cve-tool-vulnogram/generate-cve-json/SKILL.md"><code>generate-cve-json</code></a> — to
+regenerate the attachment on demand when a body field changes after the
+URL has been captured (rarely needed — sync regenerates and re-pushes
+on every relevant body change). The link points at the named ASF
+example; the active generator is the one under <code>&lt;cve-tool&gt;/</code> resolved
+from <code>cve_authority.tool</code>.</li>
+</ul>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/security/roles.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>

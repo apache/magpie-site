@@ -1,0 +1,912 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>labels and capabilities — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#labels-and-capabilities">Labels and capabilities</a>
+<ul>
+<li><a href="#label-dimensions">Label dimensions</a>
+<ul>
+<li><a href="#1-area--subject">1. <code>area:*</code> — subject</a></li>
+<li><a href="#2-capability--two-axes-skills-vs-tools">2. capability — two axes (skills vs tools)</a></li>
+<li><a href="#3-kind--change-type-pre-existing">3. <code>kind:*</code> — change type (pre-existing)</a></li>
+<li><a href="#4-mode--handling-mode-pre-existing">4. <code>mode:*</code> — handling mode (pre-existing)</a></li>
+<li><a href="#standalone-labels">Standalone labels</a></li>
+</ul>
+</li>
+<li><a href="#capability-to-skill-map">Capability to skill map</a></li>
+<li><a href="#capability-to-tool-map">Capability to tool map</a></li>
+<li><a href="#mcp-servers-classified-by-capability">MCP servers, classified by capability</a></li>
+<li><a href="#the-rule">The rule</a>
+<ul>
+<li><a href="#a-github-issue">A GitHub issue</a></li>
+<li><a href="#a-pull-request">A pull request</a></li>
+<li><a href="#a-new-tool-under-tools">A new tool under <code>tools/</code></a></li>
+<li><a href="#a-new-skill-under-claudeskills">A new skill under <code>.claude/skills/</code></a></li>
+<li><a href="#a-new-doc-under-docs">A new doc under <code>docs/</code></a></li>
+</ul>
+</li>
+<li><a href="#why-this-exists">Why this exists</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="labels-and-capabilities">Labels and capabilities</h1>
+<p>This page is the canonical reference for the label taxonomy used on
+issues and pull requests in this framework repository
+(<code>apache/magpie</code>). It also defines the <strong>capability</strong> model
+that classifies what each skill or tool in the framework actually
+<em>does</em>, independent of which subject area it sits under.</p>
+<p>Every issue and pull request opened against this repository should
+carry at least one <strong><code>area:*</code></strong> label and at least one
+<strong><code>capability:*</code></strong> label. New tools and new skills must declare their
+capability up front (see <a href="#the-rule">The rule</a>).</p>
+<blockquote>
+<p><strong>Scope caveat.</strong> This taxonomy applies to <em>this framework
+repository</em>. Skills that create issues or PRs on an <strong>adopter’s
+tracker</strong> (e.g. <code>security-issue-import</code>, <code>security-issue-fix</code>,
+<code>issue-fix-workflow</code>) use the adopter’s own label scheme — adopters
+are free to mirror this taxonomy in their own repo but are not
+required to.</p>
+</blockquote>
+<hr>
+<h2 id="label-dimensions">Label dimensions</h2>
+<p>The repository’s labels fall into four orthogonal dimensions. An issue
+or PR typically carries one label from each dimension that applies.</p>
+<h3 id="1-area--subject">1. <code>area:*</code> — subject</h3>
+<p>What part of the framework does this touch?</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>area:pr-management</code></td>
+<td><code>pr-management-*</code> skills</td>
+</tr>
+<tr>
+<td><code>area:security</code></td>
+<td><code>security-*</code> skills, <code>security-tracker-stats-dashboard</code></td>
+</tr>
+<tr>
+<td><code>area:setup</code></td>
+<td><code>setup-*</code> skills, framework adoption, agent-sandbox setup</td>
+</tr>
+<tr>
+<td><code>area:issue</code></td>
+<td><code>issue-*</code> skills (<code>issue-triage</code>, <code>issue-fix-workflow</code>, <code>issue-reassess</code>, <code>issue-reassess-stats</code>, <code>issue-reproducer</code>, <code>issue-stale-sweep</code>, <code>issue-deduplicate</code>, <code>issue-backlog-stats</code>)</td>
+</tr>
+<tr>
+<td><code>area:tools</code></td>
+<td>Substrate tools under <code>tools/*</code> (CLI bridges, agent-runtime adapters, mail-source backends)</td>
+</tr>
+<tr>
+<td><code>area:ci</code></td>
+<td><code>.github/</code> workflows, prek, validators</td>
+</tr>
+<tr>
+<td><code>area:docs</code></td>
+<td><code>docs/</code>, <code>MISSION.md</code>, READMEs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-capability--two-axes-skills-vs-tools">2. capability — two axes (skills vs tools)</h3>
+<p>Per <a href="/skills/rfcs/rfc-ai-0005">RFC-AI-0005</a>, “capability” is <strong>two orthogonal
+vocabularies</strong>, one per entity. A skill carries one or more <strong>skill
+capabilities</strong> (<code>capability:*</code>); a tool carries one or more <strong>tool
+capabilities</strong> (<code>contract:*</code> or <code>substrate:*</code>). List <strong>all</strong> that apply;
+do not pick a single “primary”.</p>
+<p><strong>Axis 1 — skill capability</strong> (<code>capability:*</code>) — the workflow-lifecycle
+phase a skill performs:</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>capability:triage</code></td>
+<td>Sweep a queue, classify candidates, propose dispositions for human confirmation.</td>
+</tr>
+<tr>
+<td><code>capability:review</code></td>
+<td>Deep per-item code review of a PR or local diff; also contributor mentoring (single-item teaching intervention).</td>
+</tr>
+<tr>
+<td><code>capability:fix</code></td>
+<td>Implement a code change against an upstream repo to resolve a triaged issue.</td>
+</tr>
+<tr>
+<td><code>capability:intake</code></td>
+<td>Import external signal (mailing list, scan report, public PR) into a tracker entry, or keep an existing entry reconciled with one of those sources.</td>
+</tr>
+<tr>
+<td><code>capability:reconciliation</code></td>
+<td>Compare tracker state against an external inventory (e.g. ASF security dashboard, organization-wide issue registry); surface drift; propose corrections. Does <strong>not</strong> write to either source.</td>
+</tr>
+<tr>
+<td><code>capability:resolve</code></td>
+<td>Close-out actions: invalidate, dedupe, CVE-allocate, post-announcement housekeeping.</td>
+</tr>
+<tr>
+<td><code>capability:reassess</code></td>
+<td>Re-run resolved or end-of-life issues against current code to verify still-fixed / still-broken.</td>
+</tr>
+<tr>
+<td><code>capability:stats</code></td>
+<td>Read-only dashboards, metrics, governance evidence, contributor nomination briefs.</td>
+</tr>
+<tr>
+<td><code>capability:platform</code></td>
+<td>Framework / agent substrate skills: install, verify, update, doctor, override-upstream, status, shared-config-sync, the <code>setup</code> bootstrap.</td>
+</tr>
+<tr>
+<td><code>capability:authoring</code></td>
+<td>Skills that author or maintain other skills: <code>write-skill</code>, <code>optimize-skill</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Axis 2 — tool capability</strong> (<code>contract:*</code> / <code>substrate:*</code>) — the
+interface a tool/adapter provides. <code>contract:&lt;name&gt;</code> implements a
+capability contract under <code>tools/&lt;contract&gt;/</code>; <code>substrate:&lt;name&gt;</code> is
+framework substrate:</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Kind</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contract:tracker</code></td>
+<td>contract</td>
+<td>Issue / PR / board / label backend.</td>
+</tr>
+<tr>
+<td><code>contract:source-control</code></td>
+<td>contract</td>
+<td>Branch / commit / diff / push (VCS).</td>
+</tr>
+<tr>
+<td><code>contract:mail-archive</code></td>
+<td>contract</td>
+<td>Mailing-list / forum archive reads.</td>
+</tr>
+<tr>
+<td><code>contract:mail-source</code></td>
+<td>contract</td>
+<td>Inbound-mail ingestion (mbox / IMAP / …).</td>
+</tr>
+<tr>
+<td><code>contract:mail-draft</code></td>
+<td>contract</td>
+<td>Outbound mail composition (draft, never send).</td>
+</tr>
+<tr>
+<td><code>contract:cve-authority</code></td>
+<td>contract</td>
+<td>CVE allocation / record management / publication.</td>
+</tr>
+<tr>
+<td><code>contract:report-relay</code></td>
+<td>contract</td>
+<td>Inbound security-report relay detection.</td>
+</tr>
+<tr>
+<td><code>contract:scan-format</code></td>
+<td>contract</td>
+<td>Security-scanner report parsing.</td>
+</tr>
+<tr>
+<td><code>contract:project-metadata</code></td>
+<td>contract</td>
+<td>Governance rosters / people / releases.</td>
+</tr>
+<tr>
+<td><code>substrate:analytics</code></td>
+<td>substrate</td>
+<td>Read-only metrics / dashboards / renderers.</td>
+</tr>
+<tr>
+<td><code>substrate:sandbox</code></td>
+<td>substrate</td>
+<td>Agent isolation, egress control, settings audit.</td>
+</tr>
+<tr>
+<td><code>substrate:action-guard</code></td>
+<td>substrate</td>
+<td>Deterministic pre-tool-use command guards.</td>
+</tr>
+<tr>
+<td><code>substrate:privacy</code></td>
+<td>substrate</td>
+<td>PII redaction / approved-LLM gating.</td>
+</tr>
+<tr>
+<td><code>substrate:framework-dev</code></td>
+<td>substrate</td>
+<td>Build / validate / eval the framework itself.</td>
+</tr>
+</tbody>
+</table>
+<p>Both capability axes are <strong>orthogonal</strong> to <code>area:*</code>. A single
+query can answer “how is our triage stack doing across PR + issue +
+security?” by filtering on <code>capability:triage</code> alone, without
+enumerating per-area queries.</p>
+<h3 id="3-kind--change-type-pre-existing">3. <code>kind:*</code> — change type (pre-existing)</h3>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind:dx</code></td>
+<td>Maintainer dev-loop / CLI UX</td>
+</tr>
+<tr>
+<td><code>kind:policy</code></td>
+<td>Rule changes (eligibility, thresholds, behaviour switches)</td>
+</tr>
+<tr>
+<td><code>kind:perf</code></td>
+<td>Token / latency / API-call budget</td>
+</tr>
+<tr>
+<td><code>kind:adopter-config</code></td>
+<td>Per-adopter knob</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-mode--handling-mode-pre-existing">4. <code>mode:*</code> — handling mode (pre-existing)</h3>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode:A</code></td>
+<td>Mode A — triage</td>
+</tr>
+<tr>
+<td><code>mode:B</code></td>
+<td>Mode B — mentoring</td>
+</tr>
+<tr>
+<td><code>mode:C</code></td>
+<td>Mode C — agent-authored fix with human review</td>
+</tr>
+<tr>
+<td><code>mode:D</code></td>
+<td>Mode D — narrowly-scoped auto-merge (off until A/B/C run 2 quarters)</td>
+</tr>
+<tr>
+<td><code>mode:cross-cutting</code></td>
+<td>Spans multiple modes</td>
+</tr>
+<tr>
+<td><code>mode:platform</code></td>
+<td>Substrate / infra — not a mode (sandbox, CI, validators)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standalone-labels">Standalone labels</h3>
+<p><code>marketing</code> (branding artefacts), <code>dependencies</code> (dependency-update
+PRs), <code>python:uv</code> (Python uv-managed code), plus the default GitHub
+labels (<code>bug</code>, <code>enhancement</code>, <code>documentation</code>, <code>good first issue</code>,
+etc.).</p>
+<hr>
+<h2 id="capability-to-skill-map">Capability to skill map</h2>
+<p>Capabilities for every skill currently in
+<a href="../skills/"><code>.claude/skills/</code></a>. Skills with two values
+(separated by <code>+</code>) carry both labels.</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Capability / capabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pr-management-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>issue-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>issue-stale-sweep</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>security-issue-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>ci-runner-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>dependency-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>workflow-security-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>license-compliance-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>flaky-test-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td><code>reviewer-routing</code></td>
+<td><code>capability:triage</code> <em>(scores the configured reviewer roster on area match, git-history familiarity, and open-review load; proposes a primary reviewer plus optional backup — read-only, propose-then-confirm)</em></td>
+</tr>
+<tr>
+<td><code>pr-management-quick-merge</code></td>
+<td><code>capability:triage</code> + <code>capability:review</code> <em>(screens the ready-for-review queue for trivial, all-gates-green PRs — triage; submits the maintainer’s approve on per-PR confirmation — review)</em></td>
+</tr>
+<tr>
+<td><code>pr-management-code-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td><code>pairing-self-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td><code>pairing-multi-agent-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td><code>pr-management-mentor</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td><code>good-first-issue-author</code></td>
+<td><code>capability:review</code> <em>(authors a newcomer-ready good first issue — contributor mentoring on the supply side)</em></td>
+</tr>
+<tr>
+<td><code>good-first-issue-sweep</code></td>
+<td><code>capability:review</code> + <code>capability:triage</code> <em>(sweeps the open issue backlog for GFI candidates; scores each against the G1–G7 rubric and proposes the label on maintainer confirmation — a triage sweep in the mentoring family)</em></td>
+</tr>
+<tr>
+<td><code>mentoring-welcome</code></td>
+<td><code>capability:review</code> <em>(drafts a first-contact orientation comment for first-time contributors on issues and PRs)</em></td>
+</tr>
+<tr>
+<td><code>issue-fix-workflow</code></td>
+<td><code>capability:fix</code></td>
+</tr>
+<tr>
+<td><code>audit-finding-fix</code></td>
+<td><code>capability:fix</code></td>
+</tr>
+<tr>
+<td><code>security-issue-fix</code></td>
+<td><code>capability:fix</code> + <code>capability:resolve</code> <em>(opens the PR that closes the tracker — both phases)</em></td>
+</tr>
+<tr>
+<td><code>security-issue-import</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-import-from-md</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-import-from-pr</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-import-via-forwarder</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-import-from-scan</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-sync</code></td>
+<td><code>capability:intake</code> <em>(+ <code>capability:reconciliation</code> once <a href="https://github.com/apache/magpie/issues/337">#337</a> lands the ASF-dashboard step)</em></td>
+</tr>
+<tr>
+<td><code>setup-shared-config-sync</code></td>
+<td><code>capability:intake</code> + <code>capability:platform</code> <em>(reconciles user-scope config to a sync repo; the act is intake, the subject is setup)</em></td>
+</tr>
+<tr>
+<td><code>release-vote-tally</code></td>
+<td><code>capability:triage</code> + <code>capability:resolve</code> <em>(reads the vote thread / approval signal, classifies each reply as binding or non-binding, tallies the result — triage over the vote-thread queue — and drafts the <code>[RESULT] [VOTE]</code> close-out email for RM review — resolve)</em></td>
+</tr>
+<tr>
+<td><code>release-prepare</code></td>
+<td><code>capability:resolve</code> <em>(drafts the planning issue, prep PR, and post-release bump PR that open the release lifecycle)</em></td>
+</tr>
+<tr>
+<td><code>release-announce-draft</code></td>
+<td><code>capability:resolve</code> <em>(drafts the <code>[ANNOUNCE]</code> email and opens the site-bump PR that complete the release lifecycle)</em></td>
+</tr>
+<tr>
+<td><code>release-verify-rc</code></td>
+<td><code>capability:triage</code> <em>(read-only RC pre-flight: verifies GPG signatures, checksums, RAT licence headers, NOTICE/LICENSE presence, prohibited binaries, and version-string consistency; emits a PASS/PASS-WITH-WARNINGS/FAIL report)</em></td>
+</tr>
+<tr>
+<td><code>release-promote</code></td>
+<td><code>capability:resolve</code> <em>(emits the backend-shaped promotion command set that moves a passed-vote RC to the release distribution area; never runs the command itself)</em></td>
+</tr>
+<tr>
+<td><code>release-keys-sync</code></td>
+<td><code>capability:resolve</code> <em>(drafts the KEYS file diff and paste-ready <code>svn</code> command sequence to add the RM’s public key; validates key strength against the ASF floor)</em></td>
+</tr>
+<tr>
+<td><code>release-rc-cut</code></td>
+<td><code>capability:resolve</code> <em>(emits the paste-ready tag, build, sign, checksum, and staging command sequences for an RC)</em></td>
+</tr>
+<tr>
+<td><code>release-vote-draft</code></td>
+<td><code>capability:resolve</code> <em>(drafts the <code>[VOTE]</code> email and planning-issue comment that advance the release to the vote stage)</em></td>
+</tr>
+<tr>
+<td><code>release-archive-sweep</code></td>
+<td><code>capability:resolve</code> + <code>capability:triage</code> <em>(scans the dist area, classifies each release against the retention rule — triage — and proposes the command set to move past-retention releases to the archive — resolve)</em></td>
+</tr>
+<tr>
+<td><code>security-cve-allocate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td><code>security-issue-invalidate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td><code>security-issue-deduplicate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td><code>issue-deduplicate</code></td>
+<td><code>capability:resolve</code> <em>(closes a duplicate general-issue and posts cross-reference comments; maintainer confirms before any action is applied)</em></td>
+</tr>
+<tr>
+<td><code>issue-reassess</code></td>
+<td><code>capability:reassess</code></td>
+</tr>
+<tr>
+<td><code>issue-reproducer</code></td>
+<td><code>capability:reassess</code></td>
+</tr>
+<tr>
+<td><code>pr-management-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>issue-reassess-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>issue-backlog-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>security-tracker-stats-dashboard</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>contributor-nomination</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>contributor-to-committer</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>contributor-activity-sweep</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>committer-onboarding</code></td>
+<td><code>capability:resolve</code> + <code>capability:triage</code> <em>(post-vote onboarding close-out — resolve — after validating the vote result in pre-flight — triage)</em></td>
+</tr>
+<tr>
+<td><code>list-skills</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td><code>release-audit-report</code></td>
+<td><code>capability:stats</code> <em>(assembles the per-release audit record from the planning issue, vote thread, artefact list, and announce archive URL)</em></td>
+</tr>
+<tr>
+<td><code>setup-status</code></td>
+<td><code>capability:stats</code> + <code>capability:platform</code> <em>(reports the adoption configuration — stats — and delegates reconfiguration to the setup skill)</em></td>
+</tr>
+<tr>
+<td><code>setup</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td><code>setup-isolated-setup-install</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td><code>setup-isolated-setup-verify</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td><code>setup-isolated-setup-update</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td><code>setup-isolated-setup-doctor</code></td>
+<td><code>capability:platform</code> + <code>capability:reassess</code> <em>(re-checks an installed sandbox against current spec — the phase is reassess on subject setup)</em></td>
+</tr>
+<tr>
+<td><code>setup-override-upstream</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td><code>write-skill</code></td>
+<td><code>capability:authoring</code></td>
+</tr>
+<tr>
+<td><code>optimize-skill</code></td>
+<td><code>capability:authoring</code></td>
+</tr>
+<tr>
+<td><code>skill-reconciler</code></td>
+<td><code>capability:reconciliation</code> <em>(compares two near-duplicate skill copies and classifies every difference as ALLOWED, DRIFT, or SAFETY-BASELINE; proposes convergence; never writes either copy)</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="capability-to-tool-map">Capability to tool map</h2>
+<p>Tools under <a href="../tools/"><code>tools/</code></a>. A tool’s capability is the interface
+it provides; a tool may carry more than one value (separated by <code>+</code>) when
+it implements multiple contracts (e.g. <code>tools/gmail</code> provides both
+<code>mail-source</code> and <code>mail-draft</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Capability / capabilities</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../tools/agent-guard/"><code>tools/agent-guard</code></a></td>
+<td><code>substrate:action-guard</code></td>
+<td>Deterministic <code>PreToolUse</code> guard dispatcher: blocks <code>gh</code>/<code>git</code> commands that would ping maintainers, carry a <code>Co-Authored-By</code> trailer, mark-ready prematurely, leak security language publicly, or empty a PR via force-push. Extensible — skills contribute guards via <code>guards.d</code></td>
+</tr>
+<tr>
+<td><a href="../tools/agent-isolation/"><code>tools/agent-isolation</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Secure-agent sandbox helpers</td>
+</tr>
+<tr>
+<td><a href="../tools/apache-projects/"><code>tools/apache-projects</code></a></td>
+<td><code>contract:project-metadata</code></td>
+<td>ASF project-metadata substrate (<code>apache/comdev</code> <code>apache-projects-mcp</code>); read-only <code>projects.apache.org/json</code> rosters / people / releases. Backs <code>contributor-nomination</code> and the security roster-resolution paths; tracked at <code>main</code>, not pinned</td>
+</tr>
+<tr>
+<td><a href="../tools/asf-svn/"><code>tools/asf-svn</code></a></td>
+<td><code>contract:source-control</code></td>
+<td>ASF SVN tool adapter: source-control binding for <code>svn.apache.org</code> working copies (centralized model), <code>svn</code> CLI operation catalogue, <code>dist.apache.org</code> release-distribution helpers (stage/promote/prune), ASF committer/PMC authorization, and optional svnpubsub site publishing. The SVN counterpart to <code>tools/github/</code> for ASF projects</td>
+</tr>
+<tr>
+<td><a href="../tools/cve-org/"><code>tools/cve-org</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>CVE.org services adapter: publishes records to CVE.org and reads back the resulting CVE state. Implements the <code>tools/cve-tool/</code> contract for the CVE.org-direct backend</td>
+</tr>
+<tr>
+<td><a href="../tools/cve-tool/"><code>tools/cve-tool</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>Adapter contract for CNA backends (Vulnogram, MITRE form, CVE.org direct, GHSA). Pure interface spec; no executable code — adapters under sibling <code>tools/cve-tool-*/</code> directories implement it.</td>
+</tr>
+<tr>
+<td><a href="../tools/cve-tool-vulnogram/"><code>tools/cve-tool-vulnogram</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>ASF Vulnogram CVE-allocation adapter. Implements the <code>tools/cve-tool/</code> contract. Previously named <code>tools/vulnogram/</code>.</td>
+</tr>
+<tr>
+<td><a href="../tools/dashboard-generator/"><code>tools/dashboard-generator</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Self-contained HTML dashboard generator</td>
+</tr>
+<tr>
+<td><a href="../tools/dev/"><code>tools/dev</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Framework dev-loop helpers</td>
+</tr>
+<tr>
+<td><a href="../tools/egress-gateway/"><code>tools/egress-gateway</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Egress-allowlist forward proxy (proxy.py plugin); host-level egress chokepoint — defence-in-depth for RFC-AI-0003 §4.4</td>
+</tr>
+<tr>
+<td><a href="../tools/forwarder-relay/"><code>tools/forwarder-relay</code></a></td>
+<td><code>contract:report-relay</code></td>
+<td>Adapter contract for inbound-relay backends (ASF Security relay, huntr.com, HackerOne triagers). Pure interface spec; adapters declare detection + credit-extraction + reporter-addressing rules.</td>
+</tr>
+<tr>
+<td><a href="../tools/github/"><code>tools/github</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code></td>
+<td>GitHub REST / GraphQL tracker substrate (called by every lifecycle phase) plus the Git source-control binding documented in <a href="https://github.com/apache/magpie/blob/main/tools/github/source-control.md"><code>source-control.md</code></a> (runnable backend in <a href="../tools/vcs/"><code>tools/vcs</code></a>)</td>
+</tr>
+<tr>
+<td><a href="../tools/github-body-field/"><code>tools/github-body-field</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>Read or rewrite one <code>### Field</code> section of a GitHub issue body without bringing the body into agent context — substrate helper for the security-sync skills</td>
+</tr>
+<tr>
+<td><a href="../tools/github-rollup/"><code>tools/github-rollup</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>Append to (or create) the status-rollup comment on a GitHub issue without bringing the rollup body into agent context — substrate helper for every status-update-emitting skill</td>
+</tr>
+<tr>
+<td><a href="../tools/gmail/"><code>tools/gmail</code></a></td>
+<td><code>contract:mail-source</code> + <code>contract:mail-draft</code> + <code>contract:mail-archive</code></td>
+<td>Gmail API substrate — inbound report intake (<code>mail-source</code>), thread / archive reads (<code>mail-archive</code>), plus outbound courtesy-reply drafting (<code>mail-draft</code>); read + draft only, never sends</td>
+</tr>
+<tr>
+<td><a href="../tools/jira/"><code>tools/jira</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>JIRA REST substrate (read-only today; write subcommands tracked in <a href="https://github.com/apache/magpie/issues/301">#301</a>)</td>
+</tr>
+<tr>
+<td><a href="../tools/mail-archive/"><code>tools/mail-archive</code></a></td>
+<td><code>contract:mail-archive</code></td>
+<td>Adapter contract for public mail-archive backends (PonyMail, Hyperkitty, Discourse, Google Groups, GitHub Discussions). Pure interface spec.</td>
+</tr>
+<tr>
+<td><a href="../tools/mail-source/"><code>tools/mail-source</code></a></td>
+<td><code>contract:mail-source</code></td>
+<td>Mail-source backend abstraction (mbox / IMAP / Mailman 3) feeding a uniform inbound thread/message view to the intake pipeline</td>
+</tr>
+<tr>
+<td><a href="../tools/ponymail/"><code>tools/ponymail</code></a></td>
+<td><code>contract:mail-archive</code> + <code>contract:mail-source</code></td>
+<td>PonyMail public mail-archive substrate (ASF <code>lists.apache.org</code>); implements the <code>tools/mail-archive/</code> contract for archive reads and the <code>tools/mail-source/</code> contract for inbound list-traffic ingestion</td>
+</tr>
+<tr>
+<td><a href="../tools/scan-format/"><code>tools/scan-format</code></a></td>
+<td><code>contract:scan-format</code></td>
+<td>Adapter contract for security-scanner report formats (ASVS reference); reads a scan’s finding index + per-finding evidence for the <code>security-issue-import-from-scan</code> pipeline.</td>
+</tr>
+<tr>
+<td><a href="../tools/permission-audit/"><code>tools/permission-audit</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Audit + atomically edit Claude Code <code>permissions.allow[]</code> entries; backs <code>/magpie-setup verify --apply-permission-audit</code> (check 8d)</td>
+</tr>
+<tr>
+<td><a href="../tools/pr-management-stats/"><code>tools/pr-management-stats</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>PR-backlog analytics engine</td>
+</tr>
+<tr>
+<td><a href="../tools/preflight-audit/"><code>tools/preflight-audit</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Dry-run the bulk-mode pre-flight classifier; measure skip-rate before / after any rule edit in the security-issue-sync skill</td>
+</tr>
+<tr>
+<td><a href="../tools/privacy-llm/"><code>tools/privacy-llm</code></a></td>
+<td><code>substrate:privacy</code></td>
+<td>Privacy-LLM PII-scrubbing gate</td>
+</tr>
+<tr>
+<td><a href="../tools/probe-templates/"><code>tools/probe-templates</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Sandbox-doctor probe templates</td>
+</tr>
+<tr>
+<td><a href="../tools/sandbox-lint/"><code>tools/sandbox-lint</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Sandbox settings linter</td>
+</tr>
+<tr>
+<td><a href="../tools/security-tracker-stats-dashboard/"><code>tools/security-tracker-stats-dashboard</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Security-tracker analytics engine</td>
+</tr>
+<tr>
+<td><a href="../tools/spec-loop/"><code>tools/spec-loop</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Spec-driven build loop runner (Ralph-style) for framework development</td>
+</tr>
+<tr>
+<td><a href="../tools/skill-evals/"><code>tools/skill-evals</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Eval harness for skills; framework-dev infrastructure whose run output is governance evidence</td>
+</tr>
+<tr>
+<td><a href="../tools/skill-and-tool-validator/"><code>tools/skill-and-tool-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Skill-frontmatter and convention validator</td>
+</tr>
+<tr>
+<td><a href="../tools/spec-status-index/"><code>tools/spec-status-index</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Index of spec / RFC implementation status — framework-dev substrate that also doubles as a governance/stats view (<code>analytics</code>)</td>
+</tr>
+<tr>
+<td><a href="../tools/vendor-neutrality-score/"><code>tools/vendor-neutrality-score</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Deterministic vendor-neutrality score — reads each contract tool’s <code>**Kind:**</code> / <code>**Vendor:**</code> metadata and scores per-contract + per-skill neutrality (<code>analytics</code>); backs the score block in <a href="/skills/vendor-neutrality"><code>docs/vendor-neutrality.md</code></a></td>
+</tr>
+<tr>
+<td><a href="../tools/spec-validator/"><code>tools/spec-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Spec-frontmatter and body-section validator — counterpart to <code>skill-and-tool-validator</code> for <code>tools/spec-loop/specs/</code></td>
+</tr>
+<tr>
+<td><a href="../tools/symlink-lint/"><code>tools/symlink-lint</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Self-adoption symlink hygiene — rejects cyclic symlinks and misdirected skill relays (canonical/relay target-correctness)</td>
+</tr>
+<tr>
+<td><a href="../tools/pilot-report-validator/"><code>tools/pilot-report-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Adopter pilot-report validator — required frontmatter keys, no unfilled placeholders, valid profile, and required body sections; counterpart to <code>spec-validator</code> for <code>docs/pilot-report-template.md</code></td>
+</tr>
+<tr>
+<td><a href="../tools/vcs/"><code>tools/vcs</code></a></td>
+<td><code>contract:source-control</code></td>
+<td>Backend-dispatching implementation of the source-control (VCS) capability (<a href="https://github.com/apache/magpie/blob/main/tools/github/source-control.md"><code>tools/github/source-control.md</code></a>); complete Git backend plus detected extension points for non-Git VCS bridges (#601 Hg, #602 SVN)</td>
+</tr>
+</tbody>
+</table>
+<p>A tool’s capability is the <strong>interface it provides</strong>, not which skills
+happen to consume it (RFC-AI-0005). <code>tools/github</code> provides the
+<code>contract:tracker</code> interface; <code>tools/cve-tool-vulnogram</code> provides
+<code>contract:cve-authority</code>; <code>tools/privacy-llm</code> is <code>substrate:privacy</code>.
+Use a <code>contract:&lt;name&gt;</code> value when the tool implements a capability
+contract under <code>tools/&lt;contract&gt;/</code>, and a <code>substrate:&lt;name&gt;</code> value for
+framework substrate. A tool may carry more than one (rare —
+<code>tools/gmail</code> is the only one today).</p>
+<h2 id="mcp-servers-classified-by-capability">MCP servers, classified by capability</h2>
+<p>Several tools wrap a <a href="https://modelcontextprotocol.io">Model Context Protocol</a>
+(MCP) server as their concrete backend. An MCP server is <strong>not</strong> a
+separate axis — it is classified by the capability its <em>wrapping tool</em>
+provides; the MCP is just the transport, interchangeable with a CLI or
+REST backend behind the same contract. A skill never names an MCP
+server — it targets the capability, and the tool routes to whichever
+backend the adopter wired in. The framework consumes four:</p>
+<table>
+<thead>
+<tr>
+<th>MCP server</th>
+<th>Tool prefix</th>
+<th>Wrapped by</th>
+<th>Capability provided</th>
+<th>Organization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub MCP</td>
+<td><code>mcp__github__*</code></td>
+<td><a href="../tools/github/"><code>tools/github</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Gmail MCP (claude.ai)</td>
+<td><code>mcp__claude_ai_Gmail__*</code></td>
+<td><a href="../tools/gmail/"><code>tools/gmail</code></a></td>
+<td><code>contract:mail-source</code> + <code>contract:mail-draft</code> + <code>contract:mail-archive</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>PonyMail MCP (<code>apache/comdev</code>)</td>
+<td><code>mcp__ponymail__*</code></td>
+<td><a href="../tools/ponymail/"><code>tools/ponymail</code></a></td>
+<td><code>contract:mail-archive</code> + <code>contract:mail-source</code></td>
+<td>ASF</td>
+</tr>
+<tr>
+<td>apache-projects MCP (<code>apache/comdev</code>)</td>
+<td><code>mcp__apache-projects__*</code></td>
+<td><a href="../tools/apache-projects/"><code>tools/apache-projects</code></a></td>
+<td><code>contract:project-metadata</code></td>
+<td>ASF</td>
+</tr>
+</tbody>
+</table>
+<p>Non-MCP backends fulfil the same contracts: JIRA is reached over REST
+and <code>gh</code> is the CLI fallback, both <code>contract:tracker</code>. See
+<a href="/skills/prerequisites"><code>docs/prerequisites.md</code></a> for connection setup.</p>
+<hr>
+<h2 id="the-rule">The rule</h2>
+<p>When you create any of the following on this repository, declare the
+capability:</p>
+<h3 id="a-github-issue">A GitHub issue</h3>
+<p>Apply at least one <code>area:*</code> AND one capability label — a skill
+capability (<code>capability:*</code>) for skill work, a tool capability
+(<code>contract:*</code> / <code>substrate:*</code>) for tool work. If the issue genuinely
+spans capabilities, apply all that apply.</p>
+<h3 id="a-pull-request">A pull request</h3>
+<p>Same: <code>area:*</code> AND the matching capability. Match the capability the
+change is <em>implementing</em>, not the file paths it happens to touch. A PR
+that adjusts the validator config to support a new triage rule is
+<code>capability:triage</code> (the change’s purpose), not <code>substrate:framework-dev</code>
+(the file it edited).</p>
+<h3 id="a-new-tool-under-tools">A new tool under <code>tools/</code></h3>
+<p>Declare the tool’s capability in the <strong>first paragraph of its README</strong>
+using the line:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#E1E4E8;font-weight:bold">**Capability:**</span><span style="color:#E1E4E8"> contract:NAME</span></span></code></pre>
+<p>…or <code>substrate:NAME</code> for framework substrate. If the tool serves more
+than one, list them (<code>contract:a + substrate:b</code>). Pick the
+<code>contract:&lt;name&gt;</code> that matches the capability contract the tool
+implements, or the <code>substrate:&lt;name&gt;</code> kind that fits.</p>
+<h3 id="a-new-skill-under-claudeskills">A new skill under <code>.claude/skills/</code></h3>
+<p>Declare the capability in the skill’s frontmatter:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#B392F0">---</span></span>
+<span class="line"><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">my-new-skill</span></span>
+<span class="line"><span style="color:#85E89D">description</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">|</span></span>
+<span class="line"><span style="color:#9ECBFF">  ...</span></span>
+<span class="line"><span style="color:#85E89D">capability</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">capability:NAME</span></span>
+<span class="line"><span style="color:#B392F0">---</span></span></code></pre>
+<p>The <a href="https://github.com/apache/magpie/blob/main/skills/write-skill/SKILL.md"><code>write-skill</code></a> skill
+prompts for this on every new-skill scaffold.</p>
+<h3 id="a-new-doc-under-docs">A new doc under <code>docs/</code></h3>
+<p>Capability-specific docs (e.g. a guide for a single skill family)
+should link to this page and name the capability in their first
+paragraph. Cross-cutting docs (<code>MISSION.md</code>, top-level READMEs) need
+no capability marker.</p>
+<hr>
+<h2 id="why-this-exists">Why this exists</h2>
+<p>The original <code>area:*</code> labels split issues by subject — useful for
+“what part of the codebase is this?” but unable to answer “what kind
+of thing is this?”. The <code>capability:*</code> dimension fills that gap and
+is orthogonal: a triage-rule change in PR management
+(<code>area:pr-management</code> + <code>capability:triage</code>) and a triage-rule change
+in security (<code>area:security</code> + <code>capability:triage</code>) become trivially
+findable as a cohort even though they live in different families.</p>
+<p>Capability is also a forcing function for skill design: if a new skill
+doesn’t fit any of the ten skill-capability buckets cleanly, that’s a
+signal worth inspecting before the skill ships.</p>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/labels-and-capabilities.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>

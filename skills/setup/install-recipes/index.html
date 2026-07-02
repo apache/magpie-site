@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>install recipes — Apache Magpie Docs</title><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/IconButton.ChbM7Z5M.css"><style>.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/skills"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden"><a href="/" class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a><a href="/skills/setup/install-recipes" aria-current="page" class="block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-600 text-white">⚡ Quick Start</a><nav class="flex flex-col gap-6"><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Getting Started</div><ul class="flex flex-col gap-1"><li><a href="/skills/index" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/prerequisites" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">prerequisites</a></li><li><a href="/skills/vendor-neutrality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor neutrality</a></li><li><a href="/skills/extending" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">extending</a></li><li><a href="/skills/modes" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">modes</a></li><li><a href="/skills/mode-economics" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mode economics</a></li><li><a href="/skills/spec-driven-development" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec driven development</a></li><li><a href="/skills/labels-and-capabilities" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">labels and capabilities</a></li><li><a href="/skills/editorial-guidelines" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">editorial guidelines</a></li><li><a href="/skills/confidentiality" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">confidentiality</a></li><li><a href="/skills/pilot-report-template" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot report template</a></li><li><a href="/skills/principles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">principles</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Setup</div><ul class="flex flex-col gap-1"><li><a href="/skills/setup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/setup/install-recipes" aria-current="page" class="block px-3 py-1.5 rounded-md text-body font-body capitalize bg-brand-100 text-brand-800">install recipes</a></li><li><a href="/skills/setup/secure-agent-setup" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent setup</a></li><li><a href="/skills/setup/secure-agent-internals" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">secure agent internals</a></li><li><a href="/skills/setup/sandbox-troubleshooting" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox troubleshooting</a></li><li><a href="/skills/setup/agentic-overrides" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agentic overrides</a></li><li><a href="/skills/setup/privacy-llm" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy llm</a></li><li><a href="/skills/setup/unadopt" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">unadopt</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Security</div><ul class="flex flex-col gap-1"><li><a href="/skills/security/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/security/roles" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">roles</a></li><li><a href="/skills/security/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/security/threat-model" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">threat model</a></li><li><a href="/skills/security/new-members-onboarding" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">new members onboarding</a></li><li><a href="/skills/security/how-to-fix-a-security-issue" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">how to fix a security issue</a></li><li><a href="/skills/security/forwarder-routing-policy" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder routing policy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">PR Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/pr-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Issue Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/issue-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Repo Health</div><ul class="flex flex-col gap-1"><li><a href="/skills/repo-health/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Release Management</div><ul class="flex flex-col gap-1"><li><a href="/skills/release-management/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/release-management/process" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">process</a></li><li><a href="/skills/release-management/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li><li><a href="/skills/release-management/svn-release-runbook" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">svn release runbook</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Mentoring</div><ul class="flex flex-col gap-1"><li><a href="/skills/mentoring/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li><li><a href="/skills/mentoring/spec" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Contributor Growth</div><ul class="flex flex-col gap-1"><li><a href="/skills/contributor-growth/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Pairing</div><ul class="flex flex-col gap-1"><li><a href="/skills/pairing/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Adapters</div><ul class="flex flex-col gap-1"><li><a href="/skills/adapters/authoring" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">authoring</a></li><li><a href="/skills/adapters/registry" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">registry</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">Tools</div><ul class="flex flex-col gap-1"><li><a href="/skills/tools/agent-guard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-guard</a></li><li><a href="/skills/tools/agent-isolation/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">agent-isolation</a></li><li><a href="/skills/tools/apache-projects/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">apache-projects</a></li><li><a href="/skills/tools/asf-svn/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">asf-svn</a></li><li><a href="/skills/tools/cve-org/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-org</a></li><li><a href="/skills/tools/cve-tool/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool</a></li><li><a href="/skills/tools/cve-tool-vulnogram/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">cve-tool-vulnogram</a></li><li><a href="/skills/tools/dashboard-generator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dashboard-generator</a></li><li><a href="/skills/tools/dev/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">dev</a></li><li><a href="/skills/tools/egress-gateway/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">egress-gateway</a></li><li><a href="/skills/tools/forwarder-relay/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">forwarder-relay</a></li><li><a href="/skills/tools/github/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github</a></li><li><a href="/skills/tools/github-body-field/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-body-field</a></li><li><a href="/skills/tools/github-rollup/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">github-rollup</a></li><li><a href="/skills/tools/gmail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">gmail</a></li><li><a href="/skills/tools/jira/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">jira</a></li><li><a href="/skills/tools/mail-archive/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-archive</a></li><li><a href="/skills/tools/mail-source/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">mail-source</a></li><li><a href="/skills/tools/permission-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">permission-audit</a></li><li><a href="/skills/tools/pilot-report-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pilot-report-validator</a></li><li><a href="/skills/tools/ponymail/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">ponymail</a></li><li><a href="/skills/tools/pr-management-stats/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">pr-management-stats</a></li><li><a href="/skills/tools/preflight-audit/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">preflight-audit</a></li><li><a href="/skills/tools/privacy-llm/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">privacy-llm</a></li><li><a href="/skills/tools/probe-templates/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">probe-templates</a></li><li><a href="/skills/tools/sandbox-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">sandbox-lint</a></li><li><a href="/skills/tools/scan-format/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">scan-format</a></li><li><a href="/skills/tools/security-tracker-stats-dashboard/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">security-tracker-stats-dashboard</a></li><li><a href="/skills/tools/skill-and-tool-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-and-tool-validator</a></li><li><a href="/skills/tools/skill-evals/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">skill-evals</a></li><li><a href="/skills/tools/spec-loop/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-loop</a></li><li><a href="/skills/tools/spec-status-index/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-status-index</a></li><li><a href="/skills/tools/spec-validator/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">spec-validator</a></li><li><a href="/skills/tools/symlink-lint/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">symlink-lint</a></li><li><a href="/skills/tools/vcs/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vcs</a></li><li><a href="/skills/tools/vendor-neutrality-score/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">vendor-neutrality-score</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">RFCs</div><ul class="flex flex-col gap-1"><li><a href="/skills/rfcs/rfc-ai-0002" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0002 · Secure Agents setup</a></li><li><a href="/skills/rfcs/rfc-ai-0003" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0003 · Privacy-aware LLM…</a></li><li><a href="/skills/rfcs/rfc-ai-0004" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0004 · Principles of agentic…</a></li><li><a href="/skills/rfcs/rfc-ai-0005" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">0005 · Framework taxonomy</a></li></ul></div><div><div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">utilities</div><ul class="flex flex-col gap-1"><li><a href="/skills/utilities/readme" class="block px-3 py-1.5 rounded-md text-body font-body capitalize text-default-font hover:bg-neutral-100">Overview</a></li></ul></div></nav></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#install-recipes--bootstrap-magpie-in-an-adopter-repo">Install recipes — bootstrap Magpie in an adopter repo</a>
+<ul>
+<li><a href="#method-1--released-zip-from-asf-distribution">Method 1 — released zip from ASF distribution</a></li>
+<li><a href="#method-2--git-tag">Method 2 — git tag</a></li>
+<li><a href="#method-3--git-branch-defaults-to-main">Method 3 — git branch (defaults to <code>main</code>)</a></li>
+<li><a href="#after-any-recipe--let-the-skill-take-over">After any recipe — let the skill take over</a></li>
+<li><a href="#subsequent-runs-and-drift-detection">Subsequent runs and drift detection</a></li>
+<li><a href="#migrating-a-pre-magpie-apache-magpie-adopter">Migrating a pre-Magpie (<code>apache-magpie</code>) adopter</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/legal/release-policy.html -->
+<h1 id="install-recipes--bootstrap-magpie-in-an-adopter-repo">Install recipes — bootstrap Magpie in an adopter repo</h1>
+<p>Three copy-pasteable shell recipes for fetching the framework
+into a new adopter project’s repo. Each recipe is <strong>the
+bootstrap that gets <code>setup</code> into the repo</strong>; once it is
+in place, the rest of the adoption (skill-family pick, framework
+symlinks, project doc note, gitignored runtime state) runs
+through <code>/magpie-setup</code> interactively.</p>
+<p>Pick the recipe that matches your distribution preference:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>When to use</th>
+<th>Reproducibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#method-1--released-zip-from-asf-distribution"><strong>svn-zip</strong></a></td>
+<td>Production adopters once the framework ships official ASF releases. Signed + checksummed.</td>
+<td>Frozen by version</td>
+</tr>
+<tr>
+<td><a href="#method-2--git-tag"><strong>git-tag</strong></a></td>
+<td>Pinning a specific framework version (e.g. for testing a release candidate, or for a cautious adopter who tracks named releases only).</td>
+<td>Frozen by tag</td>
+</tr>
+<tr>
+<td><a href="#method-3--git-branch-defaults-to-main"><strong>git-branch</strong></a></td>
+<td>WIP path — track the framework’s <code>main</code> branch directly. The default during the framework’s pre-release phase.</td>
+<td>Tracks branch tip</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Canonical layout — no per-project convention to pick.</strong>
+<code>.agents/skills/</code> is the one canonical home (see
+<a href="https://github.com/apache/magpie/blob/main/skills/setup/agents.md"><code>agents.md</code></a>). Copy <code>setup</code> into
+<code>.agents/skills/magpie-setup/</code>, then add a relay symlink to it
+from every agent-specific dir you use
+(<code>.claude/skills/magpie-setup</code> and <code>.github/skills/magpie-setup</code>
+→ <code>../../.agents/skills/magpie-setup</code>). This is the same for
+every adopter regardless of how <code>.claude/</code> / <code>.github/</code> were
+previously organised.</p>
+<p>The <code>setup</code> skill itself is the <strong>only</strong> framework
+artefact you commit. Every other framework skill is wired
+in by the <code>setup adopt</code> flow as gitignored symlinks —
+canonical in <code>.agents/skills/</code>, relayed everywhere else.</p>
+</blockquote>
+<hr>
+<h2 id="method-1--released-zip-from-asf-distribution">Method 1 — released zip from ASF distribution</h2>
+<blockquote>
+<p><strong>Status: forthcoming.</strong> ASF release distribution
+(<code>https://dist.apache.org/repos/dist/release/&lt;project&gt;/</code>)
+is the canonical home for ASF-blessed releases per the
+<a href="https://www.apache.org/legal/release-policy.html">release-policy</a>
+and <a href="https://infra.apache.org/release-distribution.html">infra release-distribution guidelines</a>.
+This recipe will be the recommended path once the framework
+ships its first official release; until then, use
+<a href="#method-3--git-branch-defaults-to-main">Method 3 — git-branch</a>.</p>
+</blockquote>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># === Magpie bootstrap — Method 1: signed zip from ASF dist ===</span></span>
+<span class="line"><span style="color:#6A737D"># Replace &#x3C;PROJECT> with the host adopter's ASF dist subdirectory</span></span>
+<span class="line"><span style="color:#6A737D"># (e.g. `airflow` once releases land at</span></span>
+<span class="line"><span style="color:#6A737D"># https://dist.apache.org/repos/dist/release/airflow/).</span></span>
+<span class="line"><span style="color:#6A737D"># Replace &#x3C;VERSION> with the framework version you want.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> /path/to/your/repo</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">VERSION</span><span style="color:#F97583">=&#x3C;</span><span style="color:#9ECBFF">VERSION</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#E1E4E8">PROJECT</span><span style="color:#F97583">=&#x3C;</span><span style="color:#9ECBFF">PROJECT</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#E1E4E8">DIST_BASE</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">https://dist.apache.org/repos/dist/release/</span><span style="color:#E1E4E8">${PROJECT}</span></span>
+<span class="line"><span style="color:#E1E4E8">ZIP</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">apache-magpie-</span><span style="color:#E1E4E8">${VERSION}</span><span style="color:#9ECBFF">-source-release.zip</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 1. Download zip + signature + checksum, verify, extract to .apache-magpie/</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSLO</span><span style="color:#E1E4E8"> ${DIST_BASE}</span><span style="color:#9ECBFF">/</span><span style="color:#E1E4E8">${ZIP}</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSLO</span><span style="color:#E1E4E8"> ${DIST_BASE}</span><span style="color:#9ECBFF">/</span><span style="color:#E1E4E8">${ZIP}</span><span style="color:#9ECBFF">.sha512</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSLO</span><span style="color:#E1E4E8"> ${DIST_BASE}</span><span style="color:#9ECBFF">/</span><span style="color:#E1E4E8">${ZIP}</span><span style="color:#9ECBFF">.asc</span></span>
+<span class="line"><span style="color:#B392F0">sha512sum</span><span style="color:#79B8FF"> -c</span><span style="color:#E1E4E8"> ${ZIP}</span><span style="color:#9ECBFF">.sha512</span></span>
+<span class="line"><span style="color:#6A737D"># Optional but recommended — verify the OpenPGP signature against the</span></span>
+<span class="line"><span style="color:#6A737D"># project KEYS file (see https://infra.apache.org/release-signing.html):</span></span>
+<span class="line"><span style="color:#6A737D">#   curl -fsSLO ${DIST_BASE}/KEYS</span></span>
+<span class="line"><span style="color:#6A737D">#   gpg --import KEYS</span></span>
+<span class="line"><span style="color:#6A737D">#   gpg --verify ${ZIP}.asc ${ZIP}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> .apache-magpie</span></span>
+<span class="line"><span style="color:#B392F0">unzip</span><span style="color:#79B8FF"> -q</span><span style="color:#E1E4E8"> ${ZIP} </span><span style="color:#79B8FF">-d</span><span style="color:#9ECBFF"> .apache-magpie</span></span>
+<span class="line"><span style="color:#B392F0">mv</span><span style="color:#9ECBFF"> .apache-magpie/apache-magpie-</span><span style="color:#E1E4E8">${VERSION}</span><span style="color:#9ECBFF">/</span><span style="color:#79B8FF">*</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">   .apache-magpie/apache-magpie-</span><span style="color:#E1E4E8">${VERSION}</span><span style="color:#9ECBFF">/.[!.]</span><span style="color:#79B8FF">*</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">   .apache-magpie/</span><span style="color:#F97583"> 2></span><span style="color:#9ECBFF">/dev/null</span></span>
+<span class="line"><span style="color:#B392F0">rmdir</span><span style="color:#9ECBFF"> .apache-magpie/apache-magpie-</span><span style="color:#E1E4E8">${VERSION}</span></span>
+<span class="line"><span style="color:#B392F0">rm</span><span style="color:#79B8FF"> -f</span><span style="color:#E1E4E8"> ${ZIP} ${ZIP}</span><span style="color:#9ECBFF">.sha512</span><span style="color:#E1E4E8"> ${ZIP}</span><span style="color:#9ECBFF">.asc</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. Copy the `setup` skill into the canonical .agents/skills/,</span></span>
+<span class="line"><span style="color:#6A737D">#    then relay it from each agent-specific dir you use.</span></span>
+<span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> .agents/skills</span><span style="color:#9ECBFF"> .claude/skills</span><span style="color:#9ECBFF"> .github/skills</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#79B8FF"> -r</span><span style="color:#9ECBFF"> .apache-magpie/skills/setup</span><span style="color:#9ECBFF"> .agents/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .claude/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .github/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#6A737D">#    (Drop the .claude or .github relay if you don't use that agent;</span></span>
+<span class="line"><span style="color:#6A737D">#     add the same `ln -sf` line for any holdout like .windsurf/skills.)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 3. Add gitignore entries (idempotent — re-run is safe)</span></span>
+<span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> .gitignore</span><span style="color:#F97583"> &#x3C;&#x3C;</span><span style="color:#9ECBFF">'GITIGNORE'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF"># Magpie — gitignored snapshot of the framework, refreshed</span></span>
+<span class="line"><span style="color:#9ECBFF"># by /magpie-setup upgrade. Build artefact, not source.</span></span>
+<span class="line"><span style="color:#9ECBFF">/.apache-magpie/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF"># Per-machine local-pin file. Records what THIS machine fetched and</span></span>
+<span class="line"><span style="color:#9ECBFF"># when. Compared against the committed .apache-magpie.lock to</span></span>
+<span class="line"><span style="color:#9ECBFF"># detect drift.</span></span>
+<span class="line"><span style="color:#9ECBFF">/.apache-magpie.local.lock</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF"># Byte-compiled artefacts emitted when framework skill scripts run</span></span>
+<span class="line"><span style="color:#9ECBFF"># from this checkout. Non-anchored so they match at any depth.</span></span>
+<span class="line"><span style="color:#9ECBFF">__pycache__/</span></span>
+<span class="line"><span style="color:#9ECBFF">*.pyc</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF"># Deterministic agent-guard PreToolUse hook — framework code synced</span></span>
+<span class="line"><span style="color:#9ECBFF"># from the snapshot by /magpie-setup (and seeded into each worktree),</span></span>
+<span class="line"><span style="color:#9ECBFF"># not an adopter artefact. The committed .claude/settings.json wires</span></span>
+<span class="line"><span style="color:#9ECBFF"># it; the script itself stays gitignored. Force-add your own guards</span></span>
+<span class="line"><span style="color:#9ECBFF"># under guards.d/ with `git add -f` if you want them tracked.</span></span>
+<span class="line"><span style="color:#9ECBFF">/.claude/hooks/agent-guard.py</span></span>
+<span class="line"><span style="color:#9ECBFF">/.claude/hooks/guards.d/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF"># Framework-skill symlinks created by /magpie-setup. One uniform</span></span>
+<span class="line"><span style="color:#9ECBFF"># block per skills dir you use: the `magpie-*` glob ignores them</span></span>
+<span class="line"><span style="color:#9ECBFF"># all (their targets are the gitignored snapshot, so they would</span></span>
+<span class="line"><span style="color:#9ECBFF"># dangle on a fresh clone), and the `!…/magpie-setup` negation keeps</span></span>
+<span class="line"><span style="color:#9ECBFF"># the one committed bootstrap tracked. .agents/skills/ is canonical;</span></span>
+<span class="line"><span style="color:#9ECBFF"># the rest are relays into it. Drop any block for a dir you don't use.</span></span>
+<span class="line"><span style="color:#9ECBFF">/.agents/skills/magpie-*</span></span>
+<span class="line"><span style="color:#9ECBFF">!/.agents/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#9ECBFF">/.claude/skills/magpie-*</span></span>
+<span class="line"><span style="color:#9ECBFF">!/.claude/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#9ECBFF">/.github/skills/magpie-*</span></span>
+<span class="line"><span style="color:#9ECBFF">!/.github/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#9ECBFF">GITIGNORE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 4. Tell your agent: "follow /magpie-setup to finish adopting Magpie."</span></span>
+<span class="line"><span style="color:#6A737D">#    The skill will write .apache-magpie.lock (committed) and</span></span>
+<span class="line"><span style="color:#6A737D">#    .apache-magpie.local.lock (gitignored), ask which skill family</span></span>
+<span class="line"><span style="color:#6A737D">#    to wire up, create the gitignored framework-skill symlinks, and</span></span>
+<span class="line"><span style="color:#6A737D">#    update your project docs.</span></span></code></pre>
+<hr>
+<h2 id="method-2--git-tag">Method 2 — git tag</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># === Magpie bootstrap — Method 2: pinned git tag ===</span></span>
+<span class="line"><span style="color:#6A737D"># Replace &#x3C;TAG> with the framework tag you want</span></span>
+<span class="line"><span style="color:#6A737D"># (e.g. `v1.0.0` once tags exist on apache/magpie).</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> /path/to/your/repo</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">TAG</span><span style="color:#F97583">=&#x3C;</span><span style="color:#9ECBFF">TAG</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#79B8FF"> --depth=1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --branch</span><span style="color:#E1E4E8"> ${TAG} </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#9ECBFF">    https://github.com/apache/magpie.git</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    .apache-magpie</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Copy the `setup` skill to canonical + relays (see Method 1 step 2)</span></span>
+<span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> .agents/skills</span><span style="color:#9ECBFF"> .claude/skills</span><span style="color:#9ECBFF"> .github/skills</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#79B8FF"> -r</span><span style="color:#9ECBFF"> .apache-magpie/skills/setup</span><span style="color:#9ECBFF"> .agents/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .claude/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .github/skills/magpie-setup</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Add gitignore entries (same block as Method 1 step 3 — see there)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Tell your agent: "follow /magpie-setup to finish adopting Magpie."</span></span></code></pre>
+<hr>
+<h2 id="method-3--git-branch-defaults-to-main">Method 3 — git branch (defaults to <code>main</code>)</h2>
+<p>The default WIP path while the framework is pre-release.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># === Magpie bootstrap — Method 3: git branch (default: main) ===</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> /path/to/your/repo</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">BRANCH</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">main</span><span style="color:#6A737D">   # or another branch you want to track</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#79B8FF"> --depth=1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --branch</span><span style="color:#E1E4E8"> ${BRANCH} </span><span style="color:#79B8FF">\</span></span>
+<span class="line"><span style="color:#9ECBFF">    https://github.com/apache/magpie.git</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    .apache-magpie</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Copy the `setup` skill to canonical + relays (see Method 1 step 2)</span></span>
+<span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> .agents/skills</span><span style="color:#9ECBFF"> .claude/skills</span><span style="color:#9ECBFF"> .github/skills</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#79B8FF"> -r</span><span style="color:#9ECBFF"> .apache-magpie/skills/setup</span><span style="color:#9ECBFF"> .agents/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .claude/skills/magpie-setup</span></span>
+<span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -sf</span><span style="color:#9ECBFF"> ../../.agents/skills/magpie-setup</span><span style="color:#9ECBFF"> .github/skills/magpie-setup</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Add gitignore entries (same block as Method 1 step 3 — see there)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Tell your agent: "follow /magpie-setup to finish adopting Magpie."</span></span></code></pre>
+<hr>
+<h2 id="after-any-recipe--let-the-skill-take-over">After any recipe — let the skill take over</h2>
+<p>Once the recipe completes, <code>setup</code> is in your repo and
+the snapshot is on disk (gitignored). Tell your agent:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>follow .agents/skills/magpie-setup to adopt Magpie</span></span></code></pre>
+<p>(or invoke <code>/magpie-setup</code> directly). The skill walks through
+the rest:</p>
+<ol>
+<li><strong>Pick the skill families</strong> to symlink in (<code>security</code>,
+<code>pr-management</code>, <code>issue</code>).</li>
+<li><strong>Write the lock files</strong>:
+<ul>
+<li><code>.apache-magpie.lock</code> (<strong>committed</strong>) — the project’s pin
+(the method + URL + ref you used in the recipe). Future
+adopters of <em>this same repo</em> re-install per this pin.</li>
+<li><code>.apache-magpie.local.lock</code> (<strong>gitignored</strong>) — what THIS
+machine actually fetched (commit SHA, timestamp).</li>
+</ul>
+</li>
+<li><strong>Create the symlinks</strong> for chosen skill families
+(gitignored — they target the gitignored snapshot).</li>
+<li><strong>Scaffold <code>.apache-magpie-overrides/</code></strong> (committed) for
+any local workflow modifications.</li>
+<li><strong>Install a <code>post-checkout</code> git hook</strong> so worktrees
+re-create the gitignored runtime state.</li>
+<li><strong>Update your project documentation</strong> with a brief mention
+of the framework adoption.</li>
+</ol>
+<p>After this, adopters fresh-cloning the repo can run
+<code>/magpie-setup</code> and get the framework provisioned per your
+project’s committed <code>.apache-magpie.lock</code> — no need to redo
+the manual recipe.</p>
+<h2 id="subsequent-runs-and-drift-detection">Subsequent runs and drift detection</h2>
+<p>Every framework skill — and <code>/magpie-setup verify</code> —
+compares the local lock against the committed lock at the top
+of its run. If they have drifted (e.g. the project lead bumped
+<code>.apache-magpie.lock</code> to a newer ref, or the local install is
+stale on a <code>main</code>-tracking adopter), the skill surfaces the
+gap and proposes:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>/magpie-setup upgrade</span></span></code></pre>
+<p><code>upgrade</code> deletes the gitignored snapshot, re-installs per the
+committed lock, refreshes the gitignored symlinks (adding any
+new framework skills, removing any that were renamed away),
+and updates the local lock. See
+<a href="https://github.com/apache/magpie/blob/main/skills/setup/upgrade.md"><code>setup/upgrade.md</code></a>
+for the full flow.</p>
+<h2 id="migrating-a-pre-magpie-apache-magpie-adopter">Migrating a pre-Magpie (<code>apache-magpie</code>) adopter</h2>
+<p>A repo that adopted the framework <strong>before</strong> it was renamed from
+<code>apache-magpie</code> to <strong>Apache Magpie</strong> is on the old layout: a committed
+<code>.claude/skills/magpie-setup/</code> skill, an <code>.apache-magpie/</code> snapshot,
+<code>.apache-magpie.lock</code> / <code>.apache-magpie-overrides/</code>, un-prefixed
+framework symlinks, and <code>~/.config/apache-magpie/</code>. The framework
+<strong>no longer ships an automated migration</strong> for this layout — migrate by
+hand:</p>
+<ol>
+<li>Remove the legacy in-repo artefacts: <code>.apache-magpie*</code> (snapshot,
+locks, overrides), any un-prefixed framework symlinks under the
+skills dir, and the committed <code>.claude/skills/magpie-setup/</code> skill.</li>
+<li>Re-adopt from scratch with <code>/magpie-setup</code> (see
+<a href="https://github.com/apache/magpie/blob/main/skills/setup/adopt.md"><code>setup/adopt.md</code></a>) so the current
+<code>.apache-magpie*</code> layout and <code>magpie-</code>-prefixed symlinks are written
+fresh. Preserve any <code>.apache-magpie-overrides/*.md</code> you want to keep
+by moving them into the new <code>.apache-magpie-overrides/</code> first.</li>
+<li>Move <code>~/.config/apache-magpie/</code> (per-user) to
+<code>~/.config/apache-magpie/</code>, and update any <code>~/.config/apache-magpie/</code>
+entry in your Claude Code sandbox allowlist (project
+<code>.claude/settings.local.json</code> / <code>.claude/settings.json</code> or user-scope
+<code>~/.claude/settings.json</code>) to <code>~/.config/apache-magpie/</code> — otherwise
+sandboxed framework tools cannot read the moved credentials.</li>
+</ol>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/skills" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a></div><div class="flex items-center gap-2"><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a><span class="text-body font-body text-subtext-color">·</span><a class="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const aside = document.querySelector("aside");
+      const active = aside?.querySelector('[aria-current="page"]');
+      if (!aside || !active) return;
+      const target =
+        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
+      aside.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/setup/install-recipes.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>
