@@ -13,11 +13,12 @@
     "authoring": "Skills that author or maintain other skills: `write-skill`, `optimize-skill`."
   },
   "contracts": {
-    "tracker": "Issue / PR / board / label backend.",
+    "tracker": "Issue / board / label backend.",
     "source-control": "Branch / commit / diff / push (VCS).",
+    "change-request": "Proposed-change review + merge gate (pull request / merge request / Gerrit change).",
     "mail-archive": "Mailing-list / forum archive reads.",
     "mail-source": "Inbound-mail ingestion (mbox / IMAP / …).",
-    "mail-draft": "Outbound mail composition (draft, never send).",
+    "mail-create": "Outbound mail composition. Always produces an editable draft; sending is a separate human-approved step on that draft (draft mode = default and the only mode implemented today; send mode declared but unimplemented — no autonomous send).",
     "cve-authority": "CVE allocation / record management / publication.",
     "report-relay": "Inbound security-report relay detection.",
     "scan-format": "Security-scanner report parsing.",
@@ -34,7 +35,7 @@
     {
       "name": "agent-guard",
       "title": "agent-guard",
-      "description": "A deterministic Claude Code PreToolUse guard dispatcher. It inspects every Bash command before it runs and must not depend on the model remembering a SKILL.md instruction.",
+      "description": "A deterministic pre-execution guard dispatcher. It inspects every shell command rule — protections that must not depend on the model remembering a SKILL.md instruction.",
       "labels": [
         {
           "kind": "substrate",
@@ -42,6 +43,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "Claude Code, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -60,6 +64,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "Claude Code, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -78,6 +85,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "ASF",
+      "harness": null,
       "organization": "ASF",
       "mcp": {
         "server": "apache-projects MCP (apache/comdev)",
@@ -87,6 +97,48 @@
       "maturity": "experimental",
       "state": "adapter",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/apache-projects"
+    },
+    {
+      "name": "asf-svn",
+      "title": "asf-svn",
+      "description": "ASF SVN tool adapter — the Subversion counterpart to tools/github/. Where the GitHub tool covers forge issues, project boards, and Git-backed source control, this adapter covers the SVN surfaces that every ASF project uses regardless of…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "source-control"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Subversion",
+      "harness": null,
+      "organization": "ASF",
+      "mcp": null,
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/asf-svn"
+    },
+    {
+      "name": "change-request",
+      "title": "change-request",
+      "description": "The framework's change-proposal adapter contract: the seam that lets a project drive PR-shaped review-and-merge work over a backend that is *not* a GitHub pull request. Today every pr-management-* skill is hardwired to gh pr — gh pr…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "change-request"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/change-request"
     },
     {
       "name": "cve-org",
@@ -99,6 +151,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "CVE.org",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -117,6 +172,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -135,6 +193,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Vulnogram",
+      "harness": null,
       "organization": "ASF",
       "mcp": null,
       "hasCode": false,
@@ -153,6 +214,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -171,6 +235,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -189,6 +256,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -207,6 +277,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -226,9 +299,16 @@
         {
           "kind": "contract",
           "name": "source-control"
+        },
+        {
+          "kind": "contract",
+          "name": "change-request"
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "GitHub",
+      "harness": null,
       "organization": null,
       "mcp": {
         "server": "GitHub MCP",
@@ -250,6 +330,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "GitHub",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -268,6 +351,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "GitHub",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -278,7 +364,7 @@
     {
       "name": "gmail",
       "title": "gmail",
-      "description": "Gmail API substrate. Read + draft-only — never sends. Provides two contracts: mail-source for inbound report intake (search / read a uniform thread/message view) and mail-draft for outbound courtesy-reply drafting. Used by the…",
+      "description": "Gmail API substrate. Read + draft-only — never sends. Provides two contracts: mail-source for inbound report intake (search / read a uniform thread/message view) and mail-create for outbound courtesy-reply composition. It implements…",
       "labels": [
         {
           "kind": "contract",
@@ -286,7 +372,7 @@
         },
         {
           "kind": "contract",
-          "name": "mail-draft"
+          "name": "mail-create"
         },
         {
           "kind": "contract",
@@ -294,6 +380,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Google",
+      "harness": null,
       "organization": null,
       "mcp": {
         "server": "Gmail MCP (claude.ai)",
@@ -315,12 +404,36 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Atlassian",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": true,
       "maturity": "experimental",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/jira"
+    },
+    {
+      "name": "jira-patch",
+      "title": "jira-patch",
+      "description": "JIRA-patch change-request adapter — the backend that lets a JIRA-tracker, SVN-hosted project drive the pr-management-* skills over patches attached to JIRA issues instead of GitHub pull requests. It implements the tools/change-request/…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "change-request"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Atlassian",
+      "harness": null,
+      "organization": "ASF",
+      "mcp": null,
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/jira-patch"
     },
     {
       "name": "mail-archive",
@@ -333,12 +446,36 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
       "maturity": null,
       "state": "adapter",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/mail-archive"
+    },
+    {
+      "name": "mail-patch",
+      "title": "mail-patch",
+      "description": "[PATCH]-mail change-request adapter — the backend that lets a project driving code review over its developer mailing list use the pr-management-* skills. It implements the tools/change-request/ contract for the oldest review mechanism…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "change-request"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "email",
+      "harness": null,
+      "organization": "ASF",
+      "mcp": null,
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/mail-patch"
     },
     {
       "name": "mail-source",
@@ -351,12 +488,40 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
       "maturity": "experimental",
       "state": "adapter",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/mail-source"
+    },
+    {
+      "name": "maildir",
+      "title": "maildir",
+      "description": "The local-files mail backend: one vendor-neutral substrate that serves both mail directions the framework needs, using nothing but the on-disk Maildir / mbox formats and the Python standard library. No cloud provider, no account, no…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "mail-source"
+        },
+        {
+          "kind": "contract",
+          "name": "mail-create"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Maildir",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/maildir"
     },
     {
       "name": "permission-audit",
@@ -369,6 +534,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "Claude Code, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -387,6 +555,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -402,9 +573,16 @@
         {
           "kind": "contract",
           "name": "mail-archive"
+        },
+        {
+          "kind": "contract",
+          "name": "mail-source"
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "PonyMail",
+      "harness": null,
       "organization": "ASF",
       "mcp": {
         "server": "PonyMail MCP (apache/comdev)",
@@ -426,6 +604,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -444,6 +625,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -462,6 +646,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -480,6 +667,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -498,6 +688,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "Claude Code, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -516,6 +709,9 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -534,6 +730,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -552,6 +751,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -570,6 +772,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -588,6 +793,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "Claude Code, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -610,6 +818,9 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -628,12 +839,36 @@
         }
       ],
       "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
       "maturity": "stable",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/spec-validator"
+    },
+    {
+      "name": "symlink-lint",
+      "title": "symlink-lint",
+      "description": "Lints the framework's self-adoption skill symlinks — the canonical .agents/skills/ links and their relays — against two invariants. This is the single place the rationale lives; the module, the prek hook, and the error output all point…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "framework-dev"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "stable",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/symlink-lint"
     },
     {
       "name": "vcs",
@@ -646,18 +881,46 @@
         }
       ],
       "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Git",
+      "harness": null,
       "organization": null,
       "mcp": null,
       "hasCode": true,
       "maturity": null,
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/vcs"
+    },
+    {
+      "name": "vendor-neutrality-score",
+      "title": "vendor-neutrality-score",
+      "description": "A deterministic uv tool that scores Magpie's vendor neutrality from repository metadata alone — no network, no judgement at runtime. It answers the question raised in apache/magpie-site#17: *for each capability contract, does Magpie…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "framework-dev"
+        },
+        {
+          "kind": "substrate",
+          "name": "analytics"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"
     }
   ],
-  "toolsTotal": 33,
-  "implementedTotal": 16,
-  "contractsTotal": 15,
-  "substratesTotal": 18,
+  "toolsTotal": 40,
+  "implementedTotal": 19,
+  "contractsTotal": 20,
+  "substratesTotal": 20,
   "mcpTotal": 4,
   "organizations": [
     {
@@ -667,7 +930,10 @@
       "logo": "https://www.apache.org/foundation/press/kit/asf_logo.svg",
       "tools": [
         "apache-projects",
+        "asf-svn",
         "cve-tool-vulnogram",
+        "jira-patch",
+        "mail-patch",
         "ponymail"
       ],
       "families": [
@@ -692,6 +958,1067 @@
     "contributor-growth",
     "release-management"
   ],
+  "vendorNeutrality": {
+    "minVendors": 2,
+    "overall": {
+      "green": 10,
+      "total": 10,
+      "percent": 100
+    },
+    "contracts": [
+      {
+        "contract": "contract:tracker",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "2 backend vendors: Atlassian, GitHub",
+        "vendors": [
+          "Atlassian",
+          "GitHub"
+        ],
+        "interfaces": [],
+        "implementations": [
+          {
+            "tool": "jira",
+            "vendor": "Atlassian"
+          },
+          {
+            "tool": "github",
+            "vendor": "GitHub"
+          },
+          {
+            "tool": "github-body-field",
+            "vendor": "GitHub"
+          },
+          {
+            "tool": "github-rollup",
+            "vendor": "GitHub"
+          }
+        ]
+      },
+      {
+        "contract": "contract:source-control",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "3 backend vendors: Git, GitHub, Subversion",
+        "vendors": [
+          "Git",
+          "GitHub",
+          "Subversion"
+        ],
+        "interfaces": [],
+        "implementations": [
+          {
+            "tool": "vcs",
+            "vendor": "Git"
+          },
+          {
+            "tool": "github",
+            "vendor": "GitHub"
+          },
+          {
+            "tool": "asf-svn",
+            "vendor": "Subversion"
+          }
+        ]
+      },
+      {
+        "contract": "contract:change-request",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "3 backend vendors: Atlassian, GitHub, email",
+        "vendors": [
+          "Atlassian",
+          "GitHub",
+          "email"
+        ],
+        "interfaces": [
+          "change-request"
+        ],
+        "implementations": [
+          {
+            "tool": "jira-patch",
+            "vendor": "Atlassian"
+          },
+          {
+            "tool": "mail-patch",
+            "vendor": "email"
+          },
+          {
+            "tool": "github",
+            "vendor": "GitHub"
+          }
+        ]
+      },
+      {
+        "contract": "contract:mail-archive",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "2 backend vendors: Google, PonyMail",
+        "vendors": [
+          "Google",
+          "PonyMail"
+        ],
+        "interfaces": [
+          "mail-archive"
+        ],
+        "implementations": [
+          {
+            "tool": "gmail",
+            "vendor": "Google"
+          },
+          {
+            "tool": "ponymail",
+            "vendor": "PonyMail"
+          }
+        ]
+      },
+      {
+        "contract": "contract:mail-source",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "3 backend vendors: Google, Maildir, PonyMail",
+        "vendors": [
+          "Google",
+          "Maildir",
+          "PonyMail"
+        ],
+        "interfaces": [
+          "mail-source"
+        ],
+        "implementations": [
+          {
+            "tool": "gmail",
+            "vendor": "Google"
+          },
+          {
+            "tool": "maildir",
+            "vendor": "Maildir"
+          },
+          {
+            "tool": "ponymail",
+            "vendor": "PonyMail"
+          }
+        ]
+      },
+      {
+        "contract": "contract:mail-create",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "2 backend vendors: Google, Maildir",
+        "vendors": [
+          "Google",
+          "Maildir"
+        ],
+        "interfaces": [],
+        "implementations": [
+          {
+            "tool": "gmail",
+            "vendor": "Google"
+          },
+          {
+            "tool": "maildir",
+            "vendor": "Maildir"
+          }
+        ]
+      },
+      {
+        "contract": "contract:cve-authority",
+        "class": "vendor-backed",
+        "green": true,
+        "basis": "2 backend vendors: CVE.org, Vulnogram",
+        "vendors": [
+          "CVE.org",
+          "Vulnogram"
+        ],
+        "interfaces": [
+          "cve-tool"
+        ],
+        "implementations": [
+          {
+            "tool": "cve-org",
+            "vendor": "CVE.org"
+          },
+          {
+            "tool": "cve-tool-vulnogram",
+            "vendor": "Vulnogram"
+          }
+        ]
+      },
+      {
+        "contract": "contract:report-relay",
+        "class": "agnostic",
+        "green": true,
+        "basis": "vendor-neutral by construction — one spec serves every backend",
+        "vendors": [],
+        "interfaces": [
+          "forwarder-relay"
+        ],
+        "implementations": []
+      },
+      {
+        "contract": "contract:scan-format",
+        "class": "agnostic",
+        "green": true,
+        "basis": "vendor-neutral by construction — one spec serves every backend",
+        "vendors": [],
+        "interfaces": [
+          "scan-format"
+        ],
+        "implementations": []
+      },
+      {
+        "contract": "contract:project-metadata",
+        "class": "single-org",
+        "green": true,
+        "basis": "single-organisation capability (ASF); no vendor choice to make",
+        "vendors": [
+          "ASF"
+        ],
+        "interfaces": [],
+        "implementations": [
+          {
+            "tool": "apache-projects",
+            "vendor": "ASF"
+          }
+        ]
+      }
+    ],
+    "harness": {
+      "neutral": 20,
+      "total": 20,
+      "percent": 100,
+      "tools": [
+        {
+          "tool": "agent-guard",
+          "substrates": [
+            "substrate:action-guard"
+          ],
+          "harnesses": [
+            "Claude Code",
+            "OpenCode"
+          ],
+          "verdict": "portable"
+        },
+        {
+          "tool": "agent-isolation",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [
+            "Claude Code",
+            "OpenCode"
+          ],
+          "verdict": "portable"
+        },
+        {
+          "tool": "dashboard-generator",
+          "substrates": [
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "dev",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "egress-gateway",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "permission-audit",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [
+            "Claude Code",
+            "OpenCode"
+          ],
+          "verdict": "portable"
+        },
+        {
+          "tool": "pilot-report-validator",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "pr-management-stats",
+          "substrates": [
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "preflight-audit",
+          "substrates": [
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "privacy-llm",
+          "substrates": [
+            "substrate:privacy"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "probe-templates",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "sandbox-lint",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [
+            "Claude Code",
+            "OpenCode"
+          ],
+          "verdict": "portable"
+        },
+        {
+          "tool": "security-tracker-stats-dashboard",
+          "substrates": [
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "skill-and-tool-validator",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "skill-evals",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "spec-loop",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [
+            "Claude Code",
+            "OpenCode"
+          ],
+          "verdict": "portable"
+        },
+        {
+          "tool": "spec-status-index",
+          "substrates": [
+            "substrate:framework-dev",
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "spec-validator",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "symlink-lint",
+          "substrates": [
+            "substrate:framework-dev"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "vendor-neutrality-score",
+          "substrates": [
+            "substrate:framework-dev",
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        }
+      ],
+      "matrix": {
+        "Claude Code": [
+          "agent-guard",
+          "agent-isolation",
+          "permission-audit",
+          "sandbox-lint",
+          "spec-loop"
+        ],
+        "OpenCode": [
+          "agent-guard",
+          "agent-isolation",
+          "permission-audit",
+          "sandbox-lint",
+          "spec-loop"
+        ],
+        "agnostic": [
+          "dashboard-generator",
+          "dev",
+          "egress-gateway",
+          "pilot-report-validator",
+          "pr-management-stats",
+          "preflight-audit",
+          "privacy-llm",
+          "probe-templates",
+          "security-tracker-stats-dashboard",
+          "skill-and-tool-validator",
+          "skill-evals",
+          "spec-status-index",
+          "spec-validator",
+          "symlink-lint",
+          "vendor-neutrality-score"
+        ]
+      }
+    },
+    "llm": {
+      "defaultApproved": [
+        {
+          "class": "Claude Code itself",
+          "examples": "The agent invoking the skill"
+        },
+        {
+          "class": "*.apache.org-hosted endpoints",
+          "examples": "A future ASF-hosted inference endpoint at e.g. `inference.apache.org`; an in-tracker endpoint at `<project>.apache.org/llm/`"
+        },
+        {
+          "class": "Local-only inference",
+          "examples": "Ollama serving a local model, vLLM on the user's workstation, llama.cpp embedded in a CLI helper"
+        },
+        {
+          "class": "Air-gapped on-prem",
+          "examples": "A PMC-hosted inference appliance on a private VLAN"
+        }
+      ],
+      "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
+    },
+    "skills": {
+      "total": 63,
+      "neutral": 63,
+      "byVerdict": {
+        "capability-pure": 9,
+        "portable": 54,
+        "vendor-coupled": 0
+      },
+      "byOrg": {
+        "agnostic": 49,
+        "ASF": 14
+      },
+      "coupled": [],
+      "list": [
+        {
+          "skill": "audit-finding-fix",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "ci-runner-audit",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "committer-onboarding",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "contributor-activity-sweep",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "contributor-nomination",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:project-metadata",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "contributor-to-committer",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "dependency-audit",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "flaky-test-triage",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "good-first-issue-author",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "good-first-issue-sweep",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-backlog-stats",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-deduplicate",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-fix-workflow",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:source-control",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-reassess",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "issue-reassess-stats",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "issue-reproducer",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-stale-sweep",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "issue-triage",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "license-compliance-audit",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "list-skills",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "mentoring-welcome",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "optimize-skill",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "pairing-multi-agent-review",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pairing-self-review",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pr-management-code-review",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pr-management-mentor",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pr-management-quick-merge",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pr-management-stats",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "pr-management-triage",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-announce-draft",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-archive-sweep",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:source-control",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-audit-report",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-keys-sync",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-prepare",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-promote",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:source-control",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-rc-cut",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:source-control",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-verify-rc",
+          "verdict": "capability-pure",
+          "organization": "ASF",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "release-vote-draft",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "release-vote-tally",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "reviewer-routing",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-cve-allocate",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:cve-authority",
+            "contract:mail-archive",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-deduplicate",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:cve-authority",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-fix",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:source-control",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-import",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:mail-archive",
+            "contract:mail-create",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-import-from-md",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-import-from-pr",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-import-from-scan",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-import-via-forwarder",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:mail-create"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-invalidate",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:cve-authority",
+            "contract:mail-archive",
+            "contract:mail-create",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-sync",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:cve-authority",
+            "contract:mail-archive",
+            "contract:mail-create",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-issue-triage",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:mail-archive",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "security-tracker-stats-dashboard",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-isolated-setup-doctor",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-isolated-setup-install",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-isolated-setup-update",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "setup-isolated-setup-verify",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-override-upstream",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request",
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-shared-config-sync",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "setup-status",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:source-control"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "skill-reconciler",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "workflow-security-audit",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "write-skill",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        }
+      ]
+    }
+  },
   "skills": {
     "total": 63,
     "apacheLicensed": 63,

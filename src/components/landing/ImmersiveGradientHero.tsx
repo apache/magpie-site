@@ -106,6 +106,35 @@ const AsfOakLeaf = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// Headline vendor-neutrality scores, summarised from the generated tools.json
+// (the same source the /tools page uses; see scripts/gen-tools.mjs).
+const vnData = toolsData.vendorNeutrality as {
+  overall: { green: number; total: number; percent: number };
+  skills: { neutral: number; total: number };
+  harness?: { neutral: number; total: number; percent: number };
+};
+const VN_SCORES = [
+  {
+    value: `${vnData.overall.green}/${vnData.overall.total}`,
+    label: "Capability contracts",
+    sub: `${vnData.overall.percent}% work across 2+ vendors`,
+  },
+  {
+    value: `${vnData.skills.neutral}/${vnData.skills.total}`,
+    label: "Skills",
+    sub: "carry no vendor lock-in",
+  },
+  ...(vnData.harness
+    ? [
+        {
+          value: `${vnData.harness.neutral}/${vnData.harness.total}`,
+          label: "Agent harness",
+          sub: `${vnData.harness.percent}% harness-neutral`,
+        },
+      ]
+    : []),
+];
+
 const SKILL_FAMILIES = [
   {
     name: "setup",
@@ -1091,7 +1120,6 @@ function ImmersiveGradientHero() {
         <div className="flex grow shrink-0 basis-0 flex-col items-start gap-6">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Vendor neutral
-            <sup className="text-[0.5em] font-[700] text-brand-600 align-super">*</sup>
           </span>
           <span className="text-body font-body text-subtext-color">
             Magpie&apos;s workflows never name a vendor.{" "}
@@ -1105,13 +1133,28 @@ function ImmersiveGradientHero() {
             governance. Swapping a backend is a config change, never a rewrite of
             the workflows.
           </span>
+          <div className="flex w-full flex-wrap gap-3">
+            {VN_SCORES.map((s) => (
+              <div
+                key={s.label}
+                className="flex min-w-[150px] grow basis-0 flex-col gap-1 rounded-2xl border border-solid border-warning-200 bg-default-background px-4 py-3"
+              >
+                <span className="font-['Inter'] text-[30px] font-[700] leading-none text-default-font">
+                  {s.value}
+                </span>
+                <span className="text-caption-bold font-caption-bold text-default-font">
+                  {s.label}
+                </span>
+                <span className="text-caption font-caption text-subtext-color">
+                  {s.sub}
+                </span>
+              </div>
+            ))}
+          </div>
           <span className="text-caption font-caption italic text-subtext-color">
-            <span className="not-italic text-brand-600">*</span> Aspirationally,
-            Magpie is truly vendor neutral and truly organisation agnostic. We are
-            working on the tools, and with other organisations, to make sure that
-            every tool and organisational capability — already implemented in our
-            architecture and design — has multiple implementations and supports
-            multiple organisations.
+            Live figures from the framework repo — every axis already works across
+            more than one vendor or is neutral by construction; we keep adding
+            backends and organisations so the numbers stay honest.
           </span>
           <div className="flex flex-wrap gap-3">
             <a
@@ -1189,9 +1232,7 @@ function ImmersiveGradientHero() {
       <div id="organisation-agnostic" className="flex w-full flex-col items-center bg-default-background px-8 py-24 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[760px] pb-12 mobile:pb-8">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
-            All organisations
-            <sup className="text-[0.5em] font-[700] text-brand-600 align-super">*</sup>{" "}
-            are welcome
+            All organisations are welcome
           </span>
           <span className="text-body font-body text-subtext-color text-center">
             Magpie isn&apos;t hardwired to the Apache Software Foundation. A
@@ -1205,14 +1246,6 @@ function ImmersiveGradientHero() {
             or your own) once and inherits the rest — so the{" "}
             <span className="font-body-bold text-default-font">same skill</span>{" "}
             runs unchanged for an ASF project and a non-ASF one.
-          </span>
-          <span className="text-caption font-caption italic text-subtext-color text-center">
-            <span className="not-italic text-brand-600">*</span> Aspirationally,
-            Magpie is truly vendor neutral and truly organisation agnostic. We are
-            working on the tools, and with other organisations, to make sure that
-            every tool and organisational capability — already implemented in our
-            architecture and design — has multiple implementations and supports
-            multiple organisations.
           </span>
         </BlurFade>
         <div className="grid w-full grid-cols-2 gap-4 max-w-[1000px] mobile:grid-cols-1">
