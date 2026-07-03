@@ -1370,6 +1370,15 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+            href={withBase("/skills/skill-sources/authoring-a-source")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Authoring an external skill source
+            <ArrowUpRight className="size-3.5" />
+          </a>
+          <a
+            className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
             href={withBase("/tools")}
             target="_blank"
             rel="noreferrer"
