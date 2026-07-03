@@ -185,6 +185,24 @@ function organizationOf(md) {
   const m = md.match(/^\*\*Organization:\*\*\s*([A-Za-z0-9_-]+)/m);
   return m ? m[1] : null;
 }
+// Vendor-neutrality metadata every contract tool declares (RFC magpie-site#17):
+//   **Kind:** interface | implementation
+//   **Vendor:** <backend identity> | agnostic
+// These feed the deterministic vendor-neutrality score below.
+function kindOf(md) {
+  const m = md.match(/^\*\*Kind:\*\*\s*(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+}
+function vendorOf(md) {
+  const m = md.match(/^\*\*Vendor:\*\*\s*(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+}
+// Substrate tools declare **Harness:** — the agent harness they integrate with
+// (or `agnostic`) — for the LLM-integration (agent-harness) neutrality axis.
+function harnessOf(md) {
+  const m = md.match(/^\*\*Harness:\*\*\s*(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+}
 
 const tools = [];
 for (const name of readdirSync(toolsDir).sort()) {
@@ -203,6 +221,11 @@ for (const name of readdirSync(toolsDir).sort()) {
     description: firstParagraph(readme),
     labels: tlabels,
     kind: tlabels.some((l) => l.kind === "contract") ? "contract" : "substrate",
+    // Vendor-neutrality axis (only meaningful for contract tools): whether this
+    // is a pure interface or a concrete backend, and the backend's identity.
+    vendorKind: kindOf(readme),
+    vendor: vendorOf(readme),
+    harness: harnessOf(readme),
     organization: organizationOf(readme),
     mcp: mcpByTool[name] ?? null,
     hasCode,
@@ -278,20 +301,251 @@ if (isDir(orgsDir)) {
 }
 
 // --- skills summary ------------------------------------------------------
+// Collect each skill's frontmatter + body once; the body is scanned below for
+// the concrete backends a skill invokes (vendor-neutrality per-skill verdict).
+const skillRecords = []; // { name, org, body }
 let skillTotal = 0;
 let apacheLicensed = 0;
 const skillsByOrg = {};
 if (isDir(skillsDir)) {
-  for (const name of readdirSync(skillsDir)) {
+  for (const name of readdirSync(skillsDir).sort()) {
     const sp = join(skillsDir, name, "SKILL.md");
     if (!existsSync(sp)) continue;
     skillTotal++;
-    const fm = read(sp).split(/^---\s*$/m)[1] ?? "";
+    const text = read(sp);
+    const fm = text.split(/^---\s*$/m)[1] ?? "";
     if (/^license:\s*Apache-2\.0/m.test(fm)) apacheLicensed++;
     const om = fm.match(/^organization:\s*([A-Za-z0-9_-]+)/m);
     if (om) skillsByOrg[om[1]] = (skillsByOrg[om[1]] || 0) + 1;
+    // Body = everything after the second `---` (matches the scorer's split).
+    const parts = text.split(/^---\s*$/m);
+    const body = parts.length >= 3 ? parts.slice(2).join("---") : text;
+    skillRecords.push({ name, org: om ? om[1] : "agnostic", body });
   }
 }
+
+// --- vendor-neutrality score (deterministic, mirrors magpie's
+// tools/vendor-neutrality-score) -----------------------------------------
+// Measured per capability *contract*. Substrate tools are Magpie's own
+// machinery and never count. Each contract belongs to one of three classes
+// (the only hand-maintained policy, kept in lockstep with the framework tool):
+//   vendor-backed → GREEN once ≥ MIN_VENDORS distinct backend vendors ship it
+//   agnostic      → GREEN by construction (one spec serves every backend)
+//   single-org    → GREEN by exemption (bound to one org's data model)
+const MIN_VENDORS = 2;
+const VENDOR_BACKED = "vendor-backed";
+const AGNOSTIC = "agnostic";
+const SINGLE_ORG = "single-org";
+// [contract, class] in the canonical order the framework tool emits.
+// Neutrality CLASS per contract (the only hand-maintained policy). Everything
+// defaults to vendor-backed; only the agnostic / single-org exceptions are
+// listed. The contract *set* is derived from the taxonomy doc (`contracts`,
+// parsed from docs/labels-and-capabilities.md) rather than hard-coded, so a
+// renamed or newly-added contract (e.g. mail-draft → mail-create) is scored
+// automatically instead of being silently dropped.
+const CONTRACT_CLASS = {
+  "contract:report-relay": AGNOSTIC,
+  "contract:scan-format": AGNOSTIC,
+  "contract:project-metadata": SINGLE_ORG,
+};
+const CONTRACT_POLICY = Object.keys(contracts).map((c) => [
+  `contract:${c}`,
+  CONTRACT_CLASS[`contract:${c}`] ?? VENDOR_BACKED,
+]);
+// High-confidence usage signals (MCP tool names, CLI verbs, hostnames) that a
+// skill actually *invokes* a contract's backend — not mere prose mentions.
+// Agnostic contracts are omitted (they never change a verdict).
+const CONTRACT_USAGE_TOKENS = {
+  "contract:tracker": [
+    /mcp__github__/,
+    /\bgh (?:issue|api|search|run|workflow|release|label)\b/,
+    /\bJIRA\b/,
+  ],
+  // `gh pr` is the change-request contract, not tracker (Jira has no PR model).
+  "contract:change-request": [/\bgh pr\b/],
+  "contract:source-control": [
+    /\bgit (?:commit|push|checkout|branch|rebase|merge|switch|worktree)\b/,
+    /\bsvn (?:checkout|commit|update|cat|list|mkdir|import|move|delete|switch|copy)\b/,
+  ],
+  "contract:mail-archive": [
+    /mcp__ponymail__/,
+    /mcp__claude_ai_Gmail__(?:search_threads|get_thread|list_)/,
+  ],
+  "contract:mail-create": [/mcp__claude_ai_Gmail__create_draft/, /\bcreate_draft\b/],
+  "contract:cve-authority": [/\bVulnogram\b/, /\bcveawg\b/, /\bcve\.org\b/],
+  "contract:project-metadata": [/mcp__apache-projects__/, /\bprojects\.apache\.org\b/],
+};
+
+const contractTools = tools.filter((t) =>
+  t.labels.some((l) => l.kind === "contract"),
+);
+const providersOf = (contract) =>
+  contractTools.filter((t) =>
+    t.labels.some((l) => l.kind === "contract" && `contract:${l.name}` === contract),
+  );
+
+const vnContracts = CONTRACT_POLICY.map(([contract, klass]) => {
+  const providers = providersOf(contract);
+  const interfaces = providers
+    .filter((t) => t.vendorKind === "interface")
+    .map((t) => t.name)
+    .sort();
+  const implementations = providers
+    .filter((t) => t.vendorKind === "implementation")
+    .map((t) => ({ tool: t.name, vendor: t.vendor }))
+    .sort((a, b) => a.vendor.localeCompare(b.vendor));
+  const vendors = [...new Set(implementations.map((i) => i.vendor))].sort();
+  let green = false;
+  let basis = "";
+  if (klass === AGNOSTIC) {
+    green = true;
+    basis = "vendor-neutral by construction — one spec serves every backend";
+  } else if (klass === SINGLE_ORG) {
+    green = true;
+    const org = vendors.join(", ") || "a single organisation";
+    basis = `single-organisation capability (${org}); no vendor choice to make`;
+  } else {
+    const n = vendors.length;
+    green = n >= MIN_VENDORS;
+    basis = green
+      ? `${n} backend vendors: ${vendors.join(", ")}`
+      : n === 0
+        ? "no backend implemented yet"
+        : `only ${n} backend vendor (${vendors.join(", ")}); needs ${MIN_VENDORS - n} more`;
+  }
+  return { contract, class: klass, green, basis, vendors, interfaces, implementations };
+});
+
+const greenByContract = Object.fromEntries(vnContracts.map((r) => [r.contract, r.green]));
+// A not-green vendor-backed contract with exactly one backend is a real
+// lock-in; name the sole vendor so the report can attribute it.
+const soleVendor = {};
+for (const r of vnContracts) {
+  if (r.class === VENDOR_BACKED && !r.green && r.vendors.length === 1) {
+    soleVendor[r.contract] = r.vendors[0];
+  }
+}
+const usagePatterns = Object.entries(CONTRACT_USAGE_TOKENS);
+const vnSkills = skillRecords.map(({ name, org, body }) => {
+  const used = usagePatterns
+    .filter(([, regexes]) => regexes.some((re) => re.test(body)))
+    .map(([c]) => c)
+    .sort();
+  const coupled = used
+    .filter((c) => !greenByContract[c] && c in soleVendor)
+    .map((c) => ({ vendor: soleVendor[c], contract: c }))
+    .sort((a, b) => a.vendor.localeCompare(b.vendor) || a.contract.localeCompare(b.contract));
+  const verdict =
+    used.length === 0 ? "capability-pure" : coupled.length ? "vendor-coupled" : "portable";
+  return { skill: name, organization: org, contractsUsed: used, verdict, coupled };
+});
+
+const vnByVerdict = { "capability-pure": 0, portable: 0, "vendor-coupled": 0 };
+const vnByOrg = {};
+for (const s of vnSkills) {
+  vnByVerdict[s.verdict] = (vnByVerdict[s.verdict] || 0) + 1;
+  vnByOrg[s.organization] = (vnByOrg[s.organization] || 0) + 1;
+}
+const vnGreen = vnContracts.filter((r) => r.green).length;
+const vnTotal = vnContracts.length;
+
+// --- LLM-integration axis (mirrors magpie's vendor-neutrality-score) --------
+// Part A — agent harness: substrate tools declare **Harness:** (a harness or
+// `agnostic`); a tool is harness-neutral when agnostic or supporting ≥2 harnesses.
+// Emitted only when substrate tools declare the field (i.e. once the upstream
+// framework carries it), so a resync against an older magpie stays valid.
+const AGNOSTIC_HARNESS = "agnostic";
+const substrateTools = tools.filter(
+  (t) => t.labels.some((l) => l.kind === "substrate") && !t.labels.some((l) => l.kind === "contract"),
+);
+const vnHarness = substrateTools
+  .filter((t) => t.harness)
+  .map((t) => {
+    const substrates = t.labels
+      .filter((l) => l.kind === "substrate")
+      .map((l) => `substrate:${l.name}`);
+    let harnesses = [];
+    let verdict;
+    if (t.harness.toLowerCase() === AGNOSTIC_HARNESS) {
+      verdict = "agnostic";
+    } else {
+      harnesses = [...new Set(t.harness.split(",").map((h) => h.trim()).filter(Boolean))].sort();
+      verdict = harnesses.length >= MIN_VENDORS ? "portable" : "coupled";
+    }
+    return { tool: t.name, substrates, harnesses, verdict };
+  })
+  .sort((a, b) => a.tool.localeCompare(b.tool));
+const harnessMatrix = {};
+for (const r of vnHarness) {
+  if (r.verdict === "agnostic") (harnessMatrix[AGNOSTIC_HARNESS] ??= []).push(r.tool);
+  else for (const h of r.harnesses) (harnessMatrix[h] ??= []).push(r.tool);
+}
+for (const h of Object.keys(harnessMatrix)) harnessMatrix[h].sort();
+const harnessNeutral = vnHarness.filter((r) => r.verdict !== "coupled").length;
+
+// Part B — approved-LLM endpoint classes from tools/privacy-llm/models.md.
+function parseApprovedLlms() {
+  const md = read(join(toolsDir, "privacy-llm", "models.md"));
+  const heading = "## The default-approved entries";
+  if (!md.includes(heading)) return [];
+  const section = md.split(heading)[1].split("\n## ")[0];
+  const rows = [];
+  for (const line of section.split("\n")) {
+    const l = line.trim();
+    if (!l.startsWith("|") || l.startsWith("|--") || /\|\s*Class\s*\|/.test(l)) continue;
+    const cells = l.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+    if (cells.length < 3) continue;
+    const name = cells[0].replace(/\*\*/g, "").replace(/`/g, "").trim();
+    if (name) rows.push({ class: name, examples: cells[2].trim() });
+  }
+  return rows;
+}
+const vnLlm = parseApprovedLlms();
+
+const vendorNeutrality = {
+  minVendors: MIN_VENDORS,
+  overall: {
+    green: vnGreen,
+    total: vnTotal,
+    percent: vnTotal ? Math.round((100 * vnGreen) / vnTotal) : 0,
+  },
+  contracts: vnContracts,
+  ...(vnHarness.length > 0 && {
+    harness: {
+      neutral: harnessNeutral,
+      total: vnHarness.length,
+      percent: vnHarness.length ? Math.round((100 * harnessNeutral) / vnHarness.length) : 0,
+      tools: vnHarness,
+      matrix: harnessMatrix,
+    },
+  }),
+  ...(vnLlm.length > 0 && {
+    llm: {
+      defaultApproved: vnLlm,
+      optIn: "adopter-declared in <project-config>/privacy-llm.md (no fixed list)",
+    },
+  }),
+  skills: {
+    total: vnSkills.length,
+    neutral: vnByVerdict["capability-pure"] + vnByVerdict.portable,
+    byVerdict: vnByVerdict,
+    byOrg: vnByOrg,
+    coupled: vnSkills
+      .filter((s) => s.verdict === "vendor-coupled")
+      .map((s) => ({ skill: s.skill, coupled: s.coupled })),
+    // Full per-skill assessment so the site can list the skills in each bucket.
+    // Sorted by name; `contractsUsed` explains a portable/coupled verdict.
+    list: [...vnSkills]
+      .sort((a, b) => a.skill.localeCompare(b.skill))
+      .map((s) => ({
+        skill: s.skill,
+        verdict: s.verdict,
+        organization: s.organization,
+        contractsUsed: s.contractsUsed,
+        coupled: s.coupled,
+      })),
+  },
+};
 
 const out = {
   _comment:
@@ -309,6 +563,7 @@ const out = {
   organizations,
   orgFamilies,
   asfFamilies,
+  vendorNeutrality,
   skills: {
     total: skillTotal,
     apacheLicensed,
@@ -324,5 +579,6 @@ console.log(
     `(${out.contractsTotal} contract, ${out.substratesTotal} substrate, ${out.implementedTotal} with code), ` +
     `${Object.keys(capabilities).length} skill-capabilities, ` +
     `${Object.keys(contracts).length} contracts, ${Object.keys(substrates).length} substrates, ` +
-    `${organizations.length} orgs, ${skillTotal} skills`,
+    `${organizations.length} orgs, ${skillTotal} skills, ` +
+    `vendor-neutrality ${vendorNeutrality.overall.green}/${vendorNeutrality.overall.total} (${vendorNeutrality.overall.percent}%)`,
 );

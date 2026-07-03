@@ -13,12 +13,53 @@ type Tool = {
   description: string;
   labels: Label[];
   kind: string;
+  vendor: string | null;
+  vendorKind: string | null;
   organization: string | null;
   mcp: { server: string; prefix: string } | null;
   hasCode: boolean;
   maturity: string | null;
   state: string;
   docUrl: string;
+};
+type VendorNeutrality = {
+  minVendors: number;
+  overall: { green: number; total: number; percent: number };
+  contracts: {
+    contract: string;
+    class: string;
+    green: boolean;
+    basis: string;
+    vendors: string[];
+    interfaces: string[];
+    implementations: { tool: string; vendor: string }[];
+  }[];
+  skills: {
+    total: number;
+    neutral: number;
+    byVerdict: Record<string, number>;
+    byOrg: Record<string, number>;
+    coupled: { skill: string; coupled: { vendor: string; contract: string }[] }[];
+    list: {
+      skill: string;
+      verdict: string;
+      organization: string;
+      contractsUsed: string[];
+      coupled: { vendor: string; contract: string }[];
+    }[];
+  };
+  // LLM-integration axis (present once magpie declares the data — see #680).
+  harness?: {
+    neutral: number;
+    total: number;
+    percent: number;
+    tools: { tool: string; substrates: string[]; harnesses: string[]; verdict: string }[];
+    matrix: Record<string, string[]>;
+  };
+  llm?: {
+    defaultApproved: { class: string; examples: string }[];
+    optIn: string;
+  };
 };
 type Org = {
   id: string;
@@ -40,6 +81,7 @@ const data = toolsData as {
   substratesTotal: number;
   mcpTotal: number;
   organizations: Org[];
+  vendorNeutrality: VendorNeutrality;
   skills: { total: number; byOrg: Record<string, number>; license: string };
 };
 
@@ -79,7 +121,8 @@ const orgChips = Object.keys(orgCounts)
   .map((id) => ({
     id,
     label: orgById[id]?.name ?? id,
-    logo: orgById[id]?.logo ?? null,
+    // ASF is shown as its oak-leaf mark, never the Apache feather (asf_logo.svg).
+    logo: (id === "ASF" ? `${base}/vendor-logos/oak.svg` : orgById[id]?.logo) ?? null,
     count: orgCounts[id],
   }));
 const agnosticCount = orgCounts[AGNOSTIC] ?? 0;
@@ -88,6 +131,94 @@ const agnosticCount = orgCounts[AGNOSTIC] ?? 0;
 const labelDefs: Record<string, string> = {};
 for (const [k, v] of Object.entries(data.contracts)) labelDefs[`contract:${k}`] = v;
 for (const [k, v] of Object.entries(data.substrates)) labelDefs[`substrate:${k}`] = v;
+
+// --- vendor neutrality ---------------------------------------------------
+const vn = data.vendorNeutrality;
+// Site-side map of a backend vendor's identity → a bundled brand logo. Kept
+// here (presentation) rather than in the generated data (framework facts);
+// vendors with no recognizable mark fall back to their name.
+const VENDOR_LOGOS: Record<string, string> = {
+  GitHub: `${base}/vendor-logos/github.svg`,
+  Git: `${base}/vendor-logos/git.svg`,
+  Subversion: `${base}/vendor-logos/subversion.svg`,
+  Atlassian: `${base}/vendor-logos/atlassian.svg`,
+  Google: `${base}/vendor-logos/google.svg`,
+  PonyMail: `${base}/vendor-logos/oak.svg`,
+  ASF: `${base}/vendor-logos/oak.svg`,
+};
+const vendorLogo = (v: string | null) => (v ? (VENDOR_LOGOS[v] ?? null) : null);
+// The ASF is represented by its oak-leaf mark, never the Apache feather. The
+// upstream org metadata still points at the feather (asf_logo.svg), so override
+// the ASF organization's logo to the bundled oak wherever it renders.
+const OAK_LOGO = `${base}/vendor-logos/oak.svg`;
+const orgLogoOf = (o: { id: string; logo: string | null } | null | undefined) =>
+  o ? (o.id === "ASF" ? OAK_LOGO : o.logo) : null;
+// Distinct backend vendors (implementation tools only) → tool count, for the
+// vendor filter dimension.
+const vendorCounts: Record<string, number> = {};
+for (const t of tools) {
+  if (t.vendorKind === "implementation" && t.vendor && t.vendor !== "agnostic") {
+    vendorCounts[t.vendor] = (vendorCounts[t.vendor] ?? 0) + 1;
+  }
+}
+const vendorChips = Object.keys(vendorCounts)
+  .sort()
+  .map((v) => ({ vendor: v, logo: vendorLogo(v), count: vendorCounts[v] }));
+const interfaceCount = tools.filter((t) => t.vendorKind === "interface").length;
+
+// Neutrality-class badge styling for the per-contract score cards.
+const CLASS_STYLE: Record<string, string> = {
+  "vendor-backed": "bg-brand-50 text-brand-700 border-brand-200",
+  agnostic: "bg-neutral-100 text-neutral-700 border-neutral-200",
+  "single-org": "bg-neutral-100 text-neutral-700 border-neutral-200",
+};
+const CLASS_LABEL: Record<string, string> = {
+  "vendor-backed": "vendor-backed",
+  agnostic: "agnostic",
+  "single-org": "single-org",
+};
+// A contract tool is a concrete backend for a vendor, or a pure interface spec.
+const isImplementation = (t: Tool) =>
+  t.vendorKind === "implementation" && !!t.vendor && t.vendor !== "agnostic";
+
+// Skills grouped into the three neutrality buckets, for the per-bucket lists.
+const VERDICT_META = [
+  {
+    key: "capability-pure",
+    label: "Capability-pure",
+    def: "names no backend at all",
+    tone: "success" as const,
+  },
+  {
+    key: "portable",
+    label: "Portable",
+    def: "every backend it invokes is swappable",
+    tone: "success" as const,
+  },
+  {
+    key: "vendor-coupled",
+    label: "Vendor-coupled",
+    def: "reaches for a capability's sole backend",
+    tone: "error" as const,
+  },
+];
+const skillsByVerdict = Object.fromEntries(
+  VERDICT_META.map((v) => [v.key, vn.skills.list.filter((s) => s.verdict === v.key)]),
+);
+const shortContract = (c: string) => c.replace(/^contract:/, "");
+
+// LLM-integration axis: group substrate tools by their agent-harness verdict.
+const HARNESS_VERDICT_META = [
+  { key: "agnostic", label: "Harness-agnostic", def: "runs under any agent harness", tone: "success" as const },
+  { key: "portable", label: "Multi-harness", def: "supports two or more harnesses", tone: "success" as const },
+  { key: "coupled", label: "Harness-coupled", def: "targets one harness today", tone: "error" as const },
+];
+type HarnessTool = NonNullable<VendorNeutrality["harness"]>["tools"][number];
+const harnessByVerdict: Record<string, HarnessTool[]> = vn.harness
+  ? Object.fromEntries(
+      HARNESS_VERDICT_META.map((v) => [v.key, vn.harness!.tools.filter((t) => t.verdict === v.key)]),
+    )
+  : {};
 
 const VENDOR_NEUTRALITY = `${base}/skills/vendor-neutrality`;
 const EXTENDING = `${base}/skills/extending`;
@@ -100,6 +231,7 @@ const SECTIONS = [
   { id: "model", label: "The model" },
   { id: "skill-capabilities", label: "Skill capabilities" },
   { id: "tool-capabilities", label: "Tool capabilities" },
+  { id: "vendor-neutrality", label: "Vendor neutrality" },
   { id: "tools", label: "Tools" },
   { id: "organizations", label: "Organizations" },
   { id: "extend", label: "Extending" },
@@ -162,6 +294,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           <span><strong class="text-default-font">{data.substratesTotal}</strong> substrate tools</span>
           <span><strong class="text-default-font">{data.organizations.length}</strong> organizations</span>
           <span><strong class="text-default-font">{data.skills.total}</strong> skills</span>
+          <span><strong class="text-success-700">{vn.overall.percent}%</strong> vendor-neutral</span>
         </div>
       </header>
     </div>
@@ -277,14 +410,256 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       </div>
     </section>
 
+    <!-- Vendor neutrality -->
+    <section id="vendor-neutrality" class={`${band} bg-default-background scroll-mt-14`}>
+      <div class={inner}>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Vendor neutrality</h2>
+          <p class="text-body font-body text-subtext-color max-w-[820px]">
+            Not a slogan — a <strong>deterministic score</strong>, computed straight from repository metadata by{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href="https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score" target="_blank" rel="noreferrer">tools/vendor-neutrality-score</a>{" "}
+            and regenerated with this page, so the number cannot drift from the code. Neutrality is measured per{" "}
+            <strong>capability contract</strong>: a contract is green once two or more backend vendors implement it,
+            by construction when one spec serves every backend, or by exemption when it is bound to a single
+            organization's data model.
+          </p>
+        </div>
+
+        <!-- Score hero -->
+        <div class="grid grid-cols-3 gap-4 mobile:grid-cols-1">
+          <div class="flex flex-col justify-center gap-2 rounded-2xl border border-solid border-success-200 bg-success-50 px-6 py-6">
+            <div class="flex items-baseline gap-2">
+              <span class="font-['Inter'] text-[44px] font-[700] leading-none text-success-700">{vn.overall.green}<span class="text-[24px] text-success-600">/{vn.overall.total}</span></span>
+              <span class="rounded-full bg-success-100 px-2.5 py-1 text-caption-bold font-caption-bold text-success-700">{vn.overall.percent}%</span>
+            </div>
+            <span class="text-body-bold font-body-bold text-default-font">capability contracts are vendor neutral</span>
+            <div class="mt-1 h-2 w-full overflow-hidden rounded-full bg-success-100">
+              <div class="h-full rounded-full bg-success-500" style={`width:${vn.overall.percent}%`}></div>
+            </div>
+          </div>
+          <div class="col-span-2 flex flex-col justify-center gap-2 rounded-2xl border border-solid border-neutral-200 bg-neutral-50 px-6 py-6 mobile:col-span-1">
+            <span class="text-body-bold font-body-bold text-default-font">
+              {vn.skills.neutral} of {vn.skills.total} skills carry no vendor lock-in.
+            </span>
+            <p class="text-caption font-caption text-subtext-color max-w-[640px]">
+              A skill is <strong>capability-pure</strong> when it names no backend, <strong>portable</strong> when
+              every backend it invokes has an alternative, and <strong>vendor-coupled</strong> only when it reaches
+              for the sole implementation of a capability. Swap in a second backend for that capability and every
+              coupled skill becomes portable — without a line of skill code changing.
+            </p>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-success-200 bg-success-50 px-3 py-1 text-caption font-caption text-success-700"><strong>{vn.skills.byVerdict["capability-pure"] ?? 0}</strong> capability-pure</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-success-200 bg-success-50 px-3 py-1 text-caption font-caption text-success-700"><strong>{vn.skills.byVerdict["portable"] ?? 0}</strong> portable</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-error-200 bg-error-50 px-3 py-1 text-caption font-caption text-error-700"><strong>{vn.skills.byVerdict["vendor-coupled"] ?? 0}</strong> vendor-coupled</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Per-contract score table -->
+        <h3 class="text-heading-3 font-heading-3 text-default-font pt-2">Per-contract score</h3>
+        <div class="grid grid-cols-2 gap-3 mobile:grid-cols-1">
+          {vn.contracts.map((c) => (
+            <div class={`flex flex-col gap-2 rounded-xl border border-solid px-4 py-3 ${c.green ? "border-success-200 bg-success-50/40" : "border-error-200 bg-error-50/50"}`}>
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-mono text-body-bold font-body-bold text-default-font">{c.contract}</span>
+                <span class={`flex-none rounded-full px-2 py-0.5 text-caption-bold font-caption-bold ${c.green ? "bg-success-100 text-success-700" : "bg-error-100 text-error-700"}`} title={c.green ? "Vendor neutral" : "Single-backend gap"}>{c.green ? "✓ neutral" : "✗ gap"}</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class={`rounded-md border border-solid px-2 py-0.5 text-caption font-caption ${CLASS_STYLE[c.class]}`}>{CLASS_LABEL[c.class]}</span>
+                {c.implementations.length > 0
+                  ? c.implementations.map((impl) => (
+                      <span class="inline-flex items-center gap-1 rounded-md border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`${impl.vendor} — tools/${impl.tool}`}>
+                        {vendorLogo(impl.vendor)
+                          ? <img src={vendorLogo(impl.vendor)} alt={impl.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" />
+                          : null}
+                        {impl.vendor}
+                      </span>
+                    ))
+                  : <span class="text-caption font-caption text-subtext-color">one spec, every backend</span>}
+              </div>
+              <span class="text-caption font-caption text-subtext-color">{c.basis}</span>
+            </div>
+          ))}
+        </div>
+
+        <!-- Skills grouped by neutrality bucket -->
+        <div class="flex flex-col gap-1 pt-2">
+          <h3 class="text-heading-3 font-heading-3 text-default-font">Skills by neutrality</h3>
+          <p class="text-caption font-caption text-subtext-color max-w-[820px]">
+            Every skill placed in its bucket. Hover a portable skill to see which capability contracts it invokes —
+            each already has more than one backend, so the skill runs unchanged whichever vendor a project picks.
+          </p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mobile:grid-cols-1">
+          {VERDICT_META.map((v) => {
+            const list = skillsByVerdict[v.key];
+            const green = v.tone === "success";
+            return (
+              <div class={`flex flex-col gap-3 rounded-2xl border border-solid px-5 py-4 ${green ? "border-success-200 bg-success-50/40" : "border-error-200 bg-error-50/50"}`}>
+                <div class="flex flex-col gap-0.5">
+                  <div class="flex items-center gap-2">
+                    <span class={`h-2.5 w-2.5 flex-none rounded-full ${green ? "bg-success-500" : "bg-error-500"}`}></span>
+                    <span class="text-body-bold font-body-bold text-default-font">{v.label}</span>
+                    <span class={`ml-auto flex-none rounded-full px-2 py-0.5 text-caption-bold font-caption-bold ${green ? "bg-success-100 text-success-700" : "bg-error-100 text-error-700"}`}>{list.length}</span>
+                  </div>
+                  <span class="text-caption font-caption text-subtext-color">{v.def}</span>
+                </div>
+                <div class="flex flex-wrap content-start gap-1.5 max-h-[360px] overflow-y-auto">
+                  {v.key === "vendor-coupled"
+                    ? list.map((s) => (
+                        <span class="inline-flex flex-col gap-0.5 rounded-md border border-solid border-error-200 bg-default-background px-2 py-1">
+                          <span class="font-mono text-caption font-caption text-default-font">{s.skill}</span>
+                          <span class="flex flex-wrap items-center gap-1">
+                            {s.coupled.map((cp) => (
+                              <span class="inline-flex items-center gap-1 rounded bg-error-100 px-1.5 py-0.5 text-caption font-caption text-error-700" title={`Sole backend: ${cp.vendor} for ${cp.contract}`}>
+                                {vendorLogo(cp.vendor)
+                                  ? <img src={vendorLogo(cp.vendor)} alt={cp.vendor} class="h-3 w-3 object-contain" loading="lazy" />
+                                  : null}
+                                {cp.vendor} → {shortContract(cp.contract)}
+                              </span>
+                            ))}
+                          </span>
+                        </span>
+                      ))
+                    : list.map((s) => (
+                        <span
+                          class="inline-flex items-center rounded-md border border-solid border-neutral-200 bg-default-background px-2 py-0.5 font-mono text-caption font-caption text-default-font"
+                          title={s.contractsUsed.length ? `Invokes ${s.contractsUsed.map(shortContract).join(", ")}` : "Names no backend"}
+                        >
+                          {s.skill}
+                        </span>
+                      ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {(vn.harness || vn.llm) && (
+          <div class="flex flex-col gap-1 pt-4">
+            <h3 class="text-heading-3 font-heading-3 text-default-font">LLM &amp; agent-integration neutrality</h3>
+            <p class="text-caption font-caption text-subtext-color max-w-[820px]">
+              A different axis from the backend contracts above: which <strong>LLM and agent</strong> Magpie's own
+              machinery is tied to. Two fronts — the <strong>agent harness</strong> that drives the skills, and the{" "}
+              <strong>model endpoint</strong> that may receive data.
+            </p>
+          </div>
+        )}
+
+        {vn.harness && (
+          <div class="flex flex-col gap-4 rounded-2xl border border-solid border-neutral-200 bg-neutral-50 px-5 py-5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-body-bold font-body-bold text-default-font">Agent harness</span>
+                <span class="text-caption font-caption text-subtext-color">
+                  Which harness supports each substrate tool. A tool is neutral when it is harness-agnostic or
+                  supports two or more harnesses.
+                </span>
+              </div>
+              <div class="flex flex-none items-center gap-2">
+                <span class="font-['Inter'] text-[26px] font-[700] leading-none text-default-font">{vn.harness.neutral}<span class="text-[16px] text-subtext-color">/{vn.harness.total}</span></span>
+                <div class="flex flex-col gap-1">
+                  <span class="text-caption font-caption text-subtext-color">harness-neutral</span>
+                  <div class="h-1.5 w-28 overflow-hidden rounded-full bg-neutral-200">
+                    <div class="h-full rounded-full bg-success-500" style={`width:${vn.harness.percent}%`}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mobile:grid-cols-1">
+              {HARNESS_VERDICT_META.map((v) => {
+                const list = harnessByVerdict[v.key] ?? [];
+                const green = v.tone === "success";
+                return (
+                  <div class={`flex flex-col gap-3 rounded-xl border border-solid px-4 py-3 ${green ? "border-success-200 bg-success-50/40" : "border-error-200 bg-error-50/50"}`}>
+                    <div class="flex flex-col gap-0.5">
+                      <div class="flex items-center gap-2">
+                        <span class={`h-2.5 w-2.5 flex-none rounded-full ${green ? "bg-success-500" : "bg-error-500"}`}></span>
+                        <span class="text-body-bold font-body-bold text-default-font">{v.label}</span>
+                        <span class={`ml-auto flex-none rounded-full px-2 py-0.5 text-caption-bold font-caption-bold ${green ? "bg-success-100 text-success-700" : "bg-error-100 text-error-700"}`}>{list.length}</span>
+                      </div>
+                      <span class="text-caption font-caption text-subtext-color">{v.def}</span>
+                    </div>
+                    <div class="flex flex-wrap content-start gap-1.5">
+                      {list.map((t) => (
+                        <span
+                          class={`inline-flex items-center gap-1 rounded-md border border-solid px-2 py-0.5 font-mono text-caption font-caption ${v.key === "coupled" ? "border-error-200 bg-default-background text-default-font" : "border-neutral-200 bg-default-background text-default-font"}`}
+                          title={`${t.substrates.join(", ")}${t.harnesses.length ? " — " + t.harnesses.join(", ") : ""}`}
+                        >
+                          {t.tool}
+                          {t.harnesses.length > 0 && (
+                            <span class="rounded bg-error-100 px-1 text-error-700">{t.harnesses.join(", ")}</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          {(harnessByVerdict.coupled?.length ?? 0) > 0 ? (
+            <p class="text-caption font-caption text-subtext-color">
+              The coupled tools are the hook / settings / launch integration points — each goes neutral once a
+              per-harness adapter (a Codex hook, a Cursor rule) ships; no skill changes.
+            </p>
+          ) : (
+            <p class="text-caption font-caption text-subtext-color">
+              Every substrate tool is either harness-agnostic or already runs under more than one harness — the
+              integration layer names no single agent.
+            </p>
+          )}
+          </div>
+        )}
+
+        {vn.llm && (
+          <div class="flex flex-col gap-3 rounded-2xl border border-solid border-success-200 bg-success-50/40 px-5 py-5">
+            <div class="flex items-start gap-2">
+              <span class="flex-none rounded-full bg-success-100 px-2 py-0.5 text-caption-bold font-caption-bold text-success-700">✓ neutral by construction</span>
+              <span class="text-body-bold font-body-bold text-default-font">Model endpoint — {vn.llm.defaultApproved.length} default-approved classes across independent trust domains</span>
+            </div>
+            <p class="text-caption font-caption text-subtext-color max-w-[820px]">
+              The <a class="text-brand-600 hover:text-brand-700 underline" href="https://github.com/apache/magpie/tree/main/tools/privacy-llm" target="_blank" rel="noreferrer">privacy-llm registry</a> keys approval on <strong>endpoint identity</strong>, not on who hosts the model — so no single LLM vendor is privileged.
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse text-caption font-caption">
+                <thead>
+                  <tr class="border-b border-solid border-success-200 text-left text-subtext-color">
+                    <th class="py-1.5 pr-4 font-caption-bold text-default-font">Default-approved endpoint class</th>
+                    <th class="py-1.5 font-caption-bold text-default-font">Examples</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {vn.llm.defaultApproved.map((c) => (
+                    <tr class="border-b border-solid border-success-100/60 align-top">
+                      <td class="py-1.5 pr-4 text-default-font whitespace-nowrap">{c.class}</td>
+                      <td class="py-1.5 text-subtext-color">{c.examples}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="text-caption font-caption text-subtext-color">
+              Every other endpoint is <strong>opt-in</strong> — the adopting project's security team declares it in{" "}
+              <span class="font-mono">&lt;project-config&gt;/privacy-llm.md</span> (endpoint, data-residency contract, approver).
+            </p>
+          </div>
+        )}
+
+        <a class="inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={VENDOR_NEUTRALITY}>
+          How the score is computed →
+        </a>
+      </div>
+    </section>
+
     <!-- Tools grid + filter -->
-    <section id="tools" class={`${band} bg-default-background scroll-mt-14`}>
+    <section id="tools" class={`${band} bg-neutral-50 scroll-mt-14`}>
       <div class={inner}>
         <div class="flex flex-col gap-1">
           <h2 class="text-heading-2 font-heading-2 text-default-font">Browse the {tools.length} tools</h2>
           <p class="text-body font-body text-subtext-color max-w-[800px]">
-            Filter by the contract or substrate a tool provides, by organization, or by whether it wraps an MCP
-            server — the dimensions combine. Within a dimension, pick more than one to widen the view.
+            Filter by the contract or substrate a tool provides, by <strong>backend vendor</strong>, by
+            organization, or by whether it wraps an MCP server — the dimensions combine. Within a dimension, pick
+            more than one to widen the view.
           </p>
         </div>
 
@@ -323,6 +698,18 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
             </button>
           </div>
           <div class="flex flex-wrap items-center gap-2">
+            <span class="text-caption font-caption text-subtext-color">vendor:</span>
+            {vendorChips.map((v) => (
+              <button type="button" data-vendor={v.vendor} aria-pressed="false" title={`Adapters backed by ${v.vendor}`} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
+                {v.logo ? <img src={v.logo} alt={v.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" /> : null}
+                {v.vendor} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{v.count}</span>
+              </button>
+            ))}
+            <button type="button" data-vendor="__interface" aria-pressed="false" title="Pure interface specs — a contract with no vendor code, waiting for adapters" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
+              interface spec <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{interfaceCount}</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
             <span class="text-caption font-caption text-subtext-color">backend:</span>
             <button type="button" data-mcp="1" aria-pressed="false" title="Tools that wrap a Model Context Protocol (MCP) server as their backend" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
               wraps an MCP <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{data.mcpTotal}</span>
@@ -341,12 +728,16 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
             const sb = stateBadge(t);
             const mb = maturityBadge(t.maturity);
             const org = t.organization ? orgById[t.organization] : null;
+            const impl = isImplementation(t);
+            const vlogo = impl ? vendorLogo(t.vendor) : null;
             return (
               <a
                 href={`${base}/skills/tools/${t.name}/readme`}
                 data-caps={t.labels.map((l) => `${l.kind}:${l.name}`).join(" ")}
                 data-org={t.organization ?? "__agnostic"}
                 data-mcp={t.mcp ? "1" : "0"}
+                data-vendor={impl ? t.vendor : ""}
+                data-interface={t.vendorKind === "interface" ? "1" : "0"}
                 class="tool-card group flex h-full flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
               >
                 <div class="flex items-start justify-between gap-3">
@@ -355,10 +746,23 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
                     <span class="font-mono text-caption font-caption text-subtext-color">tools/{t.name}</span>
                   </div>
                   <div class="flex flex-none flex-wrap justify-end gap-1.5">
+                    {impl && (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-default-font" title={`Backend vendor: ${t.vendor}`}>
+                        {vlogo
+                          ? <img src={vlogo} alt={t.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" />
+                          : null}
+                        {t.vendor}
+                      </span>
+                    )}
+                    {t.vendorKind === "interface" && (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-solid border-neutral-200 bg-neutral-50 px-2 py-0.5 text-caption font-caption text-subtext-color" title="Pure interface spec — no vendor code; adapters implement it per backend">
+                        interface
+                      </span>
+                    )}
                     {org && (
                       <span class="inline-flex items-center gap-1 rounded-full border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`Organization: ${org.name}`}>
-                        {org.logo
-                          ? <img src={org.logo} alt={org.name} class="h-3.5 w-auto" loading="lazy" />
+                        {orgLogoOf(org)
+                          ? <img src={orgLogoOf(org)} alt={org.name} class="h-3.5 w-auto" loading="lazy" />
                           : org.id}
                       </span>
                     )}
@@ -395,7 +799,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
     </section>
 
     <!-- Organizations -->
-    <section id="organizations" class={`${band} bg-neutral-50 scroll-mt-14`}>
+    <section id="organizations" class={`${band} bg-default-background scroll-mt-14`}>
       <div class={inner}>
         <div class="flex flex-col gap-1">
           <h2 class="text-heading-2 font-heading-2 text-default-font">Organizations</h2>
@@ -410,8 +814,8 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           {data.organizations.map((o) => (
             <div class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
               <div class="flex items-center gap-3">
-                {o.logo
-                  ? <img src={o.logo} alt={`${o.name} logo`} class="h-8 w-auto" loading="lazy" />
+                {orgLogoOf(o)
+                  ? <img src={orgLogoOf(o)} alt={`${o.name} logo`} class="h-8 w-auto" loading="lazy" />
                   : <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 font-mono text-caption text-neutral-600">{o.id.slice(0, 2)}</div>}
                 <div class="flex flex-col">
                   <span class="text-body-bold font-body-bold text-default-font">{o.name}</span>
@@ -454,7 +858,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
     </section>
 
     <!-- Go deeper / extending -->
-    <section id="extend" class={`${band} bg-default-background scroll-mt-14`}>
+    <section id="extend" class={`${band} bg-neutral-50 scroll-mt-14`}>
       <div class={`${inner} rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6`}>
         <h2 class="text-heading-3 font-heading-3 text-default-font">Go deeper</h2>
         <p class="text-body font-body text-subtext-color max-w-[820px]">
@@ -479,6 +883,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
     if (filters) {
       const capChipEls = [...filters.querySelectorAll("button[data-cap]")];
       const orgChipEls = [...filters.querySelectorAll("button[data-org]")];
+      const vendorChipEls = [...filters.querySelectorAll("button[data-vendor]")];
       const mcpChip = filters.querySelector("button[data-mcp]");
       const allChip = filters.querySelector('button[data-cap="__all"]');
       const clearBtn = document.getElementById("cap-clear");
@@ -489,11 +894,14 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
 
       const ACTIVE = ["border-brand-300", "bg-brand-50", "text-brand-700"];
       const INACTIVE = ["border-neutral-200", "bg-default-background", "text-default-font"];
-      // Two independent dimensions, combined with AND: a tool must match the
-      // capability filter (any selected) AND the organization filter (any
-      // selected). Empty dimension = no constraint.
+      // Independent dimensions, combined with AND: a tool must match the
+      // capability filter AND the vendor filter AND the organization filter AND
+      // the MCP filter. Empty dimension = no constraint; within a dimension,
+      // multiple selections widen (OR). The vendor dimension also carries the
+      // pseudo-value "__interface" (pure interface specs, which have no vendor).
       const activeCaps = new Set();
       const activeOrgs = new Set();
+      const activeVendors = new Set();
       let mcpOnly = false;
 
       function styleChip(chip, on) {
@@ -503,17 +911,25 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       }
       const orgLabel = (id) => (id === "__agnostic" ? "agnostic" : id);
 
+      const vendorLabel = (v) => (v === "__interface" ? "interface specs" : v);
+
       function apply() {
         const caps = [...activeCaps];
         const orgs = [...activeOrgs];
-        const none = caps.length === 0 && orgs.length === 0 && !mcpOnly;
+        const vendors = [...activeVendors];
+        const none = caps.length === 0 && orgs.length === 0 && vendors.length === 0 && !mcpOnly;
         let shown = 0;
         for (const card of cards) {
           const cardCaps = (card.dataset.caps || "").split(" ").filter(Boolean);
           const capMatch = caps.length === 0 || caps.some((c) => cardCaps.includes(c));
           const orgMatch = orgs.length === 0 || orgs.includes(card.dataset.org);
+          const vendorMatch =
+            vendors.length === 0 ||
+            vendors.some((v) =>
+              v === "__interface" ? card.dataset.interface === "1" : card.dataset.vendor === v,
+            );
           const mcpMatch = !mcpOnly || card.dataset.mcp === "1";
-          const match = capMatch && orgMatch && mcpMatch;
+          const match = capMatch && orgMatch && vendorMatch && mcpMatch;
           card.hidden = !match;
           if (match) shown++;
         }
@@ -523,6 +939,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           styleChip(chip, activeCaps.has(chip.dataset.cap));
         }
         for (const chip of orgChipEls) styleChip(chip, activeOrgs.has(chip.dataset.org));
+        for (const chip of vendorChipEls) styleChip(chip, activeVendors.has(chip.dataset.vendor));
         if (mcpChip) styleChip(mcpChip, mcpOnly);
         clearBtn.hidden = none;
         empty.hidden = shown !== 0;
@@ -534,6 +951,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
         }
         const parts = [];
         if (caps.length) parts.push(`provide ${caps.length === 1 ? "" : "any of "}${caps.join(", ")}`);
+        if (vendors.length) parts.push(`are backed by ${vendors.map(vendorLabel).join(" / ")}`);
         if (orgs.length) parts.push(`belong to ${orgs.map(orgLabel).join(" / ")}`);
         if (mcpOnly) parts.push("wrap an MCP server");
         statusText.textContent = `Showing ${shown} of ${total} tools that ${parts.join(" and ")}.`;
@@ -548,7 +966,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       for (const chip of capChipEls) {
         chip.addEventListener("click", () => {
           const cap = chip.dataset.cap;
-          if (cap === "__all") { activeCaps.clear(); activeOrgs.clear(); mcpOnly = false; }
+          if (cap === "__all") { activeCaps.clear(); activeOrgs.clear(); activeVendors.clear(); mcpOnly = false; }
           else if (activeCaps.has(cap)) activeCaps.delete(cap);
           else activeCaps.add(cap);
           apply();
@@ -562,8 +980,16 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           apply();
         });
       }
+      for (const chip of vendorChipEls) {
+        chip.addEventListener("click", () => {
+          const v = chip.dataset.vendor;
+          if (activeVendors.has(v)) activeVendors.delete(v);
+          else activeVendors.add(v);
+          apply();
+        });
+      }
       if (mcpChip) mcpChip.addEventListener("click", () => { mcpOnly = !mcpOnly; apply(); });
-      clearBtn.addEventListener("click", () => { activeCaps.clear(); activeOrgs.clear(); mcpOnly = false; apply(); });
+      clearBtn.addEventListener("click", () => { activeCaps.clear(); activeOrgs.clear(); activeVendors.clear(); mcpOnly = false; apply(); });
       apply();
     }
   </script>
