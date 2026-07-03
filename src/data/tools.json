@@ -783,6 +783,60 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/skill-evals"
     },
     {
+      "name": "sourcehut",
+      "title": "SourceHut (sr.ht) Forge Bridge",
+      "description": "SourceHut (sr.ht) forge bridge implementation for the Apache Magpie framework. It integrates ticket tracking (todo.sr.ht), mailing list patchset review (lists.sr.ht), CI builds (builds.sr.ht), and repository reads (git.sr.ht & hg.sr.ht)…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "tracker"
+        },
+        {
+          "kind": "contract",
+          "name": "source-control"
+        },
+        {
+          "kind": "contract",
+          "name": "mail-archive"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "SourceHut",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/sourcehut"
+    },
+    {
+      "name": "spec-inventory",
+      "title": "spec-inventory",
+      "description": "A deterministic uv tool that emits a compact routing inventory for the spec-loop prompts. It summarizes spec frontmatter, where-it-lives hints, validation commands, known gaps, skill frontmatter, and tool/test presence so agents can…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "framework-dev"
+        },
+        {
+          "kind": "substrate",
+          "name": "analytics"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "stable",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/spec-inventory"
+    },
+    {
       "name": "spec-loop",
       "title": "spec-loop",
       "description": "A spec-driven build loop for this framework, in the general Ralph style (run a fresh agent context against a fixed prompt, repeat), adapted to the framework's human-in-the-loop posture. The full write-up is in…",
@@ -795,7 +849,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode",
+      "harness": "Claude Code, Codex, Cursor, Gemini CLI, OpenCode",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -917,10 +971,10 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"
     }
   ],
-  "toolsTotal": 40,
-  "implementedTotal": 19,
-  "contractsTotal": 20,
-  "substratesTotal": 20,
+  "toolsTotal": 42,
+  "implementedTotal": 21,
+  "contractsTotal": 21,
+  "substratesTotal": 21,
   "mcpTotal": 4,
   "organizations": [
     {
@@ -970,10 +1024,11 @@
         "contract": "contract:tracker",
         "class": "vendor-backed",
         "green": true,
-        "basis": "2 backend vendors: Atlassian, GitHub",
+        "basis": "3 backend vendors: Atlassian, GitHub, SourceHut",
         "vendors": [
           "Atlassian",
-          "GitHub"
+          "GitHub",
+          "SourceHut"
         ],
         "interfaces": [],
         "implementations": [
@@ -992,6 +1047,10 @@
           {
             "tool": "github-rollup",
             "vendor": "GitHub"
+          },
+          {
+            "tool": "sourcehut",
+            "vendor": "SourceHut"
           }
         ]
       },
@@ -999,10 +1058,11 @@
         "contract": "contract:source-control",
         "class": "vendor-backed",
         "green": true,
-        "basis": "3 backend vendors: Git, GitHub, Subversion",
+        "basis": "4 backend vendors: Git, GitHub, SourceHut, Subversion",
         "vendors": [
           "Git",
           "GitHub",
+          "SourceHut",
           "Subversion"
         ],
         "interfaces": [],
@@ -1014,6 +1074,10 @@
           {
             "tool": "github",
             "vendor": "GitHub"
+          },
+          {
+            "tool": "sourcehut",
+            "vendor": "SourceHut"
           },
           {
             "tool": "asf-svn",
@@ -1053,10 +1117,11 @@
         "contract": "contract:mail-archive",
         "class": "vendor-backed",
         "green": true,
-        "basis": "2 backend vendors: Google, PonyMail",
+        "basis": "3 backend vendors: Google, PonyMail, SourceHut",
         "vendors": [
           "Google",
-          "PonyMail"
+          "PonyMail",
+          "SourceHut"
         ],
         "interfaces": [
           "mail-archive"
@@ -1069,6 +1134,10 @@
           {
             "tool": "ponymail",
             "vendor": "PonyMail"
+          },
+          {
+            "tool": "sourcehut",
+            "vendor": "SourceHut"
           }
         ]
       },
@@ -1184,8 +1253,8 @@
       }
     ],
     "harness": {
-      "neutral": 20,
-      "total": 20,
+      "neutral": 21,
+      "total": 21,
       "percent": 100,
       "tools": [
         {
@@ -1321,12 +1390,24 @@
           "verdict": "agnostic"
         },
         {
+          "tool": "spec-inventory",
+          "substrates": [
+            "substrate:framework-dev",
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
           "tool": "spec-loop",
           "substrates": [
             "substrate:framework-dev"
           ],
           "harnesses": [
             "Claude Code",
+            "Codex",
+            "Cursor",
+            "Gemini CLI",
             "OpenCode"
           ],
           "verdict": "portable"
@@ -1393,10 +1474,20 @@
           "security-tracker-stats-dashboard",
           "skill-and-tool-validator",
           "skill-evals",
+          "spec-inventory",
           "spec-status-index",
           "spec-validator",
           "symlink-lint",
           "vendor-neutrality-score"
+        ],
+        "Codex": [
+          "spec-loop"
+        ],
+        "Cursor": [
+          "spec-loop"
+        ],
+        "Gemini CLI": [
+          "spec-loop"
         ]
       }
     },
