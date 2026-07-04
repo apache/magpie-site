@@ -3,8 +3,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const QUICK_START = `${base}/skills/setup/install-recipes`;
-const OVERVIEW = `${base}/skills/index`;
+const QUICK_START = `${base}/docs/setup/install-recipes`;
+const OVERVIEW = `${base}/docs/index`;
 
 // Internal governance drafts that should not appear on the public site.
 const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
@@ -59,6 +59,11 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
     name: "Overview & concepts",
     blurb:
       "What Magpie is, how it works, and the cross-cutting concepts — modes, design principles, confidentiality, labels, and editorial guidelines.",
+  },
+  education: {
+    name: "Education",
+    blurb:
+      "The maintainer-education stream — learn to build and run agents for your project: your first skill, a pattern catalogue, eval-driven development, and a hands-on workshop.",
   },
   setup: {
     name: "Setup",
@@ -123,6 +128,7 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
 
 const ORDER = [
   "_root",
+  "education",
   "setup",
   "pr-management",
   "issue-management",
@@ -159,7 +165,7 @@ const sortedGroups = Array.from(groups.entries())
 const totalPages = all.length;
 ---
 
-<DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/skills/index.astro">
+<DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/docs/index.astro">
   <h1>Apache Magpie Documentation</h1>
   <p>
     Apache Magpie is an AI assistant for open-source project maintainers. It
@@ -178,11 +184,11 @@ const totalPages = all.length;
   <p>
     <a href={QUICK_START}><strong>⚡ Quick Start → Install recipes</strong></a>
     &nbsp;·&nbsp;
-    <a href={`${base}/skills/prerequisites`}>Prerequisites</a>
+    <a href={`${base}/docs/prerequisites`}>Prerequisites</a>
     &nbsp;·&nbsp;
     <a href={OVERVIEW}>What is Apache Magpie?</a>
     &nbsp;·&nbsp;
-    <a href={`${base}/tools`}>Tools</a>
+    <a href={`${base}/architecture`}>Architecture</a>
   </p>
 
   <h2>Explore the docs</h2>
@@ -196,7 +202,7 @@ const totalPages = all.length;
     <section>
       <h3>
         {group.overview ? (
-          <a href={`${base}/skills/${group.overview}`}>{group.meta.name}</a>
+          <a href={`${base}/docs/${group.overview}`}>{group.meta.name}</a>
         ) : (
           group.meta.name
         )}
@@ -205,7 +211,7 @@ const totalPages = all.length;
       <ul>
         {group.items.map((item) => (
           <li>
-            <a class="capitalize" href={`${base}/skills/${item.slug}`}>{item.label}</a>
+            <a class="capitalize" href={`${base}/docs/${item.slug}`}>{item.label}</a>
             {item.description ? ` — ${item.description}` : ""}
           </li>
         ))}

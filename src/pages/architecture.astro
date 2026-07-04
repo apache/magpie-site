@@ -220,11 +220,11 @@ const harnessByVerdict: Record<string, HarnessTool[]> = vn.harness
     )
   : {};
 
-const VENDOR_NEUTRALITY = `${base}/skills/vendor-neutrality`;
-const EXTENDING = `${base}/skills/extending`;
-const TAXONOMY = `${base}/skills/labels-and-capabilities`;
-const ADAPTERS = `${base}/skills/adapters/registry`;
-const SKILL_SOURCES_AUTHORING = `${base}/skills/skill-sources/authoring-a-source`;
+const VENDOR_NEUTRALITY = `${base}/docs/vendor-neutrality`;
+const EXTENDING = `${base}/docs/extending`;
+const TAXONOMY = `${base}/docs/labels-and-capabilities`;
+const ADAPTERS = `${base}/docs/adapters/registry`;
+const SKILL_SOURCES_AUTHORING = `${base}/docs/skill-sources/authoring-a-source`;
 const ORGANIZATIONS = "https://github.com/apache/magpie/tree/main/organizations";
 
 // In-page section navigation
@@ -263,9 +263,9 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
 ---
 
 <BaseLayout
-  title="Tools — How Magpie is built"
-  description="Apache Magpie's tools: skills declare capabilities, tools provide contract and substrate interfaces, adapters implement them, and organizations bundle the defaults. Generated from the framework repo."
-  editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/tools.astro"
+  title="Architecture — How Magpie is built"
+  description="Apache Magpie's architecture: skills declare capabilities, tools provide contract and substrate interfaces, adapters implement them, and organizations bundle the defaults. Generated from the framework repo."
+  editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/architecture.astro"
 >
   <SiteHeader />
 
@@ -275,7 +275,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       <header class="mx-auto flex w-full max-w-[1100px] flex-col gap-4">
         <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to home</a>
         <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-          <span class="text-caption font-caption text-brand-600">Tools</span>
+          <span class="text-caption font-caption text-brand-600">Architecture</span>
         </div>
         <h1 class="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:text-[28px]">
           How Magpie is built
@@ -733,7 +733,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
             const vlogo = impl ? vendorLogo(t.vendor) : null;
             return (
               <a
-                href={`${base}/skills/tools/${t.name}/readme`}
+                href={`${base}/docs/tools/${t.name}/readme`}
                 data-caps={t.labels.map((l) => `${l.kind}:${l.name}`).join(" ")}
                 data-org={t.organization ?? "__agnostic"}
                 data-mcp={t.mcp ? "1" : "0"}

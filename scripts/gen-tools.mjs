@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Generate a Tools & Capabilities summary from an apache/magpie checkout.
 //
-// Mirrors scripts/gen-skill-counts.mjs: derives the website's /tools page data
-// from the actual framework repo so it never drifts. Invoked by
+// Mirrors scripts/gen-skill-counts.mjs: derives the website's /architecture
+// page data from the actual framework repo so it never drifts. Invoked by
 // scripts/sync-docs.sh after the framework is checked out.
 //
 // For each tool under tools/<name>/ it captures:

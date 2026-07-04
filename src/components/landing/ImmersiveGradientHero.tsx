@@ -66,7 +66,7 @@ const SKILL_COUNTS = (skillCounts as { counts: Record<string, number> }).counts;
 // docs/<family>/README.md `asf: true|false` scope marker by
 // scripts/gen-tools.mjs — so the oak-leaf badge below is metadata-driven, not
 // hardcoded. A family's docs directory is the 3rd path segment of its overview
-// link (e.g. "/skills/release-management/readme" → "release-management").
+// link (e.g. "/docs/release-management/readme" → "release-management").
 const ASF_FAMILIES = new Set(
   (toolsData as { asfFamilies: string[] }).asfFamilies,
 );
@@ -107,7 +107,7 @@ const AsfOakLeaf = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 // Headline vendor-neutrality scores, summarised from the generated tools.json
-// (the same source the /tools page uses; see scripts/gen-tools.mjs).
+// (the same source the /architecture page uses; see scripts/gen-tools.mjs).
 const vnData = toolsData.vendorNeutrality as {
   overall: { green: number; total: number; percent: number };
   skills: { neutral: number; total: number };
@@ -140,7 +140,7 @@ const SKILL_FAMILIES = [
     name: "setup",
     icon: Layers,
     modes: "Infrastructure",
-    overview: "/skills/setup/readme",
+    overview: "/docs/setup/readme",
     cta: "Worried an agent will leak your credentials or wreck your machine?",
     desc: "Isolated agent setup, framework adoption & maintenance, shared-config sync. The prerequisite every adopter starts from.",
   },
@@ -148,7 +148,7 @@ const SKILL_FAMILIES = [
     name: "security",
     icon: Shield,
     modes: "Triage · Drafting",
-    overview: "/skills/security/readme",
+    overview: "/docs/security/readme",
     cta: "Security reports pile up and every step needs an audit trail?",
     desc: "The 16-step security-issue lifecycle — from security@ import through CVE allocation and publication, with state sync. Maintainer-only.",
   },
@@ -156,7 +156,7 @@ const SKILL_FAMILIES = [
     name: "pr-management",
     icon: GitPullRequest,
     modes: "Triage",
-    overview: "/skills/pr-management/readme",
+    overview: "/docs/pr-management/readme",
     cta: "Your PR queue is out of control?",
     desc: "Maintainer-facing PR-queue management — triage, queue stats, and deep code review.",
   },
@@ -164,7 +164,7 @@ const SKILL_FAMILIES = [
     name: "issue",
     icon: Filter,
     modes: "Triage · Drafting",
-    overview: "/skills/issue-management/readme",
+    overview: "/docs/issue-management/readme",
     cta: "Issue backlog is a mess of duplicates and stale reports?",
     desc: "Issue lifecycle — triage, bug reproduction, fix drafting, and backlog re-assessment against the current branch.",
   },
@@ -173,7 +173,7 @@ const SKILL_FAMILIES = [
     icon: Activity,
     modes: "Triage",
     status: "experimental",
-    overview: "/skills/repo-health/readme",
+    overview: "/docs/repo-health/readme",
     cta: "Repo hygiene quietly slipping — CI, deps, licenses, flaky tests?",
     desc: "Read-only maintenance audits — CI runner obsolescence, workflow security, stale or vulnerable dependencies, license/NOTICE drift, and flaky tests. Each proposes remedies for the maintainer to apply.",
   },
@@ -181,7 +181,7 @@ const SKILL_FAMILIES = [
     name: "release-management",
     icon: GitMerge,
     modes: "Triage · Drafting",
-    overview: "/skills/release-management/readme",
+    overview: "/docs/release-management/readme",
     cta: "Cutting a release is a manual, error-prone slog?",
     desc: "The 14-step ASF release lifecycle — planning, RC cut & sign, [VOTE], tally, promote, [ANNOUNCE], archive, audit. The agent never holds the signing key or publishes.",
   },
@@ -190,7 +190,7 @@ const SKILL_FAMILIES = [
     icon: BookOpen,
     modes: "Mentoring",
     status: "experimental",
-    overview: "/skills/mentoring/readme",
+    overview: "/docs/mentoring/readme",
     cta: "New contributors get stuck and quietly drift away?",
     desc: "Contributor mentoring — spec and tone guide in place; first skill (pr-management-mentor) shipping.",
   },
@@ -198,7 +198,7 @@ const SKILL_FAMILIES = [
     name: "contributor-growth",
     icon: Users,
     modes: "Mentoring · Triage",
-    overview: "/skills/contributor-growth/readme",
+    overview: "/docs/contributor-growth/readme",
     cta: "Hard to grow contributors into committers?",
     desc: "The contributor-to-committer path — welcome first-timers, keep the backlog newcomer-ready, track activity, assemble nomination evidence, and run post-vote onboarding.",
   },
@@ -206,7 +206,7 @@ const SKILL_FAMILIES = [
     name: "utilities",
     icon: PenTool,
     modes: "Meta",
-    overview: "/skills/utilities/readme",
+    overview: "/docs/utilities/readme",
     cta: "Want to build or maintain your own skills?",
     desc: "Framework meta-skills — author or update skills (write-skill) and print a live index of every skill (list-skills).",
   },
@@ -218,14 +218,45 @@ const skillCountLabel = (family: { name: string; status?: string }) => {
   return family.status ? `${base} · ${family.status}` : base;
 };
 
+// The maintainer-education stream (PRINCIPLE 18): every release ships the
+// learning material for its skills. The full pages live in the docs under
+// /docs/education — the landing only summarises what the stream is and links in.
+const EDUCATION = [
+  {
+    icon: PenTool,
+    title: "Your first skill",
+    desc: "A step-by-step path from zero to a merged skill — the gentle on-ramp for maintainers new to building with agents.",
+    href: "/docs/education/your-first-skill",
+  },
+  {
+    icon: Layers,
+    title: "Pattern catalogue",
+    desc: "Ready-to-copy skill and prompt examples, each with notes on what worked, what didn't, and why.",
+    href: "/docs/education/pattern-catalogue",
+  },
+  {
+    icon: Activity,
+    title: "Eval-driven development",
+    desc: "How to judge whether an agent's answers are good enough when the same input can give different results each time.",
+    href: "/docs/education/eval-driven-development",
+  },
+  {
+    icon: Users,
+    title: "Workshops",
+    desc: "A hands-on lab: build a small skill, give it an eval suite, and run it — in about 90 minutes.",
+    href: "/docs/education/workshops",
+  },
+];
+
 // In-page sections, in document order. Drives both the floating scroll-spy
 // SectionNav (desktop) and the collapsible menu (smaller screens). Keep the
 // ids in sync with the matching `id="…"` on each section below.
 const SECTIONS: { id: string; label: string }[] = [
   { id: "why-magpie", label: "Why Magpie?" },
   { id: "maintainer-first", label: "Maintainers first" },
-  { id: "agentic-automations", label: "Agentic automations" },
+  { id: "agentic-modes", label: "Agentic Modes" },
   { id: "skill-families", label: "Skill Families" },
+  { id: "education", label: "Education" },
   { id: "privacy-security", label: "Privacy & Security" },
   { id: "vendor-neutrality", label: "Vendor Neutrality" },
   { id: "organisation-agnostic", label: "Organisations" },
@@ -333,22 +364,22 @@ function ImmersiveGradientHero() {
           <div className="flex items-center gap-2">
             <a
               className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 2xl:inline-flex"
-              href={withBase("/skills")}
+              href={withBase("/docs")}
               target="_blank"
               rel="noreferrer"
-              title="Open the skill documentation in a new tab"
+              title="Open the documentation in a new tab"
             >
-              Skills
+              Docs
               <ArrowUpRight className="size-3.5" />
             </a>
             <a
               className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 2xl:inline-flex"
-              href={withBase("/tools")}
+              href={withBase("/architecture")}
               target="_blank"
               rel="noreferrer"
-              title="Open the Tools page in a new tab"
+              title="Open the Architecture page in a new tab"
             >
-              Tools
+              Architecture
               <ArrowUpRight className="size-3.5" />
             </a>
             <a
@@ -367,7 +398,7 @@ function ImmersiveGradientHero() {
             >
               <IconButton icon={<Github />} aria-label="Star Apache Magpie on GitHub" />
             </a>
-            <a href={withBase("/skills")}>
+            <a href={withBase("/docs")}>
               <Button icon={<ArrowRight />}>Get Started</Button>
             </a>
             <IconButton
@@ -393,22 +424,22 @@ function ImmersiveGradientHero() {
               <div className="mt-1 flex flex-wrap gap-2 border-t border-solid border-neutral-100 pt-3">
                 <a
                   className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                  href={withBase("/skills")}
+                  href={withBase("/docs")}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Skills
+                  Docs
                   <ArrowUpRight className="size-3.5" />
                 </a>
                 <a
                   className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                  href={withBase("/tools")}
+                  href={withBase("/architecture")}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Tools
+                  Architecture
                   <ArrowUpRight className="size-3.5" />
                 </a>
                 <a
@@ -458,7 +489,7 @@ function ImmersiveGradientHero() {
               </BlurFade>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <a href={withBase("/skills/setup/install-recipes")} target="_blank" rel="noreferrer">
+              <a href={withBase("/docs/setup/install-recipes")} target="_blank" rel="noreferrer">
                 <ShimmerButton
                   shimmerColor="#ffffff"
                   background="rgb(0 74 173)"
@@ -469,7 +500,7 @@ function ImmersiveGradientHero() {
                   <ArrowUpRight className="!text-white" />
                 </ShimmerButton>
               </a>
-              <a href={withBase("/skills")} target="_blank" rel="noreferrer">
+              <a href={withBase("/docs")} target="_blank" rel="noreferrer">
                 <Button
                   className="border border-white/20 bg-white/10 text-white hover:bg-white/20"
                   size="large"
@@ -505,7 +536,7 @@ function ImmersiveGradientHero() {
             <div className="flex w-full flex-col items-center py-4">
               <div className="flex w-full flex-col items-center">
                 <a
-                  href={withBase("/skills/modes")}
+                  href={withBase("/docs/modes")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="How a PR flows through the agentic modes"
@@ -532,7 +563,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex w-full flex-col items-center">
                 <a
-                  href={withBase("/skills/modes#triage")}
+                  href={withBase("/docs/modes#triage")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Agentic Triage Mode docs"
@@ -559,7 +590,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex w-full flex-col items-center">
                 <a
-                  href={withBase("/skills/modes#mentoring")}
+                  href={withBase("/docs/modes#mentoring")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Agentic Mentoring Mode docs"
@@ -586,7 +617,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex w-full flex-col items-center">
                 <a
-                  href={withBase("/skills/modes#drafting")}
+                  href={withBase("/docs/modes#drafting")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Agentic Drafting Mode docs"
@@ -613,7 +644,7 @@ function ImmersiveGradientHero() {
               </div>
               <div className="flex w-full flex-col items-center">
                 <a
-                  href={withBase("/skills/modes#auto-merge")}
+                  href={withBase("/docs/modes#auto-merge")}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Agentic Autonomous Mode docs"
@@ -638,7 +669,7 @@ function ImmersiveGradientHero() {
               </div>
             </div>
             <a
-              href={withBase("/skills/modes")}
+              href={withBase("/docs/modes")}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -692,7 +723,7 @@ function ImmersiveGradientHero() {
         </BlurFade>
         <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr max-w-[1100px] mobile:grid-cols-1">
           <a
-            href={withBase("/skills/principles#6-the-human-is-always-in-the-loop-until-they-choose-otherwise")}
+            href={withBase("/docs/principles#6-the-human-is-always-in-the-loop-until-they-choose-otherwise")}
             target="_blank"
             rel="noreferrer"
             className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -713,7 +744,7 @@ function ImmersiveGradientHero() {
             </span>
           </a>
           <a
-            href={withBase("/skills/principles#16-audit-every-agent-authored-action-reverse-it-where-possible")}
+            href={withBase("/docs/principles#16-audit-every-agent-authored-action-reverse-it-where-possible")}
             target="_blank"
             rel="noreferrer"
             className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -734,7 +765,7 @@ function ImmersiveGradientHero() {
             </span>
           </a>
           <a
-            href={withBase("/skills/principles#1-privacy-security-and-supply-chain-integrity-ship-before-features")}
+            href={withBase("/docs/principles#1-privacy-security-and-supply-chain-integrity-ship-before-features")}
             target="_blank"
             rel="noreferrer"
             className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -756,7 +787,7 @@ function ImmersiveGradientHero() {
           </a>
         </div>
       </div>
-      <div id="agentic-automations" className="flex w-full flex-col items-center gap-16 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
+      <div id="agentic-modes" className="flex w-full flex-col items-center gap-16 bg-default-background px-8 py-24 mobile:gap-10 mobile:px-4 mobile:py-14">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[600px]">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
             Progressive Agentic Modes
@@ -769,7 +800,7 @@ function ImmersiveGradientHero() {
         <div className="flex w-full flex-col items-start gap-3 max-w-[1100px]">
           <div className="flex w-full items-start gap-3 mobile:flex-col">
             <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
-              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/skills/modes#triage")} target="_blank" rel="noreferrer" aria-label="Agentic Triage Mode docs" />
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#triage")} target="_blank" rel="noreferrer" aria-label="Agentic Triage Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-600 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   1
@@ -792,7 +823,7 @@ function ImmersiveGradientHero() {
                   <Badge variant="neutral">Auto-labeling</Badge>
                   <Badge variant="neutral">Priority scoring</Badge>
                   <a
-                    href={withBase("/skills/modes#triage")}
+                    href={withBase("/docs/modes#triage")}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2 py-0.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -804,7 +835,7 @@ function ImmersiveGradientHero() {
               </div>
             </div>
             <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
-              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/skills/modes#drafting")} target="_blank" rel="noreferrer" aria-label="Agentic Drafting Mode docs" />
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#drafting")} target="_blank" rel="noreferrer" aria-label="Agentic Drafting Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-500 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   2
@@ -827,7 +858,7 @@ function ImmersiveGradientHero() {
                   <Badge variant="neutral">Fix PRs</Badge>
                   <Badge variant="neutral">Human-merged</Badge>
                   <a
-                    href={withBase("/skills/modes#drafting")}
+                    href={withBase("/docs/modes#drafting")}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2 py-0.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -841,7 +872,7 @@ function ImmersiveGradientHero() {
           </div>
           <div className="flex w-full items-start gap-3 mobile:flex-col">
             <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
-              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/skills/modes#mentoring")} target="_blank" rel="noreferrer" aria-label="Agentic Mentoring Mode docs" />
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#mentoring")} target="_blank" rel="noreferrer" aria-label="Agentic Mentoring Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-400 text-white font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                   3
@@ -864,7 +895,7 @@ function ImmersiveGradientHero() {
                   <Badge variant="neutral">Conventions</Badge>
                   <Badge variant="neutral">Prior PRs</Badge>
                   <a
-                    href={withBase("/skills/modes#mentoring")}
+                    href={withBase("/docs/modes#mentoring")}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2 py-0.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -876,7 +907,7 @@ function ImmersiveGradientHero() {
               </div>
             </div>
             <div className="group relative flex grow shrink-0 basis-0 items-start gap-5 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 hover:border-brand-200 hover:shadow-md transition-all">
-              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/skills/modes#pairing")} target="_blank" rel="noreferrer" aria-label="Agentic Pairing Mode docs" />
+              <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#pairing")} target="_blank" rel="noreferrer" aria-label="Agentic Pairing Mode docs" />
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-300 text-brand-900 font-['Inter'] text-[16px] font-[700]">
                 <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-brand-900">
                   4
@@ -899,7 +930,7 @@ function ImmersiveGradientHero() {
                   <Badge variant="neutral">Self-review</Badge>
                   <Badge variant="neutral">Pre-flight</Badge>
                   <a
-                    href={withBase("/skills/modes#pairing")}
+                    href={withBase("/docs/modes#pairing")}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2 py-0.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -913,7 +944,7 @@ function ImmersiveGradientHero() {
           </div>
           <div className="group relative flex w-full items-start gap-5 rounded-2xl border-2 border-solid border-brand-200 px-6 py-6 shadow-sm bg-gradient-to-r from-brand-50 to-brand-100/60 overflow-hidden">
             <BorderBeam size={150} duration={8} colorFrom="#004aad" colorTo="#80b3ff" />
-            <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/skills/modes#auto-merge")} target="_blank" rel="noreferrer" aria-label="Agentic Autonomous Mode docs" />
+            <a className="absolute inset-0 z-0 rounded-2xl" href={withBase("/docs/modes#auto-merge")} target="_blank" rel="noreferrer" aria-label="Agentic Autonomous Mode docs" />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-600 text-white font-['Inter'] text-[16px] font-[700]">
               <span className="font-['Inter'] text-[16px] font-[700] leading-[24px] text-white">
                 5
@@ -939,7 +970,7 @@ function ImmersiveGradientHero() {
                 <Badge variant="brand">Audit trail</Badge>
                 <Badge variant="brand">Rollback</Badge>
                 <a
-                  href={withBase("/skills/modes#auto-merge")}
+                  href={withBase("/docs/modes#auto-merge")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-white/70 px-2 py-0.5 text-caption font-caption text-brand-700 hover:border-brand-400 hover:bg-white"
@@ -1017,6 +1048,64 @@ function ImmersiveGradientHero() {
           })}
         </div>
       </div>
+      <div id="education" className="flex w-full flex-col items-center border-y border-solid border-brand-100 bg-brand-50 px-8 py-24 mobile:px-4 mobile:py-14">
+        <BlurFade inView className="flex flex-col items-center gap-4 max-w-[680px] pb-12 mobile:pb-8">
+          <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
+            New to agents? Learn here
+          </span>
+          <span className="text-body font-body text-subtext-color text-center">
+            Building software with an AI agent is a new skill, even for people who
+            have written code for years. It isn&apos;t harder than other coding —
+            it&apos;s different: behaviour is probabilistic, prompts and skills are
+            code, and you test with evals rather than single checks.
+          </span>
+          <span className="text-body font-body text-subtext-color text-center">
+            Magpie&apos;s maintainer-education stream teaches you that craft one
+            page at a time — no AI background needed. Every release ships the
+            learning material for the skills it contains
+            (<a className="text-brand-700 hover:text-brand-800 underline" href={withBase("/docs/principles")} target="_blank" rel="noreferrer">PRINCIPLE 18</a>).
+            The full guides live in the docs; here&apos;s what you&apos;ll find.
+          </span>
+        </BlurFade>
+        <div className="w-full items-stretch gap-4 grid grid-cols-4 auto-rows-fr max-w-[1100px] mobile:grid-cols-1">
+          {EDUCATION.map((page) => {
+            const Icon = page.icon;
+            return (
+              <a
+                key={page.title}
+                href={withBase(page.href)}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
+              >
+                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
+                  <Icon className="text-body-bold font-body-bold text-brand-700" />
+                </div>
+                <span className="text-body-bold font-body-bold text-default-font">
+                  {page.title}
+                </span>
+                <span className="text-caption font-caption text-subtext-color">
+                  {page.desc}
+                </span>
+                <span className="mt-auto inline-flex items-center gap-1 self-start rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 group-hover:border-brand-300 group-hover:bg-brand-100">
+                  Read the guide
+                  <ArrowUpRight className="size-3.5" />
+                </span>
+              </a>
+            );
+          })}
+        </div>
+        <a href={withBase("/docs/education/readme")} target="_blank" rel="noreferrer" className="mt-10">
+          <Button
+            variant="brand-secondary"
+            size="large"
+            icon={<BookOpen />}
+            iconRight={<ArrowUpRight />}
+          >
+            Explore the education stream
+          </Button>
+        </a>
+      </div>
       <div id="privacy-security" className="flex w-full flex-col items-center bg-default-background">
         <div className="flex w-full flex-col items-center gap-14 px-8 py-24 max-w-[1100px] mobile:gap-8 mobile:px-4 mobile:py-14">
           <div className="flex flex-col items-center gap-4 max-w-[600px]">
@@ -1029,7 +1118,7 @@ function ImmersiveGradientHero() {
             </span>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
               <a
-                href={withBase("/skills/security/readme")}
+                href={withBase("/docs/security/readme")}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -1038,7 +1127,7 @@ function ImmersiveGradientHero() {
                 <ArrowUpRight className="size-3.5" />
               </a>
               <a
-                href={withBase("/skills/setup/privacy-llm")}
+                href={withBase("/docs/setup/privacy-llm")}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
@@ -1050,7 +1139,7 @@ function ImmersiveGradientHero() {
           </div>
           <div className="w-full items-stretch gap-4 grid grid-cols-3 auto-rows-fr mobile:grid mobile:grid-cols-1">
             <a
-              href={withBase("/skills/setup/secure-agent-setup")}
+              href={withBase("/docs/setup/secure-agent-setup")}
               target="_blank"
               rel="noreferrer"
               className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -1071,7 +1160,7 @@ function ImmersiveGradientHero() {
               </span>
             </a>
             <a
-              href={withBase("/skills/security/forwarder-routing-policy")}
+              href={withBase("/docs/security/forwarder-routing-policy")}
               target="_blank"
               rel="noreferrer"
               className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -1092,7 +1181,7 @@ function ImmersiveGradientHero() {
               </span>
             </a>
             <a
-              href={withBase("/skills/confidentiality")}
+              href={withBase("/docs/confidentiality")}
               target="_blank"
               rel="noreferrer"
               className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-5 py-5 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
@@ -1119,7 +1208,7 @@ function ImmersiveGradientHero() {
         <div className="flex w-full items-center gap-16 px-8 py-24 max-w-[1100px] mobile:flex-col mobile:gap-10 mobile:px-4 mobile:py-14">
         <div className="flex grow shrink-0 basis-0 flex-col items-start gap-6">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
-            Vendor neutral
+            Vendor Neutrality
           </span>
           <span className="text-body font-body text-subtext-color">
             Magpie&apos;s workflows never name a vendor.{" "}
@@ -1159,7 +1248,7 @@ function ImmersiveGradientHero() {
           <div className="flex flex-wrap gap-3">
             <a
               className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              href={withBase("/skills/vendor-neutrality")}
+              href={withBase("/docs/vendor-neutrality")}
               target="_blank"
               rel="noreferrer"
             >
@@ -1168,7 +1257,7 @@ function ImmersiveGradientHero() {
             </a>
             <a
               className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              href={withBase("/tools")}
+              href={withBase("/architecture")}
               target="_blank"
               rel="noreferrer"
             >
@@ -1251,7 +1340,7 @@ function ImmersiveGradientHero() {
         <div className="grid w-full grid-cols-2 gap-4 max-w-[1000px] mobile:grid-cols-1">
           <a
             className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
-            href={withBase("/tools")}
+            href={withBase("/architecture")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1275,7 +1364,7 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
-            href={withBase("/skills/vendor-neutrality")}
+            href={withBase("/docs/vendor-neutrality")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1298,7 +1387,7 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
-            href={withBase("/skills/extending")}
+            href={withBase("/docs/extending")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1320,7 +1409,7 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="group flex flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all"
-            href={withBase("/skills/extending")}
+            href={withBase("/docs/extending")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1361,7 +1450,7 @@ function ImmersiveGradientHero() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-10">
           <a
             className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            href={withBase("/skills/extending")}
+            href={withBase("/docs/extending")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1370,7 +1459,7 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            href={withBase("/skills/skill-sources/authoring-a-source")}
+            href={withBase("/docs/skill-sources/authoring-a-source")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1379,7 +1468,7 @@ function ImmersiveGradientHero() {
           </a>
           <a
             className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-            href={withBase("/tools")}
+            href={withBase("/architecture")}
             target="_blank"
             rel="noreferrer"
           >
@@ -1652,7 +1741,7 @@ function ImmersiveGradientHero() {
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <a href={withBase("/skills")}>
+            <a href={withBase("/docs")}>
               <Button size="large" icon={<ArrowRight />}>
                 Get Started
               </Button>
@@ -1696,8 +1785,8 @@ function ImmersiveGradientHero() {
           <div className="flex grow shrink-0 basis-0 flex-wrap items-start gap-8">
             <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
               <span className="text-body-bold font-body-bold text-default-font">Project</span>
-              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/skills")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
-              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/architecture")} target="_blank" rel="noreferrer">Architecture<ArrowUpRight className="size-3.5" /></a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/downloads")}>Downloads</a>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<ArrowUpRight className="size-3.5" /></a>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<ArrowUpRight className="size-3.5" /></a>

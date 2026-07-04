@@ -42,7 +42,7 @@ export function SiteHeader() {
         >
           <IconButton icon={<GithubIcon />} aria-label="Star Apache Magpie on GitHub" />
         </a>
-        <a href={withBase("/skills")}>
+        <a href={withBase("/docs")}>
           <Button icon={<ArrowRight />}>Get Started</Button>
         </a>
       </div>

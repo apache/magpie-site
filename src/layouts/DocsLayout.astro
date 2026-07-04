@@ -22,24 +22,26 @@ const QUICK_START = { slug: "setup/install-recipes", label: "Quick Start" };
 // the top-level getting-started docs. Unlisted groups fall to the end.
 const GROUP_META: Record<string, { label: string; order: number }> = {
   _root: { label: "Getting Started", order: 0 },
-  setup: { label: "Setup", order: 1 },
-  security: { label: "Security", order: 2 },
-  "pr-management": { label: "PR Management", order: 3 },
-  "issue-management": { label: "Issue Management", order: 4 },
-  "repo-health": { label: "Repo Health", order: 5 },
-  "release-management": { label: "Release Management", order: 6 },
-  mentoring: { label: "Mentoring", order: 7 },
-  "contributor-growth": { label: "Contributor Growth", order: 8 },
-  pairing: { label: "Pairing", order: 9 },
-  adapters: { label: "Adapters", order: 10 },
-  tools: { label: "Tools", order: 11 },
-  rfcs: { label: "RFCs", order: 12 },
+  education: { label: "Education", order: 1 },
+  setup: { label: "Setup", order: 2 },
+  security: { label: "Security", order: 3 },
+  "pr-management": { label: "PR Management", order: 4 },
+  "issue-management": { label: "Issue Management", order: 5 },
+  "repo-health": { label: "Repo Health", order: 6 },
+  "release-management": { label: "Release Management", order: 7 },
+  mentoring: { label: "Mentoring", order: 8 },
+  "contributor-growth": { label: "Contributor Growth", order: 9 },
+  pairing: { label: "Pairing", order: 10 },
+  adapters: { label: "Adapters", order: 11 },
+  tools: { label: "Tools", order: 12 },
+  rfcs: { label: "RFCs", order: 13 },
 };
 
 // Logical page order within a group (by last path segment). The Overview
 // (index / README) always leads; unlisted pages follow alphabetically.
 const PAGE_ORDER: Record<string, string[]> = {
   _root: ["index", "prerequisites", "vendor-neutrality", "extending", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
+  education: ["readme", "your-first-skill", "pattern-catalogue", "eval-driven-development", "workshops"],
   setup: ["readme", "install-recipes", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "unadopt"],
   security: ["readme", "roles", "process", "threat-model", "new-members-onboarding", "how-to-fix-a-security-issue", "forwarder-routing-policy"],
   "release-management": ["readme", "process", "spec"],
@@ -118,7 +120,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
       <a href={`${base}/`} class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a>
       <a
-        href={`${base}/skills/${QUICK_START.slug}`}
+        href={`${base}/docs/${QUICK_START.slug}`}
         aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
         class={`block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
       >
@@ -134,7 +136,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
               {group.items.map((item) => (
                 <li>
                   <a
-                    href={`${base}/skills/${item.slug}`}
+                    href={`${base}/docs/${item.slug}`}
                     aria-current={currentSlug === item.slug ? "page" : undefined}
                     class={`block px-3 py-1.5 rounded-md text-body font-body capitalize ${currentSlug === item.slug ? "bg-brand-100 text-brand-800" : "text-default-font hover:bg-neutral-100"}`}
                   >
