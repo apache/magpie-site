@@ -14,9 +14,9 @@ DEST="$(dirname "$0")/../src/content/docs"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/magpie-docs.XXXXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + skills/ + tools/ + organizations/)"
+echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + assets/ + skills/ + tools/ + organizations/)"
 git clone --depth 1 --branch "$BRANCH" --filter=blob:none --sparse "$REPO" "$TMP" >/dev/null 2>&1
-(cd "$TMP" && git sparse-checkout set docs images skills tools organizations >/dev/null)
+(cd "$TMP" && git sparse-checkout set docs images assets skills tools organizations >/dev/null)
 
 echo "→ Replacing $DEST"
 rm -rf "$DEST"
@@ -43,19 +43,24 @@ else
 fi
 
 ASSET_DEST="$(dirname "$0")/../public/docs-assets"
-echo "→ Syncing images to $ASSET_DEST"
+echo "→ Syncing images/ + assets/ to $ASSET_DEST"
 rm -rf "$ASSET_DEST"
-if [ -d "$TMP/images" ]; then
-  mkdir -p "$ASSET_DEST"
-  cp -r "$TMP/images/." "$ASSET_DEST/"
-fi
+mkdir -p "$ASSET_DEST"
+# The framework moved its doc images from images/ to assets/; copy both so the
+# site keeps working whichever location a given release uses. assets/ also holds
+# non-image files (e.g. badge.json) that the site consumes directly.
+for src in images assets; do
+  if [ -d "$TMP/$src" ]; then
+    cp -r "$TMP/$src/." "$ASSET_DEST/"
+  fi
+done
 
-echo "→ Rewriting image refs in markdown (../../images → /docs-assets, ../images → /docs-assets)"
+echo "→ Rewriting image refs in markdown (../../{images,assets} → /docs-assets, etc.)"
 # perl -i is portable across GNU/Linux and BSD/macOS (sed -i differs between them)
 find "$DEST" -name '*.md' -exec perl -pi -e '
-  s{\.\./\.\./images/}{/docs-assets/}g;
-  s{\.\./images/}{/docs-assets/}g;
-  s{\(images/}{(/docs-assets/}g;
+  s{\.\./\.\./(?:images|assets)/}{/docs-assets/}g;
+  s{\.\./(?:images|assets)/}{/docs-assets/}g;
+  s{\((?:images|assets)/}{(/docs-assets/}g;
 ' {} +
 
 echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
