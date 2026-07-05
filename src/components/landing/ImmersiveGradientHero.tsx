@@ -360,7 +360,7 @@ function MagpieBadge({ className = "" }: { className?: string }) {
   );
 }
 
-// "Get a badge" footer for the Why-Magpie section: shows the badge and a
+// "Adopt a Magpie" footer for the Why-Magpie section: shows the badge and a
 // one-click-copy of the README snippet (an example of linking via shields.io).
 function GetABadge() {
   const [copied, setCopied] = React.useState(false);
@@ -377,7 +377,7 @@ function GetABadge() {
     <div className="mt-16 flex w-full max-w-[760px] flex-col items-center gap-4 border-t border-solid border-neutral-200 pt-10 mobile:mt-10">
       <div className="flex flex-col items-center gap-1.5">
         <span className="text-heading-3 font-heading-3 text-default-font">
-          Get a badge
+          Adopt a Magpie
         </span>
         <span className="text-body font-body text-subtext-color text-center">
           Running Magpie in your project? Wear it. Add the badge to your README
