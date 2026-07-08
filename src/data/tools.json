@@ -45,7 +45,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode",
+      "harness": "Claude Code, OpenCode, Kiro",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -66,7 +66,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode",
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -582,7 +582,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode",
+      "harness": "Claude Code, OpenCode, Kiro",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -736,7 +736,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode",
+      "harness": "Claude Code, OpenCode, Kiro",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -916,7 +916,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, Codex, Cursor, Gemini CLI, OpenCode",
+      "harness": "Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Kiro",
       "organization": null,
       "mcp": null,
       "hasCode": false,
@@ -1345,6 +1345,7 @@
           ],
           "harnesses": [
             "Claude Code",
+            "Kiro",
             "OpenCode"
           ],
           "verdict": "portable"
@@ -1354,11 +1355,8 @@
           "substrates": [
             "substrate:sandbox"
           ],
-          "harnesses": [
-            "Claude Code",
-            "OpenCode"
-          ],
-          "verdict": "portable"
+          "harnesses": [],
+          "verdict": "agnostic"
         },
         {
           "tool": "dashboard-generator",
@@ -1391,6 +1389,7 @@
           ],
           "harnesses": [
             "Claude Code",
+            "Kiro",
             "OpenCode"
           ],
           "verdict": "portable"
@@ -1442,6 +1441,7 @@
           ],
           "harnesses": [
             "Claude Code",
+            "Kiro",
             "OpenCode"
           ],
           "verdict": "portable"
@@ -1497,6 +1497,7 @@
             "Codex",
             "Cursor",
             "Gemini CLI",
+            "Kiro",
             "OpenCode"
           ],
           "verdict": "portable"
@@ -1539,19 +1540,24 @@
       "matrix": {
         "Claude Code": [
           "agent-guard",
-          "agent-isolation",
+          "permission-audit",
+          "sandbox-lint",
+          "spec-loop"
+        ],
+        "Kiro": [
+          "agent-guard",
           "permission-audit",
           "sandbox-lint",
           "spec-loop"
         ],
         "OpenCode": [
           "agent-guard",
-          "agent-isolation",
           "permission-audit",
           "sandbox-lint",
           "spec-loop"
         ],
         "agnostic": [
+          "agent-isolation",
           "dashboard-generator",
           "dev",
           "egress-gateway",
