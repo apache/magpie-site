@@ -107,6 +107,18 @@ const substrateList = Object.keys(data.substrates).map((s) => ({
 const tools = [...data.tools].sort((a, b) => a.name.localeCompare(b.name));
 const orgById = Object.fromEntries(data.organizations.map((o) => [o.id, o]));
 
+// Organizations with any presence — skills, org-specific tools, or skill
+// families. A fully-empty org (e.g. `independent`, which has nothing under it
+// yet) carries no information, so it's dropped from the count and the cards.
+// (The filter chips already skip it: they're built from tools that declare an
+// organization, and an empty org labels none.)
+const visibleOrgs = data.organizations.filter(
+  (o) =>
+    (data.skills.byOrg[o.id] ?? 0) > 0 ||
+    o.tools.length > 0 ||
+    o.families.length > 0,
+);
+
 // Organization filter dimension: every org that actually labels a tool, plus
 // an "agnostic" bucket for tools that declare no organization.
 const AGNOSTIC = "__agnostic";
@@ -293,7 +305,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           <span><strong class="text-default-font">{skillCaps.length}</strong> skill capabilities</span>
           <span><strong class="text-default-font">{data.contractsTotal}</strong> tools across {Object.keys(data.contracts).length} contracts</span>
           <span><strong class="text-default-font">{data.substratesTotal}</strong> substrate tools</span>
-          <span><strong class="text-default-font">{data.organizations.length}</strong> organizations</span>
+          <span><strong class="text-default-font">{visibleOrgs.length}</strong> organizations</span>
           <span><strong class="text-default-font">{data.skills.total}</strong> skills</span>
           <span><strong class="text-success-700">{vn.overall.percent}%</strong> vendor-neutral</span>
         </div>
@@ -812,7 +824,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           </p>
         </div>
         <div class="grid grid-cols-2 gap-4 mobile:grid-cols-1">
-          {data.organizations.map((o) => (
+          {visibleOrgs.map((o) => (
             <div class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
               <div class="flex items-center gap-3">
                 {orgLogoOf(o)
