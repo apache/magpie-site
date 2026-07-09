@@ -60,6 +60,21 @@ const skillsByVerdict = Object.fromEntries(
 );
 const shortContract = (c: string) => c.replace(/^contract:/, "");
 
+// Distinct backend vendors for a contract — one entry per vendor (not per
+// implementing tool), with the tool(s) each backs kept for the tooltip. Without
+// this, a vendor that ships several tools (e.g. GitHub) shows a duplicate badge
+// per tool. Sorted to match the "N backend vendors: …" basis line.
+const vendorsOf = (impls: { tool: string; vendor: string }[]) => {
+  const byVendor = new Map<string, string[]>();
+  for (const i of impls) {
+    if (!byVendor.has(i.vendor)) byVendor.set(i.vendor, []);
+    byVendor.get(i.vendor)!.push(i.tool);
+  }
+  return [...byVendor.entries()]
+    .map(([vendor, tools]) => ({ vendor, tools }))
+    .sort((a, b) => a.vendor.localeCompare(b.vendor));
+};
+
 // LLM-integration axis: group substrate tools by their agent-harness verdict.
 const HARNESS_VERDICT_META = [
   { key: "agnostic", label: "Harness-agnostic", def: "runs under any agent harness", tone: "success" as const },
@@ -338,10 +353,10 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
               <div class="flex flex-wrap items-center gap-1.5">
                 <span class={`rounded-md border border-solid px-2 py-0.5 text-caption font-caption ${CLASS_STYLE[c.class]}`}>{CLASS_LABEL[c.class]}</span>
                 {c.implementations.length > 0
-                  ? c.implementations.map((impl) => (
-                      <span class="inline-flex items-center gap-1 rounded-md border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`${impl.vendor} — tools/${impl.tool}`}>
-                        <VendorIcon vendor={impl.vendor} logo={vendorLogo(impl.vendor)} />
-                        {impl.vendor}
+                  ? vendorsOf(c.implementations).map((v) => (
+                      <span class="inline-flex items-center gap-1 rounded-md border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`${v.vendor} — ${v.tools.map((t) => `tools/${t}`).join(", ")}`}>
+                        <VendorIcon vendor={v.vendor} logo={vendorLogo(v.vendor)} />
+                        {v.vendor}
                       </span>
                     ))
                   : <span class="text-caption font-caption text-subtext-color">one spec, every backend</span>}
