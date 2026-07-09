@@ -91,3 +91,11 @@ if [ -d "$TMP/tools" ]; then
 else
   echo "⚠ no tools/ in framework checkout; leaving existing $TOOLS_OUT untouched"
 fi
+
+# Now that the education chapters are synced in, verify every one of them is
+# linked from the landing page (and the landing links no page that vanished).
+# This runs here — not as a standalone prek hook — because the docs are pulled
+# from apache/magpie and gitignored, so this is the one place they are
+# guaranteed present (locally on `npm run sync-docs`, and in CI's build job).
+echo "→ Checking every education chapter is linked on the landing page"
+python3 "$(dirname "$0")/check-landing-education.py"

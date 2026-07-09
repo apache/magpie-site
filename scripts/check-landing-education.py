@@ -23,9 +23,15 @@ summarises the maintainer-education stream and links every chapter under
 also be surfaced on the landing, otherwise the stream silently drifts out of
 sync with the docs (PRINCIPLE 18: every release ships its learning material).
 
-This hook makes that invariant deterministic and enforceable: it compares the
+This check makes that invariant deterministic and enforceable: it compares the
 set of chapter pages on disk against the ``/docs/education/<slug>`` links in
 the hero and fails if either side is missing an entry.
+
+It runs from ``scripts/sync-docs.sh`` immediately after the docs are pulled in
+from apache/magpie (which is where the education chapters actually live). That
+is the one place the chapter pages are guaranteed present — locally on
+``npm run sync-docs`` and in CI's build job — so a missing link fails the sync
+(and therefore the build).
 
 A "chapter" is any Markdown file sitting *directly* in
 ``src/content/docs/education/``, except its ``README`` (the section overview,
@@ -74,12 +80,10 @@ def landing_slugs() -> set[str]:
 
 
 def main() -> int:
-    # The docs content is synced in from apache/magpie (scripts/sync-docs.sh)
-    # and is gitignored, so it is absent in contexts that don't sync — notably
-    # the CI lint job, which runs prek without a build. Without the chapter
-    # pages there is nothing to check against, so skip cleanly rather than
-    # fail. The check still runs wherever docs are present (locally after
-    # `npm run sync-docs`, or any build context).
+    # Defensive: this is invoked from sync-docs.sh right after the docs land,
+    # so the directory is normally present. If it is somehow missing (the
+    # script was run standalone before a sync), skip cleanly rather than fail —
+    # there is nothing to check against.
     if not EDUCATION_DIR.is_dir():
         print(
             f"skip: education docs not synced ({EDUCATION_DIR} missing) — "
