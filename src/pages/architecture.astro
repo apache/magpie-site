@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SiteHeader } from "../components/landing/SiteHeader";
 import { SiteFooter } from "../components/landing/SiteFooter";
+import VendorIcon from "../components/VendorIcon.astro";
 import { buildToolsView, type VendorNeutrality } from "../lib/tools-view";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -116,7 +117,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
     <!-- Header band -->
     <div class="w-full bg-default-background px-8 pt-16 pb-10 mobile:px-4 mobile:pt-10">
       <header class="mx-auto flex w-full max-w-[1100px] flex-col gap-4">
-        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to home</a>
+        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to Magpie</a>
         <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
           <span class="text-caption font-caption text-brand-600">Architecture</span>
         </div>
@@ -148,7 +149,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden">
         {/* Pinned header: stays put while the section list below scrolls. */}
         <div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4">
-          <a href={`${base}/`} class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to home</a>
+          <a href={`${base}/`} class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to Magpie</a>
           <div class="mt-1 text-heading-3 font-heading-3 text-default-font">Architecture</div>
         </div>
         <nav class="relative flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4">
@@ -339,9 +340,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
                 {c.implementations.length > 0
                   ? c.implementations.map((impl) => (
                       <span class="inline-flex items-center gap-1 rounded-md border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-subtext-color" title={`${impl.vendor} — tools/${impl.tool}`}>
-                        {vendorLogo(impl.vendor)
-                          ? <img src={vendorLogo(impl.vendor)} alt={impl.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" />
-                          : null}
+                        <VendorIcon vendor={impl.vendor} logo={vendorLogo(impl.vendor)} />
                         {impl.vendor}
                       </span>
                     ))
@@ -382,9 +381,7 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
                           <span class="flex flex-wrap items-center gap-1">
                             {s.coupled.map((cp) => (
                               <span class="inline-flex items-center gap-1 rounded bg-error-100 px-1.5 py-0.5 text-caption font-caption text-error-700" title={`Sole backend: ${cp.vendor} for ${cp.contract}`}>
-                                {vendorLogo(cp.vendor)
-                                  ? <img src={vendorLogo(cp.vendor)} alt={cp.vendor} class="h-3 w-3 object-contain" loading="lazy" />
-                                  : null}
+                                <VendorIcon vendor={cp.vendor} logo={vendorLogo(cp.vendor)} size="h-3 w-3" />
                                 {cp.vendor} → {shortContract(cp.contract)}
                               </span>
                             ))}
@@ -580,16 +577,18 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
       </div>
     </section>
 
-    <!-- Go deeper / extending -->
+    <!-- Extending / go deeper -->
     <section id="extend" class={`${band} bg-neutral-50 scroll-mt-14`}>
-      <div class={`${inner} rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6`}>
-        <h2 class="text-heading-3 font-heading-3 text-default-font">Go deeper</h2>
-        <p class="text-body font-body text-subtext-color max-w-[820px]">
-          This page is the at-a-glance map. The detailed write-ups — the six axes of neutrality, the
-          contract-plus-adapter split, organizations, and the three "homes" an extension can live in — are in the
-          framework docs.
-        </p>
-        <div class="flex flex-wrap gap-3 pt-1">
+      <div class={inner}>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Extending</h2>
+          <p class="text-body font-body text-subtext-color max-w-[820px]">
+            This page is the at-a-glance map. The detailed write-ups — the six axes of neutrality, the
+            contract-plus-adapter split, organizations, and the three "homes" an extension can live in — are in the
+            framework docs.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6">
           <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={VENDOR_NEUTRALITY}>How Magpie achieves vendor neutrality →</a>
           <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={EXTENDING}>Extending Magpie (project / org / individual) →</a>
           <a class="inline-flex items-center gap-1 rounded-md border border-solid border-brand-300 bg-default-background px-3 py-1.5 text-caption font-caption text-brand-700 hover:bg-brand-100" href={SKILL_SOURCES_AUTHORING}>Authoring an external skill source →</a>
@@ -623,11 +622,20 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
           else a.removeAttribute("aria-current");
         }
       };
-      const sections = links
-        .map((a) => document.getElementById(a.getAttribute("data-arch-link")))
-        .filter(Boolean);
+      const ids = links.map((a) => a.getAttribute("data-arch-link"));
+      const lastId = ids[ids.length - 1];
+      const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
+
+      // Near the bottom the last section can never reach the top active-band, so
+      // the observer would otherwise leave a higher section highlighted. Force
+      // the last item active whenever the page can't scroll any further.
+      const atBottom = () =>
+        window.innerHeight + Math.ceil(window.scrollY) >=
+        document.documentElement.scrollHeight - 2;
+
       const obs = new IntersectionObserver(
         (entries) => {
+          if (atBottom()) return setActive(lastId);
           const visible = entries.filter((e) => e.isIntersecting);
           if (!visible.length) return;
           visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -636,6 +644,14 @@ const inner = "mx-auto flex w-full max-w-[1100px] flex-col gap-5";
         { rootMargin: "-10% 0px -80% 0px", threshold: 0 },
       );
       for (const s of sections) obs.observe(s);
+      window.addEventListener("scroll", () => { if (atBottom()) setActive(lastId); }, { passive: true });
+
+      // Clicking a nav item highlights it right away and keeps it highlighted —
+      // important for short sections (e.g. the last one) that the scroll-spy's
+      // active-band can't reach.
+      for (const a of links) {
+        a.addEventListener("click", () => setActive(a.getAttribute("data-arch-link")));
+      }
     })();
   </script>
 

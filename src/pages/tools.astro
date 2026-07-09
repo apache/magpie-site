@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { SiteHeader } from "../components/landing/SiteHeader";
 import { SiteFooter } from "../components/landing/SiteFooter";
 import { buildToolsView } from "../lib/tools-view";
+import VendorIcon from "../components/VendorIcon.astro";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const {
@@ -40,7 +41,7 @@ const ARCHITECTURE = `${base}/architecture`;
     <!-- Header band -->
     <div class="w-full bg-default-background px-8 pt-16 pb-8 mobile:px-4 mobile:pt-10">
       <header class="mx-auto flex w-full max-w-[1100px] flex-col gap-4">
-        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to home</a>
+        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to Magpie</a>
         <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
           <span class="text-caption font-caption text-brand-600">Tools</span>
         </div>
@@ -68,64 +69,106 @@ const ARCHITECTURE = `${base}/architecture`;
     <!-- Tools grid + filter -->
     <section class={`${band} bg-neutral-50`}>
       <div class={inner}>
-        <div id="cap-filters" class="flex flex-col gap-2">
+        {/* Sticky filter toolbar. Each dimension is a labelled dropdown of
+            checkboxes (multi-select, AND across dimensions); a count badge shows
+            how many are active. Stays pinned to the top of the viewport while
+            you scroll the grid. */}
+        <div id="cap-filters" class="sticky top-0 z-40 flex flex-col gap-2 rounded-xl border border-solid border-neutral-200 bg-default-background/95 px-4 py-3 shadow-sm backdrop-blur">
           <div class="flex flex-wrap items-center gap-2">
-            <button type="button" data-cap="__all" aria-pressed="true" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption font-caption transition-colors">
-              All <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{tools.length}</span>
-            </button>
-            <span class="text-caption font-caption text-subtext-color">contracts:</span>
-            {contractList.map((c) => (
-              <button type="button" data-cap={`contract:${c.key}`} aria-pressed="false" title={c.def} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 font-mono text-caption transition-colors">
-                {c.key} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{c.count}</span>
-              </button>
-            ))}
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-caption font-caption text-subtext-color">substrates:</span>
-            {substrateList.map((s) => (
-              <button type="button" data-cap={`substrate:${s.key}`} aria-pressed="false" title={s.def} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 font-mono text-caption transition-colors">
-                {s.key} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{s.count}</span>
-              </button>
-            ))}
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-caption font-caption text-subtext-color">organization:</span>
-            {orgChips.map((o) => (
-              <button type="button" data-org={o.id} aria-pressed="false" title={`Tools that declare organization: ${o.id} (${o.label})`} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
-                {o.logo
-                  ? <img src={o.logo} alt={o.id} class="h-3.5 w-auto" loading="lazy" />
-                  : <span class="font-mono">{o.id}</span>}
-                <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{o.count}</span>
-              </button>
-            ))}
-            <button type="button" data-org="__agnostic" aria-pressed="false" title="Organization-agnostic tools (no organization declared)" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
-              agnostic <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{agnosticCount}</span>
-            </button>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-caption font-caption text-subtext-color">vendor:</span>
-            {vendorChips.map((v) => (
-              <button type="button" data-vendor={v.vendor} aria-pressed="false" title={`Adapters backed by ${v.vendor}`} class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
-                {v.logo ? <img src={v.logo} alt={v.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" /> : null}
-                {v.vendor} <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{v.count}</span>
-              </button>
-            ))}
-            <button type="button" data-vendor="__interface" aria-pressed="false" title="Pure interface specs — a contract with no vendor code, waiting for adapters" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
-              interface spec <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{interfaceCount}</span>
-            </button>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-caption font-caption text-subtext-color">backend:</span>
-            <button type="button" data-mcp="1" aria-pressed="false" title="Tools that wrap a Model Context Protocol (MCP) server as their backend" class="cap-chip inline-flex items-center gap-1.5 rounded-full border border-solid px-3 py-1.5 text-caption transition-colors">
-              wraps an MCP <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{data.mcpTotal}</span>
-            </button>
-            <button type="button" id="cap-clear" hidden class="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-caption font-caption text-subtext-color underline hover:text-brand-700">Clear filter ✕</button>
-          </div>
-        </div>
+            <span class="mr-1 text-caption-bold font-caption-bold uppercase tracking-wider text-subtext-color">Filter</span>
 
-        <div id="cap-status" class="flex flex-col gap-1 rounded-2xl border border-solid border-neutral-200 bg-neutral-50 px-4 py-3">
-          <span id="cap-status-text" class="text-caption-bold font-caption-bold text-default-font">Showing all {tools.length} tools.</span>
-          <div id="cap-status-defs" class="flex flex-col gap-0.5"></div>
+            <details class="filter-dd relative" data-dim="cap-contract">
+              <summary class="filter-trigger">
+                <span>Contract</span>
+                <span data-badge class="hidden rounded-full bg-brand-100 px-1.5 text-caption-bold font-caption-bold text-brand-700">0</span>
+                <svg class="filter-chevron size-3 text-subtext-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </summary>
+              <div class="filter-panel">
+                {contractList.map((c) => (
+                  <label class="filter-opt" title={c.def}>
+                    <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="cap" value={`contract:${c.key}`} />
+                    <span class="flex-1 font-mono text-caption text-default-font">{c.key}</span>
+                    <span class="text-caption text-subtext-color">{c.count}</span>
+                  </label>
+                ))}
+              </div>
+            </details>
+
+            <details class="filter-dd relative" data-dim="cap-substrate">
+              <summary class="filter-trigger">
+                <span>Substrate</span>
+                <span data-badge class="hidden rounded-full bg-brand-100 px-1.5 text-caption-bold font-caption-bold text-brand-700">0</span>
+                <svg class="filter-chevron size-3 text-subtext-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </summary>
+              <div class="filter-panel">
+                {substrateList.map((s) => (
+                  <label class="filter-opt" title={s.def}>
+                    <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="cap" value={`substrate:${s.key}`} />
+                    <span class="flex-1 font-mono text-caption text-default-font">{s.key}</span>
+                    <span class="text-caption text-subtext-color">{s.count}</span>
+                  </label>
+                ))}
+              </div>
+            </details>
+
+            <details class="filter-dd relative" data-dim="org">
+              <summary class="filter-trigger">
+                <span>Organization</span>
+                <span data-badge class="hidden rounded-full bg-brand-100 px-1.5 text-caption-bold font-caption-bold text-brand-700">0</span>
+                <svg class="filter-chevron size-3 text-subtext-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </summary>
+              <div class="filter-panel">
+                {orgChips.map((o) => (
+                  <label class="filter-opt" title={`Tools that declare organization: ${o.id} (${o.label})`}>
+                    <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="org" value={o.id} />
+                    {o.logo
+                      ? <img src={o.logo} alt={o.id} class="h-3.5 w-auto flex-none" loading="lazy" />
+                      : null}
+                    <span class="flex-1 font-mono text-caption text-default-font">{o.id}</span>
+                    <span class="text-caption text-subtext-color">{o.count}</span>
+                  </label>
+                ))}
+                <label class="filter-opt" title="Organization-agnostic tools (no organization declared)">
+                  <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="org" value="__agnostic" />
+                  <span class="flex-1 text-caption text-default-font">agnostic</span>
+                  <span class="text-caption text-subtext-color">{agnosticCount}</span>
+                </label>
+              </div>
+            </details>
+
+            <details class="filter-dd relative" data-dim="vendor">
+              <summary class="filter-trigger">
+                <span>Vendor</span>
+                <span data-badge class="hidden rounded-full bg-brand-100 px-1.5 text-caption-bold font-caption-bold text-brand-700">0</span>
+                <svg class="filter-chevron size-3 text-subtext-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </summary>
+              <div class="filter-panel">
+                {vendorChips.map((v) => (
+                  <label class="filter-opt" title={`Adapters backed by ${v.vendor}`}>
+                    <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="vendor" value={v.vendor} />
+                    <VendorIcon vendor={v.vendor} logo={v.logo} />
+                    <span class="flex-1 text-caption text-default-font">{v.vendor}</span>
+                    <span class="text-caption text-subtext-color">{v.count}</span>
+                  </label>
+                ))}
+                <label class="filter-opt" title="Pure interface specs — a contract with no vendor code, waiting for adapters">
+                  <input type="checkbox" class="filter-cb size-3.5 accent-brand-600" data-dim="vendor" value="__interface" />
+                  <span class="flex-1 text-caption text-default-font">interface specs</span>
+                  <span class="text-caption text-subtext-color">{interfaceCount}</span>
+                </label>
+              </div>
+            </details>
+
+            <button type="button" data-mcp="1" aria-pressed="false" title="Tools that wrap a Model Context Protocol (MCP) server as their backend" class="filter-toggle">
+              Wraps an MCP{" "}
+              <span class="rounded-full bg-neutral-100 px-1.5 text-caption text-subtext-color">{data.mcpTotal}</span>
+            </button>
+
+            <button type="button" id="cap-clear" hidden class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-caption font-caption text-subtext-color hover:bg-neutral-100 hover:text-brand-700">Clear ✕</button>
+
+            <span id="cap-status-text" class="ml-auto text-caption font-caption text-subtext-color">Showing all {tools.length} tools.</span>
+          </div>
+          <div id="cap-status-defs" class="flex flex-col gap-0.5 empty:hidden"></div>
         </div>
 
         <div id="tools-grid" class="grid grid-cols-2 gap-4 mobile:grid-cols-1">
@@ -153,9 +196,7 @@ const ARCHITECTURE = `${base}/architecture`;
                   <div class="flex flex-none flex-wrap justify-end gap-1.5">
                     {impl && (
                       <span class="inline-flex items-center gap-1 rounded-full border border-solid border-neutral-200 bg-default-background px-2 py-0.5 text-caption font-caption text-default-font" title={`Backend vendor: ${t.vendor}`}>
-                        {vlogo
-                          ? <img src={vlogo} alt={t.vendor} class="h-3.5 w-3.5 object-contain" loading="lazy" />
-                          : null}
+                        <VendorIcon vendor={t.vendor} logo={vlogo} />
                         {t.vendor}
                       </span>
                     )}
@@ -207,44 +248,34 @@ const ARCHITECTURE = `${base}/architecture`;
   <SiteFooter />
 
   <script is:inline define:vars={{ labelDefs, total: tools.length }}>
-    const filters = document.getElementById("cap-filters");
-    if (filters) {
-      const capChipEls = [...filters.querySelectorAll("button[data-cap]")];
-      const orgChipEls = [...filters.querySelectorAll("button[data-org]")];
-      const vendorChipEls = [...filters.querySelectorAll("button[data-vendor]")];
-      const mcpChip = filters.querySelector("button[data-mcp]");
-      const allChip = filters.querySelector('button[data-cap="__all"]');
+    const bar = document.getElementById("cap-filters");
+    if (bar) {
+      const checkboxes = [...bar.querySelectorAll("input.filter-cb")];
+      const dropdowns = [...bar.querySelectorAll("details.filter-dd")];
+      const mcpToggle = bar.querySelector("[data-mcp]");
       const clearBtn = document.getElementById("cap-clear");
       const cards = [...document.querySelectorAll("#tools-grid .tool-card")];
       const statusText = document.getElementById("cap-status-text");
       const statusDefs = document.getElementById("cap-status-defs");
       const empty = document.getElementById("tools-empty");
 
-      const ACTIVE = ["border-brand-300", "bg-brand-50", "text-brand-700"];
-      const INACTIVE = ["border-neutral-200", "bg-default-background", "text-default-font"];
-      // Independent dimensions, combined with AND: a tool must match the
-      // capability filter AND the vendor filter AND the organization filter AND
-      // the MCP filter. Empty dimension = no constraint; within a dimension,
-      // multiple selections widen (OR). The vendor dimension also carries the
-      // pseudo-value "__interface" (pure interface specs, which have no vendor).
-      const activeCaps = new Set();
-      const activeOrgs = new Set();
-      const activeVendors = new Set();
-      let mcpOnly = false;
-
-      function styleChip(chip, on) {
-        chip.classList.remove(...ACTIVE, ...INACTIVE);
-        chip.classList.add(...(on ? ACTIVE : INACTIVE));
-        chip.setAttribute("aria-pressed", on ? "true" : "false");
-      }
       const orgLabel = (id) => (id === "__agnostic" ? "agnostic" : id);
-
       const vendorLabel = (v) => (v === "__interface" ? "interface specs" : v);
 
+      function readActive() {
+        const caps = [], orgs = [], vendors = [];
+        for (const cb of checkboxes) {
+          if (!cb.checked) continue;
+          if (cb.dataset.dim === "cap") caps.push(cb.value);
+          else if (cb.dataset.dim === "org") orgs.push(cb.value);
+          else if (cb.dataset.dim === "vendor") vendors.push(cb.value);
+        }
+        const mcpOnly = !!mcpToggle && mcpToggle.getAttribute("aria-pressed") === "true";
+        return { caps, orgs, vendors, mcpOnly };
+      }
+
       function apply() {
-        const caps = [...activeCaps];
-        const orgs = [...activeOrgs];
-        const vendors = [...activeVendors];
+        const { caps, orgs, vendors, mcpOnly } = readActive();
         const none = caps.length === 0 && orgs.length === 0 && vendors.length === 0 && !mcpOnly;
         let shown = 0;
         for (const card of cards) {
@@ -253,22 +284,23 @@ const ARCHITECTURE = `${base}/architecture`;
           const orgMatch = orgs.length === 0 || orgs.includes(card.dataset.org);
           const vendorMatch =
             vendors.length === 0 ||
-            vendors.some((v) =>
-              v === "__interface" ? card.dataset.interface === "1" : card.dataset.vendor === v,
-            );
+            vendors.some((v) => (v === "__interface" ? card.dataset.interface === "1" : card.dataset.vendor === v));
           const mcpMatch = !mcpOnly || card.dataset.mcp === "1";
           const match = capMatch && orgMatch && vendorMatch && mcpMatch;
           card.hidden = !match;
           if (match) shown++;
         }
-        styleChip(allChip, none);
-        for (const chip of capChipEls) {
-          if (chip === allChip) continue;
-          styleChip(chip, activeCaps.has(chip.dataset.cap));
+
+        // Per-dropdown active-count badge + active styling on the trigger.
+        for (const dd of dropdowns) {
+          const n = dd.querySelectorAll("input.filter-cb:checked").length;
+          const badge = dd.querySelector("[data-badge]");
+          const trigger = dd.querySelector(".filter-trigger");
+          if (badge) { badge.textContent = String(n); badge.classList.toggle("hidden", n === 0); }
+          if (trigger) trigger.classList.toggle("is-active", n > 0);
         }
-        for (const chip of orgChipEls) styleChip(chip, activeOrgs.has(chip.dataset.org));
-        for (const chip of vendorChipEls) styleChip(chip, activeVendors.has(chip.dataset.vendor));
-        if (mcpChip) styleChip(mcpChip, mcpOnly);
+        if (mcpToggle) mcpToggle.classList.toggle("is-active", mcpOnly);
+
         clearBtn.hidden = none;
         empty.hidden = shown !== 0;
 
@@ -291,34 +323,77 @@ const ARCHITECTURE = `${base}/architecture`;
           .join("");
       }
 
-      for (const chip of capChipEls) {
-        chip.addEventListener("click", () => {
-          const cap = chip.dataset.cap;
-          if (cap === "__all") { activeCaps.clear(); activeOrgs.clear(); activeVendors.clear(); mcpOnly = false; }
-          else if (activeCaps.has(cap)) activeCaps.delete(cap);
-          else activeCaps.add(cap);
+      for (const cb of checkboxes) cb.addEventListener("change", apply);
+      if (mcpToggle) {
+        mcpToggle.addEventListener("click", () => {
+          const on = mcpToggle.getAttribute("aria-pressed") === "true";
+          mcpToggle.setAttribute("aria-pressed", on ? "false" : "true");
           apply();
         });
       }
-      for (const chip of orgChipEls) {
-        chip.addEventListener("click", () => {
-          const org = chip.dataset.org;
-          if (activeOrgs.has(org)) activeOrgs.delete(org);
-          else activeOrgs.add(org);
-          apply();
+      clearBtn.addEventListener("click", () => {
+        for (const cb of checkboxes) cb.checked = false;
+        if (mcpToggle) mcpToggle.setAttribute("aria-pressed", "false");
+        for (const dd of dropdowns) dd.open = false;
+        apply();
+      });
+
+      // One dropdown open at a time; close on outside click or Escape.
+      for (const dd of dropdowns) {
+        dd.addEventListener("toggle", () => {
+          if (dd.open) for (const other of dropdowns) if (other !== dd) other.open = false;
         });
       }
-      for (const chip of vendorChipEls) {
-        chip.addEventListener("click", () => {
-          const v = chip.dataset.vendor;
-          if (activeVendors.has(v)) activeVendors.delete(v);
-          else activeVendors.add(v);
-          apply();
-        });
-      }
-      if (mcpChip) mcpChip.addEventListener("click", () => { mcpOnly = !mcpOnly; apply(); });
-      clearBtn.addEventListener("click", () => { activeCaps.clear(); activeOrgs.clear(); activeVendors.clear(); mcpOnly = false; apply(); });
+      document.addEventListener("click", (e) => {
+        if (!bar.contains(e.target)) for (const dd of dropdowns) dd.open = false;
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") for (const dd of dropdowns) dd.open = false;
+      });
+
       apply();
     }
   </script>
+
+  <style>
+    .filter-trigger {
+      display: inline-flex; align-items: center; gap: 0.375rem;
+      cursor: pointer; user-select: none; list-style: none;
+      border: 1px solid var(--color-neutral-300); border-radius: 0.375rem;
+      background: var(--color-default-background); padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem; line-height: 1; color: var(--color-default-font);
+    }
+    .filter-trigger::-webkit-details-marker { display: none; }
+    .filter-trigger:hover { border-color: var(--color-brand-300); }
+    .filter-trigger.is-active {
+      border-color: var(--color-brand-400);
+      background: var(--color-brand-50); color: var(--color-brand-700);
+    }
+    details[open] > .filter-trigger { border-color: var(--color-brand-400); }
+    .filter-chevron { transition: transform 0.15s ease; }
+    details[open] > .filter-trigger .filter-chevron { transform: rotate(180deg); }
+    .filter-panel {
+      position: absolute; left: 0; top: 100%; margin-top: 0.375rem; z-index: 50;
+      width: 16rem; max-height: 20rem; overflow-y: auto;
+      border: 1px solid var(--color-neutral-200); border-radius: 0.5rem;
+      background: var(--color-default-background); padding: 0.375rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    .filter-opt {
+      display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+      border-radius: 0.375rem; padding: 0.375rem 0.5rem;
+    }
+    .filter-opt:hover { background: var(--color-neutral-50); }
+    .filter-toggle {
+      display: inline-flex; align-items: center; gap: 0.375rem; cursor: pointer;
+      border: 1px solid var(--color-neutral-300); border-radius: 0.375rem;
+      background: var(--color-default-background); padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem; line-height: 1; color: var(--color-default-font);
+    }
+    .filter-toggle:hover { border-color: var(--color-brand-300); }
+    .filter-toggle.is-active {
+      border-color: var(--color-brand-400);
+      background: var(--color-brand-50); color: var(--color-brand-700);
+    }
+  </style>
 </BaseLayout>

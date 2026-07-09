@@ -1,0 +1,26 @@
+---
+// A small vendor mark. Renders the bundled brand logo when one exists;
+// otherwise falls back to a monogram badge (the vendor's initial) so that
+// *every* vendor shows an icon, without shipping a guessed/borrowed logo for
+// vendors that have no bundled mark.
+interface Props {
+  vendor: string;
+  /** Full logo URL, or null/undefined when there is no bundled brand mark. */
+  logo?: string | null;
+  /** Tailwind size utilities for the mark (default h-3.5 w-3.5). */
+  size?: string;
+}
+const { vendor, logo, size = "h-3.5 w-3.5" } = Astro.props;
+const initial = (vendor.match(/[A-Za-z0-9]/)?.[0] ?? "?").toUpperCase();
+---
+
+{logo ? (
+  <img src={logo} alt={vendor} class={`${size} flex-none object-contain`} loading="lazy" />
+) : (
+  <span
+    class={`${size} flex-none inline-flex items-center justify-center rounded-[3px] bg-neutral-200 font-mono font-bold leading-none text-neutral-600`}
+    style="font-size:0.55rem"
+    title={vendor}
+    aria-hidden="true"
+  >{initial}</span>
+)}
