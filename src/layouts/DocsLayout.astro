@@ -23,6 +23,11 @@ const QUICK_START = { slug: "setup/install-recipes", label: "Quick Start" };
 const GROUP_META: Record<string, { label: string; order: number }> = {
   _root: { label: "Getting Started", order: 0 },
   education: { label: "Education", order: 1 },
+  // The training module is a self-contained sub-section of education (an
+  // LMS-neutral course wrapping the progression pages); give it its own
+  // sidebar heading so its README is one Overview, not a second one folded
+  // into Education. See NESTED_GROUPS.
+  "education/training": { label: "Training", order: 1.5 },
   setup: { label: "Setup", order: 2 },
   security: { label: "Security", order: 3 },
   "pr-management": { label: "PR Management", order: 4 },
@@ -42,6 +47,7 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
 const PAGE_ORDER: Record<string, string[]> = {
   _root: ["index", "prerequisites", "vendor-neutrality", "extending", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
   education: ["readme", "your-first-skill", "pattern-catalogue", "eval-driven-development", "workshops"],
+  "education/training": ["readme", "lesson-01-what-agents-are", "lesson-02-working-with-agents", "lesson-03-choosing-models", "lesson-04-your-first-skill", "lesson-05-writing-safe-skills"],
   setup: ["readme", "install-recipes", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "unadopt"],
   security: ["readme", "roles", "process", "threat-model", "new-members-onboarding", "how-to-fix-a-security-issue", "forwarder-routing-policy"],
   "release-management": ["readme", "process", "spec"],
@@ -97,10 +103,19 @@ const all = (await getCollection("docs")).filter(
 
 type NavItem = { slug: string; label: string; rank: number };
 type NavGroup = { name: string; label: string; order: number; items: NavItem[]; overviewBody?: string };
+// Sub-sections that live under another group's directory but get their own
+// sidebar heading (keyed by their two-segment path). Everything else groups by
+// its top-level directory.
+const NESTED_GROUPS = new Set(["education/training"]);
 const groups = new Map<string, NavGroup>();
 for (const entry of all) {
   const parts = entry.id.split("/");
-  const groupKey = parts.length > 1 ? parts[0] : "_root";
+  const two = parts.slice(0, 2).join("/");
+  const groupKey = NESTED_GROUPS.has(two)
+    ? two
+    : parts.length > 1
+      ? parts[0]
+      : "_root";
   if (!groups.has(groupKey)) {
     groups.set(groupKey, {
       name: groupKey,
@@ -113,7 +128,11 @@ for (const entry of all) {
   const group = groups.get(groupKey)!;
   // Keep the section overview's body so page order can follow its README.
   const seg = lastSeg(slug);
-  if ((seg === "index" || seg === "readme") && parts.length <= 2) {
+  // A group's overview is the README/index sitting directly in the group's own
+  // directory (education/README for education, education/training/README for
+  // training). Deeper READMEs — e.g. tools/<name>/readme — are not overviews.
+  const dir = parts.slice(0, -1).join("/") || "_root";
+  if ((seg === "index" || seg === "readme") && dir === groupKey) {
     group.overviewBody = entry.body;
   }
   // Tool pages (tools/<name>/readme) are one overview per tool — label them by

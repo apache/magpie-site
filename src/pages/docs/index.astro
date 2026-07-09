@@ -23,15 +23,25 @@ const firstH1 = (body: string | undefined): string | null => {
 type DocItem = { slug: string; label: string; description?: string };
 type Group = { items: DocItem[]; overview?: string; overviewBody?: string };
 const groups = new Map<string, Group>();
+// Sub-sections nested under another group's directory but surfaced as their
+// own section (keyed by two-segment path). Mirrors DocsLayout's sidebar.
+const NESTED_GROUPS = new Set(["education/training"]);
 for (const entry of all) {
   const parts = entry.id.split("/");
-  const key = parts.length > 1 ? parts[0] : "_root";
+  const two = parts.slice(0, 2).join("/");
+  const key = NESTED_GROUPS.has(two)
+    ? two
+    : parts.length > 1
+      ? parts[0]
+      : "_root";
   const slug = entry.id.replace(/\.md$/, "");
   const leaf = parts[parts.length - 1].replace(/\.md$/, "");
   const isReadme = /^(readme|index)$/i.test(leaf);
-  // A family/group's own README/index (direct child) is the group overview;
-  // tool pages (tools/<name>/readme, deeper) are normal items.
-  const isGroupOverview = isReadme && parts.length <= 2;
+  // A section's own README/index (the one sitting directly in the section's
+  // directory) is its overview; deeper READMEs — tools/<name>/readme — are
+  // normal items.
+  const dir = parts.slice(0, -1).join("/") || "_root";
+  const isGroupOverview = isReadme && dir === key;
 
   if (!groups.has(key)) groups.set(key, { items: [] });
   const group = groups.get(key)!;
@@ -67,6 +77,11 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
     name: "Education",
     blurb:
       "The maintainer-education stream — a step-by-step path to building and running agents for your project: what agents are, working with them, writing and evaluating your first skill, English as code, and contributing back, plus a pattern catalogue and hands-on tutorials.",
+  },
+  "education/training": {
+    name: "Training",
+    blurb:
+      "An LMS-neutral Apache Training module that wraps the education stream as a structured course — one lesson per progression page, each adding learning objectives, exercises, and self-check questions.",
   },
   setup: {
     name: "Setup",
@@ -132,6 +147,7 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
 const ORDER = [
   "_root",
   "education",
+  "education/training",
   "setup",
   "pr-management",
   "issue-management",

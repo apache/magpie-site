@@ -29,6 +29,7 @@ import {
   GitMerge,
   GitPullRequest,
   Globe,
+  GraduationCap,
   Heart,
   Key,
   Library,
@@ -1294,16 +1295,31 @@ function ImmersiveGradientHero() {
             </div>
           </div>
         </div>
-        <a href={withBase("/docs/education/readme")} target="_blank" rel="noreferrer" className="mt-10">
-          <Button
-            variant="brand-secondary"
-            size="large"
-            icon={<BookOpen />}
-            iconRight={<ArrowUpRight />}
-          >
-            Explore the education stream
-          </Button>
-        </a>
+        {/* Two entry points: read the stream page by page, or run it as the
+            LMS-neutral training module (lessons with objectives, exercises, and
+            self-checks). Stacks vertically on mobile. */}
+        <div className="mt-10 flex items-center gap-4 mobile:flex-col">
+          <a href={withBase("/docs/education/readme")} target="_blank" rel="noreferrer">
+            <Button
+              variant="brand-secondary"
+              size="large"
+              icon={<BookOpen />}
+              iconRight={<ArrowUpRight />}
+            >
+              Explore the education stream
+            </Button>
+          </a>
+          <a href={withBase("/docs/education/training/readme")} target="_blank" rel="noreferrer">
+            <Button
+              variant="brand-secondary"
+              size="large"
+              icon={<GraduationCap />}
+              iconRight={<ArrowUpRight />}
+            >
+              Run it as a training course
+            </Button>
+          </a>
+        </div>
       </div>
       <div id="privacy-security" className="flex w-full flex-col items-center bg-default-background">
         <div className="flex w-full flex-col items-center gap-14 px-8 py-24 max-w-[1100px] mobile:gap-8 mobile:px-4 mobile:py-14">

@@ -61,6 +61,17 @@ repos:
         language: system
         files: \.(astro|tsx|jsx)$
         pass_filenames: true
+      # Keep the landing page's maintainer-education stream in sync with the
+      # docs: every chapter under src/content/docs/education/ (except README,
+      # and the training/ sub-module) must be linked from the landing hero.
+      # Deterministic, stdlib-only Python — no network, no writes. Runs whenever
+      # an education page or the hero changes (or on --all-files).
+      - id: landing-education-sync
+        name: Check every education chapter is linked on the landing page
+        entry: python3 scripts/check-landing-education.py
+        language: system
+        pass_filenames: false
+        files: ^(src/content/docs/education/.*\.md|src/components/landing/ImmersiveGradientHero\.tsx|scripts/check-landing-education\.py)$
       # Refresh the committer/PMC roster + GitHub avatars served by the landing
       # page (src/data/community.json + public/community-avatars/). Manual stage
       # only: it calls the GitHub API and writes binary avatars, so it is run on
