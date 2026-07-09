@@ -12,17 +12,17 @@ const base = process.env.SITE_BASE ?? '/';
 // scripts/rewrite-doc-links.mjs (run from scripts/sync-docs.sh at build time).
 
 // Back-compat redirects from the pre-rename routes (/skills → /docs, the whole
-// Documentation site; /tools → /architecture, the "How Magpie is built" page).
-// Emitted as static meta-refresh HTML pages so they work on ASF's static host.
-// The dynamic `/skills/[...slug]` mapping reuses the /docs/[...slug] route's
-// getStaticPaths, so every old doc URL — including the per-tool pages that were
-// at /skills/tools/<name> — redirects to its /docs equivalent. /tools never had
-// sub-paths (tool docs lived under /skills/tools/*), so only the bare route
-// needs an /architecture redirect.
+// Documentation site). Emitted as static meta-refresh HTML pages so they work on
+// ASF's static host. The dynamic `/skills/[...slug]` mapping reuses the
+// /docs/[...slug] route's getStaticPaths, so every old doc URL — including the
+// per-tool pages that were at /skills/tools/<name> — redirects to its /docs
+// equivalent.
+//
+// Note: /tools is now a real page (the tools browser, src/pages/tools.astro), so
+// it is no longer redirected to /architecture.
 const redirects = {
   "/skills": "/docs",
   "/skills/[...slug]": "/docs/[...slug]",
-  "/tools": "/architecture",
 };
 
 // https://astro.build/config

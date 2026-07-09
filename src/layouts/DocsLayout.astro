@@ -3,6 +3,9 @@ import BaseLayout from "./BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { SiteHeader } from "../components/landing/SiteHeader";
 import { SiteFooter } from "../components/landing/SiteFooter";
+import DocsNavTree from "../components/docs/DocsNavTree.astro";
+import type { TreeNode } from "../components/docs/DocsNavTree.astro";
+import toolsData from "../data/tools.json";
 
 interface Props {
   title?: string;
@@ -154,43 +157,157 @@ for (const g of sortedGroups) {
   g.items.sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
 }
 
+// --- Collapsible nav tree -------------------------------------------------
+// Turn each section's flat page list into a nested tree keyed by the page's
+// path segments (so it goes exactly as deep as the content: tools/<name>/readme
+// nests two levels), then bucket the many tools by kind and gather the sections
+// under a few super-categories. The result is rendered by DocsNavTree, which
+// folds everything except the branch leading to the current page.
+
+// Internal node shape: TreeNode plus sort/build bookkeeping fields (ignored by
+// the renderer).
+type BuildNode = TreeNode & { _seg?: string; _order?: number; children?: BuildNode[] };
+
+// tool name → "contract" | "substrate", used to split the Tools section.
+const TOOL_KIND = new Map<string, string>(
+  ((toolsData as { tools?: { name: string; kind: string }[] }).tools ?? []).map(
+    (t) => [t.name, t.kind],
+  ),
+);
+
+// Build the child nodes for one section from its (already-ordered) page items.
+const buildSection = (group: NavGroup): BuildNode[] => {
+  const strip = group.name === "_root" ? 0 : group.name.split("/").length;
+  const roots: BuildNode[] = [];
+  for (const item of group.items) {
+    const rel = item.slug.split("/").slice(strip);
+    let siblings = roots;
+    rel.forEach((seg, i) => {
+      const isLeaf = i === rel.length - 1;
+      let node = siblings.find((n) => n._seg === seg);
+      if (!node) {
+        node = { _seg: seg, label: "", _order: item.rank, children: [] };
+        siblings.push(node);
+      }
+      if (isLeaf) {
+        node.href = item.slug;
+        // Tool leaves are the tool's README → label it "Overview"; the tool
+        // name lives on the directory node above. Everything else keeps the
+        // label already computed for the flat list.
+        node.label = group.name === "tools" ? "Overview" : item.label;
+        node._order = item.rank;
+        node.isCurrent = item.slug === currentSlug;
+      } else if (!node.label) {
+        // Directory node: keep the raw segment for tool names (recognisable
+        // identifiers); prettify everything else.
+        node.label = group.name === "tools" ? seg : prettify(seg);
+      }
+      siblings = node.children!;
+    });
+  }
+  return roots;
+};
+
+// Bucket a section's direct children (tool directories) by kind.
+const bucketTools = (toolDirs: BuildNode[]): BuildNode[] => {
+  const groupsByKind: Record<string, BuildNode[]> = { contract: [], substrate: [], other: [] };
+  for (const dir of toolDirs) (groupsByKind[TOOL_KIND.get(dir._seg ?? "") ?? "other"]).push(dir);
+  const bucket = (label: string, dirs: BuildNode[], order: number): BuildNode | null =>
+    dirs.length ? { label: `${label} (${dirs.length})`, _order: order, children: dirs } : null;
+  return [
+    bucket("Contracts", groupsByKind.contract, 0),
+    bucket("Substrates", groupsByKind.substrate, 1),
+    bucket("Other", groupsByKind.other, 2),
+  ].filter((n): n is BuildNode => n !== null);
+};
+
+// Section (top-level group) key → its built node, ready to slot under a
+// super-category.
+const sectionNodes = new Map<string, BuildNode>();
+for (const g of sortedGroups) {
+  let children = buildSection(g);
+  if (g.name === "tools") children = bucketTools(children);
+  sectionNodes.set(g.name, { label: g.label, children });
+}
+
+// Super-categories: a shallow top level so the ~15 sections aren't all at the
+// root. Any section not listed here is appended to the last category so nothing
+// is ever dropped.
+const SUPER_CATEGORIES: { label: string; sections: string[] }[] = [
+  { label: "Start here", sections: ["_root", "setup"] },
+  { label: "Learn", sections: ["education", "education/training"] },
+  {
+    label: "Maintainer workflows",
+    sections: [
+      "pr-management", "issue-management", "security", "repo-health",
+      "release-management", "mentoring", "contributor-growth", "pairing",
+    ],
+  },
+  { label: "Extend & reference", sections: ["adapters", "tools", "rfcs", "skill-sources", "utilities"] },
+];
+const placed = new Set(SUPER_CATEGORIES.flatMap((c) => c.sections));
+const leftovers = sortedGroups.map((g) => g.name).filter((n) => !placed.has(n));
+SUPER_CATEGORIES[SUPER_CATEGORIES.length - 1].sections.push(...leftovers);
+
+const navTree: BuildNode[] = SUPER_CATEGORIES.map((cat, order) => ({
+  label: cat.label,
+  _order: order,
+  children: cat.sections
+    .map((key, i) => {
+      const node = sectionNodes.get(key);
+      if (node) node._order = i;
+      return node;
+    })
+    .filter((n): n is BuildNode => n !== undefined),
+})).filter((cat) => cat.children!.length > 0);
+
+// Sort every node's children by rank then label (directories inherit their
+// earliest descendant's rank), and mark the branch that holds the current page
+// so the renderer can open exactly that path.
+const finalize = (node: BuildNode): { order: number; hasCurrent: boolean } => {
+  if (!node.children || node.children.length === 0) {
+    return { order: node._order ?? 2_000_000, hasCurrent: !!node.isCurrent };
+  }
+  let minOrder = Infinity;
+  let hasCurrent = !!node.isCurrent;
+  for (const child of node.children) {
+    const r = finalize(child);
+    minOrder = Math.min(minOrder, r.order);
+    hasCurrent = hasCurrent || r.hasCurrent;
+  }
+  if (node._order === undefined) node._order = minOrder;
+  node.children.sort(
+    (a, b) => (a._order ?? 0) - (b._order ?? 0) || a.label.localeCompare(b.label),
+  );
+  node.hasCurrent = hasCurrent;
+  return { order: node._order, hasCurrent };
+};
+for (const cat of navTree) finalize(cat);
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"} editUrl={editUrl}>
   <SiteHeader />
   <div class="flex w-full">
-    <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 px-5 py-8 overflow-y-auto sticky top-0 max-h-screen mobile:hidden">
-      <a href={`${base}/`} class="block mb-6 text-body-bold font-body-bold text-brand-700 hover:text-brand-600">← Back to home</a>
-      <a
-        href={`${base}/docs/${QUICK_START.slug}`}
-        aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
-        class={`block mb-6 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
-      >
-        ⚡ {QUICK_START.label}
-      </a>
-      <nav class="flex flex-col gap-6">
-        {sortedGroups.map((group) => (
-          <div>
-            <div class="text-caption font-caption uppercase tracking-wider text-subtext-color mb-2">
-              {group.label}
-            </div>
-            <ul class="flex flex-col gap-1">
-              {group.items.map((item) => (
-                <li>
-                  <a
-                    href={`${base}/docs/${item.slug}`}
-                    aria-current={currentSlug === item.slug ? "page" : undefined}
-                    class={`block px-3 py-1.5 rounded-md text-body font-body capitalize ${currentSlug === item.slug ? "bg-brand-100 text-brand-800" : "text-default-font hover:bg-neutral-100"}`}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </nav>
+    <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden">
+      {/* Pinned header: stays put while the nav below scrolls. */}
+      <div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4">
+        <a href={`${base}/`} class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to home</a>
+        <div class="mt-1 text-heading-3 font-heading-3 text-default-font">Documentation</div>
+      </div>
+      <div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-5 py-5">
+        <a
+          href={`${base}/docs/${QUICK_START.slug}`}
+          aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
+          class={`block mb-5 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
+        >
+          ⚡ {QUICK_START.label}
+        </a>
+        <nav>
+          <DocsNavTree nodes={navTree} base={base} level={0} />
+        </nav>
+      </div>
     </aside>
     <main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8">
       <article class="prose prose-neutral max-w-3xl mx-auto">
@@ -201,16 +318,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   <SiteFooter />
 
   {/* On a long sidebar the active page can be scrolled out of view after a
-      full-page navigation. Bring it back into the sidebar viewport (scrolling
-      only the <aside>, not the window) so you keep your place. */}
+      full-page navigation. Bring it back into the sidebar's scroll viewport
+      (scrolling only the nav region, not the window) so you keep your place. */}
   <script is:inline>
     (() => {
-      const aside = document.querySelector("aside");
-      const active = aside?.querySelector('[aria-current="page"]');
-      if (!aside || !active) return;
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
       const target =
-        active.offsetTop - aside.clientHeight / 2 + active.offsetHeight / 2;
-      aside.scrollTop = Math.max(0, target);
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
     })();
   </script>
 </BaseLayout>
