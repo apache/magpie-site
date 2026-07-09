@@ -74,9 +74,19 @@ def landing_slugs() -> set[str]:
 
 
 def main() -> int:
+    # The docs content is synced in from apache/magpie (scripts/sync-docs.sh)
+    # and is gitignored, so it is absent in contexts that don't sync — notably
+    # the CI lint job, which runs prek without a build. Without the chapter
+    # pages there is nothing to check against, so skip cleanly rather than
+    # fail. The check still runs wherever docs are present (locally after
+    # `npm run sync-docs`, or any build context).
     if not EDUCATION_DIR.is_dir():
-        print(f"error: education docs directory not found: {EDUCATION_DIR}", file=sys.stderr)
-        return 1
+        print(
+            f"skip: education docs not synced ({EDUCATION_DIR} missing) — "
+            "run `npm run sync-docs` to enable this check",
+            file=sys.stderr,
+        )
+        return 0
     if not LANDING.is_file():
         print(f"error: landing page not found: {LANDING}", file=sys.stderr)
         return 1
