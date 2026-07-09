@@ -1,0 +1,99 @@
+---
+// Recursive, collapsible docs sidebar tree. Renders arbitrarily deep: a node
+// with children becomes a <details> toggle (native fold/unfold, no JS); a leaf
+// becomes a page link. Each <details> is server-rendered `open` only when the
+// current page lives at or below it, so on load exactly the branch leading to
+// the active page is unfolded and everything else is folded. Users can toggle
+// any node freely.
+export interface TreeNode {
+  label: string;
+  /** Page slug (leaf). Mutually exclusive with `children`. */
+  href?: string;
+  /** Child nodes (directory / toggle). Absent or empty ⇒ this is a leaf. */
+  children?: TreeNode[];
+  /** The current page is this node or somewhere beneath it ⇒ render open. */
+  hasCurrent?: boolean;
+  /** This leaf is the current page. */
+  isCurrent?: boolean;
+}
+interface Props {
+  nodes: TreeNode[];
+  base: string;
+  level?: number;
+}
+const { nodes, base, level = 0 } = Astro.props;
+
+// Indent each level; leaves sit a touch deeper so they line up past the parent
+// summary's chevron.
+const pad = (l: number) => `padding-left: ${(0.35 + l * 0.8).toFixed(3)}rem`;
+
+const summaryBase =
+  "tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none";
+const summaryTone = (l: number) =>
+  l === 0
+    ? "text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font"
+    : "text-body font-body text-default-font hover:bg-neutral-100";
+const linkTone = (isCurrent?: boolean) =>
+  isCurrent
+    ? "bg-brand-100 text-brand-800"
+    : "text-default-font hover:bg-neutral-100";
+---
+
+<ul class={level === 0 ? "flex flex-col gap-1.5" : "flex flex-col gap-0.5"}>
+  {nodes.map((node) =>
+    node.children && node.children.length > 0 ? (
+      <li>
+        {/* Level-0 (super-categories) stay open so the sidebar always shows at
+            least two levels — the categories and their sections. Deeper nodes
+            open only along the branch leading to the current page. */}
+        <details open={level === 0 || node.hasCurrent}>
+          <summary class={`${summaryBase} ${summaryTone(level)}`} style={pad(level)}>
+            <svg
+              class="tree-chevron flex-none"
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+            <span class="truncate">{node.label}</span>
+          </summary>
+          <Astro.self nodes={node.children} base={base} level={level + 1} />
+        </details>
+      </li>
+    ) : (
+      <li>
+        <a
+          href={`${base}/docs/${node.href}`}
+          aria-current={node.isCurrent ? "page" : undefined}
+          class={`block rounded-md py-1 pr-2 text-body font-body capitalize ${linkTone(node.isCurrent)}`}
+          style={pad(level + 0.9)}
+        >
+          {node.label}
+        </a>
+      </li>
+    ),
+  )}
+</ul>
+
+<style>
+  .tree-summary {
+    list-style: none;
+  }
+  .tree-summary::-webkit-details-marker {
+    display: none;
+  }
+  .tree-chevron {
+    transition: transform 0.15s ease;
+    color: var(--color-subtext-color);
+  }
+  details[open] > .tree-summary .tree-chevron {
+    transform: rotate(90deg);
+  }
+</style>

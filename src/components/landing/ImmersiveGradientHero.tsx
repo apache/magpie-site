@@ -578,6 +578,16 @@ function ImmersiveGradientHero() {
               <ArrowUpRight className="size-3.5" />
             </a>
             <a
+              className="hidden items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100 2xl:inline-flex"
+              href={withBase("/tools")}
+              target="_blank"
+              rel="noreferrer"
+              title="Browse the tools"
+            >
+              Tools
+              <ArrowUpRight className="size-3.5" />
+            </a>
+            <a
               href={withBase("/downloads")}
               aria-label="Downloads"
               title="Downloads"
@@ -635,6 +645,16 @@ function ImmersiveGradientHero() {
                   onClick={() => setMenuOpen(false)}
                 >
                   Architecture
+                  <ArrowUpRight className="size-3.5" />
+                </a>
+                <a
+                  className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-body-bold font-body-bold text-brand-700 hover:border-brand-300 hover:bg-brand-100"
+                  href={withBase("/tools")}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Tools
                   <ArrowUpRight className="size-3.5" />
                 </a>
                 <a
@@ -1472,11 +1492,11 @@ function ImmersiveGradientHero() {
             </a>
             <a
               className="inline-flex items-center gap-1.5 rounded-md border border-solid border-brand-200 bg-brand-50 px-3 py-1.5 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-              href={withBase("/architecture")}
+              href={withBase("/tools")}
               target="_blank"
               rel="noreferrer"
             >
-              Browse tools &amp; capabilities
+              Browse the tools
               <ArrowUpRight className="size-3.5" />
             </a>
           </div>
@@ -2002,6 +2022,7 @@ function ImmersiveGradientHero() {
               <span className="text-body-bold font-body-bold text-default-font">Project</span>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/architecture")} target="_blank" rel="noreferrer">Architecture<ArrowUpRight className="size-3.5" /></a>
+              <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/tools")} target="_blank" rel="noreferrer">Tools<ArrowUpRight className="size-3.5" /></a>
               <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/downloads")}>Downloads</a>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<ArrowUpRight className="size-3.5" /></a>
               <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<ArrowUpRight className="size-3.5" /></a>
