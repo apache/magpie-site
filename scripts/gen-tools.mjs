@@ -91,7 +91,11 @@ for (const line of labels.split("\n")) {
   const m = line.match(
     /^\|\s*([^|]+?)\s*\|\s*`(mcp__[^`]+)`\s*\|\s*\[`tools\/([a-z0-9-]+)`\]/,
   );
-  if (m) mcpByTool[m[3]] = { server: m[1].trim().replace(/`/g, ""), prefix: m[2].trim() };
+  if (m)
+    mcpByTool[m[3]] = {
+      server: m[1].trim().replace(/`/g, ""),
+      prefix: m[2].trim(),
+    };
 }
 
 // --- spec maturity per tool ---------------------------------------------
@@ -203,6 +207,14 @@ function harnessOf(md) {
   const m = md.match(/^\*\*Harness:\*\*\s*(.+?)\s*$/m);
   return m ? m[1].trim() : null;
 }
+// MCP backing a tool wraps, from its own README marker (the per-tool source
+// of truth — see tools/AGENTS.md):
+//   **MCP:** <server> (mcp__<prefix>__*)
+// Returns { server, prefix } (same shape as the labels-table fallback below).
+function mcpOf(md) {
+  const m = md.match(/^\*\*MCP:\*\*\s*(.+?)\s*\((mcp__[^)]+)\)\s*$/m);
+  return m ? { server: m[1].trim(), prefix: m[2].trim() } : null;
+}
 
 const tools = [];
 for (const name of readdirSync(toolsDir).sort()) {
@@ -227,7 +239,9 @@ for (const name of readdirSync(toolsDir).sort()) {
     vendor: vendorOf(readme),
     harness: harnessOf(readme),
     organization: organizationOf(readme),
-    mcp: mcpByTool[name] ?? null,
+    // Prefer the per-tool README **MCP:** marker (source of truth); fall back
+    // to the labels-and-capabilities MCP table for any tool not yet migrated.
+    mcp: mcpOf(readme) ?? mcpByTool[name] ?? null,
     hasCode,
     maturity: toolMaturity[name] ?? null,
     state: hasCode ? "implemented" : "adapter",
@@ -279,7 +293,9 @@ if (isDir(orgsDir)) {
     if (!existsSync(orgFile)) continue;
     const body = read(orgFile);
     const ident = {};
-    const block = body.match(/organization_identity:\s*\n([\s\S]*?)(\n```|\n#|\n\S)/);
+    const block = body.match(
+      /organization_identity:\s*\n([\s\S]*?)(\n```|\n#|\n\S)/,
+    );
     const src = block ? block[1] : "";
     for (const line of src.split("\n")) {
       const km = line.match(/^\s+(id|name|url|logo):\s*(.*)$/);
@@ -371,9 +387,15 @@ const CONTRACT_USAGE_TOKENS = {
     /mcp__ponymail__/,
     /mcp__claude_ai_Gmail__(?:search_threads|get_thread|list_)/,
   ],
-  "contract:mail-create": [/mcp__claude_ai_Gmail__create_draft/, /\bcreate_draft\b/],
+  "contract:mail-create": [
+    /mcp__claude_ai_Gmail__create_draft/,
+    /\bcreate_draft\b/,
+  ],
   "contract:cve-authority": [/\bVulnogram\b/, /\bcveawg\b/, /\bcve\.org\b/],
-  "contract:project-metadata": [/mcp__apache-projects__/, /\bprojects\.apache\.org\b/],
+  "contract:project-metadata": [
+    /mcp__apache-projects__/,
+    /\bprojects\.apache\.org\b/,
+  ],
 };
 
 const contractTools = tools.filter((t) =>
@@ -381,7 +403,9 @@ const contractTools = tools.filter((t) =>
 );
 const providersOf = (contract) =>
   contractTools.filter((t) =>
-    t.labels.some((l) => l.kind === "contract" && `contract:${l.name}` === contract),
+    t.labels.some(
+      (l) => l.kind === "contract" && `contract:${l.name}` === contract,
+    ),
   );
 
 const vnContracts = CONTRACT_POLICY.map(([contract, klass]) => {
@@ -413,10 +437,20 @@ const vnContracts = CONTRACT_POLICY.map(([contract, klass]) => {
         ? "no backend implemented yet"
         : `only ${n} backend vendor (${vendors.join(", ")}); needs ${MIN_VENDORS - n} more`;
   }
-  return { contract, class: klass, green, basis, vendors, interfaces, implementations };
+  return {
+    contract,
+    class: klass,
+    green,
+    basis,
+    vendors,
+    interfaces,
+    implementations,
+  };
 });
 
-const greenByContract = Object.fromEntries(vnContracts.map((r) => [r.contract, r.green]));
+const greenByContract = Object.fromEntries(
+  vnContracts.map((r) => [r.contract, r.green]),
+);
 // A not-green vendor-backed contract with exactly one backend is a real
 // lock-in; name the sole vendor so the report can attribute it.
 const soleVendor = {};
@@ -434,10 +468,24 @@ const vnSkills = skillRecords.map(({ name, org, body }) => {
   const coupled = used
     .filter((c) => !greenByContract[c] && c in soleVendor)
     .map((c) => ({ vendor: soleVendor[c], contract: c }))
-    .sort((a, b) => a.vendor.localeCompare(b.vendor) || a.contract.localeCompare(b.contract));
+    .sort(
+      (a, b) =>
+        a.vendor.localeCompare(b.vendor) ||
+        a.contract.localeCompare(b.contract),
+    );
   const verdict =
-    used.length === 0 ? "capability-pure" : coupled.length ? "vendor-coupled" : "portable";
-  return { skill: name, organization: org, contractsUsed: used, verdict, coupled };
+    used.length === 0
+      ? "capability-pure"
+      : coupled.length
+        ? "vendor-coupled"
+        : "portable";
+  return {
+    skill: name,
+    organization: org,
+    contractsUsed: used,
+    verdict,
+    coupled,
+  };
 });
 
 const vnByVerdict = { "capability-pure": 0, portable: 0, "vendor-coupled": 0 };
@@ -456,7 +504,9 @@ const vnTotal = vnContracts.length;
 // framework carries it), so a resync against an older magpie stays valid.
 const AGNOSTIC_HARNESS = "agnostic";
 const substrateTools = tools.filter(
-  (t) => t.labels.some((l) => l.kind === "substrate") && !t.labels.some((l) => l.kind === "contract"),
+  (t) =>
+    t.labels.some((l) => l.kind === "substrate") &&
+    !t.labels.some((l) => l.kind === "contract"),
 );
 const vnHarness = substrateTools
   .filter((t) => t.harness)
@@ -469,7 +519,14 @@ const vnHarness = substrateTools
     if (t.harness.toLowerCase() === AGNOSTIC_HARNESS) {
       verdict = "agnostic";
     } else {
-      harnesses = [...new Set(t.harness.split(",").map((h) => h.trim()).filter(Boolean))].sort();
+      harnesses = [
+        ...new Set(
+          t.harness
+            .split(",")
+            .map((h) => h.trim())
+            .filter(Boolean),
+        ),
+      ].sort();
       verdict = harnesses.length >= MIN_VENDORS ? "portable" : "coupled";
     }
     return { tool: t.name, substrates, harnesses, verdict };
@@ -477,7 +534,8 @@ const vnHarness = substrateTools
   .sort((a, b) => a.tool.localeCompare(b.tool));
 const harnessMatrix = {};
 for (const r of vnHarness) {
-  if (r.verdict === "agnostic") (harnessMatrix[AGNOSTIC_HARNESS] ??= []).push(r.tool);
+  if (r.verdict === "agnostic")
+    (harnessMatrix[AGNOSTIC_HARNESS] ??= []).push(r.tool);
   else for (const h of r.harnesses) (harnessMatrix[h] ??= []).push(r.tool);
 }
 for (const h of Object.keys(harnessMatrix)) harnessMatrix[h].sort();
@@ -492,8 +550,12 @@ function parseApprovedLlms() {
   const rows = [];
   for (const line of section.split("\n")) {
     const l = line.trim();
-    if (!l.startsWith("|") || l.startsWith("|--") || /\|\s*Class\s*\|/.test(l)) continue;
-    const cells = l.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+    if (!l.startsWith("|") || l.startsWith("|--") || /\|\s*Class\s*\|/.test(l))
+      continue;
+    const cells = l
+      .replace(/^\||\|$/g, "")
+      .split("|")
+      .map((c) => c.trim());
     if (cells.length < 3) continue;
     const name = cells[0].replace(/\*\*/g, "").replace(/`/g, "").trim();
     if (name) rows.push({ class: name, examples: cells[2].trim() });
@@ -514,7 +576,9 @@ const vendorNeutrality = {
     harness: {
       neutral: harnessNeutral,
       total: vnHarness.length,
-      percent: vnHarness.length ? Math.round((100 * harnessNeutral) / vnHarness.length) : 0,
+      percent: vnHarness.length
+        ? Math.round((100 * harnessNeutral) / vnHarness.length)
+        : 0,
       tools: vnHarness,
       matrix: harnessMatrix,
     },
@@ -522,7 +586,8 @@ const vendorNeutrality = {
   ...(vnLlm.length > 0 && {
     llm: {
       defaultApproved: vnLlm,
-      optIn: "adopter-declared in <project-config>/privacy-llm.md (no fixed list)",
+      optIn:
+        "adopter-declared in <project-config>/privacy-llm.md (no fixed list)",
     },
   }),
   skills: {
