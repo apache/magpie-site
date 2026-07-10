@@ -22,18 +22,18 @@ const SlackIcon = (props: React.SVGProps<SVGSVGElement>) => (
 // ── Link primitives ────────────────────────────────────────────────────────
 // Two kinds of footer link, so the "opens in a new tab ⇒ trailing ↗" rule is
 // enforced by construction and can't drift:
-//   InternalLink — same-site route, opens in place, no arrow.
-//   ExternalLink — leaves the site, opens in a new tab, always shows ↗.
+//   SameTabLink — opens in place, no arrow.
+//   NewTabLink  — opens in a new tab, always shows ↗.
 const linkCls =
-  "inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600";
+  "inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600";
 
-const InternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+const SameTabLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a className={linkCls} href={href}>
     {children}
   </a>
 );
 
-const ExternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+const NewTabLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a className={linkCls} href={href} target="_blank" rel="noreferrer">
     {children}
     <ArrowUpRight className="size-3.5" />
@@ -43,15 +43,16 @@ const ExternalLink = ({ href, children }: { href: string; children: React.ReactN
 // ── Footer link model ───────────────────────────────────────────────────────
 // The single source of truth for footer navigation. Both the landing page and
 // every other page render this same <SiteFooter>, so the columns stay in sync.
-type FooterLink = { label: string; href: string; external?: boolean };
+// `newTab` (external links and the docs pages) opens in a new tab with a ↗.
+type FooterLink = { label: string; href: string; newTab?: boolean };
 
-const columns: { title: string; links: FooterLink[] }[] = [
+const columns: { title: string; links: FooterLink[]; twoCol?: boolean }[] = [
   {
     title: "Documentation",
     links: [
-      { label: "Documentation", href: withBase("/docs") },
-      { label: "Architecture", href: withBase("/architecture") },
-      { label: "Tools", href: withBase("/tools") },
+      { label: "Documentation", href: withBase("/docs"), newTab: true },
+      { label: "Architecture", href: withBase("/architecture"), newTab: true },
+      { label: "Tools", href: withBase("/tools"), newTab: true },
     ],
   },
   {
@@ -59,30 +60,32 @@ const columns: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Downloads", href: withBase("/downloads") },
       { label: "Brand assets", href: withBase("/brand") },
-      { label: "Roadmap", href: "https://github.com/apache/magpie/issues", external: true },
-      { label: "Changelog", href: "https://github.com/apache/magpie/releases", external: true },
+      { label: "Roadmap", href: "https://github.com/apache/magpie/issues", newTab: true },
+      { label: "Changelog", href: "https://github.com/apache/magpie/releases", newTab: true },
     ],
   },
   {
     title: "Community",
     links: [
-      { label: "Contributing", href: "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md", external: true },
-      { label: "Mailing Lists", href: "https://lists.apache.org/list.html?dev@magpie.apache.org", external: true },
-      { label: "Slack Channel", href: "https://the-asf.slack.com/archives/C0BD1EBMVEJ", external: true },
-      { label: "Issue Tracker", href: "https://github.com/apache/magpie/issues", external: true },
-      { label: "Report a site issue", href: "https://github.com/apache/magpie-site/issues/new", external: true },
+      { label: "Contributing", href: "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md", newTab: true },
+      { label: "Mailing Lists", href: "https://lists.apache.org/list.html?dev@magpie.apache.org", newTab: true },
+      { label: "Slack Channel", href: "https://the-asf.slack.com/archives/C0BD1EBMVEJ", newTab: true },
+      { label: "Issue Tracker", href: "https://github.com/apache/magpie/issues", newTab: true },
+      { label: "Report a site issue", href: "https://github.com/apache/magpie-site/issues/new", newTab: true },
     ],
   },
   {
     title: "Foundation",
+    // Rendered two links per row to save vertical space (7 external links).
+    twoCol: true,
     links: [
-      { label: "Apache Home", href: "https://www.apache.org/", external: true },
-      { label: "License", href: "https://www.apache.org/licenses/", external: true },
-      { label: "Events", href: "https://www.apache.org/events/current-event", external: true },
-      { label: "Sponsorship", href: "https://www.apache.org/foundation/sponsorship.html", external: true },
-      { label: "Thanks", href: "https://www.apache.org/foundation/thanks.html", external: true },
-      { label: "Security", href: "https://www.apache.org/security/", external: true },
-      { label: "Privacy", href: "https://privacy.apache.org/policies/privacy-policy-public.html", external: true },
+      { label: "Apache Home", href: "https://www.apache.org/", newTab: true },
+      { label: "License", href: "https://www.apache.org/licenses/", newTab: true },
+      { label: "Events", href: "https://www.apache.org/events/current-event", newTab: true },
+      { label: "Sponsorship", href: "https://www.apache.org/foundation/sponsorship.html", newTab: true },
+      { label: "Thanks", href: "https://www.apache.org/foundation/thanks.html", newTab: true },
+      { label: "Security", href: "https://www.apache.org/security/", newTab: true },
+      { label: "Privacy", href: "https://privacy.apache.org/policies/privacy-policy-public.html", newTab: true },
     ],
   },
 ];
@@ -115,15 +118,17 @@ export function SiteFooter() {
         </div>
         <div className="flex grow shrink-0 basis-0 flex-wrap items-start gap-8">
           {columns.map((col) => (
-            <div key={col.title} className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
+            <div key={col.title} className={`flex grow shrink-0 basis-0 flex-col items-start gap-3 ${col.twoCol ? "min-w-[200px]" : "min-w-[130px]"}`}>
               <span className="text-body-bold font-body-bold text-default-font">{col.title}</span>
-              {col.links.map((link) =>
-                link.external ? (
-                  <ExternalLink key={link.label} href={link.href}>{link.label}</ExternalLink>
-                ) : (
-                  <InternalLink key={link.label} href={link.href}>{link.label}</InternalLink>
-                ),
-              )}
+              <div className={col.twoCol ? "grid grid-cols-[auto_auto] justify-start gap-x-8 gap-y-3" : "flex flex-col items-start gap-3"}>
+                {col.links.map((link) =>
+                  link.newTab ? (
+                    <NewTabLink key={link.label} href={link.href}>{link.label}</NewTabLink>
+                  ) : (
+                    <SameTabLink key={link.label} href={link.href}>{link.label}</SameTabLink>
+                  ),
+                )}
+              </div>
             </div>
           ))}
         </div>
