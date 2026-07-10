@@ -19,6 +19,74 @@ const SlackIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// ── Link primitives ────────────────────────────────────────────────────────
+// Two kinds of footer link, so the "opens in a new tab ⇒ trailing ↗" rule is
+// enforced by construction and can't drift:
+//   InternalLink — same-site route, opens in place, no arrow.
+//   ExternalLink — leaves the site, opens in a new tab, always shows ↗.
+const linkCls =
+  "inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600";
+
+const InternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a className={linkCls} href={href}>
+    {children}
+  </a>
+);
+
+const ExternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a className={linkCls} href={href} target="_blank" rel="noreferrer">
+    {children}
+    <ArrowUpRight className="size-3.5" />
+  </a>
+);
+
+// ── Footer link model ───────────────────────────────────────────────────────
+// The single source of truth for footer navigation. Both the landing page and
+// every other page render this same <SiteFooter>, so the columns stay in sync.
+type FooterLink = { label: string; href: string; external?: boolean };
+
+const columns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "Documentation",
+    links: [
+      { label: "Documentation", href: withBase("/docs") },
+      { label: "Architecture", href: withBase("/architecture") },
+      { label: "Tools", href: withBase("/tools") },
+    ],
+  },
+  {
+    title: "Project",
+    links: [
+      { label: "Downloads", href: withBase("/downloads") },
+      { label: "Brand assets", href: withBase("/brand") },
+      { label: "Roadmap", href: "https://github.com/apache/magpie/issues", external: true },
+      { label: "Changelog", href: "https://github.com/apache/magpie/releases", external: true },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "Contributing", href: "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md", external: true },
+      { label: "Mailing Lists", href: "https://lists.apache.org/list.html?dev@magpie.apache.org", external: true },
+      { label: "Slack Channel", href: "https://the-asf.slack.com/archives/C0BD1EBMVEJ", external: true },
+      { label: "Issue Tracker", href: "https://github.com/apache/magpie/issues", external: true },
+      { label: "Report a site issue", href: "https://github.com/apache/magpie-site/issues/new", external: true },
+    ],
+  },
+  {
+    title: "Foundation",
+    links: [
+      { label: "Apache Home", href: "https://www.apache.org/", external: true },
+      { label: "License", href: "https://www.apache.org/licenses/", external: true },
+      { label: "Events", href: "https://www.apache.org/events/current-event", external: true },
+      { label: "Sponsorship", href: "https://www.apache.org/foundation/sponsorship.html", external: true },
+      { label: "Thanks", href: "https://www.apache.org/foundation/thanks.html", external: true },
+      { label: "Security", href: "https://www.apache.org/security/", external: true },
+      { label: "Privacy", href: "https://privacy.apache.org/policies/privacy-policy-public.html", external: true },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
     <footer className="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8">
@@ -46,39 +114,18 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="flex grow shrink-0 basis-0 flex-wrap items-start gap-8">
-          <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
-            <span className="text-body-bold font-body-bold text-default-font">Project</span>
-            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/docs")} target="_blank" rel="noreferrer">Documentation<ArrowUpRight className="size-3.5" /></a>
-            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/architecture")} target="_blank" rel="noreferrer">Architecture<ArrowUpRight className="size-3.5" /></a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/downloads")}>Downloads</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href={withBase("/brand")}>Brand assets</a>
-            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<ArrowUpRight className="size-3.5" /></a>
-            <a className="inline-flex items-center gap-1 text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<ArrowUpRight className="size-3.5" /></a>
-          </div>
-          <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
-            <span className="text-body-bold font-body-bold text-default-font">Community</span>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md">Contributing</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org">Mailing Lists</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ">Slack Channel</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues">Issue Tracker</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new">Report a site issue</a>
-          </div>
-          <div className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
-            <span className="text-body-bold font-body-bold text-default-font">Foundation</span>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/">Apache Home</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/">License</a>
-            <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event">Events</a>
-            <div className="flex items-center gap-2">
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
-              <span className="text-body font-body text-subtext-color">·</span>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
+          {columns.map((col) => (
+            <div key={col.title} className="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]">
+              <span className="text-body-bold font-body-bold text-default-font">{col.title}</span>
+              {col.links.map((link) =>
+                link.external ? (
+                  <ExternalLink key={link.label} href={link.href}>{link.label}</ExternalLink>
+                ) : (
+                  <InternalLink key={link.label} href={link.href}>{link.label}</InternalLink>
+                ),
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/">Security</a>
-              <span className="text-body font-body text-subtext-color">·</span>
-              <a className="text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       <div className="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]">
