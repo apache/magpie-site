@@ -136,6 +136,27 @@ issue #10.)
   still in their intended state (footer identical; header intentionally
   slimmed).
 
+## apache-magpie framework
+
+This repo adopts the [`apache/magpie`](https://github.com/apache/magpie)
+framework via the snapshot mechanism. Framework skills are gitignored symlinks
+into the `.apache-magpie/` snapshot directory; only the `setup` skill is
+committed (as `.agents/skills/magpie-setup/`). This site wires the always-on
+`setup-*` and `list-*` families; the opt-in families (`pr-management`,
+`security`, `issue`) are not installed.
+
+A fresh clone needs the snapshot populated before any framework skill is
+invocable. Run `/magpie-setup` (or follow
+[`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/)) to fetch it per
+the committed [`.apache-magpie.lock`](.apache-magpie.lock). The
+contributor-facing summary lives in the
+[Agent-assisted contribution section of `README.md`](README.md#agent-assisted-contribution-apache-magpie).
+
+Adopter-specific modifications to framework-skill workflows live in
+[`.apache-magpie-overrides/`](.apache-magpie-overrides/) — never edit the
+snapshot directly. Framework changes go via PR to
+[`apache/magpie`](https://github.com/apache/magpie).
+
 ## References
 
 - Framework + conventions: https://github.com/apache/magpie (`AGENTS.md`)

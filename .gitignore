@@ -39,3 +39,44 @@ CLAUDE.md
 .apache-magpie/
 docs/superpowers/
 .subframe/
+
+# Magpie — gitignored snapshot of the framework, refreshed
+# by /magpie-setup upgrade. Build artefact, not source.
+/.apache-magpie/
+
+# Per-machine local-pin file. Records what THIS machine fetched and
+# when. Compared against the committed .apache-magpie.lock to
+# detect drift.
+/.apache-magpie.local.lock
+
+# Trusted external skill sources: the gitignored fetch and its
+# per-machine fetch fingerprint. The committed per-source pins
+# (.apache-magpie.sources.lock) travel with the repo and are NOT ignored.
+/.apache-magpie-sources/
+/.apache-magpie.sources.local.lock
+
+# Byte-compiled artefacts emitted when framework skill scripts run
+# from this checkout. Non-anchored so they match at any depth.
+__pycache__/
+*.pyc
+
+# Deterministic agent-guard PreToolUse hook — framework code synced
+# from the snapshot by /magpie-setup (and seeded into each worktree),
+# not an adopter artefact. The committed .claude/settings.json wires
+# it; the script itself stays gitignored. Force-add your own guards
+# under guards.d/ with `git add -f` if you want them tracked.
+/.claude/hooks/agent-guard.py
+/.claude/hooks/guards.d/
+
+# Framework-skill symlinks created by /magpie-setup. One uniform
+# block per skills dir you use: the `magpie-*` glob ignores them
+# all (their targets are the gitignored snapshot, so they would
+# dangle on a fresh clone), and the `!…/magpie-setup` negation keeps
+# the one committed bootstrap tracked. .agents/skills/ is canonical;
+# the rest are relays into it. Drop any block for a dir you don't use.
+/.agents/skills/magpie-*
+!/.agents/skills/magpie-setup
+/.claude/skills/magpie-*
+!/.claude/skills/magpie-setup
+/.github/skills/magpie-*
+!/.github/skills/magpie-setup

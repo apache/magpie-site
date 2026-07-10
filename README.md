@@ -117,6 +117,39 @@ The site is built with `base: '/'` so all links and assets resolve against the a
 
 > One-time infra setup (outside this repo): for a brand-new project, ASF Infra may still need to provision DNS/TLS for `magpie.apache.org` before the inferred hostname resolves.
 
+## Agent-assisted contribution (apache-magpie)
+
+This repo adopts the
+[`apache/magpie`](https://github.com/apache/magpie) framework via a snapshot
+mechanism, making its maintainer-facing agent skills available in harnesses
+such as Claude Code.
+
+The framework is **not** vendored — it lives as a gitignored snapshot under
+`.apache-magpie/`, fetched on demand from the version pinned in the committed
+[`.apache-magpie.lock`](.apache-magpie.lock). The only framework artefact
+committed to this repo is the `setup` skill at
+[`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/); everything else
+is a gitignored symlink the setup skill wires up.
+
+This site currently wires the framework's always-on **`setup-*`** (secure-agent
+setup, status, upstream-fix) and **`list-*`** (skill discovery) families. The
+opt-in families (`pr-management`, `security`, `issue`) are not installed; add
+them later by re-running `/magpie-setup`.
+
+A fresh clone needs the snapshot populated before any framework skill is
+invocable. In your agent harness, run:
+
+    /magpie-setup
+
+(or follow [`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/)) to
+fetch the snapshot per the committed lock, scaffold the gitignored symlinks, and
+install the post-checkout hook that re-creates them on each worktree checkout.
+
+Adopter-specific modifications to framework workflows live in
+[`.apache-magpie-overrides/`](.apache-magpie-overrides/) (committed) — never
+edit the snapshot directly. Framework changes go via PR to
+[`apache/magpie`](https://github.com/apache/magpie).
+
 ## License
 
 [Apache License 2.0](./LICENSE).
