@@ -15,6 +15,9 @@ export interface TreeNode {
   hasCurrent?: boolean;
   /** This leaf is the current page. */
   isCurrent?: boolean;
+  /** Cached sort key computed by DocsLayout's `finalize` pass (min order of a
+   *  node's subtree). Internal — set during finalization, not by callers. */
+  _order?: number;
 }
 interface Props {
   nodes: TreeNode[];
