@@ -82,22 +82,6 @@ for (const line of labels.split("\n")) {
   }
 }
 
-// MCP servers a tool wraps, from the "MCP servers, classified by capability"
-// table: | <server> | `<prefix>` | [`tools/<name>`](..) | <capability> | <org> |.
-// An MCP is just a transport behind a capability contract — classify the
-// wrapping tool, and badge it so the site can explain the relationship.
-const mcpByTool = {};
-for (const line of labels.split("\n")) {
-  const m = line.match(
-    /^\|\s*([^|]+?)\s*\|\s*`(mcp__[^`]+)`\s*\|\s*\[`tools\/([a-z0-9-]+)`\]/,
-  );
-  if (m)
-    mcpByTool[m[3]] = {
-      server: m[1].trim().replace(/`/g, ""),
-      prefix: m[2].trim(),
-    };
-}
-
 // --- spec maturity per tool ---------------------------------------------
 // status precedence (higher = more mature / more done)
 const RANK = { off: -1, proposed: 0, experimental: 1, stable: 2 };
@@ -207,10 +191,12 @@ function harnessOf(md) {
   const m = md.match(/^\*\*Harness:\*\*\s*(.+?)\s*$/m);
   return m ? m[1].trim() : null;
 }
-// MCP backing a tool wraps, from its own README marker (the per-tool source
-// of truth — see tools/AGENTS.md):
+// MCP backing a tool wraps, from its own README marker — the single source of
+// truth every MCP-wrapper tool now carries (see tools/AGENTS.md):
 //   **MCP:** <server> (mcp__<prefix>__*)
-// Returns { server, prefix } (same shape as the labels-table fallback below).
+// An MCP is just a transport behind a capability contract; the marker lets the
+// site badge the wrapping tool and explain the relationship. Returns
+// { server, prefix }.
 function mcpOf(md) {
   const m = md.match(/^\*\*MCP:\*\*\s*(.+?)\s*\((mcp__[^)]+)\)\s*$/m);
   return m ? { server: m[1].trim(), prefix: m[2].trim() } : null;
@@ -239,9 +225,8 @@ for (const name of readdirSync(toolsDir).sort()) {
     vendor: vendorOf(readme),
     harness: harnessOf(readme),
     organization: organizationOf(readme),
-    // Prefer the per-tool README **MCP:** marker (source of truth); fall back
-    // to the labels-and-capabilities MCP table for any tool not yet migrated.
-    mcp: mcpOf(readme) ?? mcpByTool[name] ?? null,
+    // "Wraps an MCP" flag, read from the per-tool README **MCP:** marker.
+    mcp: mcpOf(readme) ?? null,
     hasCode,
     maturity: toolMaturity[name] ?? null,
     state: hasCode ? "implemented" : "adapter",
