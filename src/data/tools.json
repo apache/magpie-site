@@ -90,7 +90,7 @@
       "harness": null,
       "organization": "ASF",
       "mcp": {
-        "server": "apache-projects MCP (apache/comdev)",
+        "server": "apache-projects — apache/comdev",
         "prefix": "mcp__apache-projects__*"
       },
       "hasCode": false,
@@ -431,7 +431,7 @@
       "harness": null,
       "organization": null,
       "mcp": {
-        "server": "Gmail MCP (claude.ai)",
+        "server": "Gmail — claude.ai",
         "prefix": "mcp__claude_ai_Gmail__*"
       },
       "hasCode": false,
@@ -631,7 +631,7 @@
       "harness": null,
       "organization": "ASF",
       "mcp": {
-        "server": "PonyMail MCP (apache/comdev)",
+        "server": "PonyMail — apache/comdev",
         "prefix": "mcp__ponymail__*"
       },
       "hasCode": false,
@@ -1609,15 +1609,15 @@
       "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
     },
     "skills": {
-      "total": 69,
-      "neutral": 69,
+      "total": 70,
+      "neutral": 70,
       "byVerdict": {
-        "capability-pure": 10,
+        "capability-pure": 11,
         "portable": 59,
         "vendor-coupled": 0
       },
       "byOrg": {
-        "agnostic": 55,
+        "agnostic": 56,
         "ASF": 14
       },
       "coupled": [],
@@ -1688,6 +1688,13 @@
         },
         {
           "skill": "dependency-audit",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "dependency-license-audit",
           "verdict": "capability-pure",
           "organization": "agnostic",
           "contractsUsed": [],
@@ -2208,7 +2215,8 @@
           "verdict": "portable",
           "organization": "agnostic",
           "contractsUsed": [
-            "contract:source-control"
+            "contract:source-control",
+            "contract:tracker"
           ],
           "coupled": []
         },
@@ -2261,8 +2269,8 @@
     }
   },
   "skills": {
-    "total": 69,
-    "apacheLicensed": 69,
+    "total": 70,
+    "apacheLicensed": 70,
     "allApache": true,
     "license": "Apache-2.0",
     "byOrg": {
