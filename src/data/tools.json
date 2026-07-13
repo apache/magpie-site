@@ -582,7 +582,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode, Kiro",
+      "harness": "agnostic",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -736,7 +736,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode, Kiro",
+      "harness": "Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Kiro",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -1387,12 +1387,8 @@
           "substrates": [
             "substrate:sandbox"
           ],
-          "harnesses": [
-            "Claude Code",
-            "Kiro",
-            "OpenCode"
-          ],
-          "verdict": "portable"
+          "harnesses": [],
+          "verdict": "agnostic"
         },
         {
           "tool": "pilot-report-validator",
@@ -1441,6 +1437,9 @@
           ],
           "harnesses": [
             "Claude Code",
+            "Codex",
+            "Cursor",
+            "Gemini CLI",
             "Kiro",
             "OpenCode"
           ],
@@ -1540,19 +1539,16 @@
       "matrix": {
         "Claude Code": [
           "agent-guard",
-          "permission-audit",
           "sandbox-lint",
           "spec-loop"
         ],
         "Kiro": [
           "agent-guard",
-          "permission-audit",
           "sandbox-lint",
           "spec-loop"
         ],
         "OpenCode": [
           "agent-guard",
-          "permission-audit",
           "sandbox-lint",
           "spec-loop"
         ],
@@ -1561,6 +1557,7 @@
           "dashboard-generator",
           "dev",
           "egress-gateway",
+          "permission-audit",
           "pilot-report-validator",
           "pr-management-stats",
           "preflight-audit",
@@ -1577,12 +1574,15 @@
           "vendor-neutrality-score"
         ],
         "Codex": [
+          "sandbox-lint",
           "spec-loop"
         ],
         "Cursor": [
+          "sandbox-lint",
           "spec-loop"
         ],
         "Gemini CLI": [
+          "sandbox-lint",
           "spec-loop"
         ]
       }
