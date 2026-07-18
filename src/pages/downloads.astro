@@ -19,8 +19,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const PROJECT = "magpie";
 const release = {
   version: "0.1.0",
-  published: false, // ← flip to true once 0.1.0 is voted and published
-  date: null as string | null, // ← e.g. "2026-10-01" once published
+  published: true, // ← flip to true once 0.1.0 is voted and published
+  date: "2026-07-19" as string | null, // ← e.g. "2026-10-01" once published
 };
 
 const artifact = `apache-${PROJECT}-${release.version}-source-release.zip`;
