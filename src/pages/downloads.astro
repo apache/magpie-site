@@ -23,18 +23,20 @@ const release = {
   date: "2026-07-19" as string | null, // ← e.g. "2026-10-01" once published
 };
 
-const artifact = `apache-${PROJECT}-${release.version}-source-release.zip`;
+const artifact = `apache-${PROJECT}-${release.version}-source.zip`;
 
 // Per ASF policy, the release artifact is fetched through the mirror system
 // (closer.lua redirects to a nearby mirror), while the detached signature, the
 // checksum and the KEYS file are served ONLY from the canonical
 // downloads.apache.org and are never mirrored — they are what you verify the
-// mirrored download against.
+// mirrored download against. Release artifacts live in a per-version
+// subdirectory; KEYS lives at the project root.
 const DIST = `https://downloads.apache.org/${PROJECT}`;
+const DIST_VERSION = `${DIST}/${release.version}`;
 const dl = {
-  mirror: `https://www.apache.org/dyn/closer.lua/${PROJECT}/${artifact}`,
-  sha512: `${DIST}/${artifact}.sha512`,
-  asc: `${DIST}/${artifact}.asc`,
+  mirror: `https://www.apache.org/dyn/closer.lua/${PROJECT}/${release.version}/${artifact}`,
+  sha512: `${DIST_VERSION}/${artifact}.sha512`,
+  asc: `${DIST_VERSION}/${artifact}.asc`,
   keys: `${DIST}/KEYS`,
   archive: `https://archive.apache.org/dist/${PROJECT}/`,
 };
@@ -47,7 +49,7 @@ gpg --import KEYS
 # 2. Verify the detached PGP signature
 gpg --verify ${artifact}.asc ${artifact}
 
-# 3. Verify the SHA-512 checksum
+# 3. (optional) Verify the SHA-512 checksum — not needed if the signature checks out
 sha512sum -c ${artifact}.sha512`;
 
 const prettyDate = release.date
@@ -150,9 +152,9 @@ const prettyDate = release.date
             <section id="verify" class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm scroll-mt-20">
               <h2 class="text-heading-2 font-heading-2 text-default-font">Verify your download</h2>
               <p class="text-body font-body text-subtext-color">
-                Always verify the source release using the detached PGP signature or the SHA-512
-                checksum. The <strong>PGP signature</strong> is the strongest check: it confirms the
-                artifact was released by an Apache Magpie committer. See the ASF's{" "}
+                Always verify the source release using the detached <strong>PGP signature</strong>:
+                it confirms the artifact was released by an Apache Magpie committer. If the
+                signature verifies, checking the SHA-512 checksum is not necessary. See the ASF's{" "}
                 <a class="text-brand-600 hover:text-brand-700 underline" href={VERIFY} target="_blank" rel="noreferrer">verification guide</a>{" "}
                 for the full procedure.
               </p>
