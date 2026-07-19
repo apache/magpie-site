@@ -6,21 +6,18 @@ import { SiteFooter } from "../components/landing/SiteFooter";
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 // ── Release configuration ────────────────────────────────────────────────
-// This page is the ASF-compliant download page (issue #46). It is wired to the
-// Apache distribution system now and points at the upcoming 0.1.0 release.
+// This page is the ASF-compliant download page (issue #46), wired to the
+// Apache distribution system. Everything below — the mirror download link, the
+// checksum / signature / KEYS links, and the verification steps — is derived
+// from the version.
 //
-// TO PUBLISH A RELEASE: set `published: true` and fill in `date` (ISO) once the
-// release has been voted by the PMC and pushed to the Apache distribution SVN
-// (https://dist.apache.org/repos/dist/release/magpie/). Everything below — the
-// mirror download link, the checksum / signature / KEYS links, and the
-// verification steps — is already derived from the version and will render the
-// compliant "Latest release" section automatically. Until then the page shows
-// the pre-release guidance and does not advertise download links that 404.
+// TO CUT A NEW RELEASE: bump `version` and set `date` (ISO) once the release
+// has been voted by the PMC and pushed to the Apache distribution SVN
+// (https://dist.apache.org/repos/dist/release/magpie/).
 const PROJECT = "magpie";
 const release = {
   version: "0.1.0",
-  published: true, // ← flip to true once 0.1.0 is voted and published
-  date: "2026-07-19" as string | null, // ← e.g. "2026-10-01" once published
+  date: "2026-07-19" as string | null,
 };
 
 const artifact = `apache-${PROJECT}-${release.version}-source.zip`;
@@ -63,7 +60,7 @@ const prettyDate = release.date
 
 <BaseLayout
   title="Downloads — Apache Magpie"
-  description="Download Apache Magpie. The official Apache source release is distributed through the ASF mirror system with detached PGP signatures and SHA-512 checksums. Until the first release (0.1.0) is published, this page explains the only supported way to install Magpie today."
+  description="Download Apache Magpie. The official Apache source release is distributed through the ASF mirror system with detached PGP signatures and SHA-512 checksums."
   editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/downloads.astro"
 >
   <SiteHeader />
@@ -72,7 +69,7 @@ const prettyDate = release.date
     <!-- Header band -->
     <div class="w-full bg-default-background px-8 pt-16 pb-10 mobile:px-4 mobile:pt-10">
       <header class="mx-auto flex w-full max-w-[860px] flex-col gap-4">
-        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to Magpie</a>
+        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a>
         <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-600" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -84,21 +81,12 @@ const prettyDate = release.date
         <h1 class="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:text-[28px]">
           Downloads
         </h1>
-        {release.published ? (
-          <p class="text-body font-body text-subtext-color max-w-[760px]">
-            The official Apache Magpie release is a signed <strong>source release</strong>,
-            distributed through the Apache mirror system. Download it below and{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href="#verify">verify it</a>{" "}
-            before use.
-          </p>
-        ) : (
-          <p class="text-body font-body text-subtext-color max-w-[760px]">
-            Apache Magpie has not made an official release yet. Its first release,{" "}
-            <strong>{release.version}</strong>, will be published here as a signed Apache
-            source release. Until then, this page explains the only supported way to install
-            Magpie today and how the official download will work.
-          </p>
-        )}
+        <p class="text-body font-body text-subtext-color max-w-[760px]">
+          The official Apache Magpie™ release is a signed <strong>source release</strong>,
+          distributed through the Apache mirror system. Download it below and{" "}
+          <a class="text-brand-600 hover:text-brand-700 underline" href="#verify">verify it</a>{" "}
+          before use.
+        </p>
       </header>
     </div>
 
@@ -106,208 +94,79 @@ const prettyDate = release.date
     <div class="w-full px-8 pb-20 mobile:px-4">
       <div class="mx-auto flex w-full max-w-[860px] flex-col gap-6">
 
-        {release.published && (
-          <>
-            <!-- Latest release (ASF-compliant) -->
-            <section id="latest" class="flex flex-col gap-4 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6 scroll-mt-20">
-              <div class="flex flex-wrap items-center gap-3">
-                <h2 class="text-heading-2 font-heading-2 text-default-font">Latest release</h2>
-                <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-brand-300 bg-default-background px-3 py-0.5 text-caption font-caption text-brand-700">
-                  Apache Magpie {release.version}
-                </span>
-                {prettyDate && (
-                  <span class="text-caption font-caption text-subtext-color">released {prettyDate}</span>
-                )}
-              </div>
-              <p class="text-body font-body text-subtext-color">
-                The signed <strong>source release</strong> is the official Apache artifact. The
-                download is served from a mirror; the signature, checksum and KEYS come from the
-                canonical{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href="https://downloads.apache.org/" target="_blank" rel="noreferrer"><code class="font-mono">downloads.apache.org</code></a>{" "}
-                and must be used to verify what you downloaded.
-              </p>
+        <!-- Latest release (ASF-compliant) -->
+        <section id="latest" class="flex flex-col gap-4 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6 scroll-mt-20">
+          <div class="flex flex-wrap items-center gap-3">
+            <h2 class="text-heading-2 font-heading-2 text-default-font">Latest release</h2>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-brand-300 bg-default-background px-3 py-0.5 text-caption font-caption text-brand-700">
+              Apache Magpie {release.version}
+            </span>
+            {prettyDate && (
+              <span class="text-caption font-caption text-subtext-color">released {prettyDate}</span>
+            )}
+          </div>
+          <p class="text-body font-body text-subtext-color">
+            The signed <strong>source release</strong> is the official Apache artifact. The
+            download is served from a mirror; the signature, checksum and KEYS come from the
+            canonical{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href="https://downloads.apache.org/" target="_blank" rel="noreferrer"><code class="font-mono">downloads.apache.org</code></a>{" "}
+            and must be used to verify what you downloaded.
+          </p>
 
-              <!-- Primary download -->
-              <a
-                href={dl.mirror}
-                class="inline-flex w-fit items-center gap-2 rounded-lg bg-brand-600 px-5 py-3 text-body-bold font-body-bold text-white shadow-sm transition-colors hover:bg-brand-700"
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-                Download {artifact}
-              </a>
-              <p class="text-caption font-caption text-subtext-color">
-                Downloaded via a nearby Apache mirror (you may be shown a mirror-selection page).
-              </p>
+          <!-- Primary download -->
+          <a
+            href={dl.mirror}
+            class="inline-flex w-fit items-center gap-2 rounded-lg bg-brand-600 px-5 py-3 text-body-bold font-body-bold text-white shadow-sm transition-colors hover:bg-brand-700"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+            Download {artifact}
+          </a>
+          <p class="text-caption font-caption text-subtext-color">
+            Downloaded via a nearby Apache mirror (you may be shown a mirror-selection page).
+          </p>
 
-              <!-- Verification artifacts -->
-              <div class="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
-                <span class="text-caption font-caption text-subtext-color">Verify with:</span>
-                <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.asc} target="_blank" rel="noreferrer">PGP signature (.asc)</a>
-                <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.sha512} target="_blank" rel="noreferrer">SHA-512 checksum</a>
-                <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.keys} target="_blank" rel="noreferrer">KEYS</a>
-              </div>
-            </section>
+          <!-- Verification artifacts -->
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
+            <span class="text-caption font-caption text-subtext-color">Verify with:</span>
+            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.asc} target="_blank" rel="noreferrer">PGP signature (.asc)</a>
+            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.sha512} target="_blank" rel="noreferrer">SHA-512 checksum</a>
+            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.keys} target="_blank" rel="noreferrer">KEYS</a>
+          </div>
+        </section>
 
-            <!-- Verify your download -->
-            <section id="verify" class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm scroll-mt-20">
-              <h2 class="text-heading-2 font-heading-2 text-default-font">Verify your download</h2>
-              <p class="text-body font-body text-subtext-color">
-                Always verify the source release using the detached <strong>PGP signature</strong>:
-                it confirms the artifact was released by an Apache Magpie committer. If the
-                signature verifies, checking the SHA-512 checksum is not necessary. See the ASF's{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href={VERIFY} target="_blank" rel="noreferrer">verification guide</a>{" "}
-                for the full procedure.
-              </p>
-              <pre class="overflow-x-auto rounded-lg border border-solid border-neutral-200 bg-neutral-50 px-4 py-3 text-caption font-mono text-default-font"><code>{verifySteps}</code></pre>
-            </section>
+        <!-- Verify your download -->
+        <section id="verify" class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm scroll-mt-20">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Verify your download</h2>
+          <p class="text-body font-body text-subtext-color">
+            Always verify the source release using the detached <strong>PGP signature</strong>:
+            it confirms the artifact was released by an Apache Magpie committer. If the
+            signature verifies, checking the SHA-512 checksum is not necessary. See the ASF's{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={VERIFY} target="_blank" rel="noreferrer">verification guide</a>{" "}
+            for the full procedure.
+          </p>
+          <pre class="overflow-x-auto rounded-lg border border-solid border-neutral-200 bg-neutral-50 px-4 py-3 text-caption font-mono text-default-font"><code>{verifySteps}</code></pre>
+        </section>
 
-            <!-- Other installation methods -->
-            <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-              <h2 class="text-heading-2 font-heading-2 text-default-font">Other installation methods</h2>
-              <p class="text-body font-body text-subtext-color">
-                The signed source release above is the recommended way to install. To bootstrap Magpie
-                into a repo from the released zip, a git tag, or the{" "}
-                <code class="font-mono">main</code> branch, see the{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/install-recipes`} target="_blank" rel="noreferrer">install recipes</a>.
-              </p>
-            </section>
+        <!-- Other installation methods -->
+        <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Other installation methods</h2>
+          <p class="text-body font-body text-subtext-color">
+            The signed source release above is the recommended way to install. To bootstrap Magpie
+            into a repo from the released zip, a git tag, or the{" "}
+            <code class="font-mono">main</code> branch, see the{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/install-recipes`} target="_blank" rel="noreferrer">install recipes</a>.
+          </p>
+        </section>
 
-            <!-- Older releases -->
-            <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-              <h2 class="text-heading-2 font-heading-2 text-default-font">Older releases</h2>
-              <p class="text-body font-body text-subtext-color">
-                Only the latest release is supported and mirrored. Previous releases are kept in the{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href={dl.archive} target="_blank" rel="noreferrer">Apache archive</a>{" "}
-                for reference.
-              </p>
-            </section>
-          </>
-        )}
-
-        {!release.published && (
-          <>
-            <!-- No official release yet -->
-            <section class="flex flex-col gap-2 rounded-2xl border border-solid border-warning-200 bg-warning-50 px-6 py-6">
-              <h2 class="text-heading-2 font-heading-2 text-default-font">No official release yet</h2>
-              <p class="text-body font-body text-subtext-color">
-                There are currently <strong>no Apache-released download artifacts</strong> for
-                Magpie. The first Apache source release, <strong>{release.version}</strong>, is being
-                prepared; once the PMC has voted on it and it is published to the Apache
-                distribution system, it will appear here with a detached PGP signature and SHA-512
-                checksum.
-              </p>
-            </section>
-
-            <!-- Installation methods -->
-            <section class="flex flex-col gap-4">
-              <div class="flex flex-col gap-1">
-                <h2 class="text-heading-2 font-heading-2 text-default-font">Installation methods</h2>
-                <p class="text-body font-body text-subtext-color">
-                  Magpie is bootstrapped into an adopter repo with one of the{" "}
-                  <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/install-recipes`} target="_blank" rel="noreferrer">install recipes</a>.
-                  The signed release from the Apache distribution is the recommended method and is{" "}
-                  <strong>Coming</strong> with {release.version}; until then, the only <strong>Ready</strong>{" "}
-                  path is fetching the framework directly from GitHub.
-                </p>
-              </div>
-
-              <!-- Method: ASF release zip (SVN dist) — Coming -->
-              <a
-                href={`${base}/docs/setup/install-recipes#method-1--released-zip-from-asf-distribution`}
-                target="_blank"
-                rel="noreferrer"
-                class="group flex items-start justify-between gap-4 rounded-xl border border-solid border-neutral-200 bg-default-background px-5 py-4 shadow-sm transition-all hover:border-brand-200 hover:shadow-md"
-              >
-                <div class="flex flex-col gap-1">
-                  <span class="inline-flex items-center gap-1.5 text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
-                    Signed release zip from the Apache distribution (SVN)
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
-                  </span>
-                  <span class="text-caption font-caption text-subtext-color">
-                    The official source release, and the recommended method: a signed, checksummed zip
-                    (<code class="font-mono">{artifact}</code>) published to the Apache distribution SVN
-                    (<code class="font-mono">dist.apache.org</code>) and mirrored from{" "}
-                    <code class="font-mono">downloads.apache.org</code>. Available once Magpie ships{" "}
-                    {release.version}.
-                  </span>
-                </div>
-                <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-warning-200 bg-warning-50 px-2.5 py-0.5 text-caption font-caption text-warning-700">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" /></svg>
-                  Coming
-                </span>
-              </a>
-
-              <!-- Method: git branch (main) — Ready -->
-              <a
-                href={`${base}/docs/setup/install-recipes#method-3--git-branch-defaults-to-main`}
-                target="_blank"
-                rel="noreferrer"
-                class="group flex items-start justify-between gap-4 rounded-xl border border-solid border-neutral-200 bg-default-background px-5 py-4 shadow-sm transition-all hover:border-brand-200 hover:shadow-md"
-              >
-                <div class="flex flex-col gap-1">
-                  <span class="inline-flex items-center gap-1.5 text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
-                    Track <code class="font-mono text-[13px]">main</code> from GitHub
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
-                  </span>
-                  <span class="text-caption font-caption text-subtext-color">
-                    Pull the framework's <code class="font-mono">main</code> branch straight from GitHub
-                    by URL. The default during the pre-release phase, and the only supported method today.
-                  </span>
-                </div>
-                <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-success-200 bg-success-50 px-2.5 py-0.5 text-caption font-caption text-success-700">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-                  Ready
-                </span>
-              </a>
-
-              <!-- Method: git tag — Coming -->
-              <a
-                href={`${base}/docs/setup/install-recipes#method-2--git-tag`}
-                target="_blank"
-                rel="noreferrer"
-                class="group flex items-start justify-between gap-4 rounded-xl border border-solid border-neutral-200 bg-default-background px-5 py-4 shadow-sm transition-all hover:border-brand-200 hover:shadow-md"
-              >
-                <div class="flex flex-col gap-1">
-                  <span class="inline-flex items-center gap-1.5 text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
-                    Pin a git tag from GitHub
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
-                  </span>
-                  <span class="text-caption font-caption text-subtext-color">
-                    Pin a specific framework version by git tag — available once tagged releases or
-                    release candidates exist.
-                  </span>
-                </div>
-                <span class="inline-flex flex-none items-center gap-1 rounded-full border border-solid border-warning-200 bg-warning-50 px-2.5 py-0.5 text-caption font-caption text-warning-700">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" /></svg>
-                  Coming
-                </span>
-              </a>
-            </section>
-
-            <!-- How the official release + verification will work -->
-            <section class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-              <h2 class="text-heading-2 font-heading-2 text-default-font">About the official release</h2>
-              <p class="text-body font-body text-subtext-color">
-                When {release.version} is cut, the source artifact is staged in the Apache
-                distribution SVN, voted on by the PMC, then published to the Apache distribution
-                system and mirrored from{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href="https://downloads.apache.org/" target="_blank" rel="noreferrer">downloads.apache.org</a>.
-                Each artifact is accompanied by a detached PGP signature (<code class="font-mono">.asc</code>)
-                and a SHA-512 checksum, and the signing keys live in the project{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href={dl.keys} target="_blank" rel="noreferrer">KEYS</a>{" "}
-                file.
-              </p>
-              <p class="text-body font-body text-subtext-color">
-                From that point on, this page will conform to the{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href="https://www.apache.org/legal/release-policy.html#publication" target="_blank" rel="noreferrer">ASF Release Distribution Policy</a>:
-                the signed <strong>source release</strong> is the official artifact, any convenience
-                binaries are provided only for convenience, and every download should be verified per
-                the ASF{" "}
-                <a class="text-brand-600 hover:text-brand-700 underline" href={VERIFY} target="_blank" rel="noreferrer">verification guide</a>.
-              </p>
-            </section>
-          </>
-        )}
+        <!-- Older releases -->
+        <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">Older releases</h2>
+          <p class="text-body font-body text-subtext-color">
+            Only the latest release is supported and mirrored. Previous releases are kept in the{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={dl.archive} target="_blank" rel="noreferrer">Apache archive</a>{" "}
+            for reference.
+          </p>
+        </section>
 
       </div>
     </div>
