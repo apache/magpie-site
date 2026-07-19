@@ -28,6 +28,7 @@ export function SiteHeader() {
           src={withBase("/subframe-wordmark.png")}
           alt="Magpie"
         />
+        <span className="self-center -mt-2 -ml-2 text-[10px] font-[700] leading-none text-default-font" aria-hidden="true">™</span>
       </a>
       <div className="flex items-center gap-2">
         <a href={withBase("/downloads")} aria-label="Downloads" title="Downloads">

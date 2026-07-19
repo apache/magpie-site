@@ -406,7 +406,7 @@ function GetABadge() {
     <div className="mt-16 flex w-full max-w-[760px] flex-col items-center gap-4 border-t border-solid border-neutral-200 pt-10 mobile:mt-10">
       <div className="flex flex-col items-center gap-1.5">
         <span className="text-heading-3 font-heading-3 text-default-font">
-          Adopt a Magpie
+          Adopt a Magpie!
         </span>
         <span className="text-body font-body text-subtext-color text-center">
           Running Magpie in your project? Wear it. Add the badge to your README
@@ -544,6 +544,7 @@ function ImmersiveGradientHero() {
               src={withBase("/subframe-wordmark.png")}
               alt="Magpie"
             />
+            <span className="self-center -mt-2 -ml-2 text-[10px] font-[700] leading-none text-default-font" aria-hidden="true">™</span>
           </a>
           {/* Inline section menu — shown only on screens wide enough to fit the
               full list (2xl+). Compact (caption-size, tight gaps, no wrap) so
@@ -698,7 +699,7 @@ function ImmersiveGradientHero() {
               </h1>
               <BlurFade delay={0.4} inView>
                 <span className="font-['Inter'] text-[17px] font-[400] leading-[27px] text-brand-200 -tracking-[0.01em]">
-                  Apache Magpie is a carefully curated set of AI agent recipes,
+                  Apache Magpie™ is a carefully curated set of AI agent recipes,
                   specially designed to handle the repetitive parts of running an
                   open-source project — triaging issues and PRs, mentoring
                   contributors, drafting fixes, managing security reports — so
@@ -904,7 +905,7 @@ function ImmersiveGradientHero() {
       <div id="why-magpie" className="flex w-full flex-col items-center bg-default-background px-8 pt-20 pb-16 mobile:px-4 mobile:pt-12">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[660px] pb-12 mobile:pb-8">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
-            Why would you like to use Magpie?
+            Why use Apache Magpie™?
           </span>
           <span className="text-body font-body text-subtext-color text-center">
             Pick the pain you feel today — each one maps to a family of skills
@@ -1917,7 +1918,7 @@ function ImmersiveGradientHero() {
         <div className="flex w-full flex-col items-center gap-6 max-w-[900px]">
           <div className="flex flex-col items-center gap-2">
             <span className="text-heading-3 font-heading-3 text-default-font text-center">
-              The people behind Magpie
+              The people behind Apache Magpie™
             </span>
             <span className="text-caption font-caption text-subtext-color text-center">
               {COMMUNITY.length}{" "}
