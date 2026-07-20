@@ -24,6 +24,13 @@ updates:
     directory: /
     schedule:
       interval: daily
+    ignore:
+      # TypeScript 7 (the Go rewrite) is not supported by @astrojs/check,
+      # which peers on `^5.0.0 || ^6.0.0` as of its latest release (0.9.9).
+      # `astro check` runs in CI, so we stay on TS 6 until upstream catches up.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
     groups:
       npm-dependencies:
         patterns:
