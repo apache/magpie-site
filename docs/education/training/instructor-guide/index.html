@@ -1,0 +1,813 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>instructor guide — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/education/training/instructor-guide/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="instructor guide — Apache Magpie Docs"><meta property="og:description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><meta property="og:url" content="https://magpie.apache.org/docs/education/training/instructor-guide/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="instructor guide — Apache Magpie Docs"><meta name="twitter:description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.DRTuqEbI.css"><style>.tree-summary[data-astro-cid-lihgpoae]{list-style:none}.tree-summary[data-astro-cid-lihgpoae]::-webkit-details-marker{display:none}.tree-chevron[data-astro-cid-lihgpoae]{color:var(--color-subtext-color);transition:transform .15s}details[data-astro-cid-lihgpoae][open]>.tree-summary[data-astro-cid-lihgpoae] .tree-chevron[data-astro-cid-lihgpoae]{transform:rotate(90deg)}.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/><span class="self-center -mt-2 -ml-2 text-[10px] font-[700] leading-none text-default-font" aria-hidden="true">™</span></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/docs"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden"><div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4"><a href="/" class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a><div class="mt-1 text-heading-3 font-heading-3 text-default-font">Documentation</div></div><div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-5 py-5"><a href="/docs/setup/install-recipes" class="block mb-5 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Getting Started</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/index" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>extending</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/prerequisites" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>source release contents</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Setup</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/install-recipes" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>install recipes</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/unadopt" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>unadopt</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/personal-use-unadopted-repo" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>personal use unadopted repo</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/mixed-adoption-teams" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>mixed adoption teams</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Education</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Training</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 01 what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 02 working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 03 choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 04 your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 05 writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 06 debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 07 writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 08 eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 09 agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 10 english as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson 11 how to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>lesson lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" aria-current="page" class="block rounded-md py-1 pr-2 text-body font-body capitalize bg-brand-100 text-brand-800" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>PR Management</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Issue Management</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Security</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-to-fix-a-security-issue" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>how to fix a security issue</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/new-members-onboarding" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>new members onboarding</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Repo Health</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Release Management</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>manual release process</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Mentoring</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Contributor Growth</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Pairing</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Adapters</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>authoring</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>registry</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.950rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Contracts (23)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>apache-projects</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>asf-svn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>bitbucket</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>change-request</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>cve-org</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>cve-tool</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>cve-tool-vulnogram</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>forwarder-relay</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>fossil</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>github</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>github-body-field</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>github-rollup</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>gmail</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>jira</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>jira-patch</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>mail-archive</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>mail-patch</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>mail-source</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>maildir</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>ponymail</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>scan-format</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>sourcehut</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>vcs</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.950rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>Substrates (22)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>agent-guard</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>agent-isolation</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>dashboard-generator</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>dev</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>egress-gateway</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>permission-audit</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>pilot-report-validator</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>pr-management-stats</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>preflight-audit</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>privacy-llm</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>probe-templates</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>sandbox-lint</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>skill-and-tool-validator</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>skill-evals</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>skill-reconciler-diff</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>spec-inventory</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>spec-loop</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>spec-status-index</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>spec-validator</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>symlink-lint</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 2.750rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>vendor-neutrality-score</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 4.270rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>RFCs</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>0003 · Privacy-aware LLM…</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>0004 · Principles of agentic…</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>0006 · Trusted external skill…</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>skill sources</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.150rem" data-astro-cid-lihgpoae><svg class="tree-chevron flex-none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg><span class="truncate" data-astro-cid-lihgpoae>utilities</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.670rem" data-astro-cid-lihgpoae>Overview</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+<ul>
+<li><a href="#facilitator-guide--building-and-running-ai-agents-for-open-source-projects">Facilitator guide — Building and running AI agents for open-source projects</a>
+<ul>
+<li><a href="#who-this-guide-is-for">Who this guide is for</a></li>
+<li><a href="#module-overview">Module overview</a></li>
+<li><a href="#delivery-formats">Delivery formats</a>
+<ul>
+<li><a href="#self-paced-with-facilitator-check-ins">Self-paced with facilitator check-ins</a></li>
+<li><a href="#instructor-led-workshop-one-day">Instructor-led workshop (one day)</a></li>
+<li><a href="#two-session-intensive">Two-session intensive</a></li>
+<li><a href="#lms-based-self-study">LMS-based self-study</a></li>
+</ul>
+</li>
+<li><a href="#environment-setup">Environment setup</a>
+<ul>
+<li><a href="#in-person">In-person</a></li>
+<li><a href="#virtual">Virtual</a></li>
+</ul>
+</li>
+<li><a href="#schedule-templates">Schedule templates</a>
+<ul>
+<li><a href="#one-day-workshop-75-hours-with-breaks">One-day workshop (~7.5 hours with breaks)</a></li>
+<li><a href="#two-session-intensive-1">Two-session intensive</a></li>
+<li><a href="#weekly-reading-group-11-weeks">Weekly reading group (~11 weeks)</a></li>
+</ul>
+</li>
+<li><a href="#per-lesson-facilitator-notes">Per-lesson facilitator notes</a>
+<ul>
+<li><a href="#lesson-1--what-agents-are">Lesson 1 — What agents are</a></li>
+<li><a href="#lesson-2--working-with-agents">Lesson 2 — Working with agents</a></li>
+<li><a href="#lesson-3--choosing-models">Lesson 3 — Choosing models</a></li>
+<li><a href="#lesson-4--your-first-skill">Lesson 4 — Your first skill</a></li>
+<li><a href="#lesson-5--writing-safe-skills">Lesson 5 — Writing safe skills</a></li>
+<li><a href="#lesson-6--debugging-a-skill">Lesson 6 — Debugging a skill</a></li>
+<li><a href="#lesson-7--writing-portable-skills">Lesson 7 — Writing portable skills</a></li>
+<li><a href="#lesson-8--eval-driven-development">Lesson 8 — Eval-driven development</a></li>
+<li><a href="#lesson-9--agentic-and-autonomous-work">Lesson 9 — Agentic and autonomous work</a></li>
+<li><a href="#lesson-10--english-as-a-programming-language">Lesson 10 — English as a programming language</a></li>
+<li><a href="#lesson-11--how-to-contribute">Lesson 11 — How to contribute</a></li>
+</ul>
+</li>
+<li><a href="#customising-for-your-project">Customising for your project</a>
+<ul>
+<li><a href="#replacing-placeholders">Replacing placeholders</a></li>
+<li><a href="#adapting-examples">Adapting examples</a></li>
+<li><a href="#selecting-lessons">Selecting lessons</a></li>
+</ul>
+</li>
+<li><a href="#assessment-and-progression">Assessment and progression</a>
+<ul>
+<li><a href="#self-check-questions">Self-check questions</a></li>
+<li><a href="#when-a-learner-is-not-ready-to-proceed">When a learner is not ready to proceed</a></li>
+<li><a href="#no-formal-certification">No formal certification</a></li>
+</ul>
+</li>
+<li><a href="#frequently-asked-questions">Frequently asked questions</a></li>
+<li><a href="#upstream-contribution">Upstream contribution</a></li>
+<li><a href="#licence">Licence</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<h1 id="facilitator-guide--building-and-running-ai-agents-for-open-source-projects">Facilitator guide — Building and running AI agents for open-source projects</h1>
+<p>This guide is for <strong>instructors and facilitators</strong> running the Apache Training
+module (this directory) as a structured course. Learners working through the
+material self-paced do not need it — the lesson files stand alone.</p>
+<hr>
+<h2 id="who-this-guide-is-for">Who this guide is for</h2>
+<p>A <strong>facilitator</strong> is anyone organising and running the module for others:
+a PMC member running a project on-boarding session, a community mentor
+hosting a workshop at a conference, or a team lead running a weekly reading
+group. No prior experience teaching AI is required; the lesson files carry the
+technical content. This guide covers the logistics, timing, and facilitation
+moves that turn static reading material into an active learning session.</p>
+<hr>
+<h2 id="module-overview">Module overview</h2>
+<p>Eleven lessons totalling approximately 7 hours of learner time:</p>
+<table>
+<thead>
+<tr>
+<th>Lesson</th>
+<th>Topic</th>
+<th>Learner time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What agents are</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Working with agents</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Choosing models</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Your first skill</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Writing safe skills</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Debugging a skill</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Writing portable skills</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Eval-driven development</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Agentic and autonomous work</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td>10</td>
+<td>English as a programming language</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>11</td>
+<td>How to contribute</td>
+<td>30 min</td>
+</tr>
+</tbody>
+</table>
+<p>Each lesson follows the same structure: read the source page → work through
+four or five exercises (20–40 min) → answer the self-check questions. Exercises need
+no computer; they use paper, a whiteboard, or a shared document. The self-check
+questions include hidden answers that learners reveal to grade themselves.</p>
+<hr>
+<h2 id="delivery-formats">Delivery formats</h2>
+<h3 id="self-paced-with-facilitator-check-ins">Self-paced with facilitator check-ins</h3>
+<p>Learners work through one or two lessons per week on their own. The
+facilitator runs a 30-minute weekly check-in to answer questions and debrief
+the self-check answers. <strong>Recommended for distributed teams and reading
+groups.</strong> Lowest facilitation overhead; high learner flexibility.</p>
+<h3 id="instructor-led-workshop-one-day">Instructor-led workshop (one day)</h3>
+<p>Cover all eleven lessons in a single day. Use the one-day schedule in the
+<a href="#schedule-templates">Schedule templates</a> section. Requires a dedicated room
+or video-conference session. Best for initial project on-boarding, conference
+tutorials, or intensive team training.</p>
+<h3 id="two-session-intensive">Two-session intensive</h3>
+<p>Split the module across two half-days or two evenings. Lessons 1–5 (concepts
+and first skill) in session one; lessons 6–11 (safety, portability, evals,
+autonomy, prose discipline, and contributing) in session two. A natural break point: session two
+builds on working skills, so learners have time between sessions to write one
+for their own project.</p>
+<h3 id="lms-based-self-study">LMS-based self-study</h3>
+<p>Upload each lesson file as a unit in your learning management system. Tag
+learning time using the per-lesson estimates above. Use the self-check
+questions as the in-LMS quiz. The facilitator role reduces to answering
+questions in the discussion forum.</p>
+<hr>
+<h2 id="environment-setup">Environment setup</h2>
+<h3 id="in-person">In-person</h3>
+<ul>
+<li><strong>Projector or large screen.</strong> You will display source pages, lesson files,
+and learner diagrams. A browser with two tabs (source page and lesson file)
+is all you need.</li>
+<li><strong>Whiteboard or flip chart.</strong> Every exercise mentions “paper or whiteboard”;
+a shared whiteboard (physical or digital) works well for group exercises.</li>
+<li><strong>No computers for learners</strong> are required for the exercises themselves. If
+learners have laptops, remind them to close them during exercise time to
+keep the group in sync.</li>
+<li><strong>Printed exercise sheets (optional).</strong> The exercises are short enough to
+read from a screen, but some facilitators find printed sheets reduce context
+switching during exercises.</li>
+</ul>
+<h3 id="virtual">Virtual</h3>
+<ul>
+<li><strong>Video-conference platform</strong> with screen sharing and a breakout-room
+feature. Breakout rooms let pairs or small groups work through exercises
+without the full group listening in.</li>
+<li><strong>Shared document</strong> (a collaborative whiteboard or a shared markdown file)
+replaces the physical whiteboard. One doc per lesson works well; create them
+before the session.</li>
+<li><strong>Paste the exercise text into the shared doc</strong> so learners can write their
+answers inline. After the exercise, unmute/reconvene and ask two or three
+groups to share.</li>
+</ul>
+<hr>
+<h2 id="schedule-templates">Schedule templates</h2>
+<h3 id="one-day-workshop-75-hours-with-breaks">One-day workshop (~7.5 hours with breaks)</h3>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09:00–09:15</td>
+<td>Welcome, objectives, module overview</td>
+</tr>
+<tr>
+<td>09:15–09:45</td>
+<td>Lesson 1 — What agents are</td>
+</tr>
+<tr>
+<td>09:45–10:15</td>
+<td>Lesson 2 — Working with agents</td>
+</tr>
+<tr>
+<td>10:15–10:45</td>
+<td>Lesson 3 — Choosing models</td>
+</tr>
+<tr>
+<td>10:45–11:00</td>
+<td>Break</td>
+</tr>
+<tr>
+<td>11:00–12:00</td>
+<td>Lesson 4 — Your first skill (60 min)</td>
+</tr>
+<tr>
+<td>12:00–13:00</td>
+<td>Lunch</td>
+</tr>
+<tr>
+<td>13:00–13:45</td>
+<td>Lesson 5 — Writing safe skills</td>
+</tr>
+<tr>
+<td>13:45–14:30</td>
+<td>Lesson 6 — Debugging a skill</td>
+</tr>
+<tr>
+<td>14:30–15:00</td>
+<td>Lesson 7 — Writing portable skills</td>
+</tr>
+<tr>
+<td>15:00–15:15</td>
+<td>Break</td>
+</tr>
+<tr>
+<td>15:15–16:15</td>
+<td>Lesson 8 — Eval-driven development (60 min)</td>
+</tr>
+<tr>
+<td>16:15–17:00</td>
+<td>Lesson 9 — Agentic and autonomous work</td>
+</tr>
+<tr>
+<td>17:00–17:30</td>
+<td>Lesson 10 — English as a programming language</td>
+</tr>
+<tr>
+<td>17:30–18:00</td>
+<td>Lesson 11 — How to contribute</td>
+</tr>
+<tr>
+<td>18:00–18:15</td>
+<td>Wrap-up and next steps</td>
+</tr>
+</tbody>
+</table>
+<p>Reduce to a half-day by covering lessons 1–5 only (concepts and first
+skill). Lessons 6–11 form a natural second half.</p>
+<h3 id="two-session-intensive-1">Two-session intensive</h3>
+<p><strong>Session 1 (~3.5 hours):</strong> Welcome (15 min), lessons 1–5 (175 min), wrap-up
+(10 min). Assign: write one skill for your project between sessions.</p>
+<p><strong>Session 2 (~4.5 hours):</strong> Review and share skills from the between-session
+assignment (20 min), lessons 6–11 (240 min), retrospective (15 min).</p>
+<h3 id="weekly-reading-group-11-weeks">Weekly reading group (~11 weeks)</h3>
+<p>One lesson per week, 45 minutes per session. Learners read the source page
+and lesson file before the session. The session time is for exercises and
+debrief only.</p>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Lesson</th>
+<th>Prep (before session)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What agents are</td>
+<td>Read <code>what-agents-are.md</code> and lesson 1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Working with agents</td>
+<td>Read <code>working-with-agents.md</code> and lesson 2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Choosing models</td>
+<td>Read <code>choosing-models.md</code> and lesson 3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Your first skill</td>
+<td>Read <code>your-first-skill.md</code> and lesson 4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Writing safe skills</td>
+<td>Read <code>writing-safe-skills.md</code> and lesson 5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Debugging a skill</td>
+<td>Read <code>debugging-skills.md</code> and lesson 6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Writing portable skills</td>
+<td>Read <code>portable-skills.md</code> and lesson 7</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Eval-driven development</td>
+<td>Read <code>eval-driven-development.md</code> and lesson 8</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Agentic and autonomous work</td>
+<td>Read <code>agentic-work.md</code> and lesson 9</td>
+</tr>
+<tr>
+<td>10</td>
+<td>English as a programming language</td>
+<td>Read <code>english-as-code.md</code> and lesson 10</td>
+</tr>
+<tr>
+<td>11</td>
+<td>How to contribute</td>
+<td>Read <code>contributing.md</code> and lesson 11</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="per-lesson-facilitator-notes">Per-lesson facilitator notes</h2>
+<p>For each lesson: the core idea to anchor, discussion prompts to deepen the
+group’s understanding, common misconceptions to correct, and rough timing
+guidance for instructor-led delivery.</p>
+<p>These timings are for instructor-led delivery, where the reading is compressed
+(skimmed, or presented together) to leave most of the slot for exercises. They
+deliberately allocate less reading time than the self-paced estimates in each
+lesson’s own header — a workshop should spend its time on active practice, not
+on reading the source page aloud.</p>
+<hr>
+<h3 id="lesson-1--what-agents-are">Lesson 1 — What agents are</h3>
+<p><strong>Core idea.</strong> An agent is a loop: model, tools, loop, context. Every other
+idea in the module is a consequence of this structure.</p>
+<p><strong>Timing.</strong> 30 min: 10 min to read the source page together or in pairs,
+15 min exercises, 5 min self-check debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Before this lesson, how would you have described what an AI agent does?
+What would you change about that description now?”</li>
+<li>“The source page says the model can only reason about what is in its
+context. What does that mean for a skill you want to write for
+<code>&lt;PROJECT&gt;</code>? What would you need to put into context?”</li>
+<li>“Why does probabilistic behaviour matter more for testing an agent than
+for testing a function? What would you do differently?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“The agent has access to the whole repo / internet / database.”</em> No — it
+can only see what has been explicitly put into context via tools. Draw the
+loop on the board and mark where information enters.</li>
+<li><em>“Agents are deterministic if you use them the same way each time.”</em>
+No — the model is probabilistic. The same input can produce different
+outputs. This is not a defect; it is a property to design around.</li>
+</ul>
+<hr>
+<h3 id="lesson-2--working-with-agents">Lesson 2 — Working with agents</h3>
+<p><strong>Core idea.</strong> An agent is a collaborator, not a command-runner. The quality
+of what you get out depends on the quality of what you put in.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Think about a task you would want to delegate to an agent in <code>&lt;PROJECT&gt;</code>.
+Write the first message you would send. Now read it back — is it complete?
+What would the agent need to clarify?”</li>
+<li>“The page talks about ‘treating outside text as data, not instructions’.
+What does that mean in practice for a skill that processes issue comments
+from the public?”</li>
+<li>“When should you give up on steering a mid-task agent and start over?
+What signals tell you the agent is on the wrong path?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“You should give the agent as much context as possible.”</em> More context is
+not always better — a long, unfocused context degrades response quality.
+The lesson’s point is <em>relevant</em> context, not maximum context.</li>
+<li><em>“If the agent makes a mistake, retry until it gets it right.”</em> Retrying
+without changing the prompt will produce the same distribution of answers.
+Diagnose first; change the prompt, not just the run count.</li>
+</ul>
+<hr>
+<h3 id="lesson-3--choosing-models">Lesson 3 — Choosing models</h3>
+<p><strong>Core idea.</strong> There is no single best model for every task; there is a
+best model for a given capability, speed, and cost combination, and the
+eval suite is what decides.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For a skill that triages incoming issues on <code>&lt;PROJECT&gt;</code>, would you reach
+for the cheapest available model, the most capable, or something in
+between? What information would you need to decide?”</li>
+<li>“The page says ‘let evals decide’. What does an eval tell you that a few
+manual test runs don’t?”</li>
+<li>“A ‘judge model’ is a model that scores another model’s output. When might
+you use a judge model for <code>&lt;PROJECT&gt;</code> tasks? What could go wrong?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Always use the most capable model — it is most reliable.”</em> Capability
+and reliability are different dimensions. The most capable model may be
+over-specified, slower, and more expensive for simple triage tasks.</li>
+<li><em>“Local models are always worse.”</em> For focused, rule-following tasks with
+tight prompts, a local model can match hosted performance at zero cost.
+The <code>local-smoke</code> eval tag exists precisely to test this claim.</li>
+</ul>
+<hr>
+<h3 id="lesson-4--your-first-skill">Lesson 4 — Your first skill</h3>
+<p><strong>Core idea.</strong> A skill is a plain Markdown file with YAML frontmatter. Writing
+one is within reach of any contributor who can open a pull request.</p>
+<p><strong>Timing.</strong> 60 min: 15 min reading, 35 min exercises (the writing exercise
+takes longer), 10 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“What task in <code>&lt;PROJECT&gt;</code> would benefit most from a repeatable agent skill?
+Why that one?”</li>
+<li>“What is the difference between a skill and a script? When would you reach
+for one instead of the other?”</li>
+<li>“The skill format requires a <code>description</code> field that triggers the skill.
+If your description is vague, what happens? Try writing two descriptions
+for the same skill — one vague, one precise — and compare them.”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“A skill needs to handle every possible edge case before I can ship it.”</em>
+No — ship the happy path first, add an eval suite, and expand from there.
+A skill without an eval suite is incomplete; a skill with an eval suite can
+grow incrementally.</li>
+<li><em>“The <code>description</code> field is just documentation.”</em> The description is what
+the agent reads to decide <em>when</em> to invoke the skill. It is a trigger, not
+a comment.</li>
+</ul>
+<hr>
+<h3 id="lesson-5--writing-safe-skills">Lesson 5 — Writing safe skills</h3>
+<p><strong>Core idea.</strong> Safety is not a review gate at the end; it is three properties
+built into the skill as you write it: propose-confirm-act, data-not-instructions,
+and sandbox-by-default.</p>
+<p><strong>Timing.</strong> 45 min: 10 min reading, 30 min exercises (the propose/confirm
+classification exercise is dense), 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For the skill you imagined in lesson 4, which steps would need a
+confirm gate and which could run without one? Where is the line for
+<code>&lt;PROJECT&gt;</code>’s context?”</li>
+<li>“What is the difference between treating outside text as data vs.
+as instructions? Give an example from <code>&lt;PROJECT&gt;</code>’s issue tracker of
+text that could be mistaken for an instruction.”</li>
+<li>“A skill that reads files only needs no special sandbox configuration.
+A skill that writes to the repo, posts comments, or sends email needs
+explicit permission entries. Why is the default ‘no permission’ and not
+‘ask at runtime’?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Propose-confirm-act slows the agent down — we want automation.”</em>
+The confirm step is cheap: it is a human reading a proposal and pressing
+one button. Removing it when the action is irreversible (a posted comment,
+a merged PR) removes the only safety net.</li>
+<li><em>“Data-not-instructions only applies to security-sensitive skills.”</em>
+It applies to any skill that processes public or user-supplied text.
+Prompt injection is not limited to security contexts.</li>
+</ul>
+<hr>
+<h3 id="lesson-6--debugging-a-skill">Lesson 6 — Debugging a skill</h3>
+<p><strong>Core idea.</strong> Debugging an agent is diagnostic work: isolate the failing
+step, read the transcript, find the moment the agent diverged, and adjust the
+prompt or context — not the retry count.</p>
+<p><strong>Timing.</strong> 45 min: 10 min reading, 30 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“You run a skill three times on the same issue and get three different
+verdicts. How do you diagnose whether this is a prompt problem, a context
+problem, or just normal variance?”</li>
+<li>“What is the first thing you would look at in a skill transcript when the
+output looks wrong?”</li>
+<li>“When is it correct to increase the temperature of a model, and when is
+that the wrong move?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Add more examples to the prompt and the skill will stop making mistakes.”</em>
+More examples help with format and style. They do not fix ambiguous
+instructions — the model will still apply the ambiguous rule, just more
+consistently. Fix the rule first, then add examples.</li>
+<li><em>“If the eval passes, the skill is correct.”</em> An eval passing means the
+skill behaves correctly on the cases you tested. It does not mean it is
+correct on all inputs. Eval coverage is a claim about the tested set, not
+the full input space.</li>
+</ul>
+<hr>
+<h3 id="lesson-7--writing-portable-skills">Lesson 7 — Writing portable skills</h3>
+<p><strong>Core idea.</strong> A skill that hard-codes project names, tool paths, or hosting
+assumptions only works in one place. Portability comes from placeholders and
+config-resolution, not from “making it generic.”</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Look at the skill draft you started in lesson 4. How many project-specific
+strings are in it? What would you need to replace to make it reusable across
+<code>&lt;PROJECT&gt;</code> and a sister project?”</li>
+<li>“The <code>&lt;tracker&gt;</code> placeholder resolves differently for a GitHub project and
+a Jira-backed project. Who decides which adapter to load, and when?”</li>
+<li>“What is the difference between a placeholder and a conditional? When is
+‘if GitHub else Jira’ the wrong approach?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“My skill only runs on <code>&lt;PROJECT&gt;</code>, so portability is not my concern.”</em>
+Even a project-internal skill benefits from placeholders: it is easier to
+test with a dummy config, easier to explain to new contributors, and easier
+to donate upstream if the project later wants to.</li>
+<li><em>“Placeholders make the skill harder to read.”</em> A well-named placeholder
+(<code>&lt;tracker&gt;</code>, <code>&lt;PROJECT&gt;</code>) is more readable than a hardcoded URL. It makes
+the assumption explicit rather than hiding it in a string.</li>
+</ul>
+<hr>
+<h3 id="lesson-8--eval-driven-development">Lesson 8 — Eval-driven development</h3>
+<p><strong>Core idea.</strong> Correctness for an agent is not a binary; it is a distribution
+over many inputs. An eval suite is how you measure that distribution and track
+it over time.</p>
+<p><strong>Timing.</strong> 60 min: 15 min reading, 35 min exercises (the fixture design
+exercise takes longer), 10 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For the skill you started in lesson 4, what are the four cases that
+every eval suite should cover? Write them out.”</li>
+<li>“A colleague says their skill ‘works fine’ because they ran it five times
+on the same issue and it produced a good result. What is missing from that
+claim?”</li>
+<li>“What is the difference between a <code>local-smoke</code> eval case and a
+<code>frontier-only</code> case? Why does that distinction matter for a project that
+wants to adopt the skill with a local model?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“I will add evals after the skill is stable.”</em> A skill without an eval
+suite cannot be called stable. Evals are what establish the baseline that
+‘stable’ means.</li>
+<li><em>“More eval cases are always better.”</em> Coverage matters more than count.
+Ten well-designed cases covering distinct failure modes are more useful than
+a hundred cases that all test the same happy path.</li>
+</ul>
+<hr>
+<h3 id="lesson-9--agentic-and-autonomous-work">Lesson 9 — Agentic and autonomous work</h3>
+<p><strong>Core idea.</strong> Autonomy is not an on/off switch; it is a dial with four
+rungs. Moving up the dial is only safe once you have the guardrails and evals
+that make it safe — not before.</p>
+<p><strong>Timing.</strong> 45 min: 15 min reading, 25 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Where on the supervision dial does <code>&lt;PROJECT&gt;</code>’s current automated
+work sit? Where would you <em>want</em> it to sit in twelve months, and what
+guardrails would you need to add first?”</li>
+<li>“The propose-confirm-act pattern is the guardrail for supervised
+automation. What is the equivalent guardrail for unattended automation?”</li>
+<li>“A skill that runs on a cron schedule and posts comments autonomously
+has a larger blast radius than one that posts under human review. What
+does ‘larger blast radius’ mean concretely for <code>&lt;PROJECT&gt;</code>’s community?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Fully autonomous is the goal — human review is just friction.”</em>
+Autonomy is a tool, not an end state. The question is not ‘how do we
+remove the human?’ but ‘at what rung is the risk acceptable given the
+guardrails we have?’</li>
+<li><em>“Compounding errors are unlikely in practice.”</em> In a short session they
+are unlikely. In a long autonomous run, the probability compounds across
+each action taken. One misclassified issue that triggers an incorrect
+follow-up action that triggers a public reply illustrates the chain.</li>
+</ul>
+<hr>
+<h3 id="lesson-10--english-as-a-programming-language">Lesson 10 — English as a programming language</h3>
+<p><strong>Core idea.</strong> The words in a skill are the program. Ambiguity is a bug
+class. The four disambiguating moves — define terms, say what done looks
+like, state boundaries, name edge cases — are the tools for closing gaps.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Find a word in a skill you have read (or written) that is not defined.
+What would a model do with it? Write a one-sentence definition that closes
+the gap.”</li>
+<li>“The page says ‘ambiguity is the new class of bug’. Give an example of
+a wording ambiguity in a skill that would not be caught by a linter or
+type-checker but would cause the agent to behave unexpectedly.”</li>
+<li>“DRY applies to prose as well as code. Find two skills in the framework
+that define the same concept differently. What is the cost of that
+duplication, and how would you fix it?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Natural language is inherently imprecise — there is nothing you can do.”</em>
+Natural language <em>can</em> be precise. Technical writing, legal text, and
+formal specifications are all precise natural language. The discipline is
+learnable and the four moves are concrete.</li>
+<li><em>“The model will ask for clarification if something is ambiguous.”</em>
+Models do not reject ambiguous instructions; they act on a plausible
+interpretation. The result is silent divergence between intent and
+execution.</li>
+</ul>
+<hr>
+<h3 id="lesson-11--how-to-contribute">Lesson 11 — How to contribute</h3>
+<p><strong>Core idea.</strong> Most of Magpie is prose the agent executes, so contributing is
+within reach of anyone who can write precisely. The four first contributions —
+fix a skill, improve a doc, add a pattern, write a new skill — all follow the
+same spec-first, eval-backed, reviewed path.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Of the four first-contribution types (fix a skill, improve a doc, add a
+pattern, write a new skill), which would you start with for <code>&lt;PROJECT&gt;</code>, and
+why that one?”</li>
+<li>“Take a change you might make to one of <code>&lt;PROJECT&gt;</code>’s skills. Does it alter a
+rule, a flow, or a contract? Walk the group through whether it needs a spec
+update.”</li>
+<li>“You are reviewing a contributor’s first skill PR. Which of the five
+framework rules would you check first, and what would you look for in the
+diff?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“You need to be a strong programmer to contribute.”</em> No — most contributions
+are prose the agent executes. Clear thinking and precise writing are the core
+skills; systems programming is only needed for the tool layer (<code>tools/</code>).</li>
+<li><em>“Evals can come in a follow-up PR.”</em> No — a skill without a matching eval
+suite is not finished, and a PR that defers the evals will not pass review.
+The eval suite ships in the same PR as the skill.</li>
+</ul>
+<hr>
+<h2 id="customising-for-your-project">Customising for your project</h2>
+<h3 id="replacing-placeholders">Replacing placeholders</h3>
+<p>Every exercise uses <code>&lt;PROJECT&gt;</code> where a real project name would appear.
+Before running the module, decide whether to:</p>
+<ol>
+<li><strong>Replace globally</strong> — do a find-and-replace in your copies of the lesson
+files. Fast; produces more readable exercise sheets.</li>
+<li><strong>Ask learners to substitute as they go</strong> — keeps the original files
+unmodified; slightly more cognitive load during exercises.</li>
+</ol>
+<p>Other placeholders you may encounter:</p>
+<table>
+<thead>
+<tr>
+<th>Placeholder</th>
+<th>What it represents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;PROJECT&gt;</code></td>
+<td>The adopting project’s name</td>
+</tr>
+<tr>
+<td><code>&lt;tracker&gt;</code></td>
+<td>The issue tracker (e.g. GitHub Issues, JIRA)</td>
+</tr>
+<tr>
+<td><code>&lt;upstream&gt;</code></td>
+<td>The main repository (e.g. <code>org/repo</code>)</td>
+</tr>
+<tr>
+<td><code>&lt;security-list&gt;</code></td>
+<td>The private security mailing list</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adapting-examples">Adapting examples</h3>
+<p>The source pages draw examples from open-source project maintenance. If your
+audience works in a different domain (internal tooling, data pipelines,
+etc.), swap the examples. The lesson structure remains the same; only the
+illustrative context changes.</p>
+<h3 id="selecting-lessons">Selecting lessons</h3>
+<p>You do not need to teach all eleven lessons in one sitting. A team that already
+has experience with agent concepts and wants to focus on safety can start at
+lesson 5. A team writing its first eval suite can teach lessons 1, 4, and 8
+as a standalone mini-module. The lessons reference each other but are
+designed to be understandable on their own.</p>
+<hr>
+<h2 id="assessment-and-progression">Assessment and progression</h2>
+<h3 id="self-check-questions">Self-check questions</h3>
+<p>Each lesson ends with five or six self-check questions with hidden answers. Learners
+reveal the answers themselves and grade their own understanding. This is
+intentional: the goal is self-knowledge, not formal grading.</p>
+<p>In an instructor-led session, use the self-check as a <strong>group debrief</strong>:
+read each question aloud and ask learners to write a brief answer before you
+reveal the answer. Gaps between a learner’s answer and the reference answer
+are the most productive discussion point.</p>
+<h3 id="when-a-learner-is-not-ready-to-proceed">When a learner is not ready to proceed</h3>
+<p>If a learner cannot answer two or more self-check questions for a lesson,
+suggest re-reading the source page before moving on. The lessons build
+sequentially: a learner who does not understand context (lesson 1) will
+struggle with evals (lesson 8).</p>
+<h3 id="no-formal-certification">No formal certification</h3>
+<p>This module does not issue certificates. The intended outcome is that a
+learner can read, write, debug, and evaluate a skill for their own project.
+The evidence of that outcome is a skill they have written and an eval suite
+that passes — not a quiz score.</p>
+<hr>
+<h2 id="frequently-asked-questions">Frequently asked questions</h2>
+<p><strong>“Do learners need a running agent installation?”</strong>
+No. The exercises are paper-based or whiteboard-based. Learners can work
+through all eleven lessons without installing any software. Lesson 4 (your first
+skill) suggests writing a skill file; that requires only a text editor.</p>
+<p><strong>“Can I skip the exercises and just present the source pages?”</strong>
+You can, but learners retain substantially less without active practice.
+Exercises in this module are not optional enrichment; they are the mechanism
+by which learners move from reading to application.</p>
+<p><strong>“What if learners have very different backgrounds — some have never seen
+a language model, others use one daily?”</strong>
+Lesson 1 is the equaliser: it defines terms that even experienced users often
+hold loosely (the difference between a model and an agent, what context means
+precisely). Spend extra time there. Experienced learners often find the
+precision useful even if the concept is familiar.</p>
+<p><strong>“How do I handle learners who want to build something live during the
+module?”</strong>
+Encourage it as optional enrichment, but do not let live-building block
+the group. Live building sessions fit better in the hands-on lab
+(<a href="/docs/education/tutorials"><code>tutorials.md</code></a>) than during the lesson sequence. Point
+interested learners there after the module.</p>
+<p><strong>“Are there formal assessment instruments for each lesson?”</strong>
+Not yet. The self-check questions are the primary formative assessment.
+Formal rubrics and summative assessments are planned for a future iteration
+of the module; facilitators who develop them are encouraged to contribute
+them back upstream (see <a href="#upstream-contribution">Upstream contribution</a>).</p>
+<hr>
+<h2 id="upstream-contribution">Upstream contribution</h2>
+<p>This module is shaped for contribution to
+<a href="https://training.apache.org/">Apache Training</a> so it can be taught beyond
+the projects that adopt this framework. If you run the module and find gaps —
+a lesson that generates persistent confusion, a discussion prompt that
+falls flat, a misconception this guide does not address — please:</p>
+<ol>
+<li>Open an issue or pull request against this repository (the framework
+repo, not your adopter repo) with the proposed change.</li>
+<li>If you are contributing to Apache Training directly, the module’s
+Apache-2.0 licence permits it. Coordinate with the Apache Training
+project on format requirements before submitting.</li>
+<li>Add your project’s experience to the module’s pilot record so future
+facilitators can calibrate against real data.</li>
+</ol>
+<p>Contributions that improve the instructor guide carry the same
+<code>Generated-by:</code> convention as contributions to the lesson files: if you use
+a generative tool to draft a section, note it in the commit message following
+<a href="https://www.apache.org/legal/generative-tooling-guidance.html">ASF Generative Tooling Guidance</a>.</p>
+<hr>
+<h2 id="licence">Licence</h2>
+<p>Apache License 2.0 (PRINCIPLE 17). Pages written with help from AI carry a
+<code>Generated-by:</code> note in their commit message following ASF Generative Tooling
+Guidance.</p>
+</article></main></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer" aria-label="Slack"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Documentation</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/docs" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/architecture" target="_blank" rel="noreferrer">Architecture<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/brand">Brand assets</a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Contributing<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer">Mailing Lists<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://the-asf.slack.com/archives/C0BD1EBMVEJ" target="_blank" rel="noreferrer">Slack Channel<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Issue Tracker<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new" target="_blank" rel="noreferrer">Report a site issue<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[200px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><div class="grid grid-cols-[auto_auto] justify-start gap-x-8 gap-y-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/" target="_blank" rel="noreferrer">Apache Home<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer">License<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer">Events<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer">Sponsorship<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer">Thanks<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/" target="_blank" rel="noreferrer">Security<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer">Privacy<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/education/training/instructor-guide.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>
