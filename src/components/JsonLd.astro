@@ -19,10 +19,16 @@
  */
 
 // Organization / WebSite / SoftwareSourceCode structured data for the <head>.
-// Drop into BaseLayout.astro's <head> once.
+// Drop into BaseLayout.astro's <head> once; DocsLayout.astro passes
+// `markdownPath` through so the <link rel="alternate"> lands on docs pages.
 
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SOURCE_REPO, DEV_LIST } from "../lib/site";
 
+interface Props {
+  /** Path of this page's Markdown twin, e.g. "/docs/modes.md". Omit on non-docs pages. */
+  markdownPath?: string;
+}
+const { markdownPath } = Astro.props;
 
 const org = {
   "@type": "Organization",
@@ -67,4 +73,7 @@ const json = JSON.stringify(payload).replace(/</g, "\\u003c");
 ---
 
 <script type="application/ld+json" set:html={json} />
+{markdownPath && (
+  <link rel="alternate" type="text/markdown" href={`${SITE_URL}${markdownPath}`} />
+)}
 <link rel="llms-txt" href={`${SITE_URL}/llms.txt`} />

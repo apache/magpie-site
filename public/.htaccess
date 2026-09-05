@@ -24,6 +24,16 @@
 # with its own bare "Not Found" body and the page's recovery links are lost.
 ErrorDocument 404 /404.html
 
+# Root discovery files and the .md twins carry the Markdown media type. The
+# twins are alternates of the HTML page, not pages, so they stay out of
+# search results.
 <Files "llms.txt">
   Header set Content-Type "text/markdown; charset=utf-8"
 </Files>
+<Files "llms-full.txt">
+  Header set Content-Type "text/markdown; charset=utf-8"
+</Files>
+<FilesMatch "\.md$">
+  Header set Content-Type "text/markdown; charset=utf-8"
+  Header set X-Robots-Tag "noindex"
+</FilesMatch>
