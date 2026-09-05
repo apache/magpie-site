@@ -1,0 +1,39 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+# Astro copies public/ into dist/ verbatim, and CI force-pushes dist/ to the
+# `publish` branch that ASF infrastructure serves at magpie.apache.org, so
+# this file lands at the site root.
+
+# Unknown paths must answer 404, never a 200 with the app shell. Astro writes
+# 404.html at build time; without ErrorDocument the ASF web server answers
+# with its own bare "Not Found" body and the page's recovery links are lost.
+ErrorDocument 404 /404.html
+
+# Root discovery files and the .md twins carry the Markdown media type. The
+# twins are alternates of the HTML page, not pages, so they stay out of
+# search results.
+<Files "llms.txt">
+  Header set Content-Type "text/markdown; charset=utf-8"
+</Files>
+<Files "llms-full.txt">
+  Header set Content-Type "text/markdown; charset=utf-8"
+</Files>
+<FilesMatch "\.md$">
+  Header set Content-Type "text/markdown; charset=utf-8"
+  Header set X-Robots-Tag "noindex"
+</FilesMatch>

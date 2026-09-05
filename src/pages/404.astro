@@ -1,0 +1,49 @@
+---
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+// Recovery page for unknown paths. Astro emits this as /404.html; the
+// .htaccess ErrorDocument points the ASF web server at it so the status stays
+// 404 and the body gives both people and agents somewhere to go. Replace the
+// bare <html> shell with the site's base layout if one exports the <head>.
+
+import { SITE_URL, SITE_NAME, SOURCE_REPO } from "../lib/site";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found — {SITE_NAME}</title>
+  </head>
+  <body>
+    <main>
+      <h1>Page not found</h1>
+      <p>There is no page at this address on {SITE_NAME}. It may have moved when the documentation was reorganised.</p>
+      <ul>
+        <li><a href="/docs/">Documentation index</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href={`${SITE_URL}/llms.txt`}>llms.txt</a> — a Markdown index of every page, for agents</li>
+        <li><a href={`${SITE_URL}/sitemap-index.xml`}>Sitemap</a></li>
+        <li><a href={SOURCE_REPO}>Source repository on GitHub</a></li>
+      </ul>
+    </main>
+  </body>
+</html>

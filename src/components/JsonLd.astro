@@ -1,0 +1,79 @@
+---
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+// Organization / WebSite / SoftwareSourceCode structured data for the <head>.
+// Drop into BaseLayout.astro's <head> once; DocsLayout.astro passes
+// `markdownPath` through so the <link rel="alternate"> lands on docs pages.
+
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SOURCE_REPO, DEV_LIST } from "../lib/site";
+
+interface Props {
+  /** Path of this page's Markdown twin, e.g. "/docs/modes.md". Omit on non-docs pages. */
+  markdownPath?: string;
+}
+const { markdownPath } = Astro.props;
+
+const org = {
+  "@type": "Organization",
+  "@id": "https://www.apache.org/#organization",
+  name: "The Apache Software Foundation",
+  url: "https://www.apache.org/",
+};
+
+const payload = {
+  "@context": "https://schema.org",
+  "@graph": [
+    org,
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: `${SITE_URL}/`,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      publisher: { "@id": org["@id"] },
+      inLanguage: "en",
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": `${SITE_URL}/#software`,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      url: `${SITE_URL}/`,
+      codeRepository: SOURCE_REPO,
+      license: "https://www.apache.org/licenses/LICENSE-2.0",
+      programmingLanguage: "Markdown",
+      applicationCategory: "DeveloperApplication",
+      author: { "@id": org["@id"] },
+      discussionUrl: `https://lists.apache.org/list.html?${DEV_LIST}`,
+    },
+  ],
+};
+
+// JSON.stringify does not escape "<", so a value containing "</script>" would
+// close the tag early. Every value is a constant today; the escape keeps that
+// independent of what the object later carries.
+const json = JSON.stringify(payload).replace(/</g, "\\u003c");
+---
+
+<script type="application/ld+json" set:html={json} />
+{markdownPath && (
+  <link rel="alternate" type="text/markdown" href={`${SITE_URL}${markdownPath}`} />
+)}
+<link rel="llms-txt" href={`${SITE_URL}/llms.txt`} />
