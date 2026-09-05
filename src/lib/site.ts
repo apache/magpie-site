@@ -93,5 +93,3 @@ export async function allDocs(): Promise<DocEntry[]> {
   const entries = await getCollection("docs", (e) => !HIDDEN_DOCS.has(docSlug(e)));
   return entries.sort((a, b) => a.id.localeCompare(b.id));
 }
-
-
