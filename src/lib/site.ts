@@ -98,8 +98,6 @@ export async function allDocs(): Promise<DocEntry[]> {
   const entries = await getCollection("docs", (e) => !HIDDEN_DOCS.has(docSlug(e)));
   return entries.sort((a, b) => a.id.localeCompare(b.id));
 }
-<<<<<<< HEAD
-=======
 
 /**
  * The Markdown twin body. Mirrors the convention on iggy.apache.org: title,
@@ -117,4 +115,3 @@ export function docMarkdown(entry: DocEntry): string {
   lines.push(`Rendered page: ${SITE_URL}${docHtmlPath(entry)}`, "", `Source: ${docSourceUrl(entry)}`, "", body, "");
   return lines.join("\n");
 }
->>>>>>> f03b2fc (Publish a Markdown copy of every docs page)
