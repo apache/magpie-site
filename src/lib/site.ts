@@ -60,6 +60,11 @@ export function docHtmlPath(entry: DocEntry): string {
   return `/docs/${docSlug(entry)}/`;
 }
 
+/** Path of the Markdown twin: same as the HTML path, .md in place of the slash. */
+export function docMarkdownPath(entry: DocEntry): string {
+  return `/docs/${docSlug(entry)}.md`;
+}
+
 /** Path of the synced file relative to apache/magpie/docs, original case preserved. */
 export function docRelPath(entry: DocEntry): string {
   return entry.filePath ? entry.filePath.replace(/^.*\/content\/docs\//, "") : `${docSlug(entry)}.md`;
@@ -94,3 +99,19 @@ export async function allDocs(): Promise<DocEntry[]> {
   return entries.sort((a, b) => a.id.localeCompare(b.id));
 }
 
+/**
+ * The Markdown twin body. Mirrors the convention on iggy.apache.org: title,
+ * one-line description as a blockquote, the rendered and source URLs, then
+ * the body exactly as synced. If the body already opens with an H1 it becomes
+ * the title rather than being printed twice.
+ */
+export function docMarkdown(entry: DocEntry): string {
+  let body = (entry.body ?? "").trim();
+  if (!entry.data.title && leadingHeading(body)) {
+    body = body.replace(/^#\s+.+?\s*(?:\n|$)/, "").trimStart();
+  }
+  const lines = [`# ${docTitle(entry)}`, ""];
+  if (entry.data.description) lines.push(`> ${entry.data.description}`, "");
+  lines.push(`Rendered page: ${SITE_URL}${docHtmlPath(entry)}`, "", `Source: ${docSourceUrl(entry)}`, "", body, "");
+  return lines.join("\n");
+}

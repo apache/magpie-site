@@ -32,6 +32,7 @@ import {
   STATIC_ROUTES,
   allDocs,
   docHtmlPath,
+  docMarkdownPath,
   docTitle,
 } from "../lib/site";
 
@@ -51,6 +52,11 @@ source repository, or through an agent marketplace.
 - Website source: ${SITE_REPO}
 - Developer mailing list: ${DEV_LIST} (archive: https://lists.apache.org/list.html?${DEV_LIST})
 
+Every documentation page has a Markdown twin at the same path with a \`.md\`
+suffix in place of the trailing slash, for example
+${SITE_URL}/docs/modes/ is also ${SITE_URL}/docs/modes.md. HTML pages advertise
+their twin with \`<link rel="alternate" type="text/markdown">\`. Prefer the
+twin: it is the synced source with no navigation.
 `;
 
 export const GET: APIRoute = async () => {
@@ -62,7 +68,7 @@ export const GET: APIRoute = async () => {
 
   const docLines = docs.map((entry) => {
     const desc = entry.data.description ? `: ${entry.data.description}` : "";
-    return `- [${docTitle(entry)}](${SITE_URL}${docHtmlPath(entry)})${desc}`;
+    return `- [${docTitle(entry)}](${SITE_URL}${docMarkdownPath(entry)})${desc} (rendered: ${SITE_URL}${docHtmlPath(entry)})`;
   });
 
   const body = [
@@ -77,6 +83,7 @@ export const GET: APIRoute = async () => {
     "",
     "## Optional",
     "",
+    `- [Full documentation in one file](${SITE_URL}/llms-full.txt): every docs page concatenated, for agents that want one fetch.`,
     `- [Sitemap](${SITE_URL}/sitemap-index.xml)`,
     "",
   ].join("\n");
