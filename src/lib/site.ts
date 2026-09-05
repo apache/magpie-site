@@ -70,9 +70,9 @@ export function docSourceUrl(entry: DocEntry): string {
   return `${SOURCE_REPO}/blob/main/docs/${docRelPath(entry)}`;
 }
 
-/** The body's opening "# heading", if it starts with one. */
+/** The body's first "# heading", wherever it sits: synced files open with a licence comment and a TOC. */
 function leadingHeading(body: string): string | undefined {
-  const m = body.trimStart().match(/^#\s+(.+?)\s*(?:\n|$)/);
+  const m = body.match(/^#\s+(.+?)\s*$/m);
   return m ? m[1].trim() : undefined;
 }
 
