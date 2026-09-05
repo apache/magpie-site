@@ -127,6 +127,10 @@
         {
           "kind": "contract",
           "name": "change-request"
+        },
+        {
+          "kind": "contract",
+          "name": "tracker"
         }
       ],
       "kind": "contract",
@@ -881,7 +885,7 @@
     {
       "name": "spec-inventory",
       "title": "spec-inventory",
-      "description": "A deterministic uv tool that emits a compact routing inventory for the spec-loop prompts. It summarizes spec frontmatter, where-it-lives hints, validation commands, known gaps, skill frontmatter, and tool/test presence so agents can…",
+      "description": "Two deterministic uv tools that help the spec-loop navigate the repository without scanning it from scratch each iteration.",
       "labels": [
         {
           "kind": "substrate",
@@ -1100,6 +1104,10 @@
         ],
         "interfaces": [],
         "implementations": [
+          {
+            "tool": "bitbucket",
+            "vendor": "Atlassian"
+          },
           {
             "tool": "jira",
             "vendor": "Atlassian"
@@ -1609,15 +1617,15 @@
       "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
     },
     "skills": {
-      "total": 70,
-      "neutral": 70,
+      "total": 71,
+      "neutral": 71,
       "byVerdict": {
         "capability-pure": 11,
-        "portable": 59,
+        "portable": 60,
         "vendor-coupled": 0
       },
       "byOrg": {
-        "agnostic": 56,
+        "agnostic": 57,
         "ASF": 14
       },
       "coupled": [],
@@ -2023,6 +2031,15 @@
           "coupled": []
         },
         {
+          "skill": "report-framework-issue",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
           "skill": "reviewer-routing",
           "verdict": "portable",
           "organization": "agnostic",
@@ -2269,8 +2286,8 @@
     }
   },
   "skills": {
-    "total": 70,
-    "apacheLicensed": 70,
+    "total": 71,
+    "apacheLicensed": 71,
     "allApache": true,
     "license": "Apache-2.0",
     "byOrg": {
