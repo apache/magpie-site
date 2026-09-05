@@ -108,7 +108,7 @@ export async function allDocs(): Promise<DocEntry[]> {
 export function docMarkdown(entry: DocEntry): string {
   let body = (entry.body ?? "").trim();
   if (!entry.data.title && leadingHeading(body)) {
-    body = body.replace(/^#\s+.+?\s*(?:\n|$)/, "").trimStart();
+    body = body.replace(/^#\s+.+?\s*$\n?/m, "").trimEnd();
   }
   const lines = [`# ${docTitle(entry)}`, ""];
   if (entry.data.description) lines.push(`> ${entry.data.description}`, "");
