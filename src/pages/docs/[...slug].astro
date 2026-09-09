@@ -1,10 +1,10 @@
 ---
 import { getCollection, render } from "astro:content";
 import DocsLayout from "../../layouts/DocsLayout.astro";
+import { HIDDEN_DOCS } from "../../lib/site";
 
 export async function getStaticPaths() {
-  // Internal governance drafts that should not appear on the public site.
-  const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+  // HIDDEN_DOCS lives in src/lib/site.ts so llms.txt hides the same pages.
   const docs = await getCollection("docs");
   return docs
     .filter((entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")))

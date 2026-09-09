@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // Production is served directly at the apex https://magpie.apache.org/ (root path).
@@ -30,7 +31,9 @@ export default defineConfig({
   site,
   base,
   redirects,
-  integrations: [react()],
+  // Markdown twins of docs pages (/docs/<page>.md) are alternates of the HTML
+  // page, not pages, so they stay out of the sitemap.
+  integrations: [react(), sitemap({ filter: (page) => !page.endsWith('.md') })],
   vite: {
     plugins: [tailwindcss()],
   },
