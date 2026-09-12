@@ -1,0 +1,132 @@
+# `tools/agent-isolation/` — secure agent setup helpers
+
+Rendered page: https://magpie.apache.org/docs/tools/agent-isolation/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/tools/agent-isolation/readme.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [`tools/agent-isolation/` — secure agent setup helpers](#toolsagent-isolation--secure-agent-setup-helpers)
+  - [Prerequisites](#prerequisites)
+  - [Files](#files)
+  - [Usage at a glance](#usage-at-a-glance)
+  - [Referenced by](#referenced-by)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+**Capability:** substrate:sandbox
+
+**Harness:** agnostic
+
+This directory ships the moving pieces the framework's
+[`docs/setup/secure-agent-setup.md`](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md) document
+references. It is not a Python project (unlike the sibling tools
+under `tools/cve-tool-vulnogram/` and `tools/gmail/oauth-draft/`) — these are
+plain shell scripts plus a TOML manifest of pinned upstream
+versions.
+
+The clean-environment launcher [`agent-iso.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/agent-iso.sh) provides
+harness-agnostic env isolation. It exposes four entry points, all sharing
+the same `env -i` credential-strip core:
+
+- **`claude-iso`** — launches Claude Code; additionally injects a one-shot
+  `--settings` sandbox `allowRead` grant for the current repo (Claude-specific).
+- **`opencode-iso`** — launches OpenCode with the same clean env; no settings
+  grant (OpenCode takes its filesystem isolation from the OS-level sandbox).
+- **`kiro-iso`** — launches Kiro CLI (the `kiro` name normalises to its
+  `kiro-cli` binary) with the same clean env; like OpenCode, it takes its
+  filesystem isolation from the OS-level sandbox (no `--settings` grant).
+- **`agent-iso <cli>`** — launches *any* agentic CLI (`codex`, `cursor`,
+  `gemini`, `aider`, …) with the same credential strip. The `--settings`
+  injection is skipped for non-Claude CLIs, which take their filesystem
+  isolation from the OS-level sandbox. The `-w` / `--worktree` flag is a
+  Claude-only control flag and is stripped from the argv of non-Claude CLIs
+  (it has no meaning for them). The Layer 0 env passthrough (including
+  `SSH_AUTH_SOCK`) is identical for every harness per
+  [RFC-AI-0002 § Layer 0](https://magpie.apache.org/docs/rfcs/rfc-ai-0002/#layer-0--clean-env-wrapper);
+  gating git push is a separate Layer 3 concern wired per-harness (see
+  [`docs/adapters/add-a-harness.md`](https://github.com/apache/magpie/blob/main/docs/adapters/add-a-harness.md)).
+
+All three paths enforce layer 0 of the secure-agent posture regardless of
+which harness drives the session. Harness-specific layers (the in-process
+action guard, the `permissions.ask` confirmation list) are wired separately
+per runtime — see [`docs/adapters/add-a-harness.md`](https://github.com/apache/magpie/blob/main/docs/adapters/add-a-harness.md).
+
+> ⚠️ **Generic harnesses (`agent-iso <cli>`) get Layer 0 only — no push gate.**
+> Claude and OpenCode ship a Layer 3 push gate (agent-guard / `permissions.ask`),
+> so a `git push` from those harnesses is gated. An arbitrary CLI launched via
+> `agent-iso` (`codex`, `aider`, …) receives the live `SSH_AUTH_SOCK` with
+> **nothing gating `git push`**. The credential-strip posture is identical across
+> harnesses, but the *net* protection is weaker: a runtime with no Layer 3 adapter
+> is responsible for providing its own push gate before it is trusted with the
+> agent socket.
+
+## Prerequisites
+
+- **Runtime:** Bash + coreutils — this directory is plain shell scripts plus a TOML manifest, not a Python project (the `pyproject.toml` ships only the test harness, which runs under Python 3.11+ via `uv`). `claude-term-bg.sh` uses `python3` / `python` for one heuristic and falls back to calm when absent.
+- **CLIs:** `jq` (required by `check-tool-updates.sh` and the status-line scripts), `curl` (the update check), `git` (status line / git hooks), and `gh` (optional — status-line PR title). The secure setup itself installs the pinned `bubblewrap` and `socat` (via `apt-get`) and `@anthropic-ai/claude-code@latest` (via `npm` — the agent runtime is intentionally unpinned; see [`pinned-versions.toml`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/pinned-versions.toml)).
+- **Credentials / auth:** None for these helpers; the wrapped `claude` session authenticates on its own (and `agent-iso.sh` deliberately strips credential-shaped env vars).
+- **Network:** `api.github.com` and `www.dest-unreach.org` (the release checks in `check-tool-updates.sh`); the install step also reaches the apt and npm registries.
+
+## Files
+
+| File | Purpose |
+|---|---|
+| [`pinned-versions.toml`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/pinned-versions.toml) | Machine-readable manifest of pinned upstream versions for the sandbox primitives `bubblewrap` and `socat`. Each entry carries a `released` date that satisfies the framework's 7-day cooldown convention. `claude-code` is deliberately **not** pinned — the agent runtime installs at `@latest` so it always carries the newest permission-rule / sandbox / prompt-injection fixes. |
+| [`check-tool-updates.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/check-tool-updates.sh) | Reads the manifest and reports upstream releases that are newer than the pin AND have themselves aged past the 7-day cooldown. Side-effect-free — no installs, no edits, no PRs. |
+| [`agent-iso.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/agent-iso.sh) | Shell function to launch Claude Code with `env -i` and a tiny passthrough list, stripping every credential-shaped environment variable from the parent shell. The framework's "layer 0" of the secure setup. |
+| [`sandbox-bypass-warn.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/sandbox-bypass-warn.sh) | Claude Code `PreToolUse` hook (Bash matcher). Prints a bold-red banner to stderr whenever the model invokes the Bash tool with `dangerouslyDisableSandbox: true`. Belt-and-braces visibility for the sandbox-bypass permission prompt. Recommended user-scope (`~/.claude/settings.json`) so it fires across every session on the host. |
+| [`sandbox-error-hint.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/sandbox-error-hint.sh) | Claude Code `PostToolUse` hook (Bash matcher). Scans the tool's stdout + stderr for the three known sandbox-shaped error signatures (SSH agent / Yubikey unreachable, loopback port-bind blocked, docker / podman socket denied) and prints a `[sandbox-hint]` line pointing at the matching entry in [`docs/setup/sandbox-troubleshooting.md`](https://github.com/apache/magpie/blob/main/docs/setup/sandbox-troubleshooting.md). Fail-open: any unexpected JSON shape exits silent. Recommended user-scope so the hint fires across every session. Complements `setup-isolated-setup-doctor` (the structured probe) by surfacing the catalog reference at the moment of failure, without the user having to remember the catalog exists. |
+| [`sandbox-status-line.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/sandbox-status-line.sh) | Claude Code `statusLine` helper. Renders `<model> [sandbox]` (green) or `<model> [NO SANDBOX]` (bold red) based on `sandbox.enabled` in the active settings — project `settings.local.json` first, then project `settings.json`, then user-scope, mirroring Claude Code's own precedence. Reflects in-session `/sandbox` toggles (which persist to project `settings.local.json`). Recommended user-scope. |
+| [`sandbox-status-line-rich.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/sandbox-status-line-rich.sh) | Opt-in richer alternative to `sandbox-status-line.sh`. Same sandbox-state detection, plus folder name (hash-coloured), git branch + dirty + ahead/behind, per-branch PR title (cached, gated by `gh`), and a yellow `[sandbox-auto]` tag for the `autoAllowBashIfSandboxed` setting. Wire one *or* the other into `statusLine.command`. |
+| [`claude-term-bg.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/claude-term-bg.sh) | **Opt-in quality-of-life helper (not a security control).** Keeps a calm baseline background and tints it only when Claude genuinely wants you to act (never while working, and never when it merely *finished* a turn), so a window you've tabbed away from can't sit blocked unnoticed. Distinguishes "blocked on a decision" from "finished and idle" — which look identical at the `Stop` event — via three signals across six hooks: `Stop` → `stop` (heuristic — tints only if the final assistant message reads as a question/request; a completion stays calm; needs `python3`/`python`, else defaults calm); `PreToolUse` (matcher `AskUserQuestion`) → `wait` (exact — a structured question was posed); `PostToolUse` (matcher `*`) → `reset` (calm while working, and clears the tint the instant you approve a permission prompt or answer a question); `Notification` → `notify` (tints for permission prompts only — the plain idle ping is a no-op so it can't wipe a pending question's tint); and `UserPromptSubmit` + `SessionStart` → `reset` (you replied / fresh session clears any stale tint). Writes the OSC escape to the Claude pty discovered by walking the process tree (hooks have no controlling tty); the only deterministic reset is an explicit `CLAUDE_RESET_BG` colour via OSC 11 (iTerm2 ignores OSC 111). Colours overridable via `CLAUDE_WAIT_BG` / `CLAUDE_RESET_BG`. Tested on iTerm2 + macOS; fail-soft elsewhere. See [`docs/setup/secure-agent-setup.md` → *Waiting-for-input terminal tint*](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md#waiting-for-input-terminal-tint). |
+| [`sandbox-add-project-root.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/sandbox-add-project-root.sh) | Adds the current adopter repo's project root (and, with `--all-worktrees`, every linked git worktree's working dir) as an explicit absolute path to `sandbox.filesystem.allowRead` and `allowWrite` in the project-local, gitignored `<repo>/.claude/settings.local.json` — one entry per worktree, each in that worktree's own settings file. Defensive against [issue #197](https://github.com/apache/magpie/issues/197) — `allowRead: ["."]` does not in practice cover CWD because the harness pre-resolves the `.` literal away from the read side. Never modifies user-scope or committed project-scope. Idempotent, atomic, tolerant of missing prereqs. Invoked from `setup-isolated-setup-install`, `/magpie-setup` (adopt / upgrade / worktree-init), and the `post-checkout` git hook installed by `/magpie-setup adopt`. |
+| [`git-global-post-checkout.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/git-global-post-checkout.sh) | Universal `post-checkout` git hook installed at `~/.claude/git-hooks/post-checkout` when the operator picks the **simple whole-user** flavour in `setup-isolated-setup-install`. Activated by `git config --global core.hooksPath ~/.claude/git-hooks/` so every `git checkout` / `git clone` / `git worktree add` across the host invokes it. Best-effort + idempotent + `\|\| true`: invokes `sandbox-add-project-root.sh` for any worktree with a `.claude/` directory. Trade-off documented in [`docs/setup/secure-agent-setup.md` → *Per-project vs whole-user scope*](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md#per-project-vs-whole-user-scope): `core.hooksPath` shadows per-repo `.git/hooks/*` across every repo on the host. The **dispatcher** flavour (below) supersedes this file. |
+| [`git-hook-dispatcher.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/git-hook-dispatcher.sh) | Universal, basename-keyed git-hook **dispatcher** for the **whole-user dispatcher** flavour. Symlinked to every hook name under `~/.claude/git-hooks/`. For each git operation it runs the framework's own logic for that hook type (the `post-checkout` sandbox-allowlist sync) **and then chains through to the repo-local `.git/hooks/<name>`** (resolved via `git rev-parse --git-common-dir`, worktree-safe; `exec`-ed with original argv + inherited stdin so a failing local hook still aborts the git op). Restores per-repo hooks (prek / pre-commit / husky / hand-written) under global `core.hooksPath`; a repo with no local hook is a clean no-op. See [`docs/setup/secure-agent-setup.md` → *Whole-user with the per-repo dispatcher*](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md#whole-user-with-the-per-repo-dispatcher). |
+| [`prek-shim.sh`](https://github.com/apache/magpie/blob/main/tools/agent-isolation/prek-shim.sh) | Transparent `prek` front installed as `~/.claude/bin/prek` (with `~/.claude/bin` prepended to PATH) for the whole-user dispatcher flavour. Rewrites **only** `prek install` — injecting `--git-dir "$(git rev-parse --git-common-dir)"` unless the caller already passed `--git-dir`, asked for `--help`, or is outside a git work tree — so prek's shim lands in the repo-local `.git/hooks/` where the dispatcher chains, instead of the shared `core.hooksPath` dir. Every other `prek` invocation passes through unchanged; no-op on hosts with no global `core.hooksPath`. |
+
+## Usage at a glance
+
+```bash
+# Initial install (read pinned-versions.toml for the bubblewrap/socat pins):
+sudo apt-get install --no-install-recommends bubblewrap=0.11.1-* socat=1.8.1.1-*
+# claude-code is unpinned — always install the latest for the newest security fixes:
+npm install -g --no-save @anthropic-ai/claude-code@latest
+
+# Source the wrapper into your shell:
+source /path/to/magpie/tools/agent-isolation/agent-iso.sh
+
+# Optional: make claude-iso the default `claude` (see docs/setup/secure-agent-setup.md
+# for the trade-off — the alias also strips env in non-tracker sessions):
+alias claude='claude-iso'
+
+# Launch a session with no inherited credentials:
+cd ~/code/<tracker>
+claude-iso
+
+# For any other harness — same credential strip, no Claude-specific settings:
+agent-iso codex [codex-args]
+agent-iso cursor [cursor-args]
+agent-iso gemini [gemini-cli-args]
+# Or directly without sourcing:
+bash /path/to/magpie/tools/agent-isolation/agent-iso.sh agent-iso codex [codex-args]
+
+# Periodically (or via /schedule weekly), check for upgrade candidates:
+bash /path/to/magpie/tools/agent-isolation/check-tool-updates.sh
+```
+
+## Referenced by
+
+- [`../../docs/setup/secure-agent-setup.md`](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md) —
+  the user-facing setup document. Read that first.
+- [`../../.claude/settings.json`](https://github.com/apache/magpie/blob/main/.claude/settings.json) — the
+  framework's own dogfooded secure config. Adopters scaffold their
+  own version from the example block in `docs/setup/secure-agent-setup.md`.

@@ -1,0 +1,186 @@
+# Agentic Mentoring skill family
+
+Rendered page: https://magpie.apache.org/docs/mentoring/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/mentoring/README.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Agentic Mentoring skill family](#agentic-mentoring-skill-family)
+  - [Install & first runs](#install--first-runs)
+    - [Try these first](#try-these-first)
+  - [Skills](#skills)
+    - [What each skill covers](#what-each-skill-covers)
+  - [Adopter contract](#adopter-contract)
+  - [Status](#status)
+  - [Cross-references](#cross-references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+> **Scope.** Works on any project, ASF or not — no
+> Apache-Software-Foundation-specific assumptions baked in.
+
+Maintainer-facing skills that join contributor threads in a teaching
+register, author newcomer-ready issues, curate the existing backlog for
+newcomers, orient first-time contributors, explain issue context to
+newcomers, and track a contributor's readiness path to committer nomination.
+Six skills shipped at `experimental`.
+
+MISSION names Agentic Mentoring as the highest-value project-side mode and the one
+off-the-shelf agent tooling skips. The framework lands the spec — tone guide,
+hand-off protocol, adopter contract — and the skill implementations together,
+so the project's tone choices are reviewable independently of runtime
+behaviour and can be evolved without editing the skill body.
+
+## Install & first runs
+
+Install just this family — one plugin, 4 skills. Newcomer-facing mentoring — welcome, explain, and curate first issues.
+
+```text
+/plugin marketplace add apache/magpie
+/plugin install magpie-mentoring@apache-magpie
+```
+
+<!-- CAPTURE: assets/quickstart/README.md -->
+![Claude Code showing the magpie-mentoring plugin installed and enabled](/docs-assets/quickstart/families/mentoring-install.png)
+
+New to Magpie? The [quick start](/docs/quick-start) covers the other agents,
+the all-in-one alternative, and the secure-isolation setup to run next.
+
+### Try these first
+
+*Illustrative shapes, not real transcripts — your output will differ. Nothing
+below sends, merges, or posts anything without you confirming it.*
+
+**Welcome a first-time contributor.**
+
+```text
+> /magpie-mentoring:welcome
+
+  PR #5210 is @kasia-w's first contribution
+  Welcome comment drafted: CI hints + the DCO step they missed
+```
+
+**Curate the good-first-issue backlog.**
+
+```text
+> /magpie-mentoring:good-first-issue-sweep
+
+  23 labelled good-first-issue
+   9 stale (>180d, no claim)   4 not actually beginner-sized
+  10 healthy
+```
+
+**Explain an issue to a newcomer.**
+
+```text
+> /magpie-mentoring:newcomer-issue-explainer
+
+  #8144 explained: what breaks, the 2 files to touch,
+  how to run just that test. Comment drafted.
+```
+
+## Skills
+
+| Skill | Purpose | Status |
+|---|---|---|
+| [`pr-management-mentor`](https://github.com/apache/magpie/blob/main/skills/pr-management-mentor/SKILL.md) | Draft a teaching-register comment on a single GitHub issue or PR thread; waits for maintainer confirmation before posting. | experimental |
+| [`good-first-issue-author`](https://github.com/apache/magpie/blob/main/skills/good-first-issue-author/SKILL.md) | Draft one net-new good first issue from a supplied gap or small task; a suitability gate and R1–R9 readiness checklist gate the draft; waits for maintainer confirmation before filing via `gh`. | experimental |
+| [`mentoring-welcome`](https://github.com/apache/magpie/blob/main/skills/mentoring-welcome/SKILL.md) | Draft a first-contact orientation comment for a first-time contributor on a newly opened issue or PR; detects first-time authorship via the GitHub `author_association` field; skips repeat contributors. | experimental |
+| [`newcomer-issue-explainer`](https://github.com/apache/magpie/blob/main/skills/newcomer-issue-explainer/SKILL.md) | Explain a single issue's context, relevant code paths, and expected approach to a newcomer who has claimed it; teaching register, never gatekeeps. | experimental |
+| [`good-first-issue-sweep`](https://github.com/apache/magpie/blob/main/skills/good-first-issue-sweep/SKILL.md) | Sweep the open issue backlog for existing issues that could be labelled as good first issues; scores each against the G1–G7 suitability rubric and classifies as READY / NEAR-MISS / SKIP; proposes labels only after explicit maintainer confirmation. | experimental |
+| [`contributor-to-committer`](https://github.com/apache/magpie/blob/main/skills/contributor-to-committer/SKILL.md) | Read-only readiness tracker that maps a contributor's GitHub activity against the adopter's declared committer/PMC thresholds; surfaces a traffic-light brief (Not yet / Approaching / Ready to nominate) plus the specific evidence gaps that remain. (`family: contributor-growth` — cross-listed here for the mentoring path continuity.) | experimental |
+
+All six skills are read-only on tracker state or draft-then-confirm: no
+skill posts, labels, closes, or files anything without explicit maintainer
+confirmation in-session.
+
+### What each skill covers
+
+- **`pr-management-mentor`** — the thread-level Agentic Mentoring skill. Reads an
+  issue or PR thread, decides whether a teaching-register intervention is
+  warranted (clarifying question, convention pointer, paired example from a
+  prior PR), drafts the comment, and waits for maintainer confirmation before
+  posting. Never reviews code, routes PRs, or authors fixes — those are Agentic Triage
+  and Agentic Drafting respectively.
+- **`good-first-issue-author`** — the issue on-ramp skill. Takes a maintainer-
+  supplied gap or small task, applies a suitability gate (too large, security-
+  sensitive, or requiring a design decision → decline), runs through R1–R9
+  readiness criteria, and drafts one self-contained issue a newcomer can pick
+  up without prior repo context: scope, code pointers, contributing-doc links,
+  acceptance criteria, and a rough effort estimate.
+- **`mentoring-welcome`** — the first-contact skill. Triggered immediately
+  after a first-time contributor opens an issue or PR.
+  Drafts a lightweight orientation comment (contributing-guide link,
+  community-norm pointers, expected next steps). Skips silently for repeat
+  contributors and security-sensitive threads.
+- **`newcomer-issue-explainer`** — the issue-context skill. When a newcomer
+  claims a good-first-issue, explains the relevant code paths, project context,
+  and expected approach in a teaching register.
+- **`contributor-to-committer`** — the readiness-tracking skill. Takes a
+  GitHub handle, fetches their public activity on `<upstream>`, and maps it
+  against the adopter's declared committer or PMC thresholds from
+  `committer-readiness.md`. Returns a traffic-light verdict (Not yet /
+  Approaching / Ready to nominate) plus a gap table showing exactly what
+  evidence the contributor still needs. Read-only; never opens a nomination
+  thread, sends a message, or modifies any record.
+- **`good-first-issue-sweep`** — the backlog-curation skill. Sweeps the
+  open issue backlog and scores each issue against the G1–G7 suitability
+  rubric (scope, self-containment, code pointer, small effort, no security
+  sensitivity, no architectural decision, no deprecation decision).
+  Classifies each as READY (propose the GFI label), NEAR-MISS (surface
+  specific edits that would make it GFI-ready), or SKIP (not suitable).
+  Complements `good-first-issue-author`: the sweep stocks the on-ramp queue
+  from existing work; the author creates net-new issues from supplied gaps.
+  Read-only; proposes labels only after explicit maintainer confirmation.
+
+## Adopter contract
+
+The skills resolve project-specific content from these files in the adopter's
+`<project-config>/` directory:
+
+| File | Used by |
+|---|---|
+| [`mentoring-config.md`](https://github.com/apache/magpie/blob/main/projects/_template/mentoring-config.md) | `pr-management-mentor` (tone knobs, hand-off team, footer, `max_agent_turns`) |
+| [`good-first-issue-config.md`](https://github.com/apache/magpie/blob/main/projects/_template/good-first-issue-config.md) | `good-first-issue-author`, `good-first-issue-sweep` (candidate-scope rules, GFI-label name, suitability rubric threshold) |
+| [`mentoring-welcome-config.md`](https://github.com/apache/magpie/blob/main/projects/_template/mentoring-welcome-config.md) | `mentoring-welcome` (welcome-comment bodies, detection rules, contributing-guide URL) |
+| [`committer-readiness.md`](https://github.com/apache/magpie/blob/main/projects/_template/committer-readiness.md) | `contributor-to-committer` (committer/PMC threshold declarations: PR count, review count, issue participation, tenure window) |
+
+See the spec's [Adopter contract section](/docs/mentoring/spec#adopter-contract) for the
+required key documentation.
+
+## Status
+
+**Experimental.** Six skills shipped. No adopter has run the full
+contributor-to-committer interaction path under evaluation conditions yet;
+shape may change between framework versions.
+
+To provide pilot feedback, copy
+[`docs/pilot-report-template.md`](/docs/pilot-report-template) into your
+project notes, fill in each section, and optionally validate the filled-in
+report with:
+
+```bash
+uv run --project tools/pilot-report-validator pilot-report-validate <your-report.md>
+```
+
+## Cross-references
+
+- [`MISSION.md` § Agentic Mentoring](https://github.com/apache/magpie/blob/main/MISSION.md#technical-scope) —
+  mode definition, contributor-empowerment framing.
+- [`docs/modes.md` § Mentoring](/docs/modes#mentoring) —
+  current implementation status.
+- [`spec.md`](/docs/mentoring/spec) — full Agentic Mentoring spec: tone guide, hand-off
+  protocol, adopter contract.
+- [`projects/_template/README.md`](https://github.com/apache/magpie/blob/main/projects/_template/README.md) —
+  adopter scaffold index.
+- [`docs/setup/agentic-overrides.md`](/docs/setup/agentic-overrides) —
+  the override mechanism every skill in this family supports.

@@ -1,0 +1,292 @@
+# vetted-ops
+
+Rendered page: https://magpie.apache.org/docs/tools/vetted-ops/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/tools/vetted-ops/readme.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [vetted-ops](#vetted-ops)
+  - [Prerequisites](#prerequisites)
+  - [Why](#why)
+  - [What it actually guarantees](#what-it-actually-guarantees)
+    - [The boundary is the entry point, not `--caller`](#the-boundary-is-the-entry-point-not---caller)
+  - [Configuration](#configuration)
+  - [CLI](#cli)
+  - [Wiring it into settings](#wiring-it-into-settings)
+  - [Tests](#tests)
+  - [Referenced by](#referenced-by)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+**Capability:** substrate:sandbox
+
+**Harness:** agnostic
+
+A dispatcher for **fixed, policy-scoped forge operations**, so an agent session
+needs *one* allowlist entry instead of a dozen wildcard `ask` rules.
+
+## Prerequisites
+
+- **Runtime:** Python 3.11+ via `uv`. The package itself is stdlib-only.
+- **CLIs:** the `gh` CLI on `PATH`, authenticated for the repositories the policy
+  names. Every operation shells out to it; the dispatcher runs nothing else.
+- **Credentials:** whatever `gh` already uses (`~/.config/gh/`). This tool reads
+  no credential of its own and stores none.
+- **Network:** only what `gh` needs — `github.com` / `api.github.com`.
+- **Configuration:** a policy TOML (see *Configuration*). Without one, every
+  operation refuses.
+
+## Why
+
+[RFC-AI-0002 Layer 3](https://github.com/apache/magpie/blob/main/docs/rfcs/RFC-AI-0002.md) forces confirmation on every
+outward-visible action:
+
+```json
+"ask": [ "Bash(gh issue edit *)", "Bash(gh issue comment *)",
+         "Bash(gh issue close *)", "Bash(gh api * -X *)", … ]
+```
+
+The wildcard is doing the work, and it is also the cost. `gh issue edit *` covers
+an unbounded argument surface — `--add-label`, `--body`, `--repo <somewhere
+else>` — so a human has to read every invocation to know what it does. On a
+sweep that touches thirty trackers, that is a hundred prompts, and the hundredth
+gets the same attention as the first. Prompt fatigue is itself a security
+problem.
+
+This tool removes the wildcard rather than the confirmation. Each operation is a
+**closed shape**: a name, typed parameters, and a builder that returns an argv
+list. The repository comes from policy, not the command line. Labels, milestones,
+assignees, board columns and close reasons must be values the policy declares.
+Because the effect set is bounded by construction, the dispatcher can be
+`allow`ed once instead of `ask`ed every time.
+
+## What it actually guarantees
+
+Being precise, because a security tool that overstates itself is worse than none:
+
+- **A parameter can never become a command.** Builders return `list[str]`, executed
+  with `subprocess.run(..., shell=False)`. There is no string interpolation
+  anywhere in the path, so `1; rm -rf /` is simply an invalid issue number.
+- **A parameter can never become a flag.** Any parameter starting with `-` is
+  refused before validation, which closes flag-injection into `gh`.
+- **The repo is not addressable.** No operation takes a repository parameter; it
+  is read from policy. An operation cannot be pointed at another repository, and
+  parameters that reach an API *path* — repo paths and git refs — refuse `..`,
+  so none of them can walk out of the pinned repository either.
+- **Body content is free; body *location* and *timing* are not.** Comment bodies
+  may contain anything — backticks, `$(…)`, newlines — because content is never
+  interpolated into a command. What is constrained is which file may be read and
+  when. The file must resolve inside the configured workspace, that workspace
+  must be owned by you and closed to group and world, and a symlink is refused
+  (`O_NOFOLLOW`, plus a realpath check for the parents). The dispatcher then
+  **reads the bytes itself and pipes them to `gh` on stdin**, so there is exactly
+  one open. Handing `gh` a path would leave a window between the check and the
+  send in which the file could be swapped; the bytes that were validated are the
+  bytes that get published.
+- **Writes cannot be reached through the read entry point.** `vetted-op-read`
+  refuses any operation with `writes=True` *before* it consults the policy or
+  looks at `--caller`, so the refusal cannot be argued out of it by argv. This
+  is the one property that makes an unattended `allow` defensible — see below.
+- **GraphQL is named, not written.** `gh api graphql` normally takes a query as a
+  string — the widest surface `gh` offers. Here a caller names one of the
+  documents shipped in [`queries/`](https://github.com/apache/magpie/tree/main/tools/vetted-ops/src/vetted_ops/queries), the dispatcher
+  supplies the text, and `owner`/`name` come from policy. A caller can choose
+  among the allowlisted queries; it cannot write one, and cannot re-aim one at
+  another repository.
+- **The catalogue is closed.** Widening the surface means editing
+  [`ops.py`](https://github.com/apache/magpie/blob/main/tools/vetted-ops/src/vetted_ops/ops.py) — a reviewed code change, not a runtime
+  decision.
+
+### The boundary is the entry point, not `--caller`
+
+**Per-caller scoping is least-privilege, not a security boundary.** The policy
+declares which operations each caller may run, and `--caller` is required. But
+within one agent session the agent is a single principal that chooses what to
+pass as `--caller`. This protects against *the wrong skill reaching for the wrong
+operation* — a real and common failure, especially under prompt injection, where
+a hostile issue body talks a read-only triage pass into closing something. It
+does **not** stop a determined agent, and a permission rule must never be
+written as though it does. Concretely: allowlisting `vetted-op *` on the strength
+of a read-only caller name grants **every** operation in the catalogue, because
+the next invocation can name a different caller.
+
+What *can* be bound is the **entry point**, because a permission rule keys on the
+command and argv cannot change which binary is running. Hence two console
+scripts over one catalogue:
+
+| Entry point | Can write? | Intended permission |
+|---|---|---|
+| `vetted-op-read` | never — refused before policy is consulted | `allow` |
+| `vetted-op` | yes, subject to policy | `ask` (or unlisted) |
+
+That split is what lets the read path lose its prompts without the write path
+losing its gate, and it is why `--caller` repeated twice is an error rather than
+a last-wins convenience: argparse keeps the last occurrence, so repetition would
+let a command match a rule written against a read-only prefix while resolving to
+a privileged caller.
+
+For writes, the confirmation the harness puts in front of `vetted-op` is still
+doing the work. A finer boundary — per-skill scope bound by the runtime — needs
+something no portable mechanism offers yet: plugin manifests cannot declare
+permissions, and `permissionMode` is unsupported for plugin-shipped agents. The
+closest primitive is a subagent with a restricted `tools` list, which is **Claude
+Code-specific**. See
+[`tools/spec-loop/specs/vetted-command-surface.md`](https://github.com/apache/magpie/blob/main/tools/spec-loop/specs/vetted-command-surface.md)
+for that trajectory.
+
+**The policy file is only as protected as the filesystem makes it.** Rewriting
+the policy cannot reach a write through `vetted-op-read` — that refusal ignores
+the config entirely — but it can widen which repository the *reads* point at. If
+the policy lives somewhere the agent's shell can write, treat its contents as
+advisory rather than enforced.
+
+**This is not a substitute for the sandbox.** It reduces prompt volume at Layer 3.
+Layers 0–2 are unchanged and still carry the load.
+
+## Configuration
+
+Adopter-owned, at
+`.apache-magpie-overrides/tools/vetted-ops/config.toml` by default:
+
+```toml
+# Body files must resolve inside this directory.
+workspace = "/tmp/agent-scratch"
+
+[repos]
+tracker  = "acme/tracker"
+upstream = "acme/product"
+
+[values]
+labels        = ["needs triage", "cve allocated", "pr merged"]
+upstream_labels = ["ready for maintainer review", "area:scheduler"]  # issues *and* PRs
+milestones    = ["1.2.3", "1.3.0"]
+assignees     = ["alice", "bob"]
+issue_states  = ["open", "closed", "all"]
+pr_states     = ["open", "closed", "merged", "all"]
+close_reasons = ["completed", "not planned"]
+
+board_project_id      = "PVT_kwDO…"   # ProjectV2 node id
+board_status_field_id = "PVTSSF_…"    # its Status field id
+
+[values.board_columns]           # column name -> single-select option id
+"Assessed"      = "aee65beb"
+"CVE allocated" = "aae2beb3"
+
+[callers]                        # caller -> operations it may run
+"security-issue-sync"   = ["issue-view", "issue-comments", "issue-add-label",
+                           "issue-set-milestone", "issue-comment", "comment-update"]
+"security-issue-triage" = ["issue-view", "issue-comments"]
+"pr-management-triage"  = ["pr-list", "pr-view", "pr-checks", "gql-pr-liveness",
+                           "pr-add-label", "pr-remove-label", "pr-draft", "pr-ready",
+                           "pr-comment", "pr-update-branch", "run-rerun-failed",
+                           "workflow-approve"]
+"pr-management-code-review" = ["pr-view", "pr-diff", "pr-comments", "pr-reviews",
+                               "gql-pr-review-threads", "pr-review-approve",
+                               "pr-review-request-changes", "pr-review-comment"]
+"pr-management-stats"   = ["pr-list", "pr-view", "gql-pr-review-threads"]
+"issue-triage"          = ["repo-issue-view", "repo-issue-comments", "repo-issue-list",
+                           "repo-issue-add-label", "repo-issue-remove-label",
+                           "repo-issue-comment"]
+"issue-stale-sweep"     = ["repo-issue-list", "repo-issue-view", "repo-issue-comment",
+                           "repo-issue-close", "repo-issue-reopen"]
+"issue-backlog-stats"   = ["repo-issue-list"]
+"license-compliance-audit" = ["repo-view", "repo-tree", "repo-file"]
+"flaky-test-triage"     = ["run-list", "run-view", "pr-view"]
+"release-verify-rc"     = ["release-list", "release-view", "tags", "repo-file"]
+"contributor-nomination" = ["user-profile", "pr-list", "repo-issue-list"]
+"mentoring-welcome"     = ["repo-issue-view", "repo-issue-comment", "pr-view"]
+```
+
+`mentoring-welcome` needs no operation of its own: it works on upstream issues
+and PRs, which the issue and PR families already cover. A family earns new
+operations only when it has a shape the catalogue lacks.
+
+Grant the narrowest set that lets a skill finish its job: `pr-management-stats`
+is a read-only dashboard, so it gets no write operation at all, and a
+prompt-injection payload in a PR title cannot talk it into one.
+
+The policy is never supplied on the command line: a caller cannot widen its own
+policy.
+
+## CLI
+
+```bash
+vetted-op list-ops                          # the catalogue
+vetted-op policy                            # resolved policy, as JSON
+vetted-op --caller <name> <operation> [param …]
+vetted-op --caller <name> <operation> [param …] --dry-run   # print argv, run nothing
+```
+
+Exit codes: `0` ok, `2` usage, `3` refused by policy or validation, `4` the
+underlying command failed.
+
+## Wiring it into settings
+
+Replace the wildcard `ask` rules with one `allow` entry, and keep an `ask` on
+anything still invoked directly:
+
+```jsonc
+"permissions": {
+  // Only the READ dispatcher is allowlisted. Allowlisting `vetted-op` itself
+  // would grant every write in the catalogue, since --caller is argv.
+  "allow": [
+    "Bash(uv run --project ~/.claude/plugins/cache/apache-magpie/magpie-vetted-ops/*/tools/vetted-ops vetted-op-read *)"
+  ],
+  "ask": [
+    "Bash(uv run --project ~/.claude/plugins/cache/apache-magpie/magpie-vetted-ops/*/tools/vetted-ops vetted-op *)"
+  ],
+  "deny": [
+    "Edit(~/.claude/plugins/cache/apache-magpie/magpie-vetted-ops/**)",
+    "Write(~/.claude/plugins/cache/apache-magpie/magpie-vetted-ops/**)",
+    "Edit(.apache-magpie-overrides/tools/vetted-ops/**)",
+    "Write(.apache-magpie-overrides/tools/vetted-ops/**)"
+  ]
+}
+```
+
+The dispatcher must live where the agent cannot rewrite it — otherwise an agent
+that edits `ops.py` has defeated the whole design. That is why it ships as the
+`magpie-vetted-ops` **substrate plugin**: the installed plugin tree is not a path
+the agent edits, and it sits outside every `sandbox.filesystem.allowWrite` root,
+so sandboxed Bash cannot write there either.
+
+The `deny` rules above are the other half, and the `allow` is not defensible
+without them. Two surfaces define what the dispatcher may do — the operation
+catalogue and the **policy**, which names the caller→operation grants. An agent
+able to edit either one can grant itself the write access the wildcard `ask`
+rules were removed for; adding an op to the catalogue and adding itself to a
+caller list reach the same place.
+
+Be clear about the asymmetry: the catalogue is protected twice (deny rules plus
+the sandbox), the policy only once. The policy lives inside the adopter repo,
+which is sandbox-writable by design, so a Bash-level write (`sed -i`, a heredoc)
+is **not** covered by an `Edit`/`Write` deny. If that gap matters, keep the
+policy outside the writable root and point `--config` at it. Vendoring the
+dispatcher itself into a repo the agent edits reduces it to the same single
+layer.
+
+## Tests
+
+```bash
+uv run --project . python -m pytest
+```
+
+The suite asserts the properties above rather than the plumbing: hostile
+parameters are refused, every builder produces a `gh` argv, the repo cannot be
+influenced by a parameter, body files outside the workspace are rejected while
+hostile body *content* passes through untouched, and a caller cannot run an
+operation outside its manifest.
+
+## Referenced by
+
+- [RFC-AI-0002](https://github.com/apache/magpie/blob/main/docs/rfcs/RFC-AI-0002.md) — the layered agent-isolation posture.
+- [`tools/spec-loop/specs/vetted-command-surface.md`](https://github.com/apache/magpie/blob/main/tools/spec-loop/specs/vetted-command-surface.md)

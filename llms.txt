@@ -1,0 +1,180 @@
+# Apache Magpie
+
+> AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance.
+
+Apache Magpie is a set of agent skills (recipes) that maintainers run inside
+their own agent harness: Claude Code, Codex, Copilot, Gemini, Cursor and
+others. It is not a hosted service. There is no HTTP API, no OpenAPI spec and
+nothing to call on this domain; integrate by installing the skills from the
+source repository, or through an agent marketplace.
+
+- Source repository: https://github.com/apache/magpie
+- Agent contract for the source tree: https://github.com/apache/magpie/blob/main/AGENTS.md
+- Contributing: https://github.com/apache/magpie/blob/main/CONTRIBUTING.md
+- Website source: https://github.com/apache/magpie-site
+- Developer mailing list: dev@magpie.apache.org (archive: https://lists.apache.org/list.html?dev@magpie.apache.org)
+
+Every documentation page has a Markdown twin at the same path with a `.md`
+suffix in place of the trailing slash, for example
+https://magpie.apache.org/docs/modes/ is also https://magpie.apache.org/docs/modes.md. HTML pages advertise
+their twin with `<link rel="alternate" type="text/markdown">`. Prefer the
+twin: it is the synced source with no navigation.
+
+## Site
+
+- [Home](https://magpie.apache.org/): What Magpie is, the five agentic modes, and the ten skill families.
+- [Documentation](https://magpie.apache.org/docs/): Setup, skill families, education stream, principles and RFCs.
+- [Architecture](https://magpie.apache.org/architecture/): Organizations, tools and capability contracts behind vendor neutrality.
+- [Tools](https://magpie.apache.org/tools/): The adapters that fulfil each capability, and which vendors each supports.
+- [Downloads](https://magpie.apache.org/downloads/): Signed release artifacts and how to verify them.
+- [Brand assets](https://magpie.apache.org/brand/): Logos, wordmark and usage rules for the Apache Magpie trademark.
+
+## Documentation
+
+- [Adding a new agent harness](https://magpie.apache.org/docs/adapters/add-a-harness.md) (rendered: https://magpie.apache.org/docs/adapters/add-a-harness/)
+- [Authoring an adapter](https://magpie.apache.org/docs/adapters/authoring.md) (rendered: https://magpie.apache.org/docs/adapters/authoring/)
+- [Codex first-class runtime](https://magpie.apache.org/docs/adapters/codex.md) (rendered: https://magpie.apache.org/docs/adapters/codex/)
+- [Adapter registry](https://magpie.apache.org/docs/adapters/registry.md) (rendered: https://magpie.apache.org/docs/adapters/registry/)
+- [Confidentiality — drafting elaboration](https://magpie.apache.org/docs/confidentiality.md) (rendered: https://magpie.apache.org/docs/confidentiality/)
+- [Contributor-growth skill family](https://magpie.apache.org/docs/contributor-growth/readme.md) (rendered: https://magpie.apache.org/docs/contributor-growth/readme/)
+- [Contributor-sentiment evaluation methodology](https://magpie.apache.org/docs/contributor-sentiment.md) (rendered: https://magpie.apache.org/docs/contributor-sentiment/)
+- [Repo-committed setup: default plugin set and per-skill first-run configuration](https://magpie.apache.org/docs/designs/2026-09-10-repo-committed-setup-design.md) (rendered: https://magpie.apache.org/docs/designs/2026-09-10-repo-committed-setup-design/)
+- [Subsystem A — committed default set: Implementation Plan](https://magpie.apache.org/docs/designs/2026-09-10-repo-committed-setup-plan-a.md) (rendered: https://magpie.apache.org/docs/designs/2026-09-10-repo-committed-setup-plan-a/)
+- [Designs](https://magpie.apache.org/docs/designs/readme.md) (rendered: https://magpie.apache.org/docs/designs/readme/)
+- [Editorial guidelines](https://magpie.apache.org/docs/editorial-guidelines.md) (rendered: https://magpie.apache.org/docs/editorial-guidelines/)
+- [Agentic and autonomous work](https://magpie.apache.org/docs/education/agentic-work.md) (rendered: https://magpie.apache.org/docs/education/agentic-work/)
+- [How to use different models](https://magpie.apache.org/docs/education/choosing-models.md) (rendered: https://magpie.apache.org/docs/education/choosing-models/)
+- [How to contribute to Magpie](https://magpie.apache.org/docs/education/contributing.md) (rendered: https://magpie.apache.org/docs/education/contributing/)
+- [Debugging a skill](https://magpie.apache.org/docs/education/debugging-skills.md) (rendered: https://magpie.apache.org/docs/education/debugging-skills/)
+- [English as a programming language](https://magpie.apache.org/docs/education/english-as-code.md) (rendered: https://magpie.apache.org/docs/education/english-as-code/)
+- [Eval-driven development](https://magpie.apache.org/docs/education/eval-driven-development.md) (rendered: https://magpie.apache.org/docs/education/eval-driven-development/)
+- [Pattern catalogue](https://magpie.apache.org/docs/education/pattern-catalogue.md) (rendered: https://magpie.apache.org/docs/education/pattern-catalogue/)
+- [Writing portable skills](https://magpie.apache.org/docs/education/portable-skills.md) (rendered: https://magpie.apache.org/docs/education/portable-skills/)
+- [Maintainer education](https://magpie.apache.org/docs/education/readme.md) (rendered: https://magpie.apache.org/docs/education/readme/)
+- [Facilitator guide — Building and running AI agents for open-source projects](https://magpie.apache.org/docs/education/training/instructor-guide.md) (rendered: https://magpie.apache.org/docs/education/training/instructor-guide/)
+- [Lesson 1 — What agents are](https://magpie.apache.org/docs/education/training/lesson-01-what-agents-are.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-01-what-agents-are/)
+- [Lesson 2 — Working with agents](https://magpie.apache.org/docs/education/training/lesson-02-working-with-agents.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-02-working-with-agents/)
+- [Lesson 3 — Choosing models](https://magpie.apache.org/docs/education/training/lesson-03-choosing-models.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-03-choosing-models/)
+- [Lesson 4 — Your first skill](https://magpie.apache.org/docs/education/training/lesson-04-your-first-skill.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-04-your-first-skill/)
+- [Lesson 5 — Writing safe skills](https://magpie.apache.org/docs/education/training/lesson-05-writing-safe-skills.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-05-writing-safe-skills/)
+- [Lesson 6 — Debugging a skill](https://magpie.apache.org/docs/education/training/lesson-06-debugging-a-skill.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-06-debugging-a-skill/)
+- [Lesson 7 — Writing portable skills](https://magpie.apache.org/docs/education/training/lesson-07-writing-portable-skills.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-07-writing-portable-skills/)
+- [Lesson 8 — Eval-driven development](https://magpie.apache.org/docs/education/training/lesson-08-eval-driven-development.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-08-eval-driven-development/)
+- [Lesson 9 — Agentic and autonomous work](https://magpie.apache.org/docs/education/training/lesson-09-agentic-and-autonomous-work.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-09-agentic-and-autonomous-work/)
+- [Lesson 10 — English as a programming language](https://magpie.apache.org/docs/education/training/lesson-10-english-as-a-programming-language.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-10-english-as-a-programming-language/)
+- [Lesson 11 — How to contribute](https://magpie.apache.org/docs/education/training/lesson-11-how-to-contribute.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-11-how-to-contribute/)
+- [Hands-on lab — Build and evaluate a skill](https://magpie.apache.org/docs/education/training/lesson-lab-tutorials.md) (rendered: https://magpie.apache.org/docs/education/training/lesson-lab-tutorials/)
+- [Apache Training module: Building and running AI agents for open-source projects](https://magpie.apache.org/docs/education/training/readme.md) (rendered: https://magpie.apache.org/docs/education/training/readme/)
+- [Upstream contribution guide — Apache Training module](https://magpie.apache.org/docs/education/training/upstream-contribution.md) (rendered: https://magpie.apache.org/docs/education/training/upstream-contribution/)
+- [Tutorial: build and evaluate a skill](https://magpie.apache.org/docs/education/tutorials.md) (rendered: https://magpie.apache.org/docs/education/tutorials/)
+- [What agents are](https://magpie.apache.org/docs/education/what-agents-are.md) (rendered: https://magpie.apache.org/docs/education/what-agents-are/)
+- [How to work with agents](https://magpie.apache.org/docs/education/working-with-agents.md) (rendered: https://magpie.apache.org/docs/education/working-with-agents/)
+- [Writing safe skills](https://magpie.apache.org/docs/education/writing-safe-skills.md) (rendered: https://magpie.apache.org/docs/education/writing-safe-skills/)
+- [Your first skill](https://magpie.apache.org/docs/education/your-first-skill.md) (rendered: https://magpie.apache.org/docs/education/your-first-skill/)
+- [Extending Magpie](https://magpie.apache.org/docs/extending.md) (rendered: https://magpie.apache.org/docs/extending/)
+- [What is Apache Magpie?](https://magpie.apache.org/docs/index.md) (rendered: https://magpie.apache.org/docs/index/)
+- [Issue management skill family](https://magpie.apache.org/docs/issue-management/readme.md) (rendered: https://magpie.apache.org/docs/issue-management/readme/)
+- [Labels and capabilities](https://magpie.apache.org/docs/labels-and-capabilities.md) (rendered: https://magpie.apache.org/docs/labels-and-capabilities/)
+- [Agentic Mentoring skill family](https://magpie.apache.org/docs/mentoring/readme.md) (rendered: https://magpie.apache.org/docs/mentoring/readme/)
+- [Mentoring (spec)](https://magpie.apache.org/docs/mentoring/spec.md) (rendered: https://magpie.apache.org/docs/mentoring/spec/)
+- [Mode economics — what does each mode cost to run?](https://magpie.apache.org/docs/mode-economics.md) (rendered: https://magpie.apache.org/docs/mode-economics/)
+- [Modes — MISSION taxonomy mapped to current skills](https://magpie.apache.org/docs/modes.md) (rendered: https://magpie.apache.org/docs/modes/)
+- [Agentic Pairing skill family](https://magpie.apache.org/docs/pairing/readme.md) (rendered: https://magpie.apache.org/docs/pairing/readme/)
+- [Pilot report template](https://magpie.apache.org/docs/pilot-report-template.md) (rendered: https://magpie.apache.org/docs/pilot-report-template/)
+- [PR management skill family](https://magpie.apache.org/docs/pr-management/readme.md) (rendered: https://magpie.apache.org/docs/pr-management/readme/)
+- [Prerequisites for running framework skills](https://magpie.apache.org/docs/prerequisites.md) (rendered: https://magpie.apache.org/docs/prerequisites/)
+- [Apache Magpie Design Principles](https://magpie.apache.org/docs/principles.md) (rendered: https://magpie.apache.org/docs/principles/)
+- [Quick start](https://magpie.apache.org/docs/quick-start.md) (rendered: https://magpie.apache.org/docs/quick-start/)
+- [ATR release runbook (Apache Trusted Releases)](https://magpie.apache.org/docs/release-management/atr-release-runbook.md) (rendered: https://magpie.apache.org/docs/release-management/atr-release-runbook/)
+- [Manual release process — the 0.1.0 hybrid path (SVN-dist + ATR-vote)](https://magpie.apache.org/docs/release-management/manual-release-process.md) (rendered: https://magpie.apache.org/docs/release-management/manual-release-process/)
+- [Release-management workflow: process and label lifecycle](https://magpie.apache.org/docs/release-management/process.md) (rendered: https://magpie.apache.org/docs/release-management/process/)
+- [Release-management skill family](https://magpie.apache.org/docs/release-management/readme.md) (rendered: https://magpie.apache.org/docs/release-management/readme/)
+- [Release-management (spec)](https://magpie.apache.org/docs/release-management/spec.md) (rendered: https://magpie.apache.org/docs/release-management/spec/)
+- [SVN source-release runbook (signed `.zip` to `dist/dev/`)](https://magpie.apache.org/docs/release-management/svn-release-runbook.md) (rendered: https://magpie.apache.org/docs/release-management/svn-release-runbook/)
+- [Repo-health audits — family overview](https://magpie.apache.org/docs/repo-health/readme.md) (rendered: https://magpie.apache.org/docs/repo-health/readme/)
+- [RFC-AI-0002: Secure Agents setup](https://magpie.apache.org/docs/rfcs/rfc-ai-0002.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0002/)
+- [RFC-AI-0003: Privacy-aware LLM routing for foundation private information](https://magpie.apache.org/docs/rfcs/rfc-ai-0003.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0003/)
+- [RFC-AI-0004: Principles of agentic interaction for open-source maintainers](https://magpie.apache.org/docs/rfcs/rfc-ai-0004.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0004/)
+- [RFC-AI-0005: Framework taxonomy](https://magpie.apache.org/docs/rfcs/rfc-ai-0005.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0005/)
+- [RFC-AI-0006: Trusted external skill sources](https://magpie.apache.org/docs/rfcs/rfc-ai-0006.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0006/)
+- [RFC-AI-0007: Selective snapshot — fetch only the chosen skill families](https://magpie.apache.org/docs/rfcs/rfc-ai-0007.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0007/)
+- [RFC-AI-0008: The coordinator role — multi-hop relay of security reports](https://magpie.apache.org/docs/rfcs/rfc-ai-0008.md) (rendered: https://magpie.apache.org/docs/rfcs/rfc-ai-0008/)
+- [Forwarder-routing policy](https://magpie.apache.org/docs/security/forwarder-routing-policy.md) (rendered: https://magpie.apache.org/docs/security/forwarder-routing-policy/)
+- [Fixing security issues](https://magpie.apache.org/docs/security/how-to-fix-a-security-issue.md) (rendered: https://magpie.apache.org/docs/security/how-to-fix-a-security-issue/)
+- [Welcome](https://magpie.apache.org/docs/security/new-members-onboarding.md) (rendered: https://magpie.apache.org/docs/security/new-members-onboarding/)
+- [Handling reporter-supplied proof-of-concept code](https://magpie.apache.org/docs/security/poc-handling-policy.md) (rendered: https://magpie.apache.org/docs/security/poc-handling-policy/)
+- [Security workflow — process and label lifecycle](https://magpie.apache.org/docs/security/process.md) (rendered: https://magpie.apache.org/docs/security/process/)
+- [Security workflow skill family](https://magpie.apache.org/docs/security/readme.md) (rendered: https://magpie.apache.org/docs/security/readme/)
+- [Security workflow — roles, conventions, and role guides](https://magpie.apache.org/docs/security/roles.md) (rendered: https://magpie.apache.org/docs/security/roles/)
+- [Security model preparation](https://magpie.apache.org/docs/security/security-model-preparation.md) (rendered: https://magpie.apache.org/docs/security/security-model-preparation/)
+- [Security threat model](https://magpie.apache.org/docs/security/threat-model.md) (rendered: https://magpie.apache.org/docs/security/threat-model/)
+- [Agentic overrides — modifying framework workflows in an adopter](https://magpie.apache.org/docs/setup/agentic-overrides.md) (rendered: https://magpie.apache.org/docs/setup/agentic-overrides/)
+- [Install recipes — bootstrap Magpie in an adopter repo](https://magpie.apache.org/docs/setup/install-recipes.md) (rendered: https://magpie.apache.org/docs/setup/install-recipes/)
+- [Installing Apache Magpie from agent marketplaces](https://magpie.apache.org/docs/setup/marketplaces.md) (rendered: https://magpie.apache.org/docs/setup/marketplaces/)
+- [How to use Magpie on a team where not everyone has adopted it](https://magpie.apache.org/docs/setup/mixed-adoption-teams.md) (rendered: https://magpie.apache.org/docs/setup/mixed-adoption-teams/)
+- [How to enable a role-specific MCP server](https://magpie.apache.org/docs/setup/per-role-mcp-access.md) (rendered: https://magpie.apache.org/docs/setup/per-role-mcp-access/)
+- [How to use Magpie on a repo that has not adopted it](https://magpie.apache.org/docs/setup/personal-use-unadopted-repo.md) (rendered: https://magpie.apache.org/docs/setup/personal-use-unadopted-repo/)
+- [Privacy-LLM setup](https://magpie.apache.org/docs/setup/privacy-llm.md) (rendered: https://magpie.apache.org/docs/setup/privacy-llm/)
+- [Setup skill family](https://magpie.apache.org/docs/setup/readme.md) (rendered: https://magpie.apache.org/docs/setup/readme/)
+- [Sandbox troubleshooting](https://magpie.apache.org/docs/setup/sandbox-troubleshooting.md) (rendered: https://magpie.apache.org/docs/setup/sandbox-troubleshooting/)
+- [Secure agent setup — how it works](https://magpie.apache.org/docs/setup/secure-agent-internals.md) (rendered: https://magpie.apache.org/docs/setup/secure-agent-internals/)
+- [Secure agent setup](https://magpie.apache.org/docs/setup/secure-agent-setup.md) (rendered: https://magpie.apache.org/docs/setup/secure-agent-setup/)
+- [Removing Magpie from an adopter repo (unadopt)](https://magpie.apache.org/docs/setup/uninstall.md) (rendered: https://magpie.apache.org/docs/setup/uninstall/)
+- [Authoring a trusted skill source](https://magpie.apache.org/docs/skill-sources/authoring-a-source.md) (rendered: https://magpie.apache.org/docs/skill-sources/authoring-a-source/)
+- [Trusted external skill sources](https://magpie.apache.org/docs/skill-sources/readme.md) (rendered: https://magpie.apache.org/docs/skill-sources/readme/)
+- [Skill-source registry](https://magpie.apache.org/docs/skill-sources/registry.md) (rendered: https://magpie.apache.org/docs/skill-sources/registry/)
+- [Source release contents](https://magpie.apache.org/docs/source-release-contents.md) (rendered: https://magpie.apache.org/docs/source-release-contents/)
+- [Spec-driven development](https://magpie.apache.org/docs/spec-driven-development.md) (rendered: https://magpie.apache.org/docs/spec-driven-development/)
+- [agent-guard](https://magpie.apache.org/docs/tools/agent-guard/readme.md) (rendered: https://magpie.apache.org/docs/tools/agent-guard/readme/)
+- [`tools/agent-isolation/` — secure agent setup helpers](https://magpie.apache.org/docs/tools/agent-isolation/readme.md) (rendered: https://magpie.apache.org/docs/tools/agent-isolation/readme/)
+- [`tools/apache-projects/`](https://magpie.apache.org/docs/tools/apache-projects/readme.md) (rendered: https://magpie.apache.org/docs/tools/apache-projects/readme/)
+- [`tools/asf-svn/`](https://magpie.apache.org/docs/tools/asf-svn/readme.md) (rendered: https://magpie.apache.org/docs/tools/asf-svn/readme/)
+- [Bitbucket forge bridge](https://magpie.apache.org/docs/tools/bitbucket/readme.md) (rendered: https://magpie.apache.org/docs/tools/bitbucket/readme/)
+- [`tools/change-request/`](https://magpie.apache.org/docs/tools/change-request/readme.md) (rendered: https://magpie.apache.org/docs/tools/change-request/readme/)
+- [`tools/cve-org/`](https://magpie.apache.org/docs/tools/cve-org/readme.md) (rendered: https://magpie.apache.org/docs/tools/cve-org/readme/)
+- [`tools/cve-tool-vulnogram/`](https://magpie.apache.org/docs/tools/cve-tool-vulnogram/readme.md) (rendered: https://magpie.apache.org/docs/tools/cve-tool-vulnogram/readme/)
+- [`tools/cve-tool/`](https://magpie.apache.org/docs/tools/cve-tool/readme.md) (rendered: https://magpie.apache.org/docs/tools/cve-tool/readme/)
+- [Dashboard generator](https://magpie.apache.org/docs/tools/dashboard-generator/readme.md) (rendered: https://magpie.apache.org/docs/tools/dashboard-generator/readme/)
+- [`tools/dev/`](https://magpie.apache.org/docs/tools/dev/readme.md) (rendered: https://magpie.apache.org/docs/tools/dev/readme/)
+- [egress-gateway](https://magpie.apache.org/docs/tools/egress-gateway/readme.md) (rendered: https://magpie.apache.org/docs/tools/egress-gateway/readme/)
+- [tools/forwarder-relay/ — adapter contract](https://magpie.apache.org/docs/tools/forwarder-relay/readme.md) (rendered: https://magpie.apache.org/docs/tools/forwarder-relay/readme/)
+- [Fossil Forge Bridge](https://magpie.apache.org/docs/tools/fossil/readme.md) (rendered: https://magpie.apache.org/docs/tools/fossil/readme/)
+- [github-body-field](https://magpie.apache.org/docs/tools/github-body-field/readme.md) (rendered: https://magpie.apache.org/docs/tools/github-body-field/readme/)
+- [github-rollup](https://magpie.apache.org/docs/tools/github-rollup/readme.md) (rendered: https://magpie.apache.org/docs/tools/github-rollup/readme/)
+- [`tools/github/`](https://magpie.apache.org/docs/tools/github/readme.md) (rendered: https://magpie.apache.org/docs/tools/github/readme/)
+- [`tools/gmail/`](https://magpie.apache.org/docs/tools/gmail/readme.md) (rendered: https://magpie.apache.org/docs/tools/gmail/readme/)
+- [`tools/jira-patch/`](https://magpie.apache.org/docs/tools/jira-patch/readme.md) (rendered: https://magpie.apache.org/docs/tools/jira-patch/readme/)
+- [JIRA bridge](https://magpie.apache.org/docs/tools/jira/readme.md) (rendered: https://magpie.apache.org/docs/tools/jira/readme/)
+- [tools/mail-archive/](https://magpie.apache.org/docs/tools/mail-archive/readme.md) (rendered: https://magpie.apache.org/docs/tools/mail-archive/readme/)
+- [`tools/mail-patch/`](https://magpie.apache.org/docs/tools/mail-patch/readme.md) (rendered: https://magpie.apache.org/docs/tools/mail-patch/readme/)
+- [`tools/mail-source/`](https://magpie.apache.org/docs/tools/mail-source/readme.md) (rendered: https://magpie.apache.org/docs/tools/mail-source/readme/)
+- [`tools/maildir/`](https://magpie.apache.org/docs/tools/maildir/readme.md) (rendered: https://magpie.apache.org/docs/tools/maildir/readme/)
+- [permission-audit](https://magpie.apache.org/docs/tools/permission-audit/readme.md) (rendered: https://magpie.apache.org/docs/tools/permission-audit/readme/)
+- [pilot-report-validator](https://magpie.apache.org/docs/tools/pilot-report-validator/readme.md) (rendered: https://magpie.apache.org/docs/tools/pilot-report-validator/readme/)
+- [`tools/ponymail/`](https://magpie.apache.org/docs/tools/ponymail/readme.md) (rendered: https://magpie.apache.org/docs/tools/ponymail/readme/)
+- [pr-management-stats reference implementation](https://magpie.apache.org/docs/tools/pr-management-stats/readme.md) (rendered: https://magpie.apache.org/docs/tools/pr-management-stats/readme/)
+- [preflight-audit](https://magpie.apache.org/docs/tools/preflight-audit/readme.md) (rendered: https://magpie.apache.org/docs/tools/preflight-audit/readme/)
+- [`tools/privacy-llm/`](https://magpie.apache.org/docs/tools/privacy-llm/readme.md) (rendered: https://magpie.apache.org/docs/tools/privacy-llm/readme/)
+- [Probe templates](https://magpie.apache.org/docs/tools/probe-templates/readme.md) (rendered: https://magpie.apache.org/docs/tools/probe-templates/readme/)
+- [`sandbox-lint`](https://magpie.apache.org/docs/tools/sandbox-lint/readme.md) (rendered: https://magpie.apache.org/docs/tools/sandbox-lint/readme/)
+- [tools/scan-format/ — adapter contract](https://magpie.apache.org/docs/tools/scan-format/readme.md) (rendered: https://magpie.apache.org/docs/tools/scan-format/readme/)
+- [security-tracker-stats-dashboard](https://magpie.apache.org/docs/tools/security-tracker-stats-dashboard/readme.md) (rendered: https://magpie.apache.org/docs/tools/security-tracker-stats-dashboard/readme/)
+- [skill-and-tool-validator](https://magpie.apache.org/docs/tools/skill-and-tool-validator/readme.md) (rendered: https://magpie.apache.org/docs/tools/skill-and-tool-validator/readme/)
+- [skill-evals](https://magpie.apache.org/docs/tools/skill-evals/readme.md) (rendered: https://magpie.apache.org/docs/tools/skill-evals/readme/)
+- [skill-reconciler-diff](https://magpie.apache.org/docs/tools/skill-reconciler-diff/readme.md) (rendered: https://magpie.apache.org/docs/tools/skill-reconciler-diff/readme/)
+- [SourceHut (sr.ht) Forge Bridge](https://magpie.apache.org/docs/tools/sourcehut/readme.md) (rendered: https://magpie.apache.org/docs/tools/sourcehut/readme/)
+- [spec-inventory](https://magpie.apache.org/docs/tools/spec-inventory/readme.md) (rendered: https://magpie.apache.org/docs/tools/spec-inventory/readme/)
+- [spec-loop](https://magpie.apache.org/docs/tools/spec-loop/readme.md) (rendered: https://magpie.apache.org/docs/tools/spec-loop/readme/)
+- [spec-status-index](https://magpie.apache.org/docs/tools/spec-status-index/readme.md) (rendered: https://magpie.apache.org/docs/tools/spec-status-index/readme/)
+- [spec-validator](https://magpie.apache.org/docs/tools/spec-validator/readme.md) (rendered: https://magpie.apache.org/docs/tools/spec-validator/readme/)
+- [`symlink-lint`](https://magpie.apache.org/docs/tools/symlink-lint/readme.md) (rendered: https://magpie.apache.org/docs/tools/symlink-lint/readme/)
+- [`magpie-vcs`](https://magpie.apache.org/docs/tools/vcs/readme.md) (rendered: https://magpie.apache.org/docs/tools/vcs/readme/)
+- [vendor-neutrality-score](https://magpie.apache.org/docs/tools/vendor-neutrality-score/readme.md) (rendered: https://magpie.apache.org/docs/tools/vendor-neutrality-score/readme/)
+- [vetted-ops](https://magpie.apache.org/docs/tools/vetted-ops/readme.md) (rendered: https://magpie.apache.org/docs/tools/vetted-ops/readme/)
+- [Utilities skill family](https://magpie.apache.org/docs/utilities/readme.md) (rendered: https://magpie.apache.org/docs/utilities/readme/)
+- [How Magpie achieves vendor neutrality](https://magpie.apache.org/docs/vendor-neutrality.md) (rendered: https://magpie.apache.org/docs/vendor-neutrality/)
+
+## Optional
+
+- [Full documentation in one file](https://magpie.apache.org/llms-full.txt): every docs page concatenated, for agents that want one fetch.
+- [Sitemap](https://magpie.apache.org/sitemap-index.xml)
