@@ -15,8 +15,19 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-const title = entry.data.title ?? entry.id.split("/").pop()?.replace(/\.md$/, "").replace(/-/g, " ");
+const { Content, headings } = await render(entry);
+// Prefer the document's own H1 (skipping the SPDX/doctoc HTML comments) over
+// the prettified slug: every section overview is a README or index, so slugs
+// alone titled a dozen pages "readme — Apache Magpie Docs" in tabs, history
+// and search results.
+const firstH1 = (body: string | undefined): string | null => {
+  const m = (body ?? "").replace(/<!--[\s\S]*?-->/g, "").match(/^#\s+(.+?)\s*$/m);
+  return m ? m[1].trim() : null;
+};
+const title =
+  entry.data.title ??
+  firstH1(entry.body) ??
+  entry.id.split("/").pop()?.replace(/\.md$/, "").replace(/-/g, " ");
 // Docs markdown is synced from apache/magpie/docs — edits go to that repo.
 // Use filePath (preserves original name + case, e.g. README.md) rather than
 // entry.id, which the glob loader lowercases and strips the extension from.
@@ -26,6 +37,6 @@ const docRelPath = entry.filePath
 const editUrl = `https://github.com/apache/magpie/edit/main/docs/${docRelPath}`;
 ---
 
-<DocsLayout title={title} currentSlug={entry.id.replace(/\.md$/, "")} editUrl={editUrl}>
+<DocsLayout title={title} currentSlug={entry.id.replace(/\.md$/, "")} editUrl={editUrl} headings={headings}>
   <Content />
 </DocsLayout>

@@ -10,7 +10,7 @@
     "reassess": "Re-run resolved or end-of-life issues against current code to verify still-fixed / still-broken.",
     "stats": "Read-only dashboards, metrics, governance evidence, contributor nomination briefs.",
     "platform": "Framework / agent substrate skills: install, verify, update, doctor, override-upstream, status, shared-config-sync, the `setup` bootstrap.",
-    "authoring": "Skills that author or maintain other skills: `write-skill`, `optimize-skill`."
+    "authoring": "Skills that author or maintain a durable framework artefact rather than acting on a queue item: other skills (`write-skill`, `optimize-skill`) and the project's own security model (`security-model-prepare`, `security-model-update`)."
   },
   "contracts": {
     "tracker": "Issue / board / label backend.",
@@ -45,7 +45,7 @@
       "kind": "substrate",
       "vendorKind": null,
       "vendor": null,
-      "harness": "Claude Code, OpenCode, Kiro",
+      "harness": "Claude Code, OpenCode, Kiro, Gemini CLI",
       "organization": null,
       "mcp": null,
       "hasCode": true,
@@ -854,6 +854,31 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/skill-reconciler-diff"
     },
     {
+      "name": "skill-token-count",
+      "title": "skill-token-count",
+      "description": "Measures full local skill files with pinned tiktoken and checks the generated table in mode economics. Implements the deterministic measurement check discussed in issue 327.",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "framework-dev"
+        },
+        {
+          "kind": "substrate",
+          "name": "analytics"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "stable",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/skill-token-count"
+    },
+    {
       "name": "sourcehut",
       "title": "SourceHut (sr.ht) Forge Bridge",
       "description": "SourceHut (sr.ht) forge bridge implementation for the Apache Magpie framework. It integrates ticket tracking (todo.sr.ht), mailing list patchset review (lists.sr.ht), CI builds (builds.sr.ht), and repository reads (git.sr.ht & hg.sr.ht)…",
@@ -977,7 +1002,7 @@
     {
       "name": "symlink-lint",
       "title": "symlink-lint",
-      "description": "Lints the framework's self-adoption skill symlinks — the canonical .agents/skills/ links and their relays — against two invariants. This is the single place the rationale lives; the module, the prek hook, and the error output all point…",
+      "description": "Lints the framework's self-adoption skill symlinks — the canonical .agents/skills/ links and their relays — against three invariants. This is the single place the rationale lives; the module, the prek hook, and the error output all…",
       "labels": [
         {
           "kind": "substrate",
@@ -1040,12 +1065,33 @@
       "maturity": "stable",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"
+    },
+    {
+      "name": "vetted-ops",
+      "title": "vetted-ops",
+      "description": "A dispatcher for fixed, policy-scoped forge operations, so an agent session needs *one* allowlist entry instead of a dozen wildcard ask rules.",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "sandbox"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/vetted-ops"
     }
   ],
-  "toolsTotal": 45,
-  "implementedTotal": 24,
+  "toolsTotal": 47,
+  "implementedTotal": 26,
   "contractsTotal": 23,
-  "substratesTotal": 22,
+  "substratesTotal": 24,
   "mcpTotal": 4,
   "organizations": [
     {
@@ -1342,8 +1388,8 @@
       }
     ],
     "harness": {
-      "neutral": 22,
-      "total": 22,
+      "neutral": 24,
+      "total": 24,
       "percent": 100,
       "tools": [
         {
@@ -1353,6 +1399,7 @@
           ],
           "harnesses": [
             "Claude Code",
+            "Gemini CLI",
             "Kiro",
             "OpenCode"
           ],
@@ -1486,6 +1533,15 @@
           "verdict": "agnostic"
         },
         {
+          "tool": "skill-token-count",
+          "substrates": [
+            "substrate:framework-dev",
+            "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
           "tool": "spec-inventory",
           "substrates": [
             "substrate:framework-dev",
@@ -1542,10 +1598,23 @@
           ],
           "harnesses": [],
           "verdict": "agnostic"
+        },
+        {
+          "tool": "vetted-ops",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
         }
       ],
       "matrix": {
         "Claude Code": [
+          "agent-guard",
+          "sandbox-lint",
+          "spec-loop"
+        ],
+        "Gemini CLI": [
           "agent-guard",
           "sandbox-lint",
           "spec-loop"
@@ -1575,21 +1644,19 @@
           "skill-and-tool-validator",
           "skill-evals",
           "skill-reconciler-diff",
+          "skill-token-count",
           "spec-inventory",
           "spec-status-index",
           "spec-validator",
           "symlink-lint",
-          "vendor-neutrality-score"
+          "vendor-neutrality-score",
+          "vetted-ops"
         ],
         "Codex": [
           "sandbox-lint",
           "spec-loop"
         ],
         "Cursor": [
-          "sandbox-lint",
-          "spec-loop"
-        ],
-        "Gemini CLI": [
           "sandbox-lint",
           "spec-loop"
         ]
@@ -1617,15 +1684,15 @@
       "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
     },
     "skills": {
-      "total": 71,
-      "neutral": 71,
+      "total": 75,
+      "neutral": 75,
       "byVerdict": {
-        "capability-pure": 11,
-        "portable": 60,
+        "capability-pure": 14,
+        "portable": 61,
         "vendor-coupled": 0
       },
       "byOrg": {
-        "agnostic": 57,
+        "agnostic": 61,
         "ASF": 14
       },
       "coupled": [],
@@ -2166,6 +2233,29 @@
           "coupled": []
         },
         {
+          "skill": "security-model-prepare",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "security-model-update",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "security-model-verify",
+          "verdict": "portable",
+          "organization": "agnostic",
+          "contractsUsed": [
+            "contract:change-request"
+          ],
+          "coupled": []
+        },
+        {
           "skill": "security-tracker-stats-dashboard",
           "verdict": "portable",
           "organization": "agnostic",
@@ -2228,6 +2318,13 @@
           "coupled": []
         },
         {
+          "skill": "setup-privacy-llm",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
           "skill": "setup-shared-config-sync",
           "verdict": "portable",
           "organization": "agnostic",
@@ -2286,8 +2383,8 @@
     }
   },
   "skills": {
-    "total": 71,
-    "apacheLicensed": 71,
+    "total": 75,
+    "apacheLicensed": 75,
     "allApache": true,
     "license": "Apache-2.0",
     "byOrg": {

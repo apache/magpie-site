@@ -10,21 +10,58 @@ import toolsData from "../data/tools.json";
 interface Props {
   title?: string;
   currentSlug: string;
+  /** Heading tree of the rendered markdown, for the "On this page" column.
+   *  Upstream keeps a doctoc block for GitHub; the sync strips it, so this is
+   *  the page's only table of contents. */
+  headings?: { depth: number; slug: string; text: string }[];
+  /** Section key this page is the landing page of, when no leaf slug matches
+   *  it (the /docs page is the Concepts section's landing page). Opens that
+   *  branch in the sidebar. */
+  currentSection?: string;
   /** GitHub edit URL for this page's source (forwarded to BaseLayout). */
   editUrl?: string;
 }
 
-const { title, currentSlug, editUrl } = Astro.props;
+const { title, currentSlug, currentSection, editUrl, headings } = Astro.props;
+// The first heading is the page title; h4+ is too fine-grained to navigate by.
+// Depth is not fixed at h2: several pages section themselves with repeated H1s
+// rather than H2s, so filtering on h2/h3 alone left them with no page nav.
+const allHeadings = headings ?? [];
+const toc = (allHeadings[0]?.depth === 1 ? allHeadings.slice(1) : allHeadings)
+  .filter((h) => h.depth <= 3);
+// Indent relative to the shallowest heading actually present, so an H1/H2 page
+// nests the same way an H2/H3 one does.
+const tocBase = Math.min(...toc.map((h) => h.depth), 6);
 
 // Internal governance drafts that should not appear on the public site.
-const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+// "index" is docs/index.md ("What is Apache Magpie?"). The /docs landing page
+// now covers that ground, so it is left out of the navigation — the route is
+// still built, because synced docs and the /docs body link to it.
+const HIDDEN_DOCS = new Set([
+  "board-resolution-draft",
+  // docs/index.md ("What is Apache Magpie?") — the /docs landing page covers
+  // this ground.
+  "index",
+  // docs/quick-start/README.md — an index of the pages the sidebar already
+  // lists, and quick-start.md is the section's overview. It earns its keep on
+  // GitHub, where browsing the folder shows it; both keep their routes.
+  "quick-start/readme",
+]);
 // Quick-start entry pinned to the top of the docs sidebar.
-const QUICK_START = { slug: "setup/install-recipes", label: "Quick Start" };
+const QUICK_START = { slug: "quick-start", label: "Quick Start" };
 
 // Curated nav grouping — mirrors the landing's skill families. "_root" holds
 // the top-level getting-started docs. Unlisted groups fall to the end.
 const GROUP_META: Record<string, { label: string; order: number }> = {
-  _root: { label: "Getting Started", order: 0 },
+  _root: { label: "Concepts", order: 0 },
+  // Working on Magpie itself, rather than what it does. These are top-level
+  // docs/*.md pages like the concepts, split out of _root into their own
+  // section (see UPDATING_PAGES).
+  _updating: { label: "Updating Magpie", order: 0.25 },
+  // quick-start.md + docs/quick-start/ form one branch: the page is the
+  // section's overview and the three sub-pages hang off it. Labelled as the
+  // document names itself (see H1_LABEL_SECTIONS).
+  "quick-start": { label: "Quick start", order: 0.5 },
   education: { label: "Education", order: 1 },
   // The training module is a self-contained sub-section of education (an
   // LMS-neutral course wrapping the progression pages); give it its own
@@ -43,16 +80,34 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
   adapters: { label: "Adapters", order: 11 },
   tools: { label: "Tools", order: 12 },
   rfcs: { label: "RFCs", order: 13 },
+  // Without an entry here a section falls back to its prettified directory
+  // name, which renders lowercase in the sidebar (section headings, unlike
+  // page links, are not title-cased by CSS).
+  "skill-sources": { label: "External Skill Sources", order: 14 },
+  utilities: { label: "Utilities", order: 15 },
+  designs: { label: "Designs", order: 16 },
 };
 
 // Logical page order within a group (by last path segment). The Overview
 // (index / README) always leads; unlisted pages follow alphabetically.
 const PAGE_ORDER: Record<string, string[]> = {
-  _root: ["index", "prerequisites", "vendor-neutrality", "extending", "modes", "mode-economics", "spec-driven-development", "labels-and-capabilities", "editorial-guidelines", "confidentiality"],
+  // Reads as a progression: what Magpie is and the concepts it already
+  // implements, then contributing to the framework, then extending it on your
+  // own. Kept in step with the same list in pages/docs/index.astro.
+  _root: [
+    "principles", "modes", "mode-economics", "labels-and-capabilities",
+    "vendor-neutrality", "confidentiality",
+  ],
+  // Contributing to the framework first, then extending it on your own.
+  _updating: [
+    "spec-driven-development", "editorial-guidelines", "contributor-sentiment",
+    "pilot-report-template", "source-release-contents", "extending",
+  ],
   education: ["readme", "your-first-skill", "pattern-catalogue", "eval-driven-development", "workshops"],
   "education/training": ["readme", "lesson-01-what-agents-are", "lesson-02-working-with-agents", "lesson-03-choosing-models", "lesson-04-your-first-skill", "lesson-05-writing-safe-skills"],
-  setup: ["readme", "install-recipes", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "unadopt"],
-  security: ["readme", "roles", "process", "threat-model", "new-members-onboarding", "how-to-fix-a-security-issue", "forwarder-routing-policy"],
+  "quick-start": ["two-ways", "families", "other-install-methods", "prerequisites"],
+  setup: ["readme", "marketplace", "individual-use", "team-adoption", "secure-agent-setup", "secure-agent-internals", "sandbox-troubleshooting", "agentic-overrides", "privacy-llm", "uninstall"],
+  security: ["readme", "roles", "process", "threat-model", "how-the-security-team-works", "fixing-security-issues", "forwarder-routing-policy"],
   "release-management": ["readme", "process", "spec"],
   mentoring: ["readme", "spec"],
 };
@@ -70,12 +125,52 @@ const firstH1 = (body: string | undefined): string | null => {
   const m = (body ?? "").replace(/<!--[\s\S]*?-->/g, "").match(/^#\s+(.+?)\s*$/m);
   return m ? m[1].trim() : null;
 };
+// Sidebar labels for the RFCs whose derived subject is still too long for one
+// line. Keyed by number, so retitling an RFC keeps its short label; anything
+// not listed falls back to the derived subject.
+const RFC_SHORT_LABELS: Record<string, string> = {
+  "0003": "Privacy in LLM routing",
+  "0004": "Principles of interaction",
+  "0006": "Trusted skill sources",
+};
 const shortRfc = (entry: { id: string; body?: string }) => {
   const m = (firstH1(entry.body) ?? "").match(/RFC-[A-Z]+-(\d+):\s*(.+)/);
   if (!m) return prettify(lastSeg(entry.id));
-  let title = m[2].trim();
-  if (title.length > 24) title = title.slice(0, 23).replace(/\s\S*$/, "") + "…";
+  // Keep the subject, drop the explanatory tail — an em-dash subtitle
+  // ("Selective snapshot — fetch only the chosen skill families") or a
+  // "for <audience>" clause ("Principles of agentic interaction for
+  // open-source maintainers"). Ellipsis only if what is left is still long.
+  const curated = RFC_SHORT_LABELS[m[1]];
+  if (curated) return `${m[1]} · ${curated}`;
+  let title = m[2].trim().split(/\s+[—–]\s+|\s+-\s+|\s+for\s+/)[0].trim();
+  if (title.length > 34) title = title.slice(0, 33).replace(/\s\S*$/, "") + "…";
   return `${m[1]} · ${title}`;
+};
+// The document's own H1, when short enough to use as a sidebar label.
+const h1Fit = (entry: { body?: string }): string | null => {
+  const h1 = firstH1(entry.body);
+  return h1 && h1.length <= SIDEBAR_LABEL_MAX ? h1 : null;
+};
+// "Lesson 01: What agents are" → "01 · What agents are". The section is
+// already called Training, so repeating "Lesson" on every row spends sidebar
+// width saying nothing. Mirrors shortRfc.
+const LESSON_RE = /^Lesson\s+(\d+):\s*(.+)$/;
+const lessonMatch = (entry: { body?: string }) =>
+  (firstH1(entry.body) ?? "").match(LESSON_RE);
+// Design docs are filed as <date>-<topic>-<design|plan-x>. The date says
+// nothing in a menu (every variant of one design shares it) and the topic
+// slugs are long, so each gets a short name; anything unlisted keeps its
+// prettified topic.
+const DESIGN_SHORT_TOPICS: Record<string, string> = {
+  "repo-committed-setup": "Committed setup",
+  "install-adopt-upgrade": "Install & adopt",
+};
+const designLabel = (seg: string): string => {
+  const bare = seg.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+  const m = bare.match(/^(.*?)-(?:design|plan-([a-z]))$/);
+  if (!m) return prettify(bare);
+  const topic = DESIGN_SHORT_TOPICS[m[1]] ?? prettify(m[1]);
+  return `${topic} ${m[2] ? `plan ${m[2].toUpperCase()}` : "design"}`;
 };
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Character offset of the first link to `slug` in a section overview's body —
@@ -92,10 +187,15 @@ const overviewOrder = (body: string | undefined, slug: string): number => {
 // the README doesn't link; then alphabetical. Mirrors the /docs index page.
 const pageRank = (groupKey: string, slug: string, overviewBody?: string) => {
   const seg = lastSeg(slug);
-  if (seg === "index" || seg === "readme") return -1;
+  if (seg === "index" || seg === "readme" || slug === groupKey ||
+      SECTION_LANDING_PAGES.get(seg) === groupKey) return -1;
+  const i = (PAGE_ORDER[groupKey] ?? []).indexOf(seg);
+  // _root's overview is docs/index.md — a landing page whose links follow its
+  // prose rather than a reading order, so the curated list wins there. Every
+  // other section still tracks its own README's table of contents.
+  if (groupKey.startsWith("_") && i !== -1) return i;
   const off = overviewOrder(overviewBody, slug);
   if (off >= 0) return off; // README reading order (offsets are well under 1e6)
-  const i = (PAGE_ORDER[groupKey] ?? []).indexOf(seg);
   if (i !== -1) return 1_000_000 + i; // curated fallback
   return 2_000_000; // unlisted — alphabetical via the secondary sort key
 };
@@ -104,21 +204,49 @@ const all = (await getCollection("docs")).filter(
   (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
 );
 
-type NavItem = { slug: string; label: string; rank: number };
+type NavItem = { slug: string; label: string; rank: number; raw?: boolean; overview?: boolean };
 type NavGroup = { name: string; label: string; order: number; items: NavItem[]; overviewBody?: string };
 // Sub-sections that live under another group's directory but get their own
 // sidebar heading (keyed by their two-segment path). Everything else groups by
 // its top-level directory.
 const NESTED_GROUPS = new Set(["education/training"]);
+// Sections whose pages are labelled by the document's own H1 instead of the
+// prettified slug, so the branch reads the way the documents name themselves
+// ("What each family solves", not "families").
+const H1_LABEL_SECTIONS = new Set(["quick-start"]);
+// …but only when the title actually fits a 16rem sidebar. Past this the slug
+// wins, being short by construction: "Prerequisites for running framework
+// skills" reads as "Prerequisites", while "What each family solves" is kept.
+const SIDEBAR_LABEL_MAX = 30;
+// A top-level page that is a synthetic section's overview. (quick-start.md
+// gets this for free via DIR_SECTIONS, because a quick-start/ directory
+// exists; _updating has no directory of its own.)
+const SECTION_LANDING_PAGES = new Map([["updating-magpie", "_updating"]]);
+// Top-level pages that belong to "Updating Magpie" rather than "Concepts".
+// Both are docs/*.md, so they land in _root by path and are split by name.
+const UPDATING_PAGES = new Set([
+  "spec-driven-development", "editorial-guidelines", "contributor-sentiment",
+  "pilot-report-template", "source-release-contents", "extending",
+]);
+// A top-level page whose slug matches a directory (quick-start.md alongside
+// quick-start/) is that directory's overview, not a loose _root page — so the
+// two render as one branch instead of drifting into separate sections.
+const DIR_SECTIONS = new Set(
+  all.filter((e) => e.id.includes("/")).map((e) => e.id.split("/")[0]),
+);
 const groups = new Map<string, NavGroup>();
 for (const entry of all) {
   const parts = entry.id.split("/");
   const two = parts.slice(0, 2).join("/");
+  const selfNamed = parts.length === 1 && DIR_SECTIONS.has(lastSeg(entry.id));
   const groupKey = NESTED_GROUPS.has(two)
     ? two
     : parts.length > 1
       ? parts[0]
-      : "_root";
+      : selfNamed
+        ? lastSeg(entry.id)
+        : SECTION_LANDING_PAGES.get(lastSeg(entry.id)) ??
+          (UPDATING_PAGES.has(lastSeg(entry.id)) ? "_updating" : "_root");
   if (!groups.has(groupKey)) {
     groups.set(groupKey, {
       name: groupKey,
@@ -135,19 +263,53 @@ for (const entry of all) {
   // directory (education/README for education, education/training/README for
   // training). Deeper READMEs — e.g. tools/<name>/readme — are not overviews.
   const dir = parts.slice(0, -1).join("/") || "_root";
-  if ((seg === "index" || seg === "readme") && dir === groupKey) {
+  // (quick-start.md is the quick-start section's overview the same way — it is
+  // the page whose slug *is* the section.)
+  const isOverview =
+    SECTION_LANDING_PAGES.get(seg) === groupKey ||
+    (seg === "index" || seg === "readme" ? dir === groupKey : slug === groupKey);
+  if (isOverview) {
     group.overviewBody = entry.body;
   }
   // Tool pages (tools/<name>/readme) are one overview per tool — label them by
   // the tool name, not the generic "Overview".
-  const label =
-    groupKey === "tools"
+  const lesson = groupKey === "education/training" ? lessonMatch(entry) : null;
+  const label = isOverview && groupKey === "_root"
+    ? // Not this section's overview any more (/docs is) — so it is listed as
+      // the document it is, "What is Apache Magpie?".
+      (firstH1(entry.body) ?? pageLabel(entry))
+    : isOverview
+    ? // A section's overview is always "Overview", whatever naming scheme the
+      // section otherwise uses — rfcs/README.md is not an RFC, so shortRfc()
+      // would have labelled it "readme" and left the section with no overview
+      // for its header to link to.
+      "Overview"
+    : groupKey === "tools"
       ? (parts[1] ?? pageLabel(entry))
       : groupKey === "rfcs"
         ? shortRfc(entry)
-        : pageLabel(entry);
+        : groupKey === "designs"
+          ? designLabel(seg)
+        : groupKey === "education/training"
+          ? // The hands-on lab carries no number; it just loses the prefix.
+            (lesson
+              ? `${lesson[1]} · ${lesson[2].trim()}`
+              : prettify(seg.replace(/^lesson-/, "")))
+          : H1_LABEL_SECTIONS.has(groupKey) && slug !== groupKey
+            ? (h1Fit(entry) ?? pageLabel(entry))
+            : pageLabel(entry);
+  // Only a real document title renders verbatim; a slug-derived label still
+  // wants the sidebar's title-casing.
+  // A real document title renders verbatim; a slug-derived one still wants the
+  // sidebar's title-casing. RFC and lesson labels are titles, so "Secure Agents
+  // setup" does not become "Secure Agents Setup".
+  const raw =
+    (H1_LABEL_SECTIONS.has(groupKey) && h1Fit(entry) !== null) ||
+    !!lesson ||
+    groupKey === "rfcs" ||
+    groupKey === "designs";
   // rank is filled in after the loop, once every group's overview body is known.
-  group.items.push({ slug, label, rank: 0 });
+  group.items.push({ slug, label, rank: 0, raw, overview: isOverview });
 }
 const sortedGroups = Array.from(groups.values()).sort(
   (a, b) => a.order - b.order || a.name.localeCompare(b.name),
@@ -176,14 +338,32 @@ const TOOL_KIND = new Map<string, string>(
 );
 
 // Build the child nodes for one section from its (already-ordered) page items.
-const buildSection = (group: NavGroup): BuildNode[] => {
-  const strip = group.name === "_root" ? 0 : group.name.split("/").length;
+// Returns the section's child rows plus the page its own header opens. An
+// overview is never a row of its own: clicking the section (or a tool name)
+// loads it, so listing it again underneath would just repeat the header.
+const buildSection = (
+  group: NavGroup,
+): { roots: BuildNode[]; href?: string } => {
+  const strip = group.name.startsWith("_") ? 0 : group.name.split("/").length;
   const roots: BuildNode[] = [];
+  let href: string | undefined;
   for (const item of group.items) {
     const rel = item.slug.split("/").slice(strip);
+    if (item.overview || rel.length === 0) {
+      href = item.slug;
+      continue;
+    }
     let siblings = roots;
+    let parent: BuildNode | undefined;
     rel.forEach((seg, i) => {
       const isLeaf = i === rel.length - 1;
+      // A directory's own README (tools/<name>/readme) is what that row
+      // opens, not a child beneath it.
+      if (isLeaf && parent && (seg === "readme" || seg === "index")) {
+        parent.href = item.slug;
+        parent.isCurrent = item.slug === currentSlug;
+        return;
+      }
       let node = siblings.find((n) => n._seg === seg);
       if (!node) {
         node = { _seg: seg, label: "", _order: item.rank, children: [] };
@@ -191,10 +371,10 @@ const buildSection = (group: NavGroup): BuildNode[] => {
       }
       if (isLeaf) {
         node.href = item.slug;
-        // Tool leaves are the tool's README → label it "Overview"; the tool
-        // name lives on the directory node above. Everything else keeps the
-        // label already computed for the flat list.
-        node.label = group.name === "tools" ? "Overview" : item.label;
+        node.label = item.label;
+        // Real document titles are already cased — don't let the sidebar's
+        // title-casing turn "What each family solves" into title case.
+        node.rawLabel = item.raw;
         node._order = item.rank;
         node.isCurrent = item.slug === currentSlug;
       } else if (!node.label) {
@@ -202,10 +382,11 @@ const buildSection = (group: NavGroup): BuildNode[] => {
         // identifiers); prettify everything else.
         node.label = group.name === "tools" ? seg : prettify(seg);
       }
+      parent = node;
       siblings = node.children!;
     });
   }
-  return roots;
+  return { roots, href };
 };
 
 // Bucket a section's direct children (tool directories) by kind.
@@ -225,16 +406,21 @@ const bucketTools = (toolDirs: BuildNode[]): BuildNode[] => {
 // super-category.
 const sectionNodes = new Map<string, BuildNode>();
 for (const g of sortedGroups) {
-  let children = buildSection(g);
+  const built = buildSection(g);
+  let children = built.roots;
   if (g.name === "tools") children = bucketTools(children);
-  sectionNodes.set(g.name, { label: g.label, children });
+  // Concepts' overview is the /docs landing page, not a synced markdown file.
+  const href = g.name === "_root" ? "/docs" : built.href;
+  const isCurrent =
+    g.name === "_root" ? currentSection === "_root" : href === currentSlug;
+  sectionNodes.set(g.name, { label: g.label, children, href, isCurrent });
 }
 
 // Super-categories: a shallow top level so the ~15 sections aren't all at the
 // root. Any section not listed here is appended to the last category so nothing
 // is ever dropped.
 const SUPER_CATEGORIES: { label: string; sections: string[] }[] = [
-  { label: "Start here", sections: ["_root", "setup"] },
+  { label: "Start here", sections: ["quick-start", "_root", "_updating", "setup"] },
   { label: "Learn", sections: ["education", "education/training"] },
   {
     label: "Maintainer workflows",
@@ -269,7 +455,9 @@ const finalize = (node: BuildNode): { order: number; hasCurrent: boolean } => {
     return { order: node._order ?? 2_000_000, hasCurrent: !!node.isCurrent };
   }
   let minOrder = Infinity;
-  let hasCurrent = !!node.isCurrent;
+  // `node.hasCurrent` may already be set for a section whose landing page is
+  // the current page (/docs for Concepts) — keep it.
+  let hasCurrent = !!node.isCurrent || !!node.hasCurrent;
   for (const child of node.children) {
     const r = finalize(child);
     minOrder = Math.min(minOrder, r.order);
@@ -290,13 +478,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 <BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"} editUrl={editUrl}>
   <SiteHeader />
   <div class="flex w-full">
-    <aside class="w-64 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden">
+    <aside class="w-72 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden">
       {/* Pinned header: stays put while the nav below scrolls. */}
       <div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4">
         <a href={`${base}/`} class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a>
         <div class="mt-1 text-heading-3 font-heading-3 text-default-font">Documentation</div>
       </div>
-      <div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-5 py-5">
+      <div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-4 py-5">
         <a
           href={`${base}/docs/${QUICK_START.slug}`}
           aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
@@ -309,17 +497,67 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         </nav>
       </div>
     </aside>
-    <main class="flex-1 px-12 py-12 mobile:px-4 mobile:py-8">
+    <main class="min-w-0 flex-1 px-12 py-12 mobile:px-4 mobile:py-8">
       <article class="prose prose-neutral max-w-3xl mx-auto">
         <slot />
       </article>
     </main>
+    {toc.length > 0 && (
+      <aside class="hidden xl:block w-60 flex-none border-l border-solid border-neutral-200 bg-default-background sticky top-0 h-screen overflow-y-auto px-5 py-12">
+        <div class="mb-3 text-caption font-caption uppercase tracking-wider text-subtext-color">
+          On this page
+        </div>
+        <nav>
+          <ul class="flex flex-col gap-1.5">
+            {toc.map((h) => (
+              <li>
+                <a
+                  href={`#${h.slug}`}
+                  class="block text-caption font-caption text-subtext-color hover:text-brand-700"
+                  style={`padding-left: ${(h.depth - tocBase) * 0.75}rem`}
+                >
+                  {h.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )}
   </div>
   <SiteFooter />
 
   {/* On a long sidebar the active page can be scrolled out of view after a
       full-page navigation. Bring it back into the sidebar's scroll viewport
       (scrolling only the nav region, not the window) so you keep your place. */}
+  {/* A section header is a link inside a <summary>, so a plain click would
+      both navigate AND fire the summary's toggle — folding the very branch you
+      just asked to open. Cancel the toggle, unfold, then go to the overview.
+      Modifier/middle clicks keep their normal "open in a new tab" behaviour,
+      and only re-assert the unfold. */}
+  <script is:inline>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script>
+
   <script is:inline>
     (() => {
       const scroller = document.getElementById("docs-nav-scroll");

@@ -10,6 +10,7 @@ import { ShimmerButton } from "@/ui/components/ui/shimmer-button";
 import { BlurFade } from "@/ui/components/ui/blur-fade";
 import { withBase } from "@/ui/lib/utils";
 import { SiteFooter } from "./SiteFooter";
+import { SecurityStoryDemo } from "./security-story/SecurityStoryDemo";
 import skillCounts from "@/data/skill-counts.json";
 import toolsData from "@/data/tools.json";
 import community from "@/data/community.json";
@@ -452,6 +453,7 @@ function GetABadge() {
 // SectionNav (desktop) and the collapsible menu (smaller screens). Keep the
 // ids in sync with the matching `id="…"` on each section below.
 const SECTIONS: { id: string; label: string }[] = [
+  { id: "see-it-in-action", label: "Demo" },
   { id: "why-magpie", label: "Why Magpie?" },
   { id: "maintainer-first", label: "Maintainers first" },
   { id: "agentic-modes", label: "Agentic Modes" },
@@ -548,7 +550,7 @@ function ImmersiveGradientHero() {
           </a>
           {/* Inline section menu — shown only on screens wide enough to fit the
               full list (2xl+). Compact (caption-size, tight gaps, no wrap) so
-              eight labels plus the actions fit without overflowing. Below 2xl
+              the labels plus the actions fit without overflowing. Below 2xl
               the same links live in the hamburger menu, so the bar always offers
               either this menu or the hamburger. */}
           <div className="hidden items-center gap-4 2xl:flex">
@@ -710,7 +712,7 @@ function ImmersiveGradientHero() {
               </BlurFade>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <a href={withBase("/docs/setup/install-recipes")} target="_blank" rel="noreferrer">
+              <a href={withBase("/docs/quick-start")} target="_blank" rel="noreferrer">
                 <ShimmerButton
                   shimmerColor="#ffffff"
                   background="rgb(0 74 173)"
@@ -902,6 +904,7 @@ function ImmersiveGradientHero() {
         </div>
       </div>
       <div className="flex h-24 w-full flex-none items-start bg-gradient-to-b from-brand-600 to-brand-50" />
+      <SecurityStoryDemo />
       <div id="why-magpie" className="flex w-full flex-col items-center bg-default-background px-8 pt-20 pb-16 mobile:px-4 mobile:pt-12">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[660px] pb-12 mobile:pb-8">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">

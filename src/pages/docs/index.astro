@@ -3,11 +3,23 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const QUICK_START = `${base}/docs/setup/install-recipes`;
+const QUICK_START = `${base}/docs/quick-start`;
 const OVERVIEW = `${base}/docs/index`;
 
 // Internal governance drafts that should not appear on the public site.
-const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+// "index" is docs/index.md ("What is Apache Magpie?"). The /docs landing page
+// now covers that ground, so it is left out of the navigation — the route is
+// still built, because synced docs and the /docs body link to it.
+const HIDDEN_DOCS = new Set([
+  "board-resolution-draft",
+  // docs/index.md ("What is Apache Magpie?") — the /docs landing page covers
+  // this ground.
+  "index",
+  // docs/quick-start/README.md — an index of the pages the sidebar already
+  // lists, and quick-start.md is the section's overview. It earns its keep on
+  // GitHub, where browsing the folder shows it; both keep their routes.
+  "quick-start/readme",
+]);
 
 const all = (await getCollection("docs")).filter(
   (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
@@ -26,14 +38,33 @@ const groups = new Map<string, Group>();
 // Sub-sections nested under another group's directory but surfaced as their
 // own section (keyed by two-segment path). Mirrors DocsLayout's sidebar.
 const NESTED_GROUPS = new Set(["education/training"]);
+// Mirrors DocsLayout: a top-level page whose slug matches a directory
+// (quick-start.md alongside quick-start/) is that directory's overview, and
+// that section's pages are labelled by their own H1 rather than their slug.
+const H1_LABEL_SECTIONS = new Set(["quick-start"]);
+// Mirrors UPDATING_PAGES in DocsLayout: top-level pages about working on
+// Magpie itself, split out of _root into their own section.
+const SECTION_LANDING_PAGES = new Map([["updating-magpie", "_updating"]]);
+const UPDATING_PAGES = new Set([
+  "spec-driven-development", "editorial-guidelines", "contributor-sentiment",
+  "pilot-report-template", "source-release-contents", "extending",
+]);
+const DIR_SECTIONS = new Set(
+  all.filter((e) => e.id.includes("/")).map((e) => e.id.split("/")[0]),
+);
 for (const entry of all) {
   const parts = entry.id.split("/");
   const two = parts.slice(0, 2).join("/");
+  const selfNamed =
+    parts.length === 1 && DIR_SECTIONS.has(parts[0].replace(/\.md$/, ""));
   const key = NESTED_GROUPS.has(two)
     ? two
     : parts.length > 1
       ? parts[0]
-      : "_root";
+      : selfNamed
+        ? parts[0].replace(/\.md$/, "")
+        : SECTION_LANDING_PAGES.get(parts[0].replace(/\.md$/, "")) ??
+          (UPDATING_PAGES.has(parts[0].replace(/\.md$/, "")) ? "_updating" : "_root");
   const slug = entry.id.replace(/\.md$/, "");
   const leaf = parts[parts.length - 1].replace(/\.md$/, "");
   const isReadme = /^(readme|index)$/i.test(leaf);
@@ -41,12 +72,14 @@ for (const entry of all) {
   // directory) is its overview; deeper READMEs — tools/<name>/readme — are
   // normal items.
   const dir = parts.slice(0, -1).join("/") || "_root";
-  const isGroupOverview = isReadme && dir === key;
+  const isGroupOverview = isReadme ? dir === key : slug === key;
 
   if (!groups.has(key)) groups.set(key, { items: [] });
   const group = groups.get(key)!;
 
-  if (isGroupOverview) {
+  // On this page the Concepts section IS the page, so docs/index.md is listed
+  // as one of its pages rather than hoisted onto the heading as its overview.
+  if ((isGroupOverview || SECTION_LANDING_PAGES.get(leaf) === key) && key !== "_root") {
     // Hoist the overview onto the section heading instead of listing it, and
     // keep its body so we can order the section's pages the way the overview
     // (the section's own README/table of contents) presents them.
@@ -62,16 +95,25 @@ for (const entry of all) {
       ? (parts[1] ?? leaf)
       : key === "rfcs"
         ? (entry.data.title ?? firstH1(entry.body) ?? leaf.replace(/-/g, " "))
-        : entry.data.title ?? leaf.replace(/-/g, " ");
+        : key === "_root" && isGroupOverview
+          ? (firstH1(entry.body) ?? leaf.replace(/-/g, " "))
+        : H1_LABEL_SECTIONS.has(key)
+          ? (entry.data.title ?? firstH1(entry.body) ?? leaf.replace(/-/g, " "))
+          : entry.data.title ?? leaf.replace(/-/g, " ");
   group.items.push({ slug, label, description: entry.data.description });
 }
 
 // Friendly names + one-line summaries for each docs group.
 const GROUP_META: Record<string, { name: string; blurb: string }> = {
   _root: {
-    name: "Overview & concepts",
+    name: "Concepts",
     blurb:
-      "What Magpie is, how it works, and the cross-cutting concepts — modes, design principles, confidentiality, labels, and editorial guidelines.",
+      "What Magpie is and the ideas it is built on — the design principles, the agentic modes and what they cost, labels and capabilities, vendor neutrality, and confidentiality.",
+  },
+  _updating: {
+    name: "Updating Magpie",
+    blurb:
+      "Working on the framework itself — the spec-driven build loop, the editorial playbook for text it produces, how contributor sentiment is measured, the pilot report template, what ships in a source release, and how to extend Magpie without forking it.",
   },
   education: {
     name: "Education",
@@ -83,10 +125,15 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
     blurb:
       "An LMS-neutral Apache Training module that wraps the education stream as a structured course — one lesson per progression page, each adding learning objectives, exercises, and self-check questions.",
   },
+  "quick-start": {
+    name: "Quick start",
+    blurb:
+      "Install Magpie into the agent you already use — yours, on your machine, with nothing committed to any repository. Adoption is the separate, project-level decision a team takes together to commit a floor for everyone who clones the repo. Covers both, plus what each family solves, the verbatim install recipes, and the prerequisites each family needs.",
+  },
   setup: {
     name: "Setup",
     blurb:
-      "Adopt Magpie in your repo and run agents safely — install recipes, prerequisites, sandboxing, privacy/LLM routing, and unadopting.",
+      "Wire Magpie into a repo and run agents safely — the marketplace, individual use versus team adoption, sandboxing, per-role MCP access, privacy/LLM routing, and uninstalling.",
   },
   security: {
     name: "Security",
@@ -124,6 +171,11 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
     name: "Release management",
     blurb: "The ASF release lifecycle — plan, cut, vote, promote, announce.",
   },
+  "skill-sources": {
+    name: "External Skill Sources",
+    blurb:
+      "Pulling Magpie-shaped skills from a repository other than apache/magpie — the trust model, the registry of vetted sources, and how to author one.",
+  },
   utilities: {
     name: "Utilities",
     blurb: "Framework meta-skills — author skills and list every skill.",
@@ -145,7 +197,9 @@ const GROUP_META: Record<string, { name: string; blurb: string }> = {
 };
 
 const ORDER = [
+  "quick-start",
   "_root",
+  "_updating",
   "education",
   "education/training",
   "setup",
@@ -175,6 +229,21 @@ const overviewOrder = (body: string | undefined, slug: string): number => {
   return body.search(new RegExp(`docs/${escapeRe(slug)}(?![\\w-])`));
 };
 
+// Curated reading order for the root section: what Magpie is and the concepts
+// it already implements, then contributing to the framework, then extending it
+// on your own. docs/index.md is a landing page, so its link order is a poor
+// ranking signal here. Kept in step with PAGE_ORDER._root in DocsLayout.astro.
+const ROOT_ORDER: Record<string, string[]> = {
+  _root: [
+    "principles", "modes", "mode-economics", "labels-and-capabilities",
+    "vendor-neutrality", "confidentiality",
+  ],
+  _updating: [
+    "spec-driven-development", "editorial-guidelines", "contributor-sentiment",
+    "pilot-report-template", "source-release-contents", "extending",
+  ],
+};
+
 const sortedGroups = Array.from(groups.entries())
   .map(([key, group]) => ({
     key,
@@ -188,7 +257,9 @@ const sortedGroups = Array.from(groups.entries())
     items: group.items
       .map((item) => ({
         ...item,
-        order: overviewOrder(group.overviewBody, item.slug),
+        order: ROOT_ORDER[key]
+          ? ROOT_ORDER[key].indexOf(item.slug)
+          : overviewOrder(group.overviewBody, item.slug),
       }))
       .sort((a, b) => {
         // README reading order first; unlinked pages (order -1) sort last,
@@ -204,10 +275,15 @@ const sortedGroups = Array.from(groups.entries())
     return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
   });
 
+// The quick-start section is rendered in full at the top of the page (it is
+// the entry point), so it is not repeated in "Explore the docs" below.
+const quickStart = sortedGroups.find((g) => g.key === "quick-start");
+const otherGroups = sortedGroups.filter((g) => g.key !== "quick-start");
+
 const totalPages = all.length;
 ---
 
-<DocsLayout title="Documentation" currentSlug="" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/docs/index.astro">
+<DocsLayout title="Documentation" currentSlug="" currentSection="_root" editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/docs/index.astro">
   <h1>Apache Magpie™ Documentation</h1>
   <p>
     Apache Magpie is an AI assistant for open-source project maintainers. It
@@ -217,18 +293,36 @@ const totalPages = all.length;
     human. <strong>The agent proposes; the human decides.</strong>
   </p>
 
-  <h2>Quick Start</h2>
+  <h2>
+    <a href={QUICK_START}>⚡ Quick Start</a>
+  </h2>
   <p>
-    Adopt Magpie in your repo with a single copy-pasteable bootstrap, then let
-    the <code>setup</code> skill wire up the rest. Pick an install method and
-    follow the verbatim recipe:
+    Install Apache Magpie into the agent you already use — one command to add
+    the Apache Magpie Marketplace, one per family you want.
+    <strong>That install is yours, on this machine:</strong> nothing is
+    committed to your repository, and it needs no decision from your project and
+    no opt-in from your teammates.
   </p>
   <p>
-    <a href={QUICK_START}><strong>⚡ Quick Start → Install recipes</strong></a>
-    &nbsp;·&nbsp;
-    <a href={`${base}/docs/prerequisites`}>Prerequisites</a>
-    &nbsp;·&nbsp;
-    <a href={OVERVIEW}>What is Apache Magpie?</a>
+    <strong>Adoption is the other thing, and it belongs to the project.</strong>{" "}
+    It is not an install but a <em>maintainer decision</em> — the team agreeing
+    which families they recommend here and how those should behave in this
+    project, then committing that floor so everyone who clones the repo picks it
+    up on arrival. It affects every contributor, so it is the project's call to
+    make together — and you do not have to choose before installing.
+  </p>
+  {quickStart && (
+    <ul>
+      {quickStart.items.map((item) => (
+        <li>
+          <a href={`${base}/docs/${item.slug}`}>{item.label}</a>
+          {item.description ? ` — ${item.description}` : ""}
+        </li>
+      ))}
+    </ul>
+  )}
+  <p>
+    Not sure what Magpie is yet? <a href={OVERVIEW}>What is Apache Magpie?</a>
     &nbsp;·&nbsp;
     <a href={`${base}/architecture`}>Architecture</a>
   </p>
@@ -240,7 +334,7 @@ const totalPages = all.length;
     and grouped by area. Every page is also in the sidebar.
   </p>
 
-  {sortedGroups.map((group) => (
+  {otherGroups.map((group) => (
     <section>
       <h3>
         {group.overview ? (
