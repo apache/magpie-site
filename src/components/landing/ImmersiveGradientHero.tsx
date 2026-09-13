@@ -10,7 +10,7 @@ import { ShimmerButton } from "@/ui/components/ui/shimmer-button";
 import { BlurFade } from "@/ui/components/ui/blur-fade";
 import { withBase } from "@/ui/lib/utils";
 import { SiteFooter } from "./SiteFooter";
-import { InstallDemo } from "./InstallDemo";
+import { SecurityStoryDemo } from "./security-story/SecurityStoryDemo";
 import skillCounts from "@/data/skill-counts.json";
 import toolsData from "@/data/tools.json";
 import community from "@/data/community.json";
@@ -904,7 +904,7 @@ function ImmersiveGradientHero() {
         </div>
       </div>
       <div className="flex h-24 w-full flex-none items-start bg-gradient-to-b from-brand-600 to-brand-50" />
-      <InstallDemo />
+      <SecurityStoryDemo />
       <div id="why-magpie" className="flex w-full flex-col items-center bg-default-background px-8 pt-20 pb-16 mobile:px-4 mobile:pt-12">
         <BlurFade inView className="flex flex-col items-center gap-4 max-w-[660px] pb-12 mobile:pb-8">
           <span className="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font text-center -tracking-[0.035em] mobile:font-['Jost'] mobile:text-[28px] mobile:font-[400] mobile:leading-[34px] mobile:tracking-normal">
