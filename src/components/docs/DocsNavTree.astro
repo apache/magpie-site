@@ -15,6 +15,9 @@ export interface TreeNode {
   hasCurrent?: boolean;
   /** This leaf is the current page. */
   isCurrent?: boolean;
+  /** Label is a document's own title — render it verbatim, without the
+   *  slug-derived labels' title-casing. */
+  rawLabel?: boolean;
   /** Cached sort key computed by DocsLayout's `finalize` pass (min order of a
    *  node's subtree). Internal — set during finalization, not by callers. */
   _order?: number;
@@ -27,8 +30,14 @@ interface Props {
 const { nodes, base, level = 0 } = Astro.props;
 
 // Indent each level; leaves sit a touch deeper so they line up past the parent
-// summary's chevron.
-const pad = (l: number) => `padding-left: ${(0.35 + l * 0.8).toFixed(3)}rem`;
+// summary's chevron. The step is deliberately tight — every rem spent here is
+// a rem the labels do not get, and the sidebar has to fit a full RFC name on
+// one line.
+const pad = (l: number) => `padding-left: ${(0.35 + l * 0.55).toFixed(3)}rem`;
+
+// A node's href is a docs slug, or an absolute site path when it starts with
+// "/" (the Concepts section points at the /docs landing page).
+const hrefFor = (h: string) => (h.startsWith("/") ? `${base}${h}` : `${base}/docs/${h}`);
 
 const summaryBase =
   "tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none";
@@ -51,8 +60,12 @@ const linkTone = (isCurrent?: boolean) =>
             open only along the branch leading to the current page. */}
         <details open={level === 0 || node.hasCurrent}>
           <summary class={`${summaryBase} ${summaryTone(level)}`} style={pad(level)}>
+            <span
+              class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200"
+              aria-hidden="true"
+            >
             <svg
-              class="tree-chevron flex-none"
+              class="tree-chevron block"
               width="11"
               height="11"
               viewBox="0 0 24 24"
@@ -65,7 +78,19 @@ const linkTone = (isCurrent?: boolean) =>
             >
               <path d="M9 6l6 6-6 6" />
             </svg>
-            <span class="truncate">{node.label}</span>
+            </span>
+            {node.href ? (
+              <a
+                href={hrefFor(node.href)}
+                aria-current={node.isCurrent ? "page" : undefined}
+                class={`min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline ${node.isCurrent ? "bg-brand-100 text-brand-800" : ""}`}
+                title={node.label}
+              >
+                {node.label}
+              </a>
+            ) : (
+              <span class="min-w-0 flex-1 truncate">{node.label}</span>
+            )}
           </summary>
           <Astro.self nodes={node.children} base={base} level={level + 1} />
         </details>
@@ -73,10 +98,11 @@ const linkTone = (isCurrent?: boolean) =>
     ) : (
       <li>
         <a
-          href={`${base}/docs/${node.href}`}
+          href={hrefFor(node.href!)}
           aria-current={node.isCurrent ? "page" : undefined}
-          class={`block rounded-md py-1 pr-2 text-body font-body capitalize ${linkTone(node.isCurrent)}`}
-          style={pad(level + 0.9)}
+          class={`block rounded-md py-1 pr-2 text-body font-body ${node.rawLabel ? "" : "capitalize"} ${linkTone(node.isCurrent)}`}
+          style={pad(level + 0.8)}
+          title={node.label}
         >
           {node.label}
         </a>

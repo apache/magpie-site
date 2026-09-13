@@ -147,14 +147,28 @@ const prettyDate = release.date
           <pre class="overflow-x-auto rounded-lg border border-solid border-neutral-200 bg-neutral-50 px-4 py-3 text-caption font-mono text-default-font"><code>{verifySteps}</code></pre>
         </section>
 
-        <!-- Other installation methods -->
-        <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-          <h2 class="text-heading-2 font-heading-2 text-default-font">Other installation methods</h2>
+        <!-- How to install -->
+        <section class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
+          <h2 class="text-heading-2 font-heading-2 text-default-font">How to install</h2>
           <p class="text-body font-body text-subtext-color">
-            The signed source release above is the recommended way to install. To bootstrap Magpie
-            into a repo from the released zip, a git tag, or the{" "}
-            <code class="font-mono">main</code> branch, see the{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/install-recipes`} target="_blank" rel="noreferrer">install recipes</a>.
+            <strong>Most people install Magpie from the Apache Magpie Marketplace</strong> — two
+            commands, and nothing is committed to your repository. That is the main install: the{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start`}>quick start</a>{" "}
+            walks it, and{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/marketplace`}>the Marketplace reference</a>{" "}
+            covers every supported agent, per-family plugins, pinning, and updates.
+          </p>
+          <p class="text-body font-body text-subtext-color">
+            <strong>Use the signed source release above</strong> when you want to install from
+            released sources rather than from the Marketplace — an offline or air-gapped
+            install, or a policy that requires a verified ASF artifact. See{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start/other-install-methods#released-zip-from-asf-distribution-offline`}>Released zip from ASF distribution (offline)</a>.
+          </p>
+          <p class="text-body font-body text-subtext-color">
+            The remaining methods — a pinned snapshot from a git tag or the{" "}
+            <code class="font-mono">main</code> branch, and self-adoption for a clone of the
+            framework itself — are in{" "}
+            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start/other-install-methods`}>Other installation methods</a>.
           </p>
         </section>
 

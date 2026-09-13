@@ -14,7 +14,7 @@ DEST="$(dirname "$0")/../src/content/docs"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/magpie-docs.XXXXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + assets/ + skills/ + tools/ + organizations/)"
+echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + assets/ + skills/ + plugins/ + tools/ + organizations/)"
 # The source repo is public, so no credentials are needed. Disable the credential
 # helper for this clone (and persist that into the repo config so the partial-clone
 # lazy fetch during `sparse-checkout set` inherits it) — otherwise a system-level
@@ -22,7 +22,10 @@ echo "→ Cloning $REPO@$BRANCH (sparse, docs/ + images/ + assets/ + skills/ + t
 # sandboxed/CI environments and spams `fatal: failed to store: -60008`.
 git clone --depth 1 --branch "$BRANCH" --filter=blob:none --sparse \
   --config credential.helper= "$REPO" "$TMP" >/dev/null 2>&1
-(cd "$TMP" && git sparse-checkout set docs images assets skills tools organizations >/dev/null)
+# plugins/ holds the actual skill directories; skills/ is a flat tree of
+# symlinks into it, so without plugins/ every one of those symlinks dangles and
+# the skill-family counts come out empty.
+(cd "$TMP" && git sparse-checkout set docs images assets skills plugins tools organizations >/dev/null)
 
 echo "→ Replacing $DEST"
 rm -rf "$DEST"
@@ -34,6 +37,12 @@ cp -r "$TMP/docs/." "$DEST/"
 if [ -f "$TMP/PRINCIPLES.md" ]; then
   echo "→ Publishing PRINCIPLES.md → $DEST/principles.md"
   cp "$TMP/PRINCIPLES.md" "$DEST/principles.md"
+  # PRINCIPLES.md lives at the repo root, so its relative links are root-relative
+  # ("docs/vendor-neutrality.md"). Every other file the link rewriter walks came
+  # from docs/, and it resolves targets on that assumption — which would turn
+  # these into /docs/docs/... . Strip the leading docs/ here, where the fact that
+  # this one file came from above docs/ is still known.
+  perl -pi -e 's{\]\(docs/}{](}g' "$DEST/principles.md"
 else
   echo "⚠ no PRINCIPLES.md in framework checkout; /docs/principles will be missing"
 fi
@@ -67,6 +76,14 @@ find "$DEST" -name '*.md' -exec perl -pi -e '
   s{\.\./\.\./(?:images|assets)/}{/docs-assets/}g;
   s{\.\./(?:images|assets)/}{/docs-assets/}g;
   s{\((?:images|assets)/}{(/docs-assets/}g;
+' {} +
+
+# The site renders its own "On this page" column from the heading tree, so the
+# doctoc block upstream keeps for GitHub would be a second, redundant table of
+# contents sitting on top of every page.
+echo "→ Stripping doctoc blocks (the site renders its own page nav)"
+find "$DEST" -name '*.md' -exec perl -0777 -pi -e '
+  s{<!-- START doctoc.*?<!-- END doctoc.*?-->\s*}{}gs;
 ' {} +
 
 echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
