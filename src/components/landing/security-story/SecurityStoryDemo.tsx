@@ -113,7 +113,20 @@ function SecurityStoryDemo() {
               ) : (
                 <Play className="size-3.5" />
               )}
-              {finished ? "Replay" : running ? "Pause" : "Play"}
+              {/* All three labels share one grid cell, so the button is always
+                  as wide as the longest ("Replay") and never resizes when
+                  hovering the frame flips Pause to Play. */}
+              <span className="grid justify-items-start">
+                <span
+                  aria-hidden="true"
+                  className="invisible col-start-1 row-start-1"
+                >
+                  Replay
+                </span>
+                <span className="col-start-1 row-start-1">
+                  {finished ? "Replay" : running ? "Pause" : "Play"}
+                </span>
+              </span>
             </button>
 
             <ol className="flex min-w-0 flex-1 items-center gap-1 mobile:flex-wrap">
