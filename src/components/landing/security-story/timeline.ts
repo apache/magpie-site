@@ -71,4 +71,3 @@ export function chapterStart(script: Chapter[], chapterIndex: number): number {
     for (const beat of script[c].beats) ms += beat.ms + BEAT_HOLD_MS;
   return ms;
 }
-
