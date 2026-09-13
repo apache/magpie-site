@@ -82,8 +82,13 @@ find "$DEST" -name '*.md' -exec perl -pi -e '
 # doctoc block upstream keeps for GitHub would be a second, redundant table of
 # contents sitting on top of every page.
 echo "→ Stripping doctoc blocks (the site renders its own page nav)"
+# The substitution uses / delimiters, not the s{}{} form the rewrites above
+# use: an empty s{...}{} replacement puts a literal {} in the -exec command,
+# and GNU find counts that as a second placeholder ("Only one instance of {}
+# is supported with -exec ... +") and refuses to run. BSD/macOS find allows it,
+# so this only fails on Linux/CI.
 find "$DEST" -name '*.md' -exec perl -0777 -pi -e '
-  s{<!-- START doctoc.*?<!-- END doctoc.*?-->\s*}{}gs;
+  s/<!-- START doctoc.*?<!-- END doctoc.*?-->\s*//gs;
 ' {} +
 
 echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
