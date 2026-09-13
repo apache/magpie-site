@@ -58,6 +58,14 @@ continue with the original task.
 ## Local setup
 
 - `npm install` — install dependencies.
+- `prek install` — install the pre-commit hooks. The lint job runs
+  `prek run --all-files`, so this puts the same gate in front of every commit;
+  without it, hygiene failures (a missing trailing newline, a JSX
+  whitespace-collapse) are only caught after the push. If you have a global
+  `core.hooksPath`, git ignores this repo's `.git/hooks/` and plain
+  `prek install` refuses — install with
+  `prek install --force --git-dir "$(git rev-parse --git-common-dir)"`, and
+  check that the global hook chains through to the repo-local one.
 - `npm run dev` — local dev server. **Always start the dev server this way.**
   It runs `scripts/dev.sh`, which sets `ASTRO_TELEMETRY_DISABLED=1` before
   launching `astro dev`. Do **not** invoke `astro dev` / `npx astro dev`
