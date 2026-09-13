@@ -1684,15 +1684,15 @@
       "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
     },
     "skills": {
-      "total": 74,
-      "neutral": 74,
+      "total": 75,
+      "neutral": 75,
       "byVerdict": {
-        "capability-pure": 13,
+        "capability-pure": 14,
         "portable": 61,
         "vendor-coupled": 0
       },
       "byOrg": {
-        "agnostic": 60,
+        "agnostic": 61,
         "ASF": 14
       },
       "coupled": [],
@@ -2318,6 +2318,13 @@
           "coupled": []
         },
         {
+          "skill": "setup-privacy-llm",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
           "skill": "setup-shared-config-sync",
           "verdict": "portable",
           "organization": "agnostic",
@@ -2376,8 +2383,8 @@
     }
   },
   "skills": {
-    "total": 74,
-    "apacheLicensed": 74,
+    "total": 75,
+    "apacheLicensed": 75,
     "allApache": true,
     "license": "Apache-2.0",
     "byOrg": {
