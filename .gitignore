@@ -80,3 +80,7 @@ __pycache__/
 !/.claude/skills/magpie-setup
 /.github/skills/magpie-*
 !/.github/skills/magpie-setup
+
+.Codex/
+AGENTS.md
+.apache-steward/
