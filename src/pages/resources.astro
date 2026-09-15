@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { KineticEducation, KineticAdoption } from "../components/landing/KineticResources";
+import { SiteHeader } from "../components/landing/SiteHeader";
+import { SiteFooter } from "../components/landing/SiteFooter";
+import "../styles/kinetic-home.css";
+---
+<BaseLayout title="Learn and extend | Apache Magpie" description="Learning paths, extensions, and ways to adopt Apache Magpie.">
+  <div class="k-home"><SiteHeader /><main><KineticEducation /><KineticAdoption client:load /></main><SiteFooter /></div>
+</BaseLayout>

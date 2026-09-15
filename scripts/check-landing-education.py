@@ -17,7 +17,7 @@
 # under the License.
 """Guard: every education chapter is linked from the landing page.
 
-The landing hero (``src/components/landing/ImmersiveGradientHero.tsx``)
+The landing hero (``src/components/landing/KineticResources.tsx``)
 summarises the maintainer-education stream and links every chapter under
 ``/docs/education/<slug>``. When someone adds a new education page it must
 also be surfaced on the landing, otherwise the stream silently drifts out of
@@ -51,7 +51,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EDUCATION_DIR = REPO_ROOT / "src" / "content" / "docs" / "education"
-LANDING = REPO_ROOT / "src" / "components" / "landing" / "ImmersiveGradientHero.tsx"
+LANDING = REPO_ROOT / "src" / "components" / "landing" / "KineticResources.tsx"
 
 # README is the section overview (linked as the stream's front door), not a
 # chapter that has to appear in the grouped card list.
@@ -108,8 +108,8 @@ def main() -> int:
     if missing:
         print(
             "These education chapters exist under src/content/docs/education/ but are\n"
-            "NOT linked from src/components/landing/ImmersiveGradientHero.tsx.\n"
-            "Add each to an EDUCATION_GROUPS stream (or EDUCATION_REFERENCES):",
+            "NOT linked from src/components/landing/KineticResources.tsx.\n"
+            "Add each to an education group or the reference links:",
             file=sys.stderr,
         )
         for slug in missing:

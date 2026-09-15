@@ -17,8 +17,8 @@
 # under the License.
 """Guard: every skill family in the metadata has a landing-page card.
 
-The landing hero (``src/components/landing/ImmersiveGradientHero.tsx``) shows a
-card per skill family in its ``SKILL_FAMILIES`` array. The per-family *counts*
+The landing hero (``src/components/landing/KineticHome.tsx``) shows a
+card per skill family in its ``families`` array. The per-family *counts*
 are already data-driven (read from ``src/data/skill-counts.json``, which
 ``scripts/gen-skill-counts.mjs`` derives from each skill's ``family:``
 frontmatter in apache/magpie). But the *list* of families — and each card's
@@ -30,7 +30,7 @@ exactly how ``pairing`` went missing until it was noticed by eye.
 
 This check makes the invariant deterministic: it compares the family set in
 ``skill-counts.json`` (the metadata source of truth) against the ``name:``
-values in the hero's ``SKILL_FAMILIES`` array, and fails if either side is
+values in the hero's ``families`` array, and fails if either side is
 missing an entry.
 
 It runs from ``scripts/sync-docs.sh`` immediately after
@@ -53,12 +53,12 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_COUNTS = REPO_ROOT / "src" / "data" / "skill-counts.json"
-LANDING = REPO_ROOT / "src" / "components" / "landing" / "ImmersiveGradientHero.tsx"
+LANDING = REPO_ROOT / "src" / "components" / "landing" / "KineticHome.tsx"
 
-# Isolate the `const SKILL_FAMILIES = [ ... ];` array so `name:` keys elsewhere
+# Isolate the `const families = [ ... ];` array so `name:` keys elsewhere
 # in the file (community members, VN score labels, education groups) can never
 # be mistaken for a family name.
-FAMILIES_BLOCK_RE = re.compile(r"const SKILL_FAMILIES\s*=\s*\[(.*?)\n\];", re.DOTALL)
+FAMILIES_BLOCK_RE = re.compile(r"const families\s*=\s*\[(.*?)\n\];", re.DOTALL)
 # Each family object opens with `name: "<family>"`.
 FAMILY_NAME_RE = re.compile(r'name:\s*"([a-z0-9][a-z0-9-]*)"')
 
@@ -70,12 +70,12 @@ def metadata_families() -> set[str]:
 
 
 def landing_families() -> set[str]:
-    """Family names declared in the hero's SKILL_FAMILIES array."""
+    """Family names declared in the hero's families array."""
     text = LANDING.read_text(encoding="utf-8")
     block = FAMILIES_BLOCK_RE.search(text)
     if not block:
         raise SystemExit(
-            "error: could not find the `const SKILL_FAMILIES = [ ... ];` array in\n"
+            "error: could not find the `const families = [ ... ];` array in\n"
             f"{LANDING} — was it renamed? Update scripts/check-landing-families.py."
         )
     return set(FAMILY_NAME_RE.findall(block.group(1)))
@@ -110,8 +110,8 @@ def main() -> int:
         print(
             "These families appear in src/data/skill-counts.json (derived from the\n"
             "`family:` frontmatter in apache/magpie) but have NO card in the\n"
-            "SKILL_FAMILIES array of\n"
-            "src/components/landing/ImmersiveGradientHero.tsx.\n"
+            "families array of\n"
+            "src/components/landing/KineticHome.tsx.\n"
             "Add a card (icon, modes, overview, cta, desc) for each:",
             file=sys.stderr,
         )
