@@ -1120,13 +1120,13 @@ html:has(.k-home) {
   background: #c8dcff;
 }
 @media (min-width: 1600px) {
+  .k-header,
   .k-section,
   .k-process-stage,
   .k-hero,
   .k-close,
   .k-home > footer {
-    padding-left: max(5vw, calc((100vw - 1450px) / 2));
-    padding-right: max(5vw, calc((100vw - 1450px) / 2));
+    padding-inline: clamp(24px, 4vw, 96px);
   }
   .k-hero-title {
     font-size: 126px;
