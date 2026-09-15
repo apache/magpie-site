@@ -53,9 +53,9 @@ const Github = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const Slack = (props: React.SVGProps<SVGSVGElement>) => (
+const Discord = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" {...props}>
-    <path d="M6 15a2 2 0 1 1-2-2h2v2Zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5Zm2-9a2 2 0 1 1 2-2v2H9Zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5Zm9 2a2 2 0 1 1 2 2h-2V9Zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5Zm-2 9a2 2 0 1 1-2 2v-2h2Zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5Z" />
+    <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.198.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
   </svg>
 );
 
@@ -1751,9 +1751,9 @@ function ImmersiveGradientHero() {
           </span>
           <span className="text-body font-body text-subtext-color text-center">
             Day-to-day work happens on GitHub (issues &amp; pull requests) and in
-            Slack for quick questions — but every significant discussion and
+            Discord for quick questions — but every significant discussion and
             decision also lands on the developer mailing list. Prefer not to use
-            GitHub or Slack? You can follow along and take part fully over email
+            GitHub or Discord? You can follow along and take part fully over email
             alone: the dev list is the one channel that reaches everyone.
           </span>
         </BlurFade>
@@ -1840,39 +1840,30 @@ function ImmersiveGradientHero() {
           <div className="group relative flex h-full flex-col items-start gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm hover:border-brand-200 hover:shadow-md transition-all">
             <a
               className="absolute inset-0 z-0 rounded-2xl"
-              href="https://the-asf.slack.com/archives/C0BD1EBMVEJ"
+              href="https://discord.gg/bfVyXTgak"
               target="_blank"
               rel="noreferrer"
-              aria-label="Open the #magpie channel on the ASF Slack"
+              aria-label="Join the Apache Magpie Discord"
             />
             <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-100">
-              <Slack className="text-body-bold font-body-bold text-brand-700" />
+              <Discord className="text-body-bold font-body-bold text-brand-700" />
             </div>
             <span className="text-body-bold font-body-bold text-default-font group-hover:text-brand-700">
-              Slack — #magpie
+              Discord
             </span>
             <span className="text-caption font-caption text-subtext-color">
-              Real-time chat with maintainers and contributors in the #magpie
-              channel on the ASF Slack — questions, pairing, and quick design
+              Real-time chat with maintainers and contributors on the Apache
+              Magpie Discord — questions, pairing, and quick design
               back-and-forth.
             </span>
             <div className="relative z-10 mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
               <a
                 className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                href="https://s.apache.org/slack-invite"
+                href="https://discord.gg/bfVyXTgak"
                 target="_blank"
                 rel="noreferrer"
               >
-                Join the ASF Slack
-                <ArrowRight className="size-3.5" />
-              </a>
-              <a
-                className="inline-flex items-center gap-1 rounded-md border border-solid border-brand-200 bg-brand-50 px-2.5 py-1 text-caption font-caption text-brand-700 hover:border-brand-300 hover:bg-brand-100"
-                href="https://the-asf.slack.com/archives/C0BD1EBMVEJ"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open #magpie
+                Join the Discord
                 <ArrowRight className="size-3.5" />
               </a>
             </div>
