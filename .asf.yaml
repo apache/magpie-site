@@ -1,0 +1,32 @@
+# Apache Software Foundation repository configuration.
+# https://cwiki.apache.org/confluence/display/INFRA/Git+-+.asf.yaml+features
+#
+# The `github:` block below is applied from the default branch (main).
+# The `publish:` block is what serves the website: CI builds the site and
+# force-pushes the generated output (this file included) to the `publish`
+# branch. The `.asf.yaml` on that branch carries `whoami: publish`, which
+# matches the branch name (the asfyaml multi-tenancy guard), so ASF infra
+# publishes it. The hostname is INFERRED from the repository name
+# (magpie-site -> magpie.apache.org) and must NOT be set explicitly: asfyaml
+# forbids naming your own $project.apache.org via the `hostname` field
+# ("It has to be inferred to prevent abuse").
+
+github:
+  description: "Website for Apache Magpie — agent-assisted repository maintainership and development."
+  homepage: https://magpie.apache.org/
+  labels:
+    - apache
+    - magpie
+    - website
+    - astro
+  features:
+    issues: true
+
+notifications:
+  commits: commits@magpie.apache.org
+  issues: commits@magpie.apache.org
+  pullrequests: commits@magpie.apache.org
+  discussions: dev@magpie.apache.org
+
+publish:
+  whoami: publish

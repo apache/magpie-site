@@ -1,0 +1,646 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>Install, adopt, upgrade — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/designs/2026-09-13-install-adopt-upgrade/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="Install, adopt, upgrade — Apache Magpie Docs"><meta property="og:description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><meta property="og:url" content="https://magpie.apache.org/docs/designs/2026-09-13-install-adopt-upgrade/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Install, adopt, upgrade — Apache Magpie Docs"><meta name="twitter:description" content="AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.C2Dgj2WR.css"><style>.tree-summary[data-astro-cid-lihgpoae]{list-style:none}.tree-summary[data-astro-cid-lihgpoae]::-webkit-details-marker{display:none}.tree-chevron[data-astro-cid-lihgpoae]{color:var(--color-subtext-color);transition:transform .15s}details[data-astro-cid-lihgpoae][open]>.tree-summary[data-astro-cid-lihgpoae] .tree-chevron[data-astro-cid-lihgpoae]{transform:rotate(90deg)}.prose h1{color:var(--color-default-font);margin-top:0;margin-bottom:1rem;font-size:2rem;font-weight:700}.prose h2{color:var(--color-default-font);margin-top:2rem;margin-bottom:.75rem;font-size:1.5rem;font-weight:600}.prose h3{color:var(--color-default-font);margin-top:1.5rem;margin-bottom:.5rem;font-size:1.25rem;font-weight:600}.prose p{color:var(--color-default-font);margin:.75rem 0;line-height:1.7}.prose a{color:var(--color-brand-600);text-decoration:none}.prose a:hover{color:var(--color-brand-700);text-decoration:underline}.prose ul,.prose ol{color:var(--color-default-font);margin:.75rem 0;padding-left:1.5rem}.prose li{margin:.25rem 0}.prose code{background:var(--color-neutral-100);border-radius:.25rem;padding:.125rem .375rem;font-size:.875em}.prose pre{background:var(--color-neutral-900);color:var(--color-neutral-50);border-radius:.5rem;margin:1rem 0;padding:1rem;overflow-x:auto}.prose pre code{color:inherit;background:0 0;padding:0}.prose blockquote{border-left:4px solid var(--color-brand-200);color:var(--color-subtext-color);margin:1rem 0;padding-left:1rem;font-style:italic}.prose table{border-collapse:collapse;width:100%;margin:1rem 0}.prose th,.prose td{border:1px solid var(--color-neutral-200);text-align:left;padding:.5rem .75rem}.prose th{background:var(--color-neutral-50);font-weight:600}.prose img{border-radius:.5rem;max-width:100%;height:auto;margin:1rem 0}.prose hr{border:none;border-top:1px solid var(--color-neutral-200);margin:2rem 0}
+</style></head><body data-astro-cid-z4jru4n3><nav class="relative z-10 flex w-full items-center justify-between bg-default-background px-8 py-5 mobile:px-4"><a href="/" aria-label="Apache Magpie home" class="flex items-end justify-end gap-2 px-2 py-2"><img class="h-10 w-10 flex-none object-cover" src="/subframe-mark.svg" alt="Apache Magpie"/><img class="h-10 flex-none object-contain" src="/subframe-wordmark.png" alt="Magpie"/><span class="self-center -mt-2 -ml-2 text-[10px] font-[700] leading-none text-default-font" aria-hidden="true">™</span></a><div class="flex items-center gap-2"><a href="/downloads" aria-label="Downloads" title="Downloads"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Downloads"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg></span></button></a><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="Star Apache Magpie on GitHub" title="Star Apache Magpie on GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button" aria-label="Star Apache Magpie on GitHub"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="/docs"><button class="group flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-brand-600 px-3 text-left hover:bg-brand-500 active:bg-brand-600 disabled:cursor-default disabled:bg-neutral-200" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-body text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><span class="whitespace-nowrap font-body-bold text-white">Get Started</span></button></a></div></nav><div class="flex w-full"><aside class="w-72 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden"><div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4"><a href="/" class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a><div class="mt-1 text-heading-3 font-heading-3 text-default-font">Documentation</div></div><div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-4 py-5"><a href="/docs/quick-start" class="block mb-5 px-3 py-2 rounded-md text-body-bold font-body-bold bg-brand-50 text-brand-700 hover:bg-brand-100">⚡ Quick Start</a><nav><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/quick-start" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Quick start" data-astro-cid-lihgpoae>Quick start</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Concepts" data-astro-cid-lihgpoae>Concepts</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/updating-magpie" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Updating Magpie" data-astro-cid-lihgpoae>Updating Magpie</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/setup/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Setup" data-astro-cid-lihgpoae>Setup</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/education/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Education" data-astro-cid-lihgpoae>Education</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/education/training/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Training" data-astro-cid-lihgpoae>Training</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/security/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Security" data-astro-cid-lihgpoae>Security</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/release-management/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Release Management" data-astro-cid-lihgpoae>Release Management</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/mentoring/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Mentoring" data-astro-cid-lihgpoae>Mentoring</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-caption font-caption uppercase tracking-wider text-subtext-color hover:text-default-font" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/adapters/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Adapters" data-astro-cid-lihgpoae>Adapters</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Contracts (23)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><span class="min-w-0 flex-1 truncate" data-astro-cid-lihgpoae>Substrates (24)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="pr-management-stats" data-astro-cid-lihgpoae>pr-management-stats</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/rfcs/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="RFCs" data-astro-cid-lihgpoae>RFCs</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" class="block rounded-md py-1 pr-2 text-body font-body  text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/skill-sources/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="External Skill Sources" data-astro-cid-lihgpoae>External Skill Sources</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block rounded-md py-1 pr-2 text-body font-body capitalize text-default-font hover:bg-neutral-100" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer rounded-md py-1 pr-2 select-none text-body font-body text-default-font hover:bg-neutral-100" style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5 hover:bg-neutral-200" aria-hidden="true" data-astro-cid-lihgpoae><svg class="tree-chevron block" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-lihgpoae><path d="M9 6l6 6-6 6" data-astro-cid-lihgpoae></path></svg></span><a href="/docs/designs/readme" class="min-w-0 flex-1 truncate rounded px-1 -mx-1 hover:underline " title="Designs" data-astro-cid-lihgpoae>Designs</a></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" aria-current="page" class="block rounded-md py-1 pr-2 text-body font-body  bg-brand-100 text-brand-800" style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main class="min-w-0 flex-1 px-12 py-12 mobile:px-4 mobile:py-8"><article class="prose prose-neutral max-w-3xl mx-auto"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="install-adopt-upgrade">Install, adopt, upgrade</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>Built. <a href="#where-the-build-departed-from-the-design">Where the build departed from the design</a> records the two places it did.</td>
+</tr>
+<tr>
+<td><strong>Created</strong></td>
+<td>2026-09-10, rewritten 2026-09-13 as one document</td>
+</tr>
+<tr>
+<td><strong>Replaces</strong></td>
+<td>The two designs and four implementation plans this was split across while it was being built (<code>2026-09-10-repo-committed-setup-*</code>, <code>2026-09-13-install-adopt-upgrade-design</code>, <code>-plan-a/b/c</code>). They described phases; this describes the result.</td>
+</tr>
+<tr>
+<td><strong>Spec surface</strong></td>
+<td><a href="https://github.com/apache/magpie/blob/main/tools/spec-loop/specs/adoption-and-setup.md"><code>tools/spec-loop/specs/adoption-and-setup.md</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>There are exactly three things a person can do with Magpie, and the whole
+design follows from keeping them apart:</p>
+<ul>
+<li><strong>Install it</strong> — put the plugins in your agent. One command per agent, once
+per machine. Writes nothing to any repository.</li>
+<li><strong>Configure it</strong> — tell those skills about this project, in
+<code>.apache-magpie-local/</code>: gitignored, this clone only, nobody’s permission
+required. A skill whose configuration is missing runs this itself. Complete
+on its own, and all most people ever need.</li>
+<li><strong>Adopt it</strong> — commit, for one repository, the floor and the project’s
+configuration. A decision its maintainers make together, reversible in a
+pull request, never run automatically, and never a prerequisite for the
+first two.</li>
+</ul>
+<p>Everything below is either one of those three, or the consequence of a reader
+being able to tell which one they are looking at.</p>
+<p><strong>Configuring is not a lesser adopting.</strong> It is the finished state for
+individual use, which the framework’s own docs call “not a waiting room”. The
+original design had no such step, so the only route to a configured skill was
+<code>adopt</code> — which stages committed files for every contributor. A solo
+contributor on a repository whose maintainers have never heard of Magpie had
+to commit something for the team in order to work alone. That was the defect
+this split closes.</p>
+<h2 id="what-was-wrong">What was wrong</h2>
+<p>The marketplace install became the default path in 0.2.0 and committed nothing
+to the repository, by design. Four consequences followed, all from the same
+root: <strong>the marketplace path recorded nothing about itself.</strong></p>
+<ol>
+<li>
+<p><strong>Install and adopt read as one blurred flow.</strong> The quick start opened with
+<code>marketplace add</code>, then <code>/magpie-setup</code>, then an “optional: commit a default
+set” aside. A person who only wanted to try Magpie could not tell where
+trying it ended and committing something for their colleagues began.</p>
+</li>
+<li>
+<p><strong>Adoption forgot the version it was made against.</strong> The default-plugin
+block that lets a contributor arrive Magpie-ready existed as copy-paste JSON
+in the marketplace reference; no code path wrote it. And nothing anywhere
+recorded which Magpie version the project had validated against, so nothing
+could detect that a contributor was three releases behind.
+<code>.apache-magpie.lock</code> — the file whose entire job is recording the project’s
+version — existed only on the pinned-snapshot path.</p>
+</li>
+<li>
+<p><strong>Every page repeated the marketplace install.</strong> The reference carried it
+per harness, the quick start for four of them, each of the ten family
+READMEs again, and <code>magpie-setup.svg</code> spent its opening seconds recording
+it. A one-time prerequisite, re-explained as though it were part of every
+flow.</p>
+</li>
+<li>
+<p><strong>Every family page opened with a recording of the same thing.</strong> The nine
+<code>families/&lt;family&gt;-first-run.svg</code> recordings all showed a pre-flight failing
+on an unadopted repo. That is <em>setup’s</em> arc, and already the subject of
+<code>magpie-setup.svg</code>. Nine copies of it taught a reader nothing about what the
+nine families do — and all nine had sat as “recording pending” placeholders
+since the day they were added.</p>
+</li>
+</ol>
+<h2 id="decisions">Decisions</h2>
+<p>Each of these settled a fork, and each shapes what follows.</p>
+<ol>
+<li>
+<p><strong>The lock records a floor, never a pin.</strong> <code>min_version</code> is a minimum.
+Installed plugins may be — and normally will be — newer. Nothing downgrades
+anything, and the marketplace is added <em>untagged</em> so contributors track the
+tip and satisfy the floor by default. The plugin list is a floor in the same
+sense: contributors may install more, and nothing is ever removed.</p>
+</li>
+<li>
+<p><strong>The floor is framework-defined, not “whatever the maintainer installed.”</strong>
+<code>magpie-setup</code>, <code>magpie-utilities</code>, <code>magpie-agent-guard</code>. A maintainer-only
+family such as <code>magpie-security</code> would otherwise cost every contributor
+always-on context for work one person does. A maintainer may add to the
+floor deliberately, and is shown each addition’s always-on cost as they do.</p>
+<p>A consequence worth stating, because it removes work the original request
+implied: <strong>with a fixed floor there is nothing to re-sync when a maintainer
+installs another family.</strong> No per-install hook is needed — which is
+fortunate, since on most harnesses no code runs on plugin install at all.</p>
+<p><strong>The same three are the install baseline</strong>, pre-ticked in the picker and
+recommended on every page that shows an install command. A set worth
+committing for every contributor is a set worth having yourself, and one
+recommendation is easier to hold than two. <code>magpie-setup</code> alone is
+unremovable — it is the skill doing the installing; the other two are
+strongly recommended and can be un-ticked, with what is given up said once.
+Agent isolation belongs to this baseline as a <em>run</em> rather than a plugin:
+it ships inside <code>magpie-setup</code>, and the install is not described as finished
+until it has been offered.</p>
+</li>
+<li>
+<p><strong>One committed file for every install method.</strong> <code>.apache-magpie.lock</code> gains
+<code>method: marketplace</code> alongside <code>svn-zip</code> / <code>git-tag</code> / <code>git-branch</code>, rather
+than a second adoption file with overlapping meaning. Every adopted project
+then has exactly one committed record, and the pre-flight has one file to
+read.</p>
+</li>
+<li>
+<p><strong><code>.claude/settings.json</code> is derived, not authoritative.</strong> It is regenerated
+from the lock. The lock is harness-neutral; the wiring is per-harness. This
+is what lets a Codex or Gemini adopter have a meaningful adoption record at
+all.</p>
+<p>On Claude Code that file is also the store behind <code>--scope project</code>, which
+settles who writes it: the install step names all three scopes rather than
+defaulting past them — <code>user</code> (this machine, every repo), <code>local</code>
+(<code>.claude/settings.local.json</code>, this repo, gitignored) and <code>project</code> (this
+file, committed, everyone) — installs at <code>user</code> or <code>local</code>, and <strong>never
+passes <code>project</code></strong>. A request for the whole project to get Magpie is a
+request to adopt, and hands off to <code>adopt</code>, which runs those same commands
+at <code>--scope project</code> and writes the floor the flag alone would leave
+missing. Adoption is a maintainer’s act with a record, not a flag on one
+person’s install.</p>
+</li>
+<li>
+<p><strong>Adopting is optional and never a prerequisite.</strong> Plugins work in a
+repository with or without the committed record. A maintainer who declines
+has a supported end state, not a partial install, and setup must not
+describe the result as incomplete.</p>
+</li>
+<li>
+<p><strong>The agent runs the install; it does not dictate commands to type.</strong>
+<code>claude plugin list --json</code>, <code>claude plugin install</code>, <code>claude plugin update</code>
+and <code>claude plugin marketplace add</code> are CLI commands the agent can run —
+the <code>/plugin …</code> slash form is not, and conflating the two is what kept the
+install a transcription exercise for the user. Both surfaces that install
+use the CLI: the pre-flight bringing a machine up to a project’s floor, and
+the install skill installing the families the user just picked. Where no
+such CLI exists the same decision is made and the same commands print,
+minus the action.</p>
+<p>Three other conditions send it back to printing, and each is reported with
+the reason rather than silently swallowed: a <strong>plugin store the process
+cannot write to</strong> — a sandboxed agent is the common case, and Claude Code’s
+own default sandbox denies <code>~/.claude/plugins/</code> — a <strong>marketplace other
+than <code>apache/magpie</code></strong> (decision 7), and an <strong>install that stops for a
+marketplace-declared command</strong>. That last one is why <code>--yes</code> is never
+passed: the flag exists to accept such a command sight unseen, Magpie’s
+catalogue declares none, so an install that demands the flag is not the
+catalogue this step assumed it was talking to.</p>
+</li>
+<li>
+<p><strong>Auto-install is restricted to the framework’s own marketplace.</strong> Both
+surfaces act without asking <em>only</em> when the source is <code>apache/magpie</code> —
+the lock’s <code>url</code> for the pre-flight, the <code>from:</code> argument for the install
+skill. Any other value is reported and requires explicit confirmation — see
+<a href="#risks">Risks</a>. The third-party companion packages the install offers sit
+on the far side of the same line: their commands are always printed, never
+run.</p>
+</li>
+<li>
+<p><strong>The install is a prerequisite with one page</strong>, not a step repeated in
+every flow that assumes it.</p>
+<p>Every step that page documents carries <strong>both</strong> forms: the slash command and
+the plain-language sentence. Skills are model-invoked, so the sentence is the
+general case and the slash command the shortcut — and harnesses without slash
+commands have only the sentence. The one exception is the first install
+itself, which must be a client command because nothing is installed yet to
+hear the request; every later install can be asked for in words, now that the
+install step runs the CLI (decision 6).</p>
+</li>
+<li>
+<p><strong>Configuration has a gitignored home and a committed one, and the same
+lookup chain as overrides.</strong> <code>&lt;project-config&gt;</code> resolves per file, local
+first: <code>.apache-magpie-local/</code> then <code>.apache-magpie-overrides/</code>. One rule
+for everything an adopter writes, rather than one rule for configuration
+and another for overrides.</p>
+<p>The cost is real and is accepted: after a project commits a file you also
+hold locally, yours keeps winning. It is reported rather than silent —
+<code>verify</code> lists every shadowing file, and <code>adopt</code> drops the copies that are
+byte-identical as it promotes, so the project’s later corrections reach
+you.</p>
+</li>
+<li>
+<p><strong>A skill runs <code>config</code> for you; nothing ever runs <code>adopt</code> for you.</strong> The
+pre-flight that finds missing configuration invokes <code>config</code> unasked,
+because what it touches is gitignored, invisible to everyone else and
+undone by deleting a directory — and unlike a plugin install it needs no
+session restart, so the skill continues in the same turn. Adoption commits
+a recommendation for every contributor; it is mentioned in one line and
+never offered.</p>
+</li>
+<li>
+<p><strong>A family page shows that family working, and those pictures are written
+rather than captured.</strong> <code>magpie-setup.svg</code> stays a real recording — it is
+the one run a reader has not done yet. Everything else is a committed
+transcript rendered deterministically.</p>
+</li>
+</ol>
+<h2 id="the-adoption-floor">The adoption floor</h2>
+<h3 id="the-record">The record</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span># .apache-magpie.lock — committed; the project's floor.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>method:       marketplace</span></span>
+<span class="line"><span>url:          apache/magpie</span></span>
+<span class="line"><span>min_version:  0.2.0</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>plugins:</span></span>
+<span class="line"><span>  - magpie-setup</span></span>
+<span class="line"><span>  - magpie-utilities</span></span>
+<span class="line"><span>  - magpie-agent-guard</span></span></code></pre>
+<p>Read as: <em>this project expects at least Magpie 0.2.0, and expects at least
+these three plugins to be available.</em> Neither line is a ceiling. A contributor
+running 0.4.0 with seven families installed satisfies this lock completely and
+is told nothing.</p>
+<p><code>min_version</code> replaces <code>ref</code> for this method deliberately. On <code>git-tag</code> and
+<code>svn-zip</code>, <code>ref</code> <strong>is</strong> a pin and re-fetching to that exact version is the
+whole point; reusing the key here would make two opposite semantics share one
+name in one file. The three existing methods keep <code>ref</code> and keep pinning.</p>
+<p><strong>One version, compared as PEP 440.</strong> Every Magpie plugin’s version tracks the
+framework’s <code>pyproject.toml</code>, so <code>min_version</code> is a single framework version
+and not a per-plugin constraint. Between releases that version carries a
+<code>.devNNNN</code> suffix, and a floor may legitimately record one — a maintainer who
+adopted against <code>0.2.0.dev202609110041</code> is correctly satisfied by <code>0.2.0</code>,
+which is exactly what PEP 440 ordering gives. String ordering gets both that
+and <code>0.10.0</code> against <code>0.9.0</code> backwards.</p>
+<p><strong>A floor plugin the marketplace no longer ships</strong> is reported as drift by
+<code>verify</code> with a repair offer, and is <em>not</em> something the pre-flight silently
+installs around: it means the project’s floor names something that no longer
+exists, which is a fact for a maintainer to fix in a pull request.</p>
+<h3 id="adopt-writes-it"><code>adopt</code> writes it</h3>
+<p><code>setup adopt</code> writes three artefacts, <code>git add</code>s all three, and commits none —
+the version bump lands through the project’s normal review, like any other
+committed file:</p>
+<ol>
+<li><strong><code>.apache-magpie.lock</code></strong> — <code>method: marketplace</code>, <code>url: apache/magpie</code>,
+<code>min_version</code> set to the Magpie version installed on this machine right now
+(the version the maintainer is actually validating against), and the plugin
+floor.</li>
+<li><strong>The derived wiring</strong> — <code>.claude/settings.json</code>, regenerated from the lock
+under the merge rules below. The <code>extraKnownMarketplaces</code> entry stays
+<strong>untagged</strong> per decision 1.</li>
+<li><strong>The overrides store</strong> — <code>.apache-magpie-overrides/</code>, scaffolded from
+<code>projects/_template/</code>.</li>
+</ol>
+<h3 id="the-derived-wiring-and-its-merge-rules">The derived wiring, and its merge rules</h3>
+<p>The repository’s <code>.claude/settings.json</code> is not Magpie’s file. This repository’s
+own carries <code>sandbox</code> and <code>permissions</code> blocks that must survive untouched, and
+an adopter’s will carry whatever they put there.</p>
+<ul>
+<li>Merge <strong>only</strong> <code>extraKnownMarketplaces</code> and <code>enabledPlugins</code>. Every other key
+is preserved byte for byte.</li>
+<li>If <code>extraKnownMarketplaces</code> already defines <code>apache-magpie</code>, leave the
+existing definition alone — an adopter pinning <code>apache/magpie@0.2.0</code> has made
+a deliberate choice.</li>
+<li>If <code>enabledPlugins</code> exists, <strong>add</strong> missing floor members and <strong>remove
+nothing</strong>. A project that has enabled other plugins, Magpie’s or anyone
+else’s, keeps them.</li>
+<li>If the file does not exist, create it with those two keys and nothing else.</li>
+<li>If the file exists but is not valid JSON, stop and say so. Do not rewrite it.</li>
+</ul>
+<p><strong>Harness reach.</strong> Claude Code expresses the whole floor through that file.
+Codex expresses part of it: its catalogue marks <code>magpie-setup</code>
+<code>INSTALLED_BY_DEFAULT</code> and every other family <code>AVAILABLE</code>, so the floor’s
+central plugin arrives on its own and the rest stay opt-in. That became
+possible only once each family plugin carried its own skills as real
+directories — while an all-in-one plugin existed, defaulting anything on meant
+defaulting everything on. The remaining harnesses have no repo-side
+pre-install mechanism, and setup says so plainly rather than writing a file
+that does nothing.</p>
+<h3 id="setup-arrives-pre-filled"><code>setup</code> arrives pre-filled</h3>
+<p><code>/magpie-setup</code> in a project whose lock says <code>method: marketplace</code> reads the
+floor and presents it as the proposed configuration, rather than starting from
+the framework defaults. The user may change it. This is the “next time someone
+runs setup they get it pre-configured” half of the model, and it costs nothing
+beyond reading a file that is already being read for the drift check.</p>
+<p>Running plain <code>setup</code> still writes nothing to the repository. Changing the
+committed floor is <code>adopt</code>, and only <code>adopt</code>. Install therefore <em>points at</em>
+<code>/magpie-setup adopt</code> rather than offering to write the same files a second
+way: one writer of the lock, one writer of the derived wiring.</p>
+<h3 id="upgrade-splits-on-adoption"><code>upgrade</code> splits on adoption</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Not adopted</th>
+<th>Adopted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Updates the plugins</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Writes to the repo</td>
+<td><strong>nothing</strong></td>
+<td>raises <code>min_version</code>, regenerates the wiring, stages both</td>
+</tr>
+<tr>
+<td>Commits</td>
+<td>—</td>
+<td>never</td>
+</tr>
+</tbody>
+</table>
+<p><code>min_version</code> only ever <strong>rises</strong>. An upgrade run on a machine that is somehow
+behind the committed floor does not lower it.</p>
+<h3 id="the-pre-flight">The pre-flight</h3>
+<p>Two steps in <a href="https://github.com/apache/magpie/blob/main/tools/dev/preflight-block.md"><code>tools/dev/preflight-block.md</code></a>,
+which regenerates into the 65 skills that carry the block. The existing
+snapshot-method branch is unchanged.</p>
+<p><strong>Why the check lives in the skill body at all.</strong> A marketplace install
+delivers <em>skills only</em>. Nothing in it configures the repository, and on most
+harnesses <strong>no code runs</strong> when a plugin is installed or upgraded — there is no
+post-install step to rely on. Claude Code’s <code>SessionStart</code> hook rides on
+<code>magpie-setup</code>, so for an install without that plugin, and for every
+non-Claude install, this agentic check is the one thing standing between a
+stale or unadopted repo and a skill acting on wrong assumptions. That rationale
+is addressed to maintainers, so it lives here rather than in the block: the
+generator copies its source file verbatim, HTML comments included, so every
+line of it is paid on all 65 copies. Keep the block itself to rules the running
+agent needs.</p>
+<ol>
+<li><strong>Lock present and <code>method: marketplace</code></strong> → read installed state from
+<code>claude plugin list --json</code> and compare against the floor:
+<ul>
+<li>a floor plugin absent → install it;</li>
+<li>a floor plugin present but below <code>min_version</code> → update it;</li>
+<li>everything at or above the floor → <strong>silent</strong>, as today.</li>
+</ul>
+</li>
+<li><strong>Anything but a silent pass</strong> → say what happened, and stop for a restart.
+That covers all three non-silent branches: something was installed or
+updated, there was no CLI so the commands were only printed, or <code>url</code> named
+another marketplace so nothing ran. In each the machine is still below the
+floor — Claude Code loads plugins at session start, so a newly installed
+version is not live this turn, and what was only printed has not run at all.
+The skill cannot continue either way; what this buys the user is not having
+to work out the command.</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>⚠ magpie-pr-management 0.2.0 installed; this project's floor is 0.3.0.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  ✓ ran: claude plugin update magpie-pr-management@apache-magpie</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  Restart the session to load it, then re-run this command.</span></span></code></pre>
+<p>Where no <code>claude</code> CLI is present the same comparison runs and the same lines
+print, with <code>run:</code> in place of <code>✓ ran:</code>.</p>
+<p>The pre-flight never removes a plugin, never downgrades one, never pins a
+marketplace, and never touches a plugin absent from the committed floor. It
+must also never treat a <em>missing</em> record as an unadopted repo in a way that
+makes adoption feel required — that would convert an optional convenience into
+a de-facto prerequisite, contradicting decision 5.</p>
+<h3 id="the-surfaces-that-report-on-it">The surfaces that report on it</h3>
+<ul>
+<li><strong><code>verify</code></strong> — reports the floor, what is installed against it, and drift in
+either direction. Being <em>ahead</em> of the floor is not drift and is not a fault.
+A floor absent entirely is reported as fine, with one line noting it is
+available.</li>
+<li><strong><code>status</code></strong> — prints the floor alongside the installed set.</li>
+<li><strong><code>uninstall</code> / <code>unadopt</code></strong> — <code>unadopt</code> removes the lock along with the keys
+it derived, leaving the rest of <code>.claude/settings.json</code> intact; <code>uninstall</code>
+leaves the lock alone, because the project’s floor is not this machine’s
+install. Both must say which they did, and both preserve
+<code>.apache-magpie-overrides/</code> by default.</li>
+</ul>
+<h2 id="installing-one-page-one-command-per-agent">Installing: one page, one command per agent</h2>
+<p><a href="/docs/setup/marketplace-install"><code>docs/setup/marketplace-install.md</code></a> —
+<em>“Prerequisite: install Magpie from your agent’s marketplace”</em> — carries the
+install once, one section per harness: Claude Code, OpenAI Codex CLI, VS Code /
+GitHub Copilot, Google Gemini CLI, Cursor, <code>microsoft/apm</code>, Kiro CLI, JetBrains
+IDEs. Each section is the commands and nothing else. Kiro is the one with no
+marketplace — it installs skills one at a time from a GitHub subdirectory — and
+the page says so rather than omitting it.</p>
+<p><a href="/docs/setup/marketplace"><code>docs/setup/marketplace.md</code></a> keeps the reference —
+manifest families, which families to pick, skill-name differences, versioning,
+verification status — and links for the commands rather than carrying them. It
+loses commands, not reasoning.</p>
+<p>Everything else links to it. The ten family READMEs keep exactly one install
+line, their own <code>/plugin install magpie-&lt;family&gt;@apache-magpie</code>: that line is
+not duplication, because it differs per page. The marketplace <em>add</em> is, and it
+was carried twelve times.</p>
+<p>A twelfth check in
+<a href="https://github.com/apache/magpie/blob/main/tools/dev/check-doc-sync.py"><code>check-doc-sync.py</code></a> keeps it that way: the
+add — and the Codex, Gemini and <code>apm</code> equivalents — may appear in those two
+pages and nowhere else under <code>docs/</code>. <code>docs/designs/</code> is exempt, because a
+design records what was decided and rewriting the record to satisfy a linter
+would make it wrong. The repository README keeps its copy deliberately: the
+front page shows the shortest path in, not a link to it.</p>
+<p>Without that check the repetition returns the next time someone documents an
+install, and nothing notices. It is not in any earlier version of this design;
+it is here because the design’s central claim — that the install is carried
+once — otherwise has no guard, and this repository has twice had a documented
+fact drift because nothing checked it.</p>
+<h2 id="what-a-family-page-shows">What a family page shows</h2>
+<h3 id="the-benefit-callout">The benefit callout</h3>
+<p>Each family README carries, between its intro prose and its screenshots, three
+bullets saying what the family buys you:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#85E89D">&gt; [</span><span style="color:#DBEDFF;text-decoration:underline">!TIP</span><span style="color:#85E89D">]</span></span>
+<span class="line"><span style="color:#85E89D">&gt; </span><span style="color:#E1E4E8;font-weight:bold">**Why this family**</span></span>
+<span class="line"><span style="color:#85E89D">&gt; </span><span style="color:#FFAB70">-</span><span style="color:#85E89D"> Review your own diff before a maintainer spends their time on it</span></span>
+<span class="line"><span style="color:#85E89D">&gt; </span><span style="color:#FFAB70">-</span><span style="color:#85E89D"> Findings split into blocking and non-blocking, so the nits do not drown</span></span>
+<span class="line"><span style="color:#85E89D">&gt;   the real problems</span></span>
+<span class="line"><span style="color:#85E89D">&gt; </span><span style="color:#FFAB70">-</span><span style="color:#85E89D"> Nothing is sent, posted, or merged — the report is the output</span></span></code></pre>
+<p><code>&gt; [!TIP]</code> over an HTML banner or an SVG header because it is the only coloured
+notice that renders as a coloured notice on GitHub — where these pages are
+read — and degrades to a readable blockquote in mkdocs, in a plain <code>cat</code>, and
+in the source release tarball.</p>
+<h3 id="the-screenshots">The screenshots</h3>
+<p>Two or three per family, one for every command that family’s <em>Try these first</em>
+section already tells a newcomer to run — twenty-eight in all, authored rather
+than captured:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>assets/quickstart/families/pairing/</span></span>
+<span class="line"><span>  self-review.txt          ← authored source; the literal terminal text</span></span>
+<span class="line"><span>  self-review.svg          ← generated</span></span>
+<span class="line"><span>  multi-agent-review.txt</span></span>
+<span class="line"><span>  multi-agent-review.svg</span></span></code></pre>
+<p><a href="https://github.com/apache/magpie/blob/main/tools/dev/render-screenshot.sh"><code>tools/dev/render-screenshot.sh</code></a>
+renders a transcript to a static SVG on the recorder’s palette and prepends the
+Apache header. Colour comes from the line itself — a <code>&gt;</code> prompt, a <code>✓</code>/<code>⚠</code>/<code>✗</code>
+status glyph, an ALL-CAPS section label — so a transcript stays something you
+read as a terminal rather than as markup. No Node: the recorder needs
+<code>svg-term-cli</code>, this runs on a bare clone and in CI.</p>
+<p>Every argument the repository already made for SVG holds — the output is text,
+it reviews as a diff, it carries its own licence header, it stays sharp at any
+width, and it costs a fraction of a PNG set in every source release. What
+changed is only that the content is <em>written</em>, which is what makes
+twenty-eight of them maintainable.</p>
+<h3 id="the-half-of-a-captures-guarantee-that-survives">The half of a capture’s guarantee that survives</h3>
+<p>A capture guarantees the picture matches the program. Authoring does not, and
+that is the real cost. The design buys back the half it can: <strong>rendering is
+deterministic</strong> — same <code>.txt</code>, same <code>.svg</code>, byte for byte, on any machine — so
+<a href="https://github.com/apache/magpie/blob/main/tools/dev/check-quickstart-recording.py"><code>check-quickstart-recording.py</code></a>
+can prove every committed <code>.svg</code> still regenerates from its source. Edit one
+without re-rendering and the build fails. Forcing <code>LC_ALL=C</code> inside the
+renderer is part of that rather than a detail: <code>awk</code>’s <code>length()</code> is
+locale-dependent, and a renderer whose output moved between machines could not
+be checked at all.</p>
+<p>What nothing can prove is that a transcript still matches what the skill prints
+today. That gap is accepted deliberately — a screenshot’s job here is to show
+the shape of a run, not to serve as a test oracle — and
+<a href="/docs-assets/quickstart/README.md"><code>assets/quickstart/README.md</code></a> says so
+plainly rather than letting a reader assume the check is stronger than it is.
+Transcripts are written to be robust to cosmetic change: no version strings, no
+dates, no counts a minor change would move.</p>
+<h3 id="what-was-retired">What was retired</h3>
+<ul>
+<li><strong>The nine <code>families/&lt;family&gt;-first-run.svg</code>.</strong> They showed setup’s arc, not
+the family’s.</li>
+<li><strong><code>assets/examples/</code>.</strong> Two placeholder recordings doing the same job as the
+authored screenshots, by capture, for one family.</li>
+<li><strong><code>record-svg.sh</code> drops from eleven targets to one.</strong> <code>/magpie-setup</code> is the
+exception worth a capture.</li>
+<li><strong>The checker’s placeholder machinery.</strong> It existed because ten recordings
+meant ten capture sessions, and blocking commits until someone sat down with
+asciinema would have got the hook disabled. One recording is a thing a person
+does once; a screenshot is a file you write. A missing file is now an error.</li>
+</ul>
+<p>The checker was reworked rather than replaced: it keeps the parse,
+licence-header, size-cap, embed and orphan checks, and gains transcript/SVG
+pairing, per-family coverage, a check that a screenshot names a skill its family
+actually ships, and the regeneration-staleness check.</p>
+<h3 id="what-a-family-page-asks-you-to-configure">What a family page asks you to configure</h3>
+<p>The same <code>requires_config:</code> frontmatter that drives <code>config</code> generates, per
+family, the table of what that family needs before it will run — required and
+optional split, with a <em>Read by</em> column naming the skills. It replaced a
+hand-maintained table in nine of the ten family READMEs, which had drifted
+exactly as far as an unguarded table does: <code>security</code> listed none of the
+thirteen files its skills read, <code>repo-health</code> none of three,
+<code>release-management</code> one of five.</p>
+<p>Above it sits an <strong>animated</strong> <code>/magpie-setup config</code> run for that family,
+generated from the same frontmatter by <code>render-wizard.py</code>. A still frame of a
+wizard is a wizard with the interesting part removed; what a first-time reader
+needs to see is the shape of the conversation — auto-detect first, one batched
+question, gitignored files out. It is illustrative rather than a recording, and
+the embed says so.</p>
+<h3 id="companion-skill-packages">Companion skill packages</h3>
+<p>Magpie ships skills for maintaining a project. Some of what a maintainer wants
+next is not maintenance — scanning your own code, or a method for thinking a
+change through — and other people have built those well. A registry names
+them, per family, and the install flow offers them alongside the families and
+the MCP servers.</p>
+<p>Three rules make it a pointer rather than an advert:</p>
+<ul>
+<li><strong>Per harness, not per package.</strong> Superpowers installs on six agents with
+six different commands; Claude Security on one. A package is offered only
+where it can actually be installed, and a package available on one agent
+says so rather than being presented as the answer for everyone.</li>
+<li><strong>Never a dependency, and never pre-ticked.</strong> Every family works with none
+installed. An entry whose <code>why</code> cannot say what it adds to a <em>named</em> family
+is refused by the checker.</li>
+<li><strong>The marketplace is its own decision.</strong> Where a package lives in a
+catalogue Magpie does not publish, <code>install</code> and <code>marketplace</code> are separate
+fields, the offer names whose catalogue it is, and the add is a step of its
+own. Nothing is added on anybody’s behalf — the same rule as decision 7,
+reaching a different surface.</li>
+</ul>
+<h2 id="where-the-build-departed-from-the-design">Where the build departed from the design</h2>
+<p>Two places, both deliberate, both worth recording because the design argued
+for the other thing.</p>
+<p><strong>The per-skill configuration wizard became <code>config</code>, and writes locally.</strong>
+The design put the wizard behind the pre-flight and had it write into
+<code>.apache-magpie-overrides/</code> — the <em>committed</em> store — then stage the result.
+That was wrong for the case it exists to serve. A contributor whose skill
+lacks configuration is usually one person on a repository that has not adopted
+Magpie, and making them stage committed files for the whole team in order to
+work alone is the same defect this design opens by naming. So the wizard is
+<code>config</code>, it writes gitignored <code>.apache-magpie-local/</code>, and <code>adopt</code> promotes
+from it when a maintainer decides the project should publish those answers.</p>
+<p>Everything else the design specified for it shipped as specified: the
+<code>requires_config:</code> frontmatter, the <em>optional</em> set derived rather than
+hand-written, the <code>--fix</code> checker and its pre-commit hook, the validation that
+every named file exists in <code>projects/_template/</code> — which found three that did
+not — and the wizard living in one place rather than propagated into 65 skill
+bodies.</p>
+<p><strong><code>magpie-setup.svg</code> is generated rather than re-cut.</strong> The design listed
+re-cutting it as work needing a terminal, a scratch project and a human,
+because the committed recording opened with the marketplace install that had
+become a prerequisite. Rather than schedule the human, the artefact is now
+generated by <code>render-wizard.py</code> — the whole first run including the
+secure-agent setup, deterministic and checked like everything else — and the
+recorder is retired. Nothing in the repository is captured any more, which
+also ends the standing risk that the one artefact needing a person stays wrong
+because a person is hard to schedule.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<p><strong>A separate adoption file, leaving <code>.apache-magpie.lock</code> snapshot-only.</strong>
+Rejected: two committed files with overlapping meaning, two files for the
+pre-flight to read, and an unanswerable “which wins” the moment a project has
+both. The lock’s job is already “the project’s committed version record”; a
+fourth method is a smaller change than a second file.</p>
+<p><strong><code>.claude/settings.json</code> as the sole record.</strong> Rejected on reach. It is the
+mechanism Claude Code auto-installs from and it stays exactly that — but a
+Codex, Gemini or Copilot adopter would then have no adoption record at all, and
+the pre-flight would have to parse a Claude-specific file to learn a
+harness-neutral fact.</p>
+<p><strong>Pinning rather than a floor.</strong> Rejected by the maintainer during design. A
+pin makes every contributor’s upgrade wait on a pull request to the adopting
+repository, and turns the project’s record into a ceiling on individual
+installs. A floor gets the same “everyone has at least what this project needs”
+guarantee with none of that. It costs the ability to say “everyone is on exactly
+the same version”, which is the pinned-snapshot install’s job and remains
+available.</p>
+<p><strong>A floor that grows to match what the maintainer installed.</strong> Rejected: a
+maintainer-only family like <code>magpie-security</code> would cost every contributor
+always-on context for work one person does, and it would need a re-sync hook on
+a set of harnesses where nothing runs on install.</p>
+<p><strong>Pre-flight proposing rather than installing.</strong> Rejected by the maintainer
+during design, with the trade understood: it mutates global plugin state from
+inside an unrelated skill’s pre-flight. Decision 7 and the
+never-remove/never-downgrade/never-pin rule are what make it acceptable.</p>
+<p><strong>Keeping the family recordings and adding screenshots alongside.</strong> Rejected:
+the recordings’ content is setup’s, so keeping them means nine copies of the
+quick start’s recording filed under ten families.</p>
+<p><strong>Capturing family screenshots from real runs.</strong> Rejected: it is the capture
+session this work exists to retire, and every shot is re-captured whenever
+output moves. The nine placeholders that never became recordings are the
+evidence.</p>
+<h2 id="risks">Risks</h2>
+<p><strong>A committed lock can direct the pre-flight to install from an arbitrary
+marketplace.</strong> This is the significant one. A repository the user merely opened
+could carry a lock naming an attacker’s marketplace, and an auto-installing
+pre-flight would add it. Decision 7 is the mitigation: auto-install runs only
+for <code>url: apache/magpie</code>; anything else is reported and confirmed explicitly.
+The floor’s plugin list is likewise honoured only for plugins from that
+marketplace.</p>
+<p><strong>“Automatic” still ends in a restart.</strong> Claude Code loads plugins at session
+start, so the pre-flight can install the right version but cannot use it this
+turn. The message says so plainly rather than implying the retry will work in
+the same session.</p>
+<p><strong>Authored screenshots can drift from real output.</strong> The checker can prove a
+<code>.svg</code> matches its <code>.txt</code>; it cannot prove the <code>.txt</code> matches what the skill
+prints today. Genuine, unclosed, and accepted — see
+<a href="#the-half-of-a-captures-guarantee-that-survives">the half of a capture’s guarantee that survives</a>.</p>
+<p><strong>Sixty-five regenerated pre-flight blocks in one change.</strong> The block grew by
+roughly a dozen lines and every copy moved with it. Mitigated by the existing
+generation-and-check tooling, which fails the build on drift between
+<code>preflight-block.md</code> and its copies.</p>
+</article></main><aside class="hidden xl:block w-60 flex-none border-l border-solid border-neutral-200 bg-default-background sticky top-0 h-screen overflow-y-auto px-5 py-12"><div class="mb-3 text-caption font-caption uppercase tracking-wider text-subtext-color">On this page</div><nav><ul class="flex flex-col gap-1.5"><li><a href="#what-was-wrong" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">What was wrong</a></li><li><a href="#decisions" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">Decisions</a></li><li><a href="#the-adoption-floor" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">The adoption floor</a></li><li><a href="#the-record" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The record</a></li><li><a href="#adopt-writes-it" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">adopt writes it</a></li><li><a href="#the-derived-wiring-and-its-merge-rules" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The derived wiring, and its merge rules</a></li><li><a href="#setup-arrives-pre-filled" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">setup arrives pre-filled</a></li><li><a href="#upgrade-splits-on-adoption" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">upgrade splits on adoption</a></li><li><a href="#the-pre-flight" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The pre-flight</a></li><li><a href="#the-surfaces-that-report-on-it" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The surfaces that report on it</a></li><li><a href="#installing-one-page-one-command-per-agent" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">Installing: one page, one command per agent</a></li><li><a href="#what-a-family-page-shows" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">What a family page shows</a></li><li><a href="#the-benefit-callout" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The benefit callout</a></li><li><a href="#the-screenshots" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The screenshots</a></li><li><a href="#the-half-of-a-captures-guarantee-that-survives" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">The half of a capture’s guarantee that survives</a></li><li><a href="#what-was-retired" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">What was retired</a></li><li><a href="#what-a-family-page-asks-you-to-configure" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">What a family page asks you to configure</a></li><li><a href="#companion-skill-packages" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0.75rem">Companion skill packages</a></li><li><a href="#where-the-build-departed-from-the-design" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">Where the build departed from the design</a></li><li><a href="#alternatives-considered" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">Alternatives considered</a></li><li><a href="#risks" class="block text-caption font-caption text-subtext-color hover:text-brand-700" style="padding-left: 0rem">Risks</a></li></ul></nav></aside></div><footer class="flex w-full flex-col items-center gap-6 border-t border-solid border-neutral-100 bg-default-background px-8 py-12 mobile:px-4 mobile:py-8"><div class="flex w-full flex-wrap items-start gap-8 max-w-[1100px]"><div class="flex min-w-[240px] flex-col items-start gap-4"><img class="h-10 flex-none object-contain" src="/wordmark.svg" alt="Apache Magpie"/><span class="text-caption font-caption text-subtext-color max-w-[260px]">An Apache Software Foundation Top Level Project<br/><br/>AI-powered assistance for open-source maintainers.</span><div class="flex items-center gap-2"><a href="https://github.com/apache/magpie" target="_blank" rel="noreferrer" aria-label="GitHub"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.79.56 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5Z"></path></svg></span></button></a><a href="https://twitter.com/TheASF" target="_blank" rel="noreferrer" aria-label="Twitter"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"></path></svg></span></button></a><a href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer" aria-label="Discord"><button class="group flex h-8 w-8 cursor-pointer items-center justify-center gap-2 rounded-md border-none bg-transparent text-left hover:bg-neutral-100 active:bg-neutral-50 disabled:cursor-default disabled:bg-neutral-100" type="button"><span class="inline-flex items-center [&amp;_svg]:size-4 font-heading-3 text-neutral-700 group-disabled:text-neutral-400"><svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.198.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"></path></svg></span></button></a></div></div><div class="flex grow shrink-0 basis-0 flex-wrap items-start gap-8"><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Documentation</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/docs" target="_blank" rel="noreferrer">Documentation<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/architecture" target="_blank" rel="noreferrer">Architecture<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/tools" target="_blank" rel="noreferrer">Tools<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Project</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/downloads">Downloads</a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="/brand">Brand assets</a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Roadmap<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer">Changelog<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[130px]"><span class="text-body-bold font-body-bold text-default-font">Community</span><div class="flex flex-col items-start gap-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Contributing<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer">Mailing Lists<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer">Discord<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer">Issue Tracker<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://github.com/apache/magpie-site/issues/new" target="_blank" rel="noreferrer">Report a site issue<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div><div class="flex grow shrink-0 basis-0 flex-col items-start gap-3 min-w-[200px]"><span class="text-body-bold font-body-bold text-default-font">Foundation</span><div class="grid grid-cols-[auto_auto] justify-start gap-x-8 gap-y-3"><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/" target="_blank" rel="noreferrer">Apache Home<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer">License<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer">Events<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer">Sponsorship<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer">Thanks<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://www.apache.org/security/" target="_blank" rel="noreferrer">Security<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="inline-flex items-center gap-1 whitespace-nowrap text-body font-body text-subtext-color hover:text-brand-600" href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer">Privacy<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right size-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></div></div></div><div class="flex w-full flex-col items-center gap-3 border-t border-solid border-neutral-100 pt-6 max-w-[1100px]"><span class="text-caption font-caption text-subtext-color text-center">Copyright © 2026 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.</span><span class="text-caption font-caption text-subtext-color text-center max-w-[860px]">Apache Magpie, Magpie, and Apache are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries. All other marks mentioned may be trademarks or registered trademarks of their respective owners.</span></div></footer><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/designs/2026-09-13-install-adopt-upgrade.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a></body></html>
