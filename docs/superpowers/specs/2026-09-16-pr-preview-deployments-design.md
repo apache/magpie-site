@@ -8,6 +8,10 @@ Previews are opt-in per PR: a maintainer comments `/show-preview`, and from then
 on the PR's preview tracks its head commit until the PR closes. A scheduled
 workflow does the publishing; nothing privileged ever runs pull-request code.
 
+A preview is also reviewable in place: a reviewer can point at any element on the
+rendered page and write a comment against it, and land that comment on the source
+line it came from. That half is specified in [Reviewing in place](#reviewing-in-place).
+
 ## What was verified
 
 The ASF publishing framework was probed directly on 2026-09-16 before this
@@ -78,8 +82,9 @@ Two workflows, one of them already exists.
 
 ### `build.yml` — unprivileged, unchanged in spirit
 
-Already runs `npm ci` and `npm run build` on every `pull_request`. It gains one
-step: on pull-request events, upload `dist/` together with a small
+Already runs `npm ci` and `npm run build` on every `pull_request`. It gains two
+things: the build runs with `MAGPIE_PREVIEW_ANNOTATE=1` so elements carry their
+source location, and `dist/` is uploaded together with a small
 `preview-meta.json` recording the PR number and the head SHA it was built from.
 
 This job runs the pull request's code — `npm ci` alone executes install scripts
@@ -133,6 +138,10 @@ run for that PR's current head SHA and download its artifact. Then:
   `profile: pr<N>`, `whoami: preview/pr<N>-staging`.
 - Add `robots.txt` with `Disallow: /`, so previews never compete with
   `magpie.apache.org` in search results.
+- Inject the reviewing overlay: write `_preview/review.js` and
+  `_preview/anchors.json` (computed from the PR diff), and add the one-line
+  `<script>` tag to each HTML file. Injecting here rather than in the build is
+  what keeps the tool outside the pull request's reach.
 - Force-push the result to `preview/pr<N>-staging`.
 - Upsert a single status comment on the PR — edited in place, not appended —
   carrying the preview URL and the SHA it was built from.
@@ -174,6 +183,99 @@ and immediately reap the preview a maintainer had just asked for. Arming through
 the marker keeps one rule — *armed means a maintainer said so, in a comment* —
 with `/show-preview` and manual dispatch as two ways of saying it.
 
+## Reviewing in place
+
+Looking at a preview and then describing the problem in words — *"the third card
+in the community row, the button under it"* — is the slow part of reviewing a
+site change. The preview should let a reviewer point instead.
+
+### The constraint that shapes it
+
+A preview is static files on ASF staging with no backend, and **the page renders
+the pull request's own code**. Both halves matter. There is nowhere to run a
+receiver, and no credential may ever exist on that page: a token in
+`localStorage` — a PAT, an OAuth result, anything — is readable by whatever the
+pull request chose to ship. A design where the reviewer authenticates to post
+comments directly is a design that hands a maintainer's token to the author of a
+hostile PR. So nothing on the preview page ever authenticates, and the comment
+reaches GitHub through the reviewer's own browser session.
+
+### Build-time source annotation
+
+A Vite plugin, active only when `MAGPIE_PREVIEW_ANNOTATE=1`, stamps rendered
+elements with `data-magpie-src="<repo-relative path>:<line>"`. `build.yml` sets
+it for the artifact that feeds previews; the `publish` build never does, so
+`magpie.apache.org` is byte-identical to what it is today.
+
+This is the one place previews deliberately differ from production. The
+difference is additive — extra attributes, no changed markup or styles — and is
+asserted by a check that the published build contains no `data-magpie-src`.
+
+### The overlay
+
+The publisher injects `_preview/review.js` and a one-line `<script>` tag into
+each HTML file after downloading the artifact, rather than the build including
+it. That keeps the reviewing tool out of the pull request's reach: a PR cannot
+edit, disable or impersonate it by changing its own source. The script holds no
+secrets, so running in the same origin as untrusted code costs nothing.
+
+It is off until asked for — a floating button, or `c` — because a review tool
+that overlays the thing being reviewed is worse than useless. When armed:
+
+- Hovering outlines the nearest ancestor carrying `data-magpie-src`; clicking
+  selects it. A text selection resolves the same way, from its anchor node.
+- A composer opens showing the resolved `file:line` and the selected text, with
+  a textarea for the comment.
+- Escape exits; the picker is keyboard-navigable, since a reviewer checking
+  keyboard access should not have to leave the tool to do it.
+
+### What it produces
+
+On submit the overlay composes one markdown block, copies it with
+`navigator.clipboard.writeText` (a secure context and a user gesture, both
+satisfied), and opens the PR at the matching location:
+
+```markdown
+**Preview feedback** — `src/components/landing/SiteFooter.tsx:72`
+
+> Discord
+
+The invite should open in a new tab like the other footer links.
+
+<sub>from magpie-pr176.staged.apache.org @ 834cad5</sub>
+```
+
+The reviewer pastes and submits. One paste per comment is the price of never
+holding a credential, and it keeps the comment attributable to the reviewer
+rather than to a bot speaking for them.
+
+### Landing it in the right place
+
+The publisher knows the diff — it has API access and the PR number — so it
+writes `_preview/anchors.json` beside the site: for each changed file, its diff
+anchor and the line ranges the diff actually touches.
+
+- **Source line inside the diff** → open the Files tab anchored at that line, so
+  the paste target is the inline comment box on the very line the element came
+  from.
+- **Source line outside the diff** (an unchanged component rendering changed
+  content) → open the Conversation tab. The pasted block still names `file:line`,
+  so the comment is precise even where GitHub has no line to anchor to.
+
+The anchor format GitHub uses for diff lines is not contractual and has changed
+before. `anchors.json` is generated in one place for exactly this reason: if the
+format moves, one function changes. **To verify before implementation:** the
+current anchor shape, against a real PR on this repository.
+
+### Failure handling
+
+| Situation | Behaviour |
+|---|---|
+| Element has no annotated ancestor | Falls back to the page URL plus a CSS path; the comment is still useful, just less precise |
+| Clipboard write refused | Composer keeps the block on screen and selected, with a "copy failed — select and copy" note |
+| `anchors.json` missing or stale | Overlay degrades to opening the Conversation tab |
+| Reviewer has no GitHub session | GitHub's own sign-in handles it; the clipboard already holds the comment |
+
 ## Why polling rather than events
 
 `issue_comment` would arm a PR the moment the comment lands, and `workflow_run`
@@ -205,6 +307,13 @@ The validation logic — metadata checks, comment matching, armed-set resolution
 goes in a script under `scripts/` with unit tests, not inline in YAML, so it can
 be tested without pushing workflows. Test-driven: the anchored comment match, the
 digits-only PR number, and the SHA-equality check each get a failing test first.
+
+The reviewing overlay has two testable seams, both pure functions: composing the
+markdown block from a selection, and resolving a `file:line` against
+`anchors.json` to a URL. Both get unit tests, including the outside-the-diff
+fallback. A build check asserts that a production build contains no
+`data-magpie-src` — the one regression that would leak preview-only markup to
+`magpie.apache.org`.
 
 End-to-end verification uses a throwaway PR against the repository: comment
 `/show-preview`, confirm the branch appears and the URL serves within a few
