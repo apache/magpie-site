@@ -6,6 +6,7 @@ import { SiteFooter } from "../components/landing/SiteFooter";
 import DocsNavTree from "../components/docs/DocsNavTree.astro";
 import type { TreeNode } from "../components/docs/DocsNavTree.astro";
 import toolsData from "../data/tools.json";
+import { HIDDEN_DOCS } from "../lib/site";
 
 interface Props {
   title?: string;
@@ -33,15 +34,8 @@ const toc = (allHeadings[0]?.depth === 1 ? allHeadings.slice(1) : allHeadings)
 // nests the same way an H2/H3 one does.
 const tocBase = Math.min(...toc.map((h) => h.depth), 6);
 
-// Internal governance drafts that should not appear on the public site.
-// "index" is docs/index.md ("What is Apache Magpie?"). The /docs landing page
-// now covers that ground, so it is left out of the navigation — the route is
-// still built, because synced docs and the /docs body link to it.
-const HIDDEN_DOCS = new Set([
-  "board-resolution-draft",
-  // docs/index.md ("What is Apache Magpie?") — the /docs landing page covers
-  // this ground.
-  "index",
+const HIDDEN_NAV_DOCS = new Set([
+  ...HIDDEN_DOCS,
   // docs/quick-start/README.md — an index of the pages the sidebar already
   // lists, and quick-start.md is the section's overview. It earns its keep on
   // GitHub, where browsing the folder shows it; both keep their routes.
@@ -190,9 +184,8 @@ const pageRank = (groupKey: string, slug: string, overviewBody?: string) => {
   if (seg === "index" || seg === "readme" || slug === groupKey ||
       SECTION_LANDING_PAGES.get(seg) === groupKey) return -1;
   const i = (PAGE_ORDER[groupKey] ?? []).indexOf(seg);
-  // _root's overview is docs/index.md — a landing page whose links follow its
-  // prose rather than a reading order, so the curated list wins there. Every
-  // other section still tracks its own README's table of contents.
+  // Synthetic sections use the curated order; other sections track their
+  // own README's table of contents.
   if (groupKey.startsWith("_") && i !== -1) return i;
   const off = overviewOrder(overviewBody, slug);
   if (off >= 0) return off; // README reading order (offsets are well under 1e6)
@@ -201,7 +194,7 @@ const pageRank = (groupKey: string, slug: string, overviewBody?: string) => {
 };
 
 const all = (await getCollection("docs")).filter(
-  (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
+  (entry) => !HIDDEN_NAV_DOCS.has(entry.id.replace(/\.md$/, "")),
 );
 
 type NavItem = { slug: string; label: string; rank: number; raw?: boolean; overview?: boolean };
