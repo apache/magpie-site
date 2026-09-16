@@ -219,3 +219,33 @@ const howtoBody = (pr) =>
   `commenting \`/show-preview\` on its own line. It will appear at ${previewUrl(pr)} ` +
   `and then track this PR's head commit until it closes.\n\nStaging takes a few minutes ` +
   `to pick up each push.`;
+
+import { createClient } from "./github.mjs";
+import { createGit } from "./git.mjs";
+import { createArtifactFetcher } from "./artifact.mjs";
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const repo = process.env.GITHUB_REPOSITORY;
+  const token = process.env.GITHUB_TOKEN;
+  if (!repo || !token) {
+    console.error("GITHUB_REPOSITORY and GITHUB_TOKEN are required");
+    process.exit(1);
+  }
+
+  const prArg = process.argv.indexOf("--pr");
+  const only = prArg === -1 ? null : Number(process.argv[prArg + 1]);
+  if (prArg !== -1 && !Number.isInteger(only)) {
+    console.error("--pr requires an integer");
+    process.exit(1);
+  }
+
+  const gh = createClient({ repo, token });
+  await run({
+    gh,
+    git: createGit({ repo, token }),
+    repo,
+    fetchArtifact: createArtifactFetcher({ gh, repo, token }),
+    only,
+    dispatchedBy: process.env.GITHUB_ACTOR ?? null,
+  });
+}
