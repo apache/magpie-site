@@ -20,12 +20,29 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
     return res.json();
   }
 
+  /**
+   * Follows pages until a short page arrives. An incomplete read here is not
+   * cosmetic: a /show-preview comment missed on page 2 makes a PR look unarmed,
+   * and an unarmed PR with a live preview gets tombstoned.
+   */
+  async function paginate(path) {
+    const out = [];
+    for (let page = 1; ; page += 1) {
+      const sep = path.includes("?") ? "&" : "?";
+      const batch = await request(`${path}${sep}per_page=100&page=${page}`);
+      if (!Array.isArray(batch) || batch.length === 0) break;
+      out.push(...batch);
+      if (batch.length < 100) break;
+    }
+    return out;
+  }
+
   return {
     request,
 
-    listOpenPulls: () => request(`/repos/${repo}/pulls?state=open&per_page=100`),
+    listOpenPulls: () => paginate(`/repos/${repo}/pulls?state=open`),
     getPull: (n) => request(`/repos/${repo}/pulls/${n}`),
-    listComments: (n) => request(`/repos/${repo}/issues/${n}/comments?per_page=100`),
+    listComments: (n) => paginate(`/repos/${repo}/issues/${n}/comments`),
 
     async hasWriteAccess(login) {
       try {
@@ -38,9 +55,19 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
     },
 
     async upsertComment(n, marker, body) {
-      const withMarker = `${body}\n\n<!-- ${marker} -->`;
-      const existing = (await request(`/repos/${repo}/issues/${n}/comments?per_page=100`))
-        .find((c) => typeof c.body === "string" && c.body.includes(`<!-- ${marker} -->`));
+      // Two conditions, both required. The marker must be the exact trailing
+      // HTML comment — a substring test lets anyone plant it — and the author
+      // must be a Bot, so a human comment can never be PATCHed out from under
+      // its author while still showing their name.
+      const tag = `<!-- ${marker} -->`;
+      const withMarker = `${body}\n\n${tag}`;
+
+      const existing = (await paginate(`/repos/${repo}/issues/${n}/comments`)).find(
+        (c) =>
+          c?.user?.type === "Bot" &&
+          typeof c.body === "string" &&
+          c.body.trimEnd().endsWith(tag),
+      );
 
       if (existing) {
         return request(`/repos/${repo}/issues/comments/${existing.id}`, {
@@ -55,7 +82,7 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
     },
 
     async listPreviewBranches() {
-      const refs = await request(`/repos/${repo}/git/matching-refs/heads/preview/`);
+      const refs = await paginate(`/repos/${repo}/git/matching-refs/heads/preview/`);
       return refs.map((r) => r.ref.replace("refs/heads/", ""));
     },
 
