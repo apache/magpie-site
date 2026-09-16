@@ -87,13 +87,24 @@ test("strips a .git directory nested below the root", async () => {
   assert.equal(await readFile(join(dir, "sub", "page.html"), "utf8"), "<h1>kept</h1>");
 });
 
-test("redactError scrubs the token from cmd as well as message", () => {
-  const err = Object.assign(new Error("Command failed: git push https://x-access-token:SEKRET@h/r"), {
-    cmd: "git push https://x-access-token:SEKRET@h/r",
-    stderr: "fatal: unable to access 'https://x-access-token:SEKRET@h/r'",
+test("redactError scrubs the token from every field that can carry argv", () => {
+  const remote = "https://x-access-token:SEKRET@h/r";
+  const err = Object.assign(new Error(`Command failed: git push ${remote}`), {
+    cmd: `git push ${remote}`,
+    stderr: `fatal: unable to access '${remote}'`,
+    path: "git",
+    spawnargs: ["push", "-f", remote, "preview/pr5-staging"],
   });
+
   redactError(err, "SEKRET");
+
   for (const f of ["message", "cmd", "stderr"]) {
     assert.equal(String(err[f]).includes("SEKRET"), false, `${f} must not carry the token`);
   }
+  assert.equal(
+    err.spawnargs.some((a) => String(a).includes("SEKRET")),
+    false,
+    "spawnargs must not carry the token",
+  );
+  assert.deepEqual(err.spawnargs.length, 4, "redaction must not drop arguments");
 });

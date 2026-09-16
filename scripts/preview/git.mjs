@@ -19,10 +19,18 @@ export function redactToken(text, token) {
   return String(text ?? "").replaceAll(token, "***");
 }
 
-/** Strip a token from every field of an execFile rejection that can reach a log. */
+/**
+ * Strip a token from every field of a child-process rejection that can reach a
+ * log. `spawnargs` is an ARRAY of raw arguments, and a spawn-level failure
+ * (ENOENT and friends) populates it with the tokenised remote URL — so a string
+ * sweep over the scalar fields is not enough on its own.
+ */
 export function redactError(err, token) {
-  for (const field of ["message", "stderr", "stdout", "cmd"]) {
+  for (const field of ["message", "stderr", "stdout", "cmd", "path"]) {
     if (err?.[field]) err[field] = redactToken(err[field], token);
+  }
+  if (Array.isArray(err?.spawnargs)) {
+    err.spawnargs = err.spawnargs.map((arg) => redactToken(arg, token));
   }
   return err;
 }
