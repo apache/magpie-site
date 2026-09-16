@@ -67,3 +67,16 @@ test("ignores branches that are not preview refs", () => {
   assert.deepEqual(result.tombstone, []);
   assert.deepEqual(result.delete, []);
 });
+
+test("leaves a preview alone when the PR's armed state is unknown", () => {
+  // No entry for 5 at all — what an unresolved or errored lookup looks like.
+  const result = planActions({
+    openPulls: [5],
+    armedByPr: new Map(),
+    previewBranches: ["preview/pr5-staging"],
+    tombstoned: new Set(),
+  });
+  assert.deepEqual(result.tombstone, [], "unknown must not tombstone a live preview");
+  assert.deepEqual(result.delete, []);
+  assert.deepEqual(result.publish, []);
+});

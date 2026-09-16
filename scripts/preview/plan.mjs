@@ -19,6 +19,11 @@ export function planActions({ openPulls, armedByPr, previewBranches, tombstoned 
     if (!match) continue;
 
     const pr = Number(match[1]);
+    // An open PR whose armed state was never resolved is UNKNOWN, not disarmed.
+    // Retiring overwrites live content, so missing data must never be more
+    // dangerous than an explicit `false`: leave the branch alone this run and
+    // let a later run decide once the state is known.
+    if (open.has(pr) && !armedByPr.has(pr)) continue;
     const retired = !open.has(pr) || armedByPr.get(pr) !== true;
     if (!retired) continue;
 
