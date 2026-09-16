@@ -22,6 +22,10 @@ const base = process.env.SITE_BASE ?? '/';
 // Note: /tools is now a real page (the tools browser, src/pages/tools.astro), so
 // it is no longer redirected to /architecture.
 const redirects = {
+  // The documentation landing page replaces the redundant framework overview.
+  "/docs/index": "/docs",
+  "/docs/index.md": "/docs",
+  "/skills/index": "/docs",
   "/skills": "/docs",
   "/skills/[...slug]": "/docs/[...slug]",
 };

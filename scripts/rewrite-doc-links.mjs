@@ -43,6 +43,8 @@ function rewriteTarget(target, currentDir) {
       .slice("docs/".length)
       .replace(/\.md$/i, "")
       .toLowerCase();
+    // The retired overview's headings do not exist on the docs landing page.
+    if (slug === "index") return `${base}/docs`;
     return `${base}/docs/${slug}${hash}`;
   }
   // Has a file extension (foo.md, bar.toml, baz.sh) → blob; otherwise a
