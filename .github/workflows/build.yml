@@ -91,6 +91,10 @@ jobs:
           name: preview-site
           path: dist
           retention-days: 30
+          # dist/.htaccess is a dotfile and carries the site's 404 handler and
+          # the text/markdown headers for llms.txt. Without this it is silently
+          # dropped on the round-trip through the artifact.
+          include-hidden-files: true
 
       - name: Upload site artifact
         if: github.ref == 'refs/heads/main'
@@ -99,6 +103,10 @@ jobs:
           name: site
           path: dist
           retention-days: 1
+          # dist/.htaccess is a dotfile and carries the site's 404 handler and
+          # the text/markdown headers for llms.txt. Without this it is silently
+          # dropped on the round-trip through the artifact.
+          include-hidden-files: true
 
   deploy:
     needs: build
