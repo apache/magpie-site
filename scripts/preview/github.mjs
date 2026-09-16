@@ -98,5 +98,15 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
 
     artifactZipUrl: (artifactId) =>
       `${API}/repos/${repo}/actions/artifacts/${artifactId}/zip`,
+
+    async branchHeadMessage(branch) {
+      try {
+        const commit = await request(`/repos/${repo}/commits/${encodeURIComponent(branch)}`);
+        return commit?.commit?.message ?? "";
+      } catch (e) {
+        if (e.status === 404) return "";
+        throw e;
+      }
+    },
   };
 }

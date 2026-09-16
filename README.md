@@ -136,6 +136,10 @@ rather than disappearing, because deleting the branch does not unstage the
 site — the branch is only deleted (as a separate, later step) once the notice
 is live.
 
+To turn a preview off before the PR closes, delete the `/show-preview`
+comment (and, if the preview was started by manual dispatch, also delete the
+bot's arming comment); the next scheduled run retires it.
+
 ## Agent-assisted contribution (apache-magpie)
 
 This repo adopts the

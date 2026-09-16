@@ -20,11 +20,12 @@ const TOMBSTONE_TAG = "[tombstone]";
  * The same predicate github.mjs uses before editing a comment, and for the same
  * reason: a bare substring test lets anyone who can comment plant the marker.
  */
-function hasBotMarker(comments, marker) {
+function hasBotMarker(comments, marker, { login = null } = {}) {
   const tag = `<!-- ${marker} -->`;
   return comments.some(
     (c) =>
       c?.user?.type === "Bot" &&
+      (login === null || c?.user?.login === login) &&
       typeof c.body === "string" &&
       c.body.trimEnd().endsWith(tag),
   );
@@ -38,6 +39,8 @@ export async function run({
   only = null,
   dispatchedBy = null,
 }) {
+  let failures = 0;
+
   const openPulls = await gh.listOpenPulls();
 
   // A dispatch naming a closed, merged or nonexistent PR must fail loudly, not
@@ -61,7 +64,10 @@ export async function run({
       // A manual dispatch leaves a durable, bot-authored arming record. Without
       // it a dispatched preview reads as unarmed on the next scheduled run and
       // is tombstoned within one cron interval.
-      armedByPr.set(pull.number, armed || hasBotMarker(comments, ARMED_MARKER));
+      armedByPr.set(
+        pull.number,
+        armed || hasBotMarker(comments, ARMED_MARKER, { login: "github-actions[bot]" }),
+      );
 
       if (!hasBotMarker(comments, HOWTO_MARKER)) {
         await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number));
@@ -71,6 +77,7 @@ export async function run({
       // whole reap. The PR is left with no armedByPr entry, which planActions
       // treats as unknown and leaves alone.
       console.error(`preview: skipping #${pull.number}: ${err.message}`);
+      failures += 1;
     }
   }
 
@@ -86,13 +93,14 @@ export async function run({
   const tombstoned = new Set();
   for (const branch of previewBranches) {
     try {
-      const message = await git.headMessage(branch);
+      const message = await gh.branchHeadMessage(branch);
       if (message.includes(TOMBSTONE_TAG)) tombstoned.add(branch);
     } catch (err) {
       // Treat an unreadable head as un-tombstoned. Re-pushing a tombstone is
       // idempotent; deleting a branch we could not inspect is not recoverable,
       // because deleting a branch does not unstage the site.
       console.error(`preview: could not read ${branch} head: ${err.message}`);
+      failures += 1;
     }
   }
 
@@ -114,6 +122,7 @@ export async function run({
       }
     } catch (err) {
       console.error(`preview: publish failed for #${pr}: ${err.message}`);
+      failures += 1;
     }
   }
 
@@ -131,6 +140,7 @@ export async function run({
       await gh.upsertComment(pr, MARKER, retiredBody(pr));
     } catch (err) {
       console.error(`preview: tombstone failed for #${pr}: ${err.message}`);
+      failures += 1;
     }
   }
 
@@ -139,7 +149,13 @@ export async function run({
       await gh.deleteBranch(branch);
     } catch (err) {
       console.error(`preview: delete failed for ${branch}: ${err.message}`);
+      failures += 1;
     }
+  }
+
+  if (failures > 0) {
+    console.error(`preview: ${failures} operation(s) failed this run`);
+    process.exitCode = 1;
   }
 }
 
@@ -209,7 +225,7 @@ const waitingBody = (pr, sha) =>
   `The preview publishes on the next run after the build goes green.`;
 
 const refusedBody = (pr, reason) =>
-  `### Preview could not be published\n\nThe build artifact was refused: ${reason}`;
+  `### Preview could not be published\n\nThe build artifact was refused: ${String(reason).slice(0, 200)}`;
 
 const retiredBody = (pr) =>
   `### Preview retired\n\nThe preview for this pull request is no longer published. ` +

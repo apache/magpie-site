@@ -101,7 +101,10 @@ export function createArtifactFetcher({ gh, repo, token, fetchImpl = fetch }) {
         throw new Error("archive contains symlink members");
       }
       const total = uncompressedBytes(longListing);
-      if (total !== null && total > MAX_UNCOMPRESSED_BYTES) {
+      if (total === null) {
+        throw new Error("could not read the archive's uncompressed size");
+      }
+      if (total > MAX_UNCOMPRESSED_BYTES) {
         throw new Error(`archive expands to ${total} bytes, over the ${MAX_UNCOMPRESSED_BYTES} cap`);
       }
 

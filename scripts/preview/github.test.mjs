@@ -85,6 +85,27 @@ test("upsertComment never edits a human comment that contains the marker", async
   );
 });
 
+test("branchHeadMessage returns the commit message for a found branch", async () => {
+  const { impl } = fakeFetch({
+    "GET /repos/apache/magpie-site/commits/preview%2Fpr9-staging": {
+      commit: { message: "Retire preview for #9 [tombstone]" },
+    },
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+
+  assert.equal(
+    await gh.branchHeadMessage("preview/pr9-staging"),
+    "Retire preview for #9 [tombstone]",
+  );
+});
+
+test("branchHeadMessage returns empty string for a branch that does not exist", async () => {
+  const impl = async () => ({ ok: false, status: 404, json: async () => ({}), text: async () => "" });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+
+  assert.equal(await gh.branchHeadMessage("preview/pr9-staging"), "");
+});
+
 test("upsertComment edits the bot's own marked comment in place", async () => {
   const mine = { id: 9, user: { type: "Bot" }, body: "old\n\n<!-- magpie-preview-status -->" };
   const { impl, calls } = fakeFetch({

@@ -26,7 +26,7 @@ export function redactToken(text, token) {
  * sweep over the scalar fields is not enough on its own.
  */
 export function redactError(err, token) {
-  for (const field of ["message", "stderr", "stdout", "cmd", "path"]) {
+  for (const field of ["message", "stderr", "stdout", "cmd", "path", "stack"]) {
     if (err?.[field]) err[field] = redactToken(err[field], token);
   }
   if (Array.isArray(err?.spawnargs)) {
@@ -99,30 +99,13 @@ export function createGit({ repo, token }) {
   }
 
   return {
-    async headMessage(branch) {
-      const dir = await mkdtemp(join(tmpdir(), "preview-head-"));
-      try {
-        const { stdout } = await git(["ls-remote", remote, `refs/heads/${branch}`]);
-        if (!stdout.trim()) return "";
-
-        await git(["init", "-q", dir]);
-        await git(["-C", dir, ...SAFE, "fetch", "-q", "--depth", "1", remote, branch]);
-        const { stdout: msg } = await git(["-C", dir, "log", "-1", "--format=%s", "FETCH_HEAD"]);
-        return msg.trim();
-      } catch {
-        return "";
-      } finally {
-        await rm(dir, { recursive: true, force: true });
-      }
-    },
-
     /** Force-push an orphan commit containing contentDir plus generated files. */
     async pushTree(branch, files, message, contentDir = null) {
       const dir = await mkdtemp(join(tmpdir(), "preview-push-"));
       try {
         await prepareTree({ dir, files, contentDir });
 
-        await git(["init", "-q", dir]);
+        await git([...SAFE, "init", "-q", dir]);
         await git(["-C", dir, ...SAFE, "checkout", "-q", "-b", branch]);
         await git(["-C", dir, "config", "user.name", "github-actions[bot]"]);
         await git(["-C", dir, "config", "user.email", "github-actions[bot]@users.noreply.github.com"]);

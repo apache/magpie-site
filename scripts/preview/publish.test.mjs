@@ -15,7 +15,7 @@ async function artifactDir({ withSymlink = false } = {}) {
   return dir;
 }
 
-const bot = (body) => ({ user: { type: "Bot" }, body });
+const bot = (body, login = "github-actions[bot]") => ({ user: { type: "Bot", login }, body });
 const human = (body, login = "drive-by") => ({ user: { type: "User", login }, body });
 const armCmd = (login = "maintainer") => ({ user: { type: "User", login }, body: "/show-preview" });
 
@@ -46,13 +46,13 @@ function fakes({
       deleted.push(name);
     },
     latestSuccessfulBuild: async () => (hasBuild ? { id: 1 } : null),
+    branchHeadMessage: async (branch) => headMessages[branch] ?? "",
   };
 
   const git = {
     pushTree: async (branch, files, message, contentDir) => {
       pushed.push({ branch, files, message, contentDir });
     },
-    headMessage: async (branch) => headMessages[branch] ?? "",
   };
 
   return { gh, git, pushed, deleted, posted };
@@ -237,7 +237,7 @@ test("one PR's failure does not abort the reap", async () => {
 
 test("a branch whose head cannot be read is tombstoned, never deleted", async () => {
   const f = fakes({ openPulls: [], branches: ["preview/pr9-staging"] });
-  f.git.headMessage = async () => {
+  f.gh.branchHeadMessage = async () => {
     throw new Error("unreadable");
   };
 
@@ -248,4 +248,40 @@ test("a branch whose head cannot be read is tombstoned, never deleted", async ()
     "an unreadable head must still be tombstoned",
   );
   assert.deepEqual(f.deleted, [], "must not delete a branch it could not inspect");
+});
+
+test("an arming marker from a different bot login does not arm the PR", async () => {
+  // ARMED_MARKER is an authorisation signal, not just an announcement: gating
+  // on `user.type === "Bot"` alone lets any GitHub App installed on the repo
+  // plant the tag and self-arm a PR.
+  const f = fakes({
+    openPulls: [pull(5)],
+    comments: {
+      5: [{ user: { type: "Bot", login: "other-app[bot]" }, body: "armed\n\n<!-- magpie-preview-armed -->" }],
+    },
+  });
+  let fetched = 0;
+
+  await go(f, {
+    fetchArtifact: async () => {
+      fetched += 1;
+      return null;
+    },
+  });
+
+  assert.equal(fetched, 0, "an arming marker from another bot must not arm the PR");
+  assert.equal(f.pushed.length, 0);
+});
+
+test("a run with a persistently failing operation reports failure via the exit code", async () => {
+  // The publisher runs unattended on a schedule; catching and logging every
+  // error without ever failing the process lets a permanently broken
+  // publisher report success forever.
+  const f = fakes({ openPulls: [pull(5)], throwFor: [5] });
+
+  process.exitCode = 0;
+  await go(f);
+
+  assert.equal(process.exitCode, 1, "a run with a failed operation must set a nonzero exit code");
+  process.exitCode = 0;
 });
