@@ -40,8 +40,12 @@ name: "Publish PR previews"
 
 permissions:
   contents: write # push, force-push and delete preview/* branches
-  issues: write # the PR comments below are issue-comment endpoints
-  pull-requests: read # listing open PRs and reading their head SHAs
+  # Commenting on a PULL REQUEST needs pull-requests: write, even though the
+  # endpoint is /issues/{n}/comments. issues: write covers issues only — with
+  # it alone every comment 403s, which is exactly what happened on the first
+  # scheduled run (actions/runs/35148520846).
+  pull-requests: write # list open PRs, read head SHAs, and post PR comments
+  issues: write # the same endpoints when the target is a real issue
   actions: read # list and download build.yml's artifacts
 
 concurrency:
