@@ -22,6 +22,25 @@ github:
   features:
     issues: true
 
+  # Branch protection for main. Only checks that run on EVERY pull request may
+  # be listed here: a required context whose workflow does not trigger is never
+  # reported, and the pull request blocks forever with nothing to re-run.
+  #
+  # Deliberately NOT required:
+  #   asf-allowlist-check - path-filtered to .github/**, so it is absent on any
+  #                         pull request that does not touch a workflow.
+  #   deploy              - gated to refs/heads/main; never runs on a PR.
+  #   publish             - schedule / workflow_dispatch only (PR previews).
+  protected_branches:
+    main:
+      required_status_checks:
+        # Not strict: main moves quickly, and requiring every branch to be
+        # up to date would mean rebasing each PR whenever anything merges.
+        strict: false
+        contexts:
+          - lint
+          - build
+
 notifications:
   commits: commits@magpie.apache.org
   issues: commits@magpie.apache.org
