@@ -165,6 +165,24 @@ Adopter-specific modifications to framework-skill workflows live in
 snapshot directly. Framework changes go via PR to
 [`apache/magpie`](https://github.com/apache/magpie).
 
+## Design documents
+
+Design documents live in [`docs/designs/`](docs/designs/), matching
+`apache/magpie`'s own convention — the site serves them under `/docs/designs/`.
+
+When working with the **superpowers** skills, their default locations do not
+apply in this repository:
+
+- A design produced by `brainstorming` goes in `docs/designs/`, **not**
+  `docs/superpowers/specs/`.
+- Implementation plans and the subagent execution ledger stay out of the
+  repository: `docs/superpowers/` and `.superpowers/` are gitignored agent
+  scratch.
+
+The distinction is what a future maintainer needs. A design explains why the
+code is shaped the way it is and belongs in review alongside it; a plan and a
+ledger are working state for one run, and go stale the moment it ends.
+
 ## References
 
 - Framework + conventions: https://github.com/apache/magpie (`AGENTS.md`)

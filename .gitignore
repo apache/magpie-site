@@ -37,6 +37,7 @@ CLAUDE.md
 **/settings.local.json
 **/scheduled_tasks.lock
 .apache-magpie/
+docs/superpowers/
 .subframe/
 
 # Magpie — gitignored snapshot of the framework, refreshed
