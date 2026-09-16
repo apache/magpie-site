@@ -35,3 +35,20 @@ test("the tombstone names the PR and links to it", () => {
   assert.match(html, /https:\/\/github\.com\/apache\/magpie-site\/pull\/176/);
   assert.match(html, /<meta name="robots" content="noindex">/);
 });
+
+test("refuses a pr value that would inject YAML", () => {
+  assert.throws(
+    () => renderAsfYaml("1\npublish:\n  whoami: evil"),
+    /digits only/,
+  );
+});
+
+test("refuses a missing or non-numeric pr", () => {
+  assert.throws(() => previewBranch(undefined), /digits only/);
+  assert.throws(() => previewUrl("../../evil"), /digits only/);
+  assert.throws(() => renderTombstone({ pr: "x", repo: "apache/magpie-site" }), /digits only/);
+});
+
+test("still accepts a numeric string", () => {
+  assert.equal(previewBranch("176"), "preview/pr176-staging");
+});
