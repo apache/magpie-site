@@ -53,8 +53,12 @@ test("finds symlinks in an extracted tree", async () => {
 });
 
 test("flags a symlinked directory without walking into it", async () => {
+  // A symlink nested inside the target: if the walk wrongly descends through
+  // `escape`, this surfaces as "escape/nested-link" and the assertion fails.
+  // A regular file here would prove nothing, since only symlinks are ever
+  // reported.
   const outside = await mkdtemp(join(tmpdir(), "preview-outside-"));
-  await writeFile(join(outside, "secret.txt"), "should never be walked");
+  await symlink("/etc/passwd", join(outside, "nested-link"));
 
   const root = await mkdtemp(join(tmpdir(), "preview-"));
   await writeFile(join(root, "index.html"), "<h1>ok</h1>");
@@ -62,10 +66,6 @@ test("flags a symlinked directory without walking into it", async () => {
 
   const unsafe = await findUnsafeEntries(root);
   assert.deepEqual(unsafe, ["escape"]);
-  assert.ok(
-    !unsafe.some((p) => p.includes("secret.txt")),
-    "the walk must not descend through a symlinked directory",
-  );
 });
 
 test("reports nothing for a clean tree", async () => {
