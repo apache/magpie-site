@@ -79,8 +79,15 @@ export async function run({
   // overwrite it.
   const tombstoned = new Set();
   for (const branch of previewBranches) {
-    const message = await git.headMessage(branch);
-    if (message.includes(TOMBSTONE_TAG)) tombstoned.add(branch);
+    try {
+      const message = await git.headMessage(branch);
+      if (message.includes(TOMBSTONE_TAG)) tombstoned.add(branch);
+    } catch (err) {
+      // Treat an unreadable head as un-tombstoned. Re-pushing a tombstone is
+      // idempotent; deleting a branch we could not inspect is not recoverable,
+      // because deleting a branch does not unstage the site.
+      console.error(`preview: could not read ${branch} head: ${err.message}`);
+    }
   }
 
   const actions = planActions({

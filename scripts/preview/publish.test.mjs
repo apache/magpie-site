@@ -107,12 +107,22 @@ test("publishes an armed open PR", async () => {
 
 test("does not publish an unarmed PR", async () => {
   const f = fakes({ openPulls: [pull(5)], comments: { 5: [human("/show-preview")] } });
+  let fetched = 0;
+
   await go(f, {
     fetchArtifact: async () => {
-      throw new Error("must not fetch an artifact for an unarmed PR");
+      fetched += 1;
+      return null;
     },
   });
+
+  assert.equal(fetched, 0, "an unarmed PR must never have its artifact fetched");
   assert.equal(f.pushed.length, 0);
+  assert.equal(
+    f.posted.filter((p) => p.marker === "magpie-preview-status").length,
+    0,
+    "an unarmed PR must not get a status comment",
+  );
 });
 
 test("refuses an artifact whose metadata claims another PR", async () => {
@@ -223,4 +233,19 @@ test("one PR's failure does not abort the reap", async () => {
     f.pushed.some((p) => /tombstone/.test(p.message)),
     "a transient failure on one PR must not block teardown of unrelated previews",
   );
+});
+
+test("a branch whose head cannot be read is tombstoned, never deleted", async () => {
+  const f = fakes({ openPulls: [], branches: ["preview/pr9-staging"] });
+  f.git.headMessage = async () => {
+    throw new Error("unreadable");
+  };
+
+  await go(f);
+
+  assert.ok(
+    f.pushed.some((p) => /tombstone/.test(p.message)),
+    "an unreadable head must still be tombstoned",
+  );
+  assert.deepEqual(f.deleted, [], "must not delete a branch it could not inspect");
 });
