@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { unsafeArchiveEntries } from "./artifact.mjs";
+import { unsafeArchiveEntries, archiveHasSymlinkMembers, uncompressedBytes } from "./artifact.mjs";
 
 test("flags an absolute path entry", () => {
   assert.deepEqual(unsafeArchiveEntries("/etc/passwd"), ["/etc/passwd"]);
@@ -45,4 +45,34 @@ test("ignores blank lines between entries", () => {
 test("collects multiple unsafe entries from a mixed listing", () => {
   const listing = "index.html\n/etc/passwd\nassets/app.js\n../evil.html";
   assert.deepEqual(unsafeArchiveEntries(listing), ["/etc/passwd", "../evil.html"]);
+});
+
+test("detects a symlink member from the long listing", () => {
+  const listing = [
+    "Archive:  artifact.zip",
+    "-rw-r--r--  3.0 unx      123 tx defN 26-Sep-16 12:00 index.html",
+    "lrwxrwxrwx  3.0 unx        5 bx stor 26-Sep-16 12:00 a -> ../..",
+    "2 files, 128 bytes uncompressed, 64 bytes compressed:  50.0%",
+  ].join("\n");
+  assert.equal(archiveHasSymlinkMembers(listing), true);
+});
+
+test("a listing with no symlink members passes", () => {
+  const listing = [
+    "-rw-r--r--  3.0 unx      123 tx defN 26-Sep-16 12:00 index.html",
+    "-rw-r--r--  3.0 unx      456 tx defN 26-Sep-16 12:00 assets/app.js",
+    "2 files, 579 bytes uncompressed, 200 bytes compressed:  65.5%",
+  ].join("\n");
+  assert.equal(archiveHasSymlinkMembers(listing), false);
+  assert.equal(archiveHasSymlinkMembers(""), false);
+  assert.equal(archiveHasSymlinkMembers(null), false);
+});
+
+test("reads the uncompressed total", () => {
+  assert.equal(
+    uncompressedBytes("2 files, 579 bytes uncompressed, 200 bytes compressed:  65.5%"),
+    579,
+  );
+  assert.equal(uncompressedBytes("no totals here"), null);
+  assert.equal(uncompressedBytes(null), null);
 });

@@ -40,6 +40,12 @@ export async function run({
 }) {
   const openPulls = await gh.listOpenPulls();
 
+  // A dispatch naming a closed, merged or nonexistent PR must fail loudly, not
+  // silently succeed with nothing published.
+  if (only !== null && !openPulls.some((p) => p.number === only)) {
+    throw new Error(`--pr ${only} is not an open pull request`);
+  }
+
   // Armed state is resolved for EVERY open PR, even when publishing just one:
   // scoping this to the dispatched PR would leave every other preview looking
   // disarmed, and the reap step would tombstone all of them.
@@ -232,11 +238,37 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(1);
   }
 
-  const prArg = process.argv.indexOf("--pr");
-  const only = prArg === -1 ? null : Number(process.argv[prArg + 1]);
-  if (prArg !== -1 && !Number.isInteger(only)) {
-    console.error("--pr requires an integer");
+  // Strict parsing on purpose: `Number(...)` + `Number.isInteger` alone lets
+  // `--pr -5` through (a negative integer that then matches no PR and quietly
+  // publishes nothing) and silently ignores `--pr=42` (`only` stays null and
+  // the run publishes EVERY armed PR instead of one). Only a plain run of
+  // digits is accepted, both forms are recognised, and repeating the flag is
+  // an error rather than picking the first or last occurrence.
+  const args = process.argv.slice(2);
+  const prValues = [];
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    if (arg === "--pr") {
+      prValues.push(args[i + 1]);
+      i += 1;
+    } else if (arg.startsWith("--pr=")) {
+      prValues.push(arg.slice("--pr=".length));
+    }
+  }
+
+  if (prValues.length > 1) {
+    console.error("--pr may only be given once");
     process.exit(1);
+  }
+
+  let only = null;
+  if (prValues.length === 1) {
+    const raw = prValues[0];
+    if (raw === undefined || !/^\d+$/.test(raw)) {
+      console.error(`--pr requires a non-negative integer, got ${JSON.stringify(raw ?? null)}`);
+      process.exit(1);
+    }
+    only = Number(raw);
   }
 
   const gh = createClient({ repo, token });

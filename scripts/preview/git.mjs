@@ -6,43 +6,103 @@ import { join } from "node:path";
 
 const run = promisify(execFile);
 
+/**
+ * Remove a credential from text before it can reach a log.
+ *
+ * execFile's rejection message contains the whole argv, and the remote URL
+ * carries the token. publish.mjs prints err.message on failure, so without this
+ * a push failure puts a push-capable token into a public Actions log. Actions'
+ * own secret masking only covers registered secrets, so it cannot be relied on.
+ */
+export function redactToken(text, token) {
+  if (!token) return String(text ?? "");
+  return String(text ?? "").replaceAll(token, "***");
+}
+
+/**
+ * Build the tree to be committed, and strip everything the pull request could
+ * have smuggled into its own artifact.
+ *
+ * Exported so the stripping is testable without git or a network.
+ */
+export async function prepareTree({ dir, files, contentDir = null }) {
+  if (contentDir) await cp(contentDir, dir, { recursive: true });
+
+  // The artifact is pull-request-controlled. `git init` REINITIALISES an
+  // existing .git directory, keeping its hooks and its config, and the commit
+  // below would then execute them in the job holding the push token. A
+  // .gitignore would silently drop our generated .asf.yaml and robots.txt from
+  // the commit, defeating both the noindex control and the generated-config
+  // defence. Neither is caught by the entry-name screen or the symlink walk.
+  await rm(join(dir, ".git"), { recursive: true, force: true });
+  await rm(join(dir, ".gitignore"), { force: true });
+
+  // Generated files are written AFTER the copy, so ours always win over any
+  // file of the same name shipped inside the artifact.
+  for (const [name, body] of Object.entries(files)) {
+    await writeFile(join(dir, name), body);
+  }
+
+  // Never publish the metadata the publisher validated against.
+  await rm(join(dir, "preview-meta.json"), { force: true });
+}
+
 export function createGit({ repo, token }) {
   const remote = `https://x-access-token:${token}@github.com/${repo}.git`;
 
+  // Hooks and ignore files come from the artifact's tree, so every git
+  // invocation neutralises both.
+  const SAFE = ["-c", "core.hooksPath=/dev/null", "-c", "core.excludesFile=/dev/null"];
+
+  async function git(args) {
+    try {
+      return await run("git", args);
+    } catch (err) {
+      err.message = redactToken(err.message, token);
+      if (err.stderr) err.stderr = redactToken(err.stderr, token);
+      if (err.stdout) err.stdout = redactToken(err.stdout, token);
+      throw err;
+    }
+  }
+
   return {
     async headMessage(branch) {
+      const dir = await mkdtemp(join(tmpdir(), "preview-head-"));
       try {
-        const { stdout } = await run("git", ["ls-remote", remote, `refs/heads/${branch}`]);
+        const { stdout } = await git(["ls-remote", remote, `refs/heads/${branch}`]);
         if (!stdout.trim()) return "";
-        const dir = await mkdtemp(join(tmpdir(), "preview-head-"));
-        await run("git", ["init", "-q", dir]);
-        await run("git", ["-C", dir, "fetch", "-q", "--depth", "1", remote, branch]);
-        const { stdout: msg } = await run("git", ["-C", dir, "log", "-1", "--format=%s", "FETCH_HEAD"]);
-        await rm(dir, { recursive: true, force: true });
+
+        await git(["init", "-q", dir]);
+        await git(["-C", dir, ...SAFE, "fetch", "-q", "--depth", "1", remote, branch]);
+        const { stdout: msg } = await git(["-C", dir, "log", "-1", "--format=%s", "FETCH_HEAD"]);
         return msg.trim();
       } catch {
         return "";
+      } finally {
+        await rm(dir, { recursive: true, force: true });
       }
     },
 
     /** Force-push an orphan commit containing contentDir plus generated files. */
     async pushTree(branch, files, message, contentDir = null) {
       const dir = await mkdtemp(join(tmpdir(), "preview-push-"));
-      if (contentDir) await cp(contentDir, dir, { recursive: true });
+      try {
+        await prepareTree({ dir, files, contentDir });
 
-      for (const [name, body] of Object.entries(files)) {
-        await writeFile(join(dir, name), body);
+        await git(["init", "-q", dir]);
+        await git(["-C", dir, ...SAFE, "checkout", "-q", "-b", branch]);
+        await git(["-C", dir, "config", "user.name", "github-actions[bot]"]);
+        await git(["-C", dir, "config", "user.email", "github-actions[bot]@users.noreply.github.com"]);
+        await git(["-C", dir, ...SAFE, "add", "-A", "-f"]);
+        await git([
+          "-C", dir, ...SAFE, "commit", "-q", "--no-verify",
+          "-m", `${message}\n\nGenerated-by: preview-publish\n`,
+        ]);
+        await git(["-C", dir, ...SAFE, "push", "-f", remote, branch]);
+      } finally {
+        // Always, including on failure: this tree holds the whole built site.
+        await rm(dir, { recursive: true, force: true });
       }
-      await rm(join(dir, "preview-meta.json"), { force: true });
-
-      await run("git", ["init", "-q", dir]);
-      await run("git", ["-C", dir, "checkout", "-q", "-b", branch]);
-      await run("git", ["-C", dir, "config", "user.name", "github-actions[bot]"]);
-      await run("git", ["-C", dir, "config", "user.email", "github-actions[bot]@users.noreply.github.com"]);
-      await run("git", ["-C", dir, "add", "-A"]);
-      await run("git", ["-C", dir, "commit", "-q", "-m", `${message}\n\nGenerated-by: preview-publish\n`]);
-      await run("git", ["-C", dir, "push", "-f", remote, branch]);
-      await rm(dir, { recursive: true, force: true });
     },
   };
 }
