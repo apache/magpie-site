@@ -117,6 +117,29 @@ The site is built with `base: '/'` so all links and assets resolve against the a
 
 > One-time infra setup (outside this repo): for a brand-new project, ASF Infra may still need to provision DNS/TLS for `magpie.apache.org` before the inferred hostname resolves.
 
+### Previewing a pull request
+
+A committer can publish a live preview of any open pull request by commenting:
+
+    /show-preview
+
+The **Publish PR previews** workflow runs on a 15-minute schedule and then
+tracks the PR's head commit — each new push is picked up on the next run —
+though GitHub may delay a scheduled run when it is busy. It appears at
+`https://magpie-pr<N>.staged.apache.org/`, and like the production site, ASF
+staging takes a few minutes to propagate after each publish. A maintainer who
+does not want to wait can dispatch the **Publish PR previews** workflow
+manually with the PR number.
+
+Previews are retired when the PR closes: the site is replaced with a notice
+rather than disappearing, because deleting the branch does not unstage the
+site — the branch is only deleted (as a separate, later step) once the notice
+is live.
+
+To turn a preview off before the PR closes, delete the `/show-preview`
+comment (and, if the preview was started by manual dispatch, also delete the
+bot's arming comment); the next scheduled run retires it.
+
 ## Agent-assisted contribution (apache-magpie)
 
 This repo adopts the

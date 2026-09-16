@@ -6,6 +6,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "test": "node --test \"scripts/**/*.test.mjs\"",
     "sync-docs": "bash scripts/sync-docs.sh",
     "sync-community": "node scripts/sync-community.mjs",
     "prebuild": "npm run sync-docs",
