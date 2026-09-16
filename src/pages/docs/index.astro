@@ -1,20 +1,12 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { getCollection } from "astro:content";
+import { HIDDEN_DOCS } from "../../lib/site";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const QUICK_START = `${base}/docs/quick-start`;
-const OVERVIEW = `${base}/docs/index`;
-
-// Internal governance drafts that should not appear on the public site.
-// "index" is docs/index.md ("What is Apache Magpie?"). The /docs landing page
-// now covers that ground, so it is left out of the navigation — the route is
-// still built, because synced docs and the /docs body link to it.
-const HIDDEN_DOCS = new Set([
-  "board-resolution-draft",
-  // docs/index.md ("What is Apache Magpie?") — the /docs landing page covers
-  // this ground.
-  "index",
+const HIDDEN_NAV_DOCS = new Set([
+  ...HIDDEN_DOCS,
   // docs/quick-start/README.md — an index of the pages the sidebar already
   // lists, and quick-start.md is the section's overview. It earns its keep on
   // GitHub, where browsing the folder shows it; both keep their routes.
@@ -22,7 +14,7 @@ const HIDDEN_DOCS = new Set([
 ]);
 
 const all = (await getCollection("docs")).filter(
-  (entry) => !HIDDEN_DOCS.has(entry.id.replace(/\.md$/, "")),
+  (entry) => !HIDDEN_NAV_DOCS.has(entry.id.replace(/\.md$/, "")),
 );
 
 // First markdown H1 of a page body (skipping doctoc/SPDX HTML comments) — used
@@ -77,8 +69,7 @@ for (const entry of all) {
   if (!groups.has(key)) groups.set(key, { items: [] });
   const group = groups.get(key)!;
 
-  // On this page the Concepts section IS the page, so docs/index.md is listed
-  // as one of its pages rather than hoisted onto the heading as its overview.
+  // This page is already the Concepts section's landing page.
   if ((isGroupOverview || SECTION_LANDING_PAGES.get(leaf) === key) && key !== "_root") {
     // Hoist the overview onto the section heading instead of listing it, and
     // keep its body so we can order the section's pages the way the overview
@@ -322,9 +313,8 @@ const totalPages = all.length;
     </ul>
   )}
   <p>
-    Not sure what Magpie is yet? <a href={OVERVIEW}>What is Apache Magpie?</a>
-    &nbsp;·&nbsp;
-    <a href={`${base}/architecture`}>Architecture</a>
+    Learn how Magpie fits together in the{" "}
+    <a href={`${base}/architecture`}>Architecture guide</a>.
   </p>
 
   <h2>Explore the docs</h2>

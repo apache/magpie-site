@@ -42,11 +42,11 @@ export const STATIC_ROUTES: { path: string; title: string; description: string }
 ];
 
 /**
- * Internal governance drafts that are in the synced collection but must not
+ * Drafts and retired pages that are in the synced collection but must not
  * appear on the public site. src/pages/docs/[...slug].astro, llms.txt and the
  * Markdown twins all filter on this one set.
  */
-export const HIDDEN_DOCS = new Set(["board-resolution-draft"]);
+export const HIDDEN_DOCS = new Set(["board-resolution-draft", "index"]);
 
 export type DocEntry = CollectionEntry<"docs">;
 
