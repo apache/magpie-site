@@ -52,6 +52,22 @@ test("finds symlinks in an extracted tree", async () => {
   assert.deepEqual(unsafe, ["sub/leak"]);
 });
 
+test("flags a symlinked directory without walking into it", async () => {
+  const outside = await mkdtemp(join(tmpdir(), "preview-outside-"));
+  await writeFile(join(outside, "secret.txt"), "should never be walked");
+
+  const root = await mkdtemp(join(tmpdir(), "preview-"));
+  await writeFile(join(root, "index.html"), "<h1>ok</h1>");
+  await symlink(outside, join(root, "escape"));
+
+  const unsafe = await findUnsafeEntries(root);
+  assert.deepEqual(unsafe, ["escape"]);
+  assert.ok(
+    !unsafe.some((p) => p.includes("secret.txt")),
+    "the walk must not descend through a symlinked directory",
+  );
+});
+
 test("reports nothing for a clean tree", async () => {
   const root = await mkdtemp(join(tmpdir(), "preview-"));
   await writeFile(join(root, "index.html"), "<h1>ok</h1>");

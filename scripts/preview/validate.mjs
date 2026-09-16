@@ -32,7 +32,14 @@ export function validateMeta(meta, expected) {
   return { ok: true };
 }
 
-/** Paths that are symlinks, or that resolve outside the extraction root. */
+/**
+ * Paths in an extracted tree that must never be published: symlinks.
+ *
+ * This walks an already-extracted tree, so it cannot see an archive entry that
+ * escaped the root during extraction — such an entry lands outside the tree and
+ * no walk of it would find it. Screening archive entry names before extraction
+ * is the defence for that, and it lives in the extraction step.
+ */
 export async function findUnsafeEntries(root) {
   const rootReal = await realpath(root);
   const unsafe = [];
