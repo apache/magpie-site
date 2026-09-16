@@ -68,8 +68,19 @@ export function createArtifactFetcher({ gh, repo, token, fetchImpl = fetch }) {
           accept: "application/vnd.github+json",
           "x-github-api-version": "2022-11-28",
         },
+        signal: AbortSignal.timeout(120_000),
       });
       if (!res.ok) throw new Error(`artifact download failed with ${res.status}`);
+
+      // Check the advertised length before allocating: fetch buffers the whole
+      // body in memory (curl -o streamed to disk instead), so the size cap is
+      // only useful if it runs before, not just after, that allocation. The
+      // header is advisory and may be absent or wrong, so the post-buffer
+      // check below still runs too.
+      const advertised = Number(res.headers.get("content-length") ?? "0");
+      if (advertised > MAX_ZIP_BYTES) {
+        throw new Error(`artifact advertises ${advertised} bytes, over the ${MAX_ZIP_BYTES} cap`);
+      }
 
       const body = Buffer.from(await res.arrayBuffer());
       if (body.length > MAX_ZIP_BYTES) {

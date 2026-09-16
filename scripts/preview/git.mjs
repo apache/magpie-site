@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { mkdtemp, writeFile, rm, cp } from "node:fs/promises";
+import { mkdtemp, writeFile, rm, cp, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -19,6 +19,35 @@ export function redactToken(text, token) {
   return String(text ?? "").replaceAll(token, "***");
 }
 
+/** Strip a token from every field of an execFile rejection that can reach a log. */
+export function redactError(err, token) {
+  for (const field of ["message", "stderr", "stdout", "cmd"]) {
+    if (err?.[field]) err[field] = redactToken(err[field], token);
+  }
+  return err;
+}
+
+/**
+ * Remove every .git and .gitignore ANYWHERE in the tree, not just at the root.
+ *
+ * A nested sub/.git is not an execution vector — git will not run a nested
+ * repo's hooks — but `git add` records `sub` as a gitlink, so the subtree
+ * silently vanishes from the published preview and its target SHA is chosen by
+ * whoever built the artifact.
+ */
+async function stripGitMetadata(dir) {
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.name === ".git" || entry.name === ".gitignore" || entry.name === ".gitmodules") {
+      await rm(full, { recursive: true, force: true });
+      continue;
+    }
+    // Symlinked directories are already refused at the archive level; do not
+    // follow one here either.
+    if (entry.isDirectory() && !entry.isSymbolicLink()) await stripGitMetadata(full);
+  }
+}
+
 /**
  * Build the tree to be committed, and strip everything the pull request could
  * have smuggled into its own artifact.
@@ -34,8 +63,7 @@ export async function prepareTree({ dir, files, contentDir = null }) {
   // .gitignore would silently drop our generated .asf.yaml and robots.txt from
   // the commit, defeating both the noindex control and the generated-config
   // defence. Neither is caught by the entry-name screen or the symlink walk.
-  await rm(join(dir, ".git"), { recursive: true, force: true });
-  await rm(join(dir, ".gitignore"), { force: true });
+  await stripGitMetadata(dir);
 
   // Generated files are written AFTER the copy, so ours always win over any
   // file of the same name shipped inside the artifact.
@@ -58,10 +86,7 @@ export function createGit({ repo, token }) {
     try {
       return await run("git", args);
     } catch (err) {
-      err.message = redactToken(err.message, token);
-      if (err.stderr) err.stderr = redactToken(err.stderr, token);
-      if (err.stdout) err.stdout = redactToken(err.stdout, token);
-      throw err;
+      throw redactError(err, token);
     }
   }
 

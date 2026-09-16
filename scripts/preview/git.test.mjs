@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, writeFile, readFile, readdir, access } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { prepareTree, redactToken } from "./git.mjs";
+import { prepareTree, redactToken, redactError } from "./git.mjs";
 
 const missing = async (p) => {
   try {
@@ -72,4 +72,28 @@ test("prepareTree strips preview-meta.json", async () => {
   await prepareTree({ dir, files: {}, contentDir: content });
 
   assert.ok(await missing(join(dir, "preview-meta.json")));
+});
+
+test("strips a .git directory nested below the root", async () => {
+  const content = await mkdtemp(join(tmpdir(), "preview-content-"));
+  await mkdir(join(content, "sub", ".git", "hooks"), { recursive: true });
+  await writeFile(join(content, "sub", ".git", "hooks", "pre-commit"), "#!/bin/sh\n");
+  await writeFile(join(content, "sub", "page.html"), "<h1>kept</h1>");
+
+  const dir = await mkdtemp(join(tmpdir(), "preview-tree-"));
+  await prepareTree({ dir, files: {}, contentDir: content });
+
+  assert.ok(await missing(join(dir, "sub", ".git")), "a nested .git must not survive");
+  assert.equal(await readFile(join(dir, "sub", "page.html"), "utf8"), "<h1>kept</h1>");
+});
+
+test("redactError scrubs the token from cmd as well as message", () => {
+  const err = Object.assign(new Error("Command failed: git push https://x-access-token:SEKRET@h/r"), {
+    cmd: "git push https://x-access-token:SEKRET@h/r",
+    stderr: "fatal: unable to access 'https://x-access-token:SEKRET@h/r'",
+  });
+  redactError(err, "SEKRET");
+  for (const f of ["message", "cmd", "stderr"]) {
+    assert.equal(String(err[f]).includes("SEKRET"), false, `${f} must not carry the token`);
+  }
 });
