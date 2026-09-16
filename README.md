@@ -123,12 +123,12 @@ A committer can publish a live preview of any open pull request by commenting:
 
     /show-preview
 
-The preview is published within 15 minutes of that comment (the **Publish PR
-previews** workflow runs on a 15-minute schedule) and then tracks the PR's head
-commit — each new push is picked up on the next run. It appears at
+The **Publish PR previews** workflow runs on a 15-minute schedule and then
+tracks the PR's head commit — each new push is picked up on the next run —
+though GitHub may delay a scheduled run when it is busy. It appears at
 `https://magpie-pr<N>.staged.apache.org/`, and like the production site, ASF
-staging takes a few minutes to propagate after each publish. To publish sooner
-than the next scheduled run, dispatch the **Publish PR previews** workflow
+staging takes a few minutes to propagate after each publish. A maintainer who
+does not want to wait can dispatch the **Publish PR previews** workflow
 manually with the PR number.
 
 Previews are retired when the PR closes: the site is replaced with a notice

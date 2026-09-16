@@ -39,9 +39,10 @@ name: "Publish PR previews"
         type: string
 
 permissions:
-  contents: write
-  pull-requests: write
-  actions: read
+  contents: write # push, force-push and delete preview/* branches
+  issues: write # the PR comments below are issue-comment endpoints
+  pull-requests: read # listing open PRs and reading their head SHAs
+  actions: read # list and download build.yml's artifacts
 
 concurrency:
   group: preview-publish
