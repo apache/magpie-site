@@ -67,3 +67,19 @@ test("targetUrl falls back when the file, the manifest or the source is missing"
   assert.equal(targetUrl({ ...base, source: "a.tsx:1", anchors: null }), conversation);
   assert.equal(targetUrl({ ...base, source: null, anchors: {} }), conversation);
 });
+
+test("targetUrl treats the diff range as inclusive at both ends", () => {
+  const anchors = { "a.tsx": { anchor: "diff-deadbeef", ranges: [[10, 20]] } };
+  const base = { repo: "apache/magpie-site", pr: 180, anchors };
+  const files = (line) => targetUrl({ ...base, source: `a.tsx:${line}` });
+
+  assert.match(files(10), /files#diff-deadbeefR10$/, "the first line of a range is in the diff");
+  assert.match(files(20), /files#diff-deadbeefR20$/, "the last line of a range is in the diff");
+  assert.equal(files(9), "https://github.com/apache/magpie-site/pull/180", "one before is not");
+  assert.equal(files(21), "https://github.com/apache/magpie-site/pull/180", "one after is not");
+});
+
+test("clampRegion yields no region for a drag entirely off-screen", () => {
+  assert.equal(clampRegion({ x1: 1200, y1: 100, x2: 1300, y2: 200 }, viewport), null);
+  assert.equal(clampRegion({ x1: 100, y1: -300, x2: 200, y2: -200 }, viewport), null);
+});
