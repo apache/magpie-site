@@ -31,6 +31,21 @@ function hasBotMarker(comments, marker, { login = null } = {}) {
   );
 }
 
+const PUBLISHED_SHA_RE = /\(([0-9a-f]{7,40})\)\s*$/;
+
+/**
+ * The commit a preview branch was last published from, read from its head
+ * commit subject — "Publish preview for #180 (14fdc13)" — or null.
+ *
+ * A tombstoned branch's subject carries no SHA, so a re-armed pull request
+ * publishes again rather than being mistaken for up to date.
+ */
+export function publishedShaFrom(message) {
+  const subject = String(message ?? "").split("\n")[0].trim();
+  const match = PUBLISHED_SHA_RE.exec(subject);
+  return match ? match[1] : null;
+}
+
 export async function run({
   gh,
   git,
@@ -91,10 +106,14 @@ export async function run({
   // delete after a failed tombstone strands live content with nothing left to
   // overwrite it.
   const tombstoned = new Set();
+  const publishedByBranch = new Map();
   for (const branch of previewBranches) {
     try {
       const message = await gh.branchHeadMessage(branch);
       if (message.includes(TOMBSTONE_TAG)) tombstoned.add(branch);
+
+      const sha = publishedShaFrom(message);
+      if (sha) publishedByBranch.set(branch, sha);
     } catch (err) {
       // Treat an unreadable head as un-tombstoned. Re-pushing a tombstone is
       // idempotent; deleting a branch we could not inspect is not recoverable,
@@ -116,7 +135,16 @@ export async function run({
 
   for (const pr of actions.publish) {
     try {
-      const published = await publishOne({ gh, git, repo, fetchArtifact, openPulls, pr });
+      const published = await publishOne({
+        gh,
+        git,
+        repo,
+        fetchArtifact,
+        openPulls,
+        pr,
+        publishedSha: publishedByBranch.get(previewBranch(pr)) ?? null,
+        force: only === pr,
+      });
       if (published && only === pr) {
         await gh.upsertComment(pr, ARMED_MARKER, armedBody(pr, dispatchedBy));
       }
@@ -160,10 +188,25 @@ export async function run({
 }
 
 /** Returns true only when content was actually published. */
-async function publishOne({ gh, git, repo, fetchArtifact, openPulls, pr }) {
+async function publishOne({
+  gh,
+  git,
+  repo,
+  fetchArtifact,
+  openPulls,
+  pr,
+  publishedSha = null,
+  force = false,
+}) {
   const pull = openPulls.find((p) => p.number === pr);
   if (!pull) return false;
   const headSha = pull.head.sha;
+
+  // Nothing has changed since the last publish. Republishing anyway force-pushes
+  // an identical tree every fifteen minutes — a commits@ mail and a rewritten
+  // status comment for a preview nobody touched. A manual dispatch is an
+  // explicit request, so it republishes regardless.
+  if (!force && publishedSha && headSha.startsWith(publishedSha)) return false;
 
   const build = await gh.latestSuccessfulBuild(headSha);
   if (!build) {

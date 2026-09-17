@@ -126,8 +126,22 @@ A PR is *disarmed* by deleting or editing that comment; there is no `/hide-previ
 Since the armed set is recomputed from scratch on every run, removing the comment
 is enough, and the next reap tears the preview down.
 
-**3. Publish.** For each armed PR, find the most recent successful `build.yml`
-run for that PR's current head SHA and download its artifact. Then:
+**3. Publish.** For each armed PR, first ask whether anything has changed.
+
+A preview branch's head commit subject records what it was built from —
+`Publish preview for #180 (14fdc13)` — so the publisher already knows the
+published commit from the same read that detects tombstones. If it equals the
+PR's current head, the run does nothing for that PR: no artifact download, no
+push, no comment. Republishing regardless force-pushes an identical tree every
+fifteen minutes, which costs a `commits@` mail and a rewritten status comment
+for a preview nobody touched. A manual dispatch skips this check, because asking
+for a preview explicitly is a request to rebuild it.
+
+A tombstoned branch's subject carries no SHA, so a re-armed pull request
+publishes rather than being mistaken for up to date.
+
+Otherwise, find the most recent successful `build.yml` run for that PR's current
+head SHA and download its artifact. Then:
 
 - Validate `preview-meta.json`. The PR number must be digits only. The head SHA
   in the artifact must equal the head SHA the API reports for that PR. Without
@@ -300,12 +314,15 @@ the next scheduled run instead.
 | Force-push to a preview branch fails | Run fails loudly; the next scheduled run retries |
 | PR closed mid-run | Next run tombstones the preview; the run after deletes the branch |
 | Two runs overlap | Prevented by the concurrency group |
+| Nothing changed since the last publish | The run does nothing for that PR — no push, no comment, no `commits@` mail |
 
 ## Testing
 
 The validation logic — metadata checks, comment matching, armed-set resolution —
 goes in a script under `scripts/` with unit tests, not inline in YAML, so it can
-be tested without pushing workflows. Test-driven: the anchored comment match, the
+be tested without pushing workflows. Reading the published commit out of a
+branch's head subject is one of those pure functions, and the test that an
+unchanged preview is left alone fails if the check is removed. Test-driven: the anchored comment match, the
 digits-only PR number, and the SHA-equality check each get a failing test first.
 
 The reviewing overlay has two testable seams, both pure functions: composing the

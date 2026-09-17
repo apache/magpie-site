@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, writeFile, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { run } from "./publish.mjs";
+import { run, publishedShaFrom } from "./publish.mjs";
 
 const SHA = "c".repeat(40);
 const pull = (number, sha = SHA) => ({ number, head: { sha } });
@@ -103,6 +103,72 @@ test("publishes an armed open PR", async () => {
   assert.match(f.pushed[0].files[".asf.yaml"], /profile: pr5/);
   assert.match(f.pushed[0].files["robots.txt"], /Disallow: \//);
   assert.ok(f.posted.some((p) => p.marker === "magpie-preview-status" && /published/i.test(p.body)));
+});
+
+test("publishedShaFrom reads the published commit, and nothing else", () => {
+  assert.equal(publishedShaFrom("Publish preview for #180 (14fdc13)"), "14fdc13");
+  assert.equal(publishedShaFrom("Retire preview for #9 [tombstone]"), null);
+  assert.equal(publishedShaFrom("Publish preview for #180 (14fdc13)\n\nGenerated-by: x"), "14fdc13");
+  assert.equal(publishedShaFrom(""), null);
+  assert.equal(publishedShaFrom(null), null);
+});
+
+test("does not republish a preview that already matches the PR head", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5)],
+    comments: { 5: [armCmd()] },
+    branches: ["preview/pr5-staging"],
+    headMessages: { "preview/pr5-staging": `Publish preview for #5 (${SHA.slice(0, 7)})` },
+  });
+  let fetched = 0;
+
+  await go(f, {
+    fetchArtifact: async () => {
+      fetched += 1;
+      return { dir, meta: { pr: 5, headSha: SHA } };
+    },
+  });
+
+  assert.equal(fetched, 0, "an unchanged preview must not download its artifact again");
+  assert.equal(f.pushed.length, 0, "an unchanged preview must not be force-pushed again");
+  assert.equal(
+    f.posted.filter((p) => p.marker === "magpie-preview-status").length,
+    0,
+    "an unchanged preview must not rewrite its status comment",
+  );
+});
+
+test("republishes when the PR head has moved on", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5)],
+    comments: { 5: [armCmd()] },
+    branches: ["preview/pr5-staging"],
+    headMessages: { "preview/pr5-staging": "Publish preview for #5 (deadbee)" },
+  });
+
+  await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.pushed.length, 1, "a moved head must publish");
+  assert.equal(f.pushed[0].branch, "preview/pr5-staging");
+});
+
+test("a manual dispatch republishes even when nothing changed", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5)],
+    branches: ["preview/pr5-staging"],
+    headMessages: { "preview/pr5-staging": `Publish preview for #5 (${SHA.slice(0, 7)})` },
+  });
+
+  await go(f, {
+    only: 5,
+    dispatchedBy: "maintainer",
+    fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }),
+  });
+
+  assert.equal(f.pushed.length, 1, "asking for it explicitly must republish");
 });
 
 test("does not publish an unarmed PR", async () => {
