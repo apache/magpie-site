@@ -37,7 +37,22 @@ export default defineConfig({
   redirects,
   // Markdown twins of docs pages (/docs/<page>.md) are alternates of the HTML
   // page, not pages, so they stay out of the sitemap.
-  integrations: [react(), sitemap({ filter: (page) => !page.endsWith('.md') })],
+  integrations: [
+    react(
+      process.env.MAGPIE_PREVIEW_ANNOTATE === "1"
+        ? {
+            babel: {
+              plugins: [
+                // Preview builds only: stamps data-magpie-src so the review
+                // overlay can map a marked region back to a diff line.
+                ["./scripts/preview/babel-plugin-magpie-src.mjs", { root: process.cwd() }],
+              ],
+            },
+          }
+        : {},
+    ),
+    sitemap({ filter: (page) => !page.endsWith('.md') }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

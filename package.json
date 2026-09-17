@@ -32,6 +32,7 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/react": "^6.0.5",
     "@astrojs/sitemap": "^3.7.4",
+    "@babel/core": "^7.29.7",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.5.1",
     "@types/react": "^19.3.0",
