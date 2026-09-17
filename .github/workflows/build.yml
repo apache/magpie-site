@@ -38,6 +38,15 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "22"
+          cache: npm
+
+      # The tests were previously run without installing anything, which
+      # worked only for as long as every test imported Node built-ins alone.
+      # The first test to import a real dependency failed with
+      # ERR_MODULE_NOT_FOUND, which reads as a missing dependency rather than
+      # a missing install step. `build` below has always done this.
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run unit tests
         run: npm test
