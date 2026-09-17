@@ -48,10 +48,18 @@
     armed = false;
     drag = null;
     root.style.display = "none";
+    box.style.display = "none";
     button.textContent = "Comment on this preview";
   }
 
   async function submit(region) {
+    // Hide the overlay BEFORE resolving the source. root is
+    // position:fixed;inset:0 and must accept pointer events to receive the
+    // drag, so with it displayed elementFromPoint returns root itself, the walk
+    // ends at <body>, and the source is never resolved — which silently turns
+    // every capture into a Conversation-tab fallback.
+    hideChrome();
+
     var source = sourceUnder(region.x + region.w / 2, region.y + region.h / 2);
     var url = targetUrl({ repo: cfg.repo, pr: cfg.pr, source: source, anchors: cfg.anchors });
     var caption = captionFor({
@@ -61,67 +69,101 @@
       sha: cfg.sha,
     });
 
-    hideChrome();
-    var shot;
-    try {
-      shot = await window.html2canvas(document.body, {
+    // Built as a promise and handed straight to ClipboardItem, so
+    // clipboard.write() is reached while the click's transient activation is
+    // still valid. Awaiting the capture first loses it, and Safari then refuses
+    // the write on every large page.
+    var blobPromise = (async function () {
+      var shot = await window.html2canvas(document.body, {
         x: window.scrollX, y: window.scrollY,
         width: window.innerWidth, height: window.innerHeight,
         scale: Math.min(window.devicePixelRatio || 1, 2),
         useCORS: true, logging: false,
       });
+
+      var scale = shot.width / window.innerWidth;
+      var out = document.createElement("canvas");
+      out.width = shot.width;
+      out.height = shot.height + 28 * scale;
+      var ctx = out.getContext("2d");
+
+      ctx.drawImage(shot, 0, 0);
+      ctx.fillStyle = "rgba(15,23,42,0.55)";
+      ctx.fillRect(0, 0, out.width, region.y * scale);
+      ctx.fillRect(0, (region.y + region.h) * scale, out.width, shot.height);
+      ctx.fillRect(0, region.y * scale, region.x * scale, region.h * scale);
+      ctx.fillRect((region.x + region.w) * scale, region.y * scale, out.width, region.h * scale);
+      ctx.strokeStyle = "#e11d48";
+      ctx.lineWidth = 2 * scale;
+      ctx.strokeRect(region.x * scale, region.y * scale, region.w * scale, region.h * scale);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(0, shot.height, out.width, 28 * scale);
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = (13 * scale) + "px ui-monospace, monospace";
+
+      var text = caption;
+      while (text.length > 12 && ctx.measureText(text).width > out.width - 16 * scale) {
+        text = text.slice(0, -4) + "…";
+      }
+      ctx.fillText(text, 8 * scale, shot.height + 19 * scale);
+
+      // toBlob throws SecurityError on a canvas tainted by a cross-origin
+      // image. Inside this promise it surfaces as a rejection and is reported,
+      // rather than escaping a callback and leaving the overlay stuck.
+      return await new Promise(function (resolve, reject) {
+        try {
+          out.toBlob(function (blob) {
+            if (blob) resolve(blob);
+            else reject(new Error("the canvas produced no image"));
+          }, "image/png");
+        } catch (err) {
+          reject(err);
+        }
+      });
+    })();
+
+    var copied = false;
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })]);
+      copied = true;
     } catch (err) {
-      showChrome();
-      root.style.display = "block";
-      say("Could not capture the page: " + err.message);
-      return;
+      copied = false;
     }
 
     showChrome();
 
-    var scale = shot.width / window.innerWidth;
-    var out = document.createElement("canvas");
-    out.width = shot.width;
-    out.height = shot.height + 28 * scale;
-    var ctx = out.getContext("2d");
-
-    ctx.drawImage(shot, 0, 0);
-    ctx.fillStyle = "rgba(15,23,42,0.55)";
-    ctx.fillRect(0, 0, out.width, region.y * scale);
-    ctx.fillRect(0, (region.y + region.h) * scale, out.width, shot.height);
-    ctx.fillRect(0, region.y * scale, region.x * scale, region.h * scale);
-    ctx.fillRect((region.x + region.w) * scale, region.y * scale, out.width, region.h * scale);
-    ctx.strokeStyle = "#e11d48";
-    ctx.lineWidth = 2 * scale;
-    ctx.strokeRect(region.x * scale, region.y * scale, region.w * scale, region.h * scale);
-
-    ctx.fillStyle = "#0f172a";
-    ctx.fillRect(0, shot.height, out.width, 28 * scale);
-    ctx.fillStyle = "#e2e8f0";
-    ctx.font = (13 * scale) + "px ui-monospace, monospace";
-    // The caption can carry a long URL and a long source path. Measure and
-    // truncate rather than letting it run off the edge of the image.
-    var text = caption;
-    while (text.length > 12 && ctx.measureText(text).width > out.width - 16 * scale) {
-      text = text.slice(0, -4) + "…";
-    }
-    ctx.fillText(text, 8 * scale, shot.height + 19 * scale);
-
-    out.toBlob(async function (blob) {
+    if (!copied) {
+      // Either the clipboard refused, or the capture itself failed. Awaiting
+      // the promise tells us which, and reports the real reason either way.
+      var blob = null;
       try {
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-        say("Screenshot copied — paste it into the comment box");
+        blob = await blobPromise;
       } catch (err) {
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "preview-pr" + cfg.pr + ".png";
-        a.click();
-        say("Clipboard refused — the screenshot was downloaded; drag it into the comment box");
+        root.style.display = "block";
+        say("Could not capture the page: " + err.message);
+        return;
       }
-      var opened = window.open(url, "_blank", "noopener");
-      if (!opened) say("Popup blocked — open the pull request manually: " + url, 15000);
-      disarm();
-    }, "image/png");
+
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "preview-pr" + cfg.pr + ".png";
+      a.click();
+      say("Clipboard refused — the screenshot was downloaded; drag it into the comment box");
+    } else {
+      say("Screenshot copied — paste it into the comment box");
+    }
+
+    // window.open returns null whenever "noopener" is passed, blocked or not,
+    // so the opener is cleared manually instead and a null result genuinely
+    // means the popup was blocked.
+    var opened = window.open(url, "_blank");
+    if (opened) {
+      try { opened.opener = null; } catch (err) { /* cross-origin, already safe */ }
+    } else {
+      say("Popup blocked — open the pull request manually: " + url, 15000);
+    }
+    disarm();
   }
 
   function build() {
@@ -166,7 +208,26 @@
 
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && armed) disarm();
-      if (e.key === "c" && !armed && e.target === document.body) button.click();
+      if (
+        e.key === "c" &&
+        !armed &&
+        !e.metaKey && !e.ctrlKey && !e.altKey &&
+        e.target === document.body
+      ) {
+        button.click();
+      }
+    });
+
+    // A mouseup outside the window never reaches root, which would leave drag
+    // set and make the next mousemove resize a box the user never started.
+    window.addEventListener("mouseup", function () {
+      if (!drag) return;
+      drag = null;
+      box.style.display = "none";
+    });
+    window.addEventListener("blur", function () {
+      drag = null;
+      box.style.display = "none";
     });
 
     document.body.appendChild(root);
