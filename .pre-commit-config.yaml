@@ -46,9 +46,12 @@ repos:
       - id: check-yaml
       - id: detect-private-key
       - id: end-of-file-fixer
+        exclude: ^vendor/
       - id: mixed-line-ending
+        exclude: ^vendor/
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+        exclude: ^vendor/
   - repo: local
     hooks:
       # Guard against the Astro/JSX whitespace-collapse bug (#10, #29): a prose
