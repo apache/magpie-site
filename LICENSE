@@ -202,7 +202,7 @@
    limitations under the License.
 
 =======================================================================
-This product bundles html2canvas 1.4.1, which is available under the MIT
-licence. See vendor/html2canvas/LICENSE for the full text.
-  https://github.com/niklasvh/html2canvas
+This product bundles html2canvas-pro 2.4.3, which is available under the MIT
+licence. See vendor/html2canvas-pro/LICENSE for the full text.
+  https://github.com/yorickshan/html2canvas-pro
 =======================================================================

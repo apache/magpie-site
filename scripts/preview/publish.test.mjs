@@ -359,7 +359,7 @@ test("injectOverlay adds the scripts once, before </body>", async () => {
   const once = injectOverlay(html);
 
   assert.match(once, /_preview\/review\.js/);
-  assert.match(once, /_preview\/html2canvas\.min\.js/);
+  assert.match(once, /_preview\/html2canvas-pro\.min\.js/);
   assert.ok(once.indexOf("</body>") > once.indexOf("review.js"), "scripts come before </body>");
   assert.equal(injectOverlay(once), once, "injecting twice changes nothing");
 });

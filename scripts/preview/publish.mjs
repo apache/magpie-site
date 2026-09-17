@@ -252,13 +252,13 @@ async function publishOne({
   const logic = await readFile(new URL("./overlay/logic.mjs", import.meta.url), "utf8");
   const overlay = await readFile(new URL("./overlay/review.js", import.meta.url), "utf8");
   const vendor = await readFile(
-    new URL("../../vendor/html2canvas/html2canvas.min.js", import.meta.url), "utf8",
+    new URL("../../vendor/html2canvas-pro/html2canvas-pro.min.js", import.meta.url), "utf8",
   );
 
   const generated = {
     ".asf.yaml": renderAsfYaml(pr),
     "robots.txt": renderRobots(),
-    "_preview/html2canvas.min.js": vendor,
+    "_preview/html2canvas-pro.min.js": vendor,
     // The overlay's pure logic is unit-tested as a module and inlined here; the
     // browser file has no build step and no imports.
     "_preview/review.js":
@@ -286,7 +286,7 @@ async function publishOne({
 const OVERLAY_MARKER = "<!-- magpie-preview-overlay -->";
 const OVERLAY_TAGS =
   OVERLAY_MARKER + "\n" +
-  '<script src="/_preview/html2canvas.min.js"></script>\n' +
+  '<script src="/_preview/html2canvas-pro.min.js"></script>\n' +
   '<script src="/_preview/review.js"></script>\n';
 
 /**
