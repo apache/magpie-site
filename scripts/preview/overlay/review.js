@@ -74,7 +74,18 @@
     // still valid. Awaiting the capture first loses it, and Safari then refuses
     // the write on every large page.
     var blobPromise = (async function () {
-      var shot = await window.html2canvas(document.body, {
+      // html2canvas-pro's UMD bundle exposes a module namespace, not a
+      // callable: window.html2canvas is an object whose .default is the
+      // function. The older html2canvas exposed the function directly, so
+      // resolve both shapes rather than depending on one.
+      var capture =
+        (window.html2canvas && (window.html2canvas.default || window.html2canvas.html2canvas)) ||
+        window.html2canvas;
+      if (typeof capture !== "function") {
+        throw new Error("the screenshot library did not load");
+      }
+
+      var shot = await capture(document.body, {
         x: window.scrollX, y: window.scrollY,
         width: window.innerWidth, height: window.innerHeight,
         scale: Math.min(window.devicePixelRatio || 1, 2),
