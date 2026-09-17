@@ -5,7 +5,7 @@
 
   var armed = false;
   var drag = null;
-  var root, box, button, toast;
+  var root, box, button, toast, banner;
 
   function el(tag, style, text) {
     var n = document.createElement(tag);
@@ -27,10 +27,12 @@
     root.style.display = "none";
     button.style.display = "none";
     toast.style.display = "none";
+    banner.style.display = "none";
   }
 
   function showChrome() {
     button.style.display = "";
+    banner.style.display = "";
   }
 
   function sourceUnder(x, y) {
@@ -188,6 +190,20 @@
       button.textContent = armed ? "Cancel (Esc)" : "Comment on this preview";
     });
 
+    // Always on, and deliberately not dismissible: someone sent this URL to
+    // someone else, and the reader needs to know it is a pull request's
+    // preview and not magpie.apache.org.
+    banner = document.createElement("a");
+    banner.href = "https://github.com/" + cfg.repo + "/pull/" + cfg.pr;
+    banner.target = "_blank";
+    banner.rel = "noopener";
+    banner.style.cssText =
+      "position:fixed;top:0;right:16px;z-index:2147483646;padding:4px 10px;" +
+      "border-radius:0 0 6px 6px;background:#b45309;color:#fff;text-decoration:none;" +
+      "font:12px/1.6 system-ui;box-shadow:0 1px 4px rgba(0,0,0,.3)";
+    banner.textContent =
+      "Preview of " + cfg.repo + " #" + cfg.pr + " · " + cfg.sha + " · not the published site";
+
     root = el("div", "position:fixed;inset:0;z-index:2147483645;display:none;cursor:crosshair");
     box = el("div", "position:absolute;border:2px solid #e11d48;background:rgba(225,29,72,0.08);display:none");
     root.appendChild(box);
@@ -241,6 +257,7 @@
       box.style.display = "none";
     });
 
+    document.body.appendChild(banner);
     document.body.appendChild(root);
     document.body.appendChild(button);
     document.body.appendChild(toast);
