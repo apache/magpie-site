@@ -1,14 +1,16 @@
 # Preview review overlay — design
 
 A reviewer looking at a PR preview marks a rectangle on the page, and gets a
-screenshot of it on the clipboard plus the pull request's comment box open,
-ready to paste into and write in.
+screenshot of it on the clipboard plus the pull request open **at the diff line
+the marked content came from**, where GitHub's inline comment box is one click
+away.
 
 It replaces the "Reviewing in place" section of
 [the preview-deployments design](2026-09-16-pr-preview-deployments-design.md),
-which specified a different mechanism — clicking an element to produce a
-markdown block naming its source file and line. That half was never built; this
-supersedes it, and is considerably smaller.
+which specified clicking an element to produce a markdown block the reviewer
+pasted by hand. That half was never built. This supersedes it: the same
+source-line resolution, but the reviewer marks a region, gets a screenshot, and
+lands on the diff line itself rather than assembling a comment from text.
 
 ## What already exists
 
@@ -34,11 +36,14 @@ endpoint its web UI uses is private. A URL can prefill text (`?body=`) but
 never a file. So "submit and the screenshot is attached" is not reachable
 without a server; the clipboard is the floor, and it costs exactly one paste.
 
-**Previews must stay byte-identical to production.** The earlier design
-required a build-time plugin stamping `data-magpie-src` on elements, which
-meant a preview-only build mode. This design drops that entirely: the overlay
-is injected after the build, into content that is otherwise exactly what
-`magpie.apache.org` serves.
+**Previews are not byte-identical to production, and that is a deliberate
+trade.** Landing a comment on the right diff line means knowing which source
+line produced a rendered element, and that requires a build-time plugin
+stamping `data-magpie-src`. An earlier revision of this design dropped the
+plugin to keep previews identical to production; pointing at a source line is
+worth more than that property. The divergence is additive — extra attributes,
+no changed markup or styling — and a check asserts the production build carries
+none of it.
 
 ## The flow
 
@@ -57,8 +62,8 @@ zero-pixel region.
 capped at 2 so a retina screen does not produce an eight-megabyte PNG. The
 overlay then composites onto that bitmap: the dimming outside the rectangle,
 the rectangle's outline, and a caption strip along the bottom carrying the page
-URL, the region's size and origin, and the short SHA the preview was built
-from. The caption is burned into the image deliberately — it survives being
+URL, the resolved `file:line` where one was found, the region's size and
+origin, and the short SHA the preview was built from. The caption is burned into the image deliberately — it survives being
 dragged into a comment, quoted, or downloaded, where a separate line of text
 would not.
 
@@ -73,6 +78,43 @@ thing, and GitHub's paste handler takes an image and discards accompanying
 text, so any design that transfers both needs two staged copies and a dance the
 reviewer has to understand. Writing in GitHub also means autocomplete,
 `@`-mentions, preview, and draft recovery all work normally.
+
+## Resolving the marked region to a source line
+
+A Vite plugin, active only when `MAGPIE_PREVIEW_ANNOTATE=1`, stamps rendered
+elements with `data-magpie-src="<repo-relative path>:<line>"`. `build.yml` sets
+it for the artifact that feeds previews; the `publish` build never does.
+
+When a rectangle is confirmed, the overlay resolves it to one source location:
+the deepest element carrying `data-magpie-src` whose box contains the
+rectangle's centre. Centre rather than corner, because a reviewer dragging
+around a button usually starts outside it. If nothing under the centre is
+annotated, the walk continues up the tree; if the walk reaches `<body>` with no
+annotation, there is no source line and the fallback below applies.
+
+## Landing it on the diff line
+
+The publisher knows the diff — it has the PR number and an API token — so it
+writes `_preview/anchors.json` beside the site: for each changed file, its diff
+anchor and the line ranges the diff actually touches.
+
+- **Source line inside the diff** → the overlay opens the Files tab anchored at
+  that line (`/pull/<N>/files#diff-<anchor>R<line>`). The reviewer clicks the
+  `+` on that line and pastes; the comment lands inline, attached to the code
+  that produced what they marked.
+- **Source line outside the diff**, or no annotated ancestor → the Conversation
+  tab. The caption in the screenshot still names the file and line where one
+  was found, so the comment is precise even where GitHub has no line to anchor
+  to.
+
+GitHub cannot prefill an inline comment box any more than a conversation one,
+so "ready to fill" means the reviewer is standing on the right line with the
+screenshot already on the clipboard. That is one click and one paste from a
+comment attached to the exact source line — which is the thing this feature
+exists to make cheap.
+
+The anchor format is not contractual and has changed before, so `anchors.json`
+is generated in one place: if GitHub changes it, one function changes.
 
 ## How the page knows which PR it is
 
@@ -94,16 +136,15 @@ supplies this.
 | `html2canvas` throws | Toast names the failure; the overlay stays open so the region is not lost |
 | Popup blocked when opening the PR | Toast carries the PR link as a plain anchor to click |
 | `window.__MAGPIE_PREVIEW__` missing | The button never appears — this is not a preview |
+| No annotated ancestor above the marked region | Conversation tab instead of a diff line; the caption says the source was not resolved |
+| Source line is outside the diff | Conversation tab; the caption still names the `file:line` |
+| `_preview/anchors.json` missing or stale | Conversation tab — never a wrong line |
 
 Nothing degrades into doing nothing silently. Two defects in the publishing
 pipeline were exactly that shape, and both were expensive to find.
 
 ## What this deliberately does not do
 
-- **No source-file mapping.** No `data-magpie-src`, no Vite plugin, no
-  preview-only build. The author locates the component from the screenshot,
-  which on this site they can. If reviewers say otherwise, the plugin from the
-  earlier design is still available to add.
 - **No freehand circling or arrows.** A rectangle is enough to say "this bit".
 - **No comment text in the overlay.** See above.
 - **No posting on the reviewer's behalf.** Nothing authenticates, so the
@@ -128,7 +169,9 @@ of every single screenshot. That kills the ergonomics the feature exists for.
 
 The parts worth testing are pure and are separated for that reason: composing
 the caption text, clamping a dragged rectangle to the viewport and rejecting
-undersized ones, and building the PR URL. Those get unit tests in the existing
+undersized ones, resolving a `file:line` against `anchors.json` to a URL —
+including the outside-the-diff and missing-manifest fallbacks — and building
+the PR URL. Those get unit tests in the existing
 `node --test` suite.
 
 The DOM, canvas and clipboard paths cannot be unit-tested without a browser and
@@ -136,9 +179,18 @@ are verified by hand against a real preview: mark a region, confirm the PNG
 lands on the clipboard, paste it into a comment, confirm the caption is legible
 and the dimming shows the right area.
 
-A build check asserts no preview-only asset appears in a production build.
+A build check asserts that a production build contains neither a preview-only
+asset nor any `data-magpie-src` attribute — the one regression that would leak
+preview-only markup to `magpie.apache.org`.
 
 ## Open questions
+
+**What is GitHub's current diff-anchor format?** The Files-tab anchor
+(`#diff-<anchor>R<line>`) is not a documented contract and has changed before —
+it has been both an MD5 and a SHA-256 of the file path. This must be verified
+against a real pull request on this repository before implementation, and
+`anchors.json` exists so that a future change is one function rather than a
+hunt.
 
 **Does GitHub's comment box accept a programmatically-written clipboard image
 on every browser we care about?** Chrome and Edge are certain. Firefox
