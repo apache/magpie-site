@@ -283,15 +283,28 @@ async function publishOne({
   return true;
 }
 
+const OVERLAY_MARKER = "<!-- magpie-preview-overlay -->";
 const OVERLAY_TAGS =
+  OVERLAY_MARKER + "\n" +
   '<script src="/_preview/html2canvas.min.js"></script>\n' +
   '<script src="/_preview/review.js"></script>\n';
 
-/** Add the overlay's script tags to a page, exactly once. */
+/**
+ * Add the overlay's script tags to a page, exactly once.
+ *
+ * Guarded on a marker comment rather than on the script path: a page whose
+ * CONTENT mentions "/_preview/review.js" — this feature's own design document,
+ * once published — would otherwise silently get no overlay. Injected at the
+ * LAST </body>, because an earlier one can appear inside an inline script or a
+ * serialised island prop, and injecting there corrupts the page.
+ */
 export function injectOverlay(html) {
-  if (typeof html !== "string" || !html.includes("</body>")) return html;
-  if (html.includes("/_preview/review.js")) return html;
-  return html.replace("</body>", OVERLAY_TAGS + "</body>");
+  if (typeof html !== "string") return html;
+  if (html.includes(OVERLAY_MARKER)) return html;
+
+  const at = html.lastIndexOf("</body>");
+  if (at === -1) return html;
+  return html.slice(0, at) + OVERLAY_TAGS + html.slice(at);
 }
 
 async function findHtmlFiles(root) {
