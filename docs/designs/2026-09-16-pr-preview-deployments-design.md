@@ -185,6 +185,14 @@ with `/show-preview` and manual dispatch as two ways of saying it.
 
 ## Reviewing in place
 
+> **Superseded.** This section was never implemented. It is replaced by
+> [the preview review overlay design](2026-09-17-preview-review-overlay-design.md),
+> which marks a region and produces a screenshot rather than clicking an element
+> to resolve its source file and line — and which needs no build-time plugin, so
+> previews stay byte-identical to production. The reasoning below is kept because
+> the constraints it establishes still hold.
+
+
 Looking at a preview and then describing the problem in words — *"the third card
 in the community row, the button under it"* — is the slow part of reviewing a
 site change. The preview should let a reviewer point instead.
