@@ -368,3 +368,20 @@ test("injectOverlay leaves a document with no body alone", async () => {
   const { injectOverlay } = await import("./publish.mjs");
   assert.equal(injectOverlay("no body here"), "no body here");
 });
+
+test("injectOverlay injects at the last </body> and only once", async () => {
+  const { injectOverlay } = await import("./publish.mjs");
+
+  // An inline script containing </body> must not be the injection point.
+  const html = '<html><body><script>var s = "</body>";</script></body></html>';
+  const once = injectOverlay(html);
+  assert.ok(
+    once.lastIndexOf("_preview/review.js") > once.indexOf('var s = "</body>"'),
+    "must inject after the string literal, not inside the script",
+  );
+  assert.equal(injectOverlay(once), once, "injecting twice changes nothing");
+
+  // A page that merely mentions the script path still gets the overlay.
+  const mentions = "<html><body>see /_preview/review.js for details</body></html>";
+  assert.match(injectOverlay(mentions), /magpie-preview-overlay/);
+});
