@@ -200,3 +200,9 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+=======================================================================
+This product bundles html2canvas 1.4.1, which is available under the MIT
+licence. See vendor/html2canvas/LICENSE for the full text.
+  https://github.com/niklasvh/html2canvas
+=======================================================================
