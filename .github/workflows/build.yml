@@ -76,6 +76,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Assert the production build carries no preview annotation
+        run: |
+          if grep -rq "data-magpie-src" dist/; then
+            echo "::error::data-magpie-src found in a production build — it must never ship to magpie.apache.org"
+            grep -rl "data-magpie-src" dist/ | head -20
+            exit 1
+          fi
+          echo "production build is clean of preview annotation"
+
       - name: Build the preview site with source annotation
         if: github.event_name == 'pull_request'
         env:
