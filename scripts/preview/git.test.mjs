@@ -108,3 +108,10 @@ test("redactError scrubs the token from every field that can carry argv", () => 
   );
   assert.deepEqual(err.spawnargs.length, 4, "redaction must not drop arguments");
 });
+
+test("prepareTree writes generated files into nested directories", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "preview-tree-"));
+  await prepareTree({ dir, files: { "_preview/review.js": "// hi\n" } });
+
+  assert.equal(await readFile(join(dir, "_preview", "review.js"), "utf8"), "// hi\n");
+});

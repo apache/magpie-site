@@ -1,6 +1,9 @@
+import { readFile, writeFile, readdir } from "node:fs/promises";
+import { join } from "node:path";
 import { resolveArmed } from "./armed.mjs";
 import { planActions } from "./plan.mjs";
 import { validateMeta, findUnsafeEntries } from "./validate.mjs";
+import { buildAnchors } from "./anchors.mjs";
 import {
   renderAsfYaml,
   renderRobots,
@@ -245,18 +248,60 @@ async function publishOne({
     return false;
   }
 
+  const anchors = buildAnchors(await gh.listPullFiles(pr));
+  const logic = await readFile(new URL("./overlay/logic.mjs", import.meta.url), "utf8");
+  const overlay = await readFile(new URL("./overlay/review.js", import.meta.url), "utf8");
+  const vendor = await readFile(
+    new URL("../../vendor/html2canvas/html2canvas.min.js", import.meta.url), "utf8",
+  );
+
+  const generated = {
+    ".asf.yaml": renderAsfYaml(pr),
+    "robots.txt": renderRobots(),
+    "_preview/html2canvas.min.js": vendor,
+    // The overlay's pure logic is unit-tested as a module and inlined here; the
+    // browser file has no build step and no imports.
+    "_preview/review.js":
+      logic.replace(/^export /gm, "") +
+      `\nwindow.__MAGPIE_PREVIEW__ = ${JSON.stringify({
+        repo, pr, sha: headSha.slice(0, 7), anchors,
+      })};\n` + overlay,
+  };
+
+  for (const page of await findHtmlFiles(artifact.dir)) {
+    await writeFile(page, injectOverlay(await readFile(page, "utf8")));
+  }
+
   await git.pushTree(
     previewBranch(pr),
-    {
-      ".asf.yaml": renderAsfYaml(pr),
-      "robots.txt": renderRobots(),
-    },
+    generated,
     `Publish preview for #${pr} (${headSha.slice(0, 7)})`,
     artifact.dir,
   );
 
   await gh.upsertComment(pr, MARKER, publishedBody(pr, headSha));
   return true;
+}
+
+const OVERLAY_TAGS =
+  '<script src="/_preview/html2canvas.min.js"></script>\n' +
+  '<script src="/_preview/review.js"></script>\n';
+
+/** Add the overlay's script tags to a page, exactly once. */
+export function injectOverlay(html) {
+  if (typeof html !== "string" || !html.includes("</body>")) return html;
+  if (html.includes("/_preview/review.js")) return html;
+  return html.replace("</body>", OVERLAY_TAGS + "</body>");
+}
+
+async function findHtmlFiles(root) {
+  const out = [];
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    const full = join(root, entry.name);
+    if (entry.isDirectory() && !entry.isSymbolicLink()) out.push(...(await findHtmlFiles(full)));
+    else if (entry.isFile() && entry.name.endsWith(".html")) out.push(full);
+  }
+  return out;
 }
 
 const publishedBody = (pr, sha) =>

@@ -42,6 +42,7 @@ function fakes({
       posted.push({ n, marker, body });
     },
     listPreviewBranches: async () => branches,
+    listPullFiles: async () => [],
     deleteBranch: async (name) => {
       deleted.push(name);
     },
@@ -350,4 +351,20 @@ test("a run with a persistently failing operation reports failure via the exit c
 
   assert.equal(process.exitCode, 1, "a run with a failed operation must set a nonzero exit code");
   process.exitCode = 0;
+});
+
+test("injectOverlay adds the scripts once, before </body>", async () => {
+  const { injectOverlay } = await import("./publish.mjs");
+  const html = "<html><body><h1>x</h1></body></html>";
+  const once = injectOverlay(html);
+
+  assert.match(once, /_preview\/review\.js/);
+  assert.match(once, /_preview\/html2canvas\.min\.js/);
+  assert.ok(once.indexOf("</body>") > once.indexOf("review.js"), "scripts come before </body>");
+  assert.equal(injectOverlay(once), once, "injecting twice changes nothing");
+});
+
+test("injectOverlay leaves a document with no body alone", async () => {
+  const { injectOverlay } = await import("./publish.mjs");
+  assert.equal(injectOverlay("no body here"), "no body here");
 });

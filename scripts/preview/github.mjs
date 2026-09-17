@@ -43,6 +43,7 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
     listOpenPulls: () => paginate(`/repos/${repo}/pulls?state=open`),
     getPull: (n) => request(`/repos/${repo}/pulls/${n}`),
     listComments: (n) => paginate(`/repos/${repo}/issues/${n}/comments`),
+    listPullFiles: (n) => paginate(`/repos/${repo}/pulls/${n}/files`),
 
     async hasWriteAccess(login) {
       try {
