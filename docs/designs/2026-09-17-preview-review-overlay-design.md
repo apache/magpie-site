@@ -139,7 +139,7 @@ supplies this.
 |---|---|
 | Clipboard write refused (Safari/Firefox permissions) | The PNG downloads instead, and the toast says to drag the file into the comment box |
 | `html2canvas` throws | Toast names the failure; the overlay stays open so the region is not lost |
-| Popup blocked when opening the PR | Toast carries the PR link as a plain anchor to click |
+| Popup blocked when opening the PR | Toast shows the pull request's URL as text, for fifteen seconds, to copy by hand |
 | `window.__MAGPIE_PREVIEW__` missing | The button never appears — this is not a preview |
 | No annotated ancestor above the marked region | Conversation tab instead of a diff line; the caption says the source was not resolved |
 | Source line is outside the diff | Conversation tab; the caption still names the `file:line` |
@@ -184,9 +184,11 @@ are verified by hand against a real preview: mark a region, confirm the PNG
 lands on the clipboard, paste it into a comment, confirm the caption is legible
 and the dimming shows the right area.
 
-A build check asserts that a production build contains neither a preview-only
-asset nor any `data-magpie-src` attribute — the one regression that would leak
-preview-only markup to `magpie.apache.org`.
+A build check asserts that a production build contains no `data-magpie-src`
+attribute — the one regression that would leak preview-only markup to
+`magpie.apache.org`. The preview's own assets are written by the publisher into
+a preview branch and never enter a production build, so there is nothing to
+assert about them there.
 
 ## Open questions
 
