@@ -76,6 +76,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Build the preview site with source annotation
+        if: github.event_name == 'pull_request'
+        env:
+          MAGPIE_PREVIEW_ANNOTATE: "1"
+        run: npm run build
+
       - name: Write preview metadata
         if: github.event_name == 'pull_request'
         env:
