@@ -1,8 +1,8 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { mkdtemp, writeFile, rm, cp, readdir } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm, cp, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const run = promisify(execFile);
 
@@ -76,7 +76,9 @@ export async function prepareTree({ dir, files, contentDir = null }) {
   // Generated files are written AFTER the copy, so ours always win over any
   // file of the same name shipped inside the artifact.
   for (const [name, body] of Object.entries(files)) {
-    await writeFile(join(dir, name), body);
+    const target = join(dir, name);
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, body);
   }
 
   // Never publish the metadata the publisher validated against.
