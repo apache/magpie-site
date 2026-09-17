@@ -22,7 +22,7 @@ test("addedLineRanges reads the new-file line numbers a hunk touches", () => {
     "+changed",
   ].join("\n");
 
-  assert.deepEqual(addedLineRanges(patch), [[2, 3], [22, 22]]);
+  assert.deepEqual(addedLineRanges(patch), [[2, 3], [21, 21]]);
 });
 
 test("addedLineRanges is empty for a patch with no additions", () => {
@@ -40,4 +40,22 @@ test("buildAnchors keys by path and carries anchor plus ranges", () => {
   assert.equal(built["a.tsx"].anchor, diffAnchor("a.tsx"));
   assert.deepEqual(built["a.tsx"].ranges, [[2, 2]]);
   assert.deepEqual(built["b.png"].ranges, [], "a binary file has no line ranges");
+});
+
+test("deletions never advance the new-file line number", () => {
+  const patch = [
+    "@@ -10,6 +10,4 @@",
+    " context",       // new line 10
+    "-gone one",
+    "-gone two",
+    "-gone three",
+    "+replacement",   // new line 11
+    " context",       // new line 12
+  ].join("\n");
+
+  assert.deepEqual(
+    addedLineRanges(patch),
+    [[11, 11]],
+    "three deletions must not push the replacement to line 14",
+  );
 });
