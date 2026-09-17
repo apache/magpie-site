@@ -27,9 +27,11 @@ export function addedLineRanges(patch) {
       run = run ? [run[0], line] : [line, line];
       line += 1;
     } else if (text.startsWith("-")) {
+      // A removed line exists only in the old file, so the new-file cursor
+      // stays put. Advancing here shifts every following line number and
+      // anchors comments to the wrong line.
       if (run) ranges.push(run);
       run = null;
-      line += 1;
     } else {
       if (run) ranges.push(run);
       run = null;
