@@ -21,6 +21,18 @@
     say._t = setTimeout(function () { toast.style.display = "none"; }, ms || 6000);
   }
 
+  // root holds the dimming and the marking box; button and toast are siblings
+  // on document.body, so hiding root alone leaves them in the captured image.
+  function hideChrome() {
+    root.style.display = "none";
+    button.style.display = "none";
+    toast.style.display = "none";
+  }
+
+  function showChrome() {
+    button.style.display = "";
+  }
+
   function sourceUnder(x, y) {
     var node = document.elementFromPoint(x, y);
     while (node && node !== document.body) {
@@ -49,7 +61,7 @@
       sha: cfg.sha,
     });
 
-    root.style.display = "none"; // keep the overlay out of the capture
+    hideChrome();
     var shot;
     try {
       shot = await window.html2canvas(document.body, {
@@ -59,10 +71,13 @@
         useCORS: true, logging: false,
       });
     } catch (err) {
+      showChrome();
       root.style.display = "block";
       say("Could not capture the page: " + err.message);
       return;
     }
+
+    showChrome();
 
     var scale = shot.width / window.innerWidth;
     var out = document.createElement("canvas");
