@@ -2,10 +2,18 @@ const MIN_SIDE = 12;
 
 /** Normalise a drag into a viewport-clipped rectangle, or null if it is a stray click. */
 export function clampRegion({ x1, y1, x2, y2 }, viewport) {
-  const x = Math.max(0, Math.min(x1, x2));
-  const y = Math.max(0, Math.min(y1, y2));
-  const w = Math.min(viewport.w, Math.max(x1, x2)) - x;
-  const h = Math.min(viewport.h, Math.max(y1, y2)) - y;
+  // Clamp both corners into the viewport before measuring, so an off-screen
+  // drag yields a zero-size region rather than a negative one. Relying on the
+  // minimum-size check to reject negatives works, but only by coincidence.
+  const left = Math.min(Math.max(0, Math.min(x1, x2)), viewport.w);
+  const top = Math.min(Math.max(0, Math.min(y1, y2)), viewport.h);
+  const right = Math.min(Math.max(0, Math.max(x1, x2)), viewport.w);
+  const bottom = Math.min(Math.max(0, Math.max(y1, y2)), viewport.h);
+
+  const x = left;
+  const y = top;
+  const w = right - left;
+  const h = bottom - top;
 
   if (w < MIN_SIDE || h < MIN_SIDE) return null;
   return { x, y, w, h };
