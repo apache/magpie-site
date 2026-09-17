@@ -8,6 +8,10 @@ import { relative } from "node:path";
  * host elements of its own, and those carry the location the reviewer can act
  * on. Active only when the build sets MAGPIE_PREVIEW_ANNOTATE=1 — the
  * production build must emit none of this.
+ *
+ * This is a Babel plugin wired through @astrojs/react, so it only sees JSX:
+ * `.tsx` and `.jsx` files. `.astro` templates and the synced markdown docs are
+ * never annotated — that would need the Astro compiler, not Babel.
  */
 export default function magpieSrc({ types: t }) {
   return {

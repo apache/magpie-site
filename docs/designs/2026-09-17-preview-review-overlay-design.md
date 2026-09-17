@@ -49,14 +49,12 @@ none of it.
 
 **Activation.** A floating button sits bottom-right — *Comment on this
 preview* — with `c` as a shortcut. It is off until asked for: a review tool
-that overlays the thing being reviewed is worse than useless. The armed state
-lives in `sessionStorage`, so it does not follow the reviewer to the next page.
+that overlays the thing being reviewed is worse than useless.
 
 **Marking.** Click and drag a rectangle. While dragging, the area outside the
 rectangle dims and its edge is outlined, so what will be captured is visible
-before committing to it. `Escape` cancels. `Enter`, or the Submit button,
-confirms. A minimum size is enforced so a stray click cannot submit a
-zero-pixel region.
+before committing to it. `Escape` cancels. Releasing the drag confirms. A
+minimum size is enforced so a stray click cannot submit a zero-pixel region.
 
 **Capture.** `html2canvas` rasterizes the viewport at `devicePixelRatio`,
 capped at 2 so a retina screen does not produce an eight-megabyte PNG. The
@@ -92,11 +90,18 @@ around a button usually starts outside it. If nothing under the centre is
 annotated, the walk continues up the tree; if the walk reaches `<body>` with no
 annotation, there is no source line and the fallback below applies.
 
+Only `.tsx` and `.jsx` are annotated. `.astro` templates and the synced
+markdown docs are not: annotating them needs the Astro compiler rather than
+Babel. Content originating there resolves no source and falls back to the
+Conversation tab — which means a documentation-only pull request never gets
+diff-line landing. On this repository that is 25 `.tsx` against 13 `.astro`
+and 159 markdown files, so the landing page is covered and the docs are not.
+
 ## Landing it on the diff line
 
 The publisher knows the diff — it has the PR number and an API token — so it
-writes `_preview/anchors.json` beside the site: for each changed file, its diff
-anchor and the line ranges the diff actually touches.
+embeds an anchors payload in `window.__MAGPIE_PREVIEW__`: for each changed
+file, its diff anchor and the line ranges the diff actually touches.
 
 - **Source line inside the diff** → the overlay opens the Files tab anchored at
   that line (`/pull/<N>/files#diff-<anchor>R<line>`). The reviewer clicks the
@@ -113,8 +118,8 @@ screenshot already on the clipboard. That is one click and one paste from a
 comment attached to the exact source line — which is the thing this feature
 exists to make cheap.
 
-The anchor format is not contractual and has changed before, so `anchors.json`
-is generated in one place: if GitHub changes it, one function changes.
+The anchor format is not contractual and has changed before, so the anchors
+payload is generated in one place: if GitHub changes it, one function changes.
 
 ## How the page knows which PR it is
 
@@ -138,7 +143,7 @@ supplies this.
 | `window.__MAGPIE_PREVIEW__` missing | The button never appears — this is not a preview |
 | No annotated ancestor above the marked region | Conversation tab instead of a diff line; the caption says the source was not resolved |
 | Source line is outside the diff | Conversation tab; the caption still names the `file:line` |
-| `_preview/anchors.json` missing or stale | Conversation tab — never a wrong line |
+| anchors missing from the payload | Conversation tab — never a wrong line |
 
 Nothing degrades into doing nothing silently. Two defects in the publishing
 pipeline were exactly that shape, and both were expensive to find.
@@ -169,8 +174,8 @@ of every single screenshot. That kills the ergonomics the feature exists for.
 
 The parts worth testing are pure and are separated for that reason: composing
 the caption text, clamping a dragged rectangle to the viewport and rejecting
-undersized ones, resolving a `file:line` against `anchors.json` to a URL —
-including the outside-the-diff and missing-manifest fallbacks — and building
+undersized ones, resolving a `file:line` against the anchors payload to a URL
+— including the outside-the-diff and missing-payload fallbacks — and building
 the PR URL. Those get unit tests in the existing
 `node --test` suite.
 
@@ -188,9 +193,9 @@ preview-only markup to `magpie.apache.org`.
 **What is GitHub's current diff-anchor format?** The Files-tab anchor
 (`#diff-<anchor>R<line>`) is not a documented contract and has changed before —
 it has been both an MD5 and a SHA-256 of the file path. This must be verified
-against a real pull request on this repository before implementation, and
-`anchors.json` exists so that a future change is one function rather than a
-hunt.
+against a real pull request on this repository before implementation, and the
+anchors payload is generated in one place so that a future change is one
+function rather than a hunt.
 
 **Does GitHub's comment box accept a programmatically-written clipboard image
 on every browser we care about?** Chrome and Edge are certain. Firefox
