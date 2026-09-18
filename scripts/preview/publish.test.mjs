@@ -3,10 +3,19 @@ import assert from "node:assert/strict";
 import { mkdtemp, writeFile, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { run, publishedShaFrom } from "./publish.mjs";
+import { run, publishedShaFrom, isBotAuthored } from "./publish.mjs";
 
 const SHA = "c".repeat(40);
-const pull = (number, sha = SHA) => ({ number, head: { sha } });
+const pull = (number, sha = SHA) => ({
+  number,
+  head: { sha },
+  user: { type: "User", login: "contributor" },
+});
+const botPull = (number, login = "dependabot[bot]", type = "Bot") => ({
+  number,
+  head: { sha: SHA },
+  user: { type, login },
+});
 
 async function artifactDir({ withSymlink = false } = {}) {
   const dir = await mkdtemp(join(tmpdir(), "preview-art-"));
@@ -69,6 +78,38 @@ test("announces on an open PR that has not been told about previews", async () =
   const announce = f.posted.find((p) => p.marker === "magpie-preview-howto");
   assert.ok(announce, "expected an explainer comment");
   assert.match(announce.body, /magpie-pr5\.staged\.apache\.org/);
+});
+
+test("isBotAuthored reads the type, and falls back to the login suffix", () => {
+  assert.equal(isBotAuthored({ user: { type: "Bot", login: "dependabot[bot]" } }), true);
+  assert.equal(isBotAuthored({ user: { type: "User", login: "renovate[bot]" } }), true);
+  assert.equal(isBotAuthored({ user: { type: "User", login: "contributor" } }), false);
+  assert.equal(isBotAuthored({}), false);
+  assert.equal(isBotAuthored(null), false);
+});
+
+test("does not announce on a bot-authored pull request", async () => {
+  const f = fakes({ openPulls: [botPull(5)] });
+  await go(f);
+
+  assert.equal(
+    f.posted.filter((p) => p.marker === "magpie-preview-howto").length,
+    0,
+    "a dependency bot opens many PRs and reads none of them",
+  );
+});
+
+test("still publishes a bot's PR when a maintainer arms it", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [botPull(5)],
+    comments: { 5: [armCmd()] },
+  });
+
+  await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.pushed.length, 1, "asking for a preview of a bot PR must still work");
+  assert.equal(f.pushed[0].branch, "preview/pr5-staging");
 });
 
 test("does not announce twice when its own explainer is already there", async () => {
