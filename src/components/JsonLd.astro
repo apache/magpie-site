@@ -72,7 +72,7 @@ const payload = {
 const json = JSON.stringify(payload).replace(/</g, "\\u003c");
 ---
 
-<script type="application/ld+json" set:html={json} />
+<script is:inline type="application/ld+json" set:html={json} />
 {markdownPath && (
   <link rel="alternate" type="text/markdown" href={`${SITE_URL}${markdownPath}`} />
 )}
