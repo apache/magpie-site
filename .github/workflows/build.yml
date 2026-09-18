@@ -79,8 +79,11 @@ jobs:
         run: npm run sync-docs
 
       - name: Type check
+        # No longer continue-on-error: the tree is clean of errors, warnings and
+        # hints, so anything this reports from here on is a regression someone
+        # introduced. astro check only fails the step on errors — warnings and
+        # hints still print without blocking.
         run: npx astro check
-        continue-on-error: true
 
       - name: Build
         run: npm run build

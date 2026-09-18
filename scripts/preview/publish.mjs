@@ -49,6 +49,17 @@ export function publishedShaFrom(message) {
   return match ? match[1] : null;
 }
 
+/**
+ * Whether a pull request was opened by a bot — dependabot and friends.
+ *
+ * `user.type` is the authoritative signal; the login suffix is a fallback for
+ * anything the API reports as a User but which is plainly automation.
+ */
+export function isBotAuthored(pull) {
+  if (pull?.user?.type === "Bot") return true;
+  return /\[bot\]$/.test(String(pull?.user?.login ?? ""));
+}
+
 export async function run({
   gh,
   git,
@@ -87,7 +98,12 @@ export async function run({
         armed || hasBotMarker(comments, ARMED_MARKER, { login: "github-actions[bot]" }),
       );
 
-      if (!hasBotMarker(comments, HOWTO_MARKER)) {
+      // Announce to humans only. A dependency-bump bot opens many pull
+      // requests and reads none of them, so the explainer is noise on its
+      // timeline and on commits@. Arming is deliberately not gated the same
+      // way: a maintainer who wants a preview of a bot's PR can still ask for
+      // one, and it will publish.
+      if (!isBotAuthored(pull) && !hasBotMarker(comments, HOWTO_MARKER)) {
         await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number));
       }
     } catch (err) {
@@ -149,7 +165,7 @@ export async function run({
         force: only === pr,
       });
       if (published && only === pr) {
-        await gh.upsertComment(pr, ARMED_MARKER, armedBody(pr, dispatchedBy));
+        await gh.upsertComment(pr, ARMED_MARKER, armedBody(dispatchedBy));
       }
     } catch (err) {
       console.error(`preview: publish failed for #${pr}: ${err.message}`);
@@ -213,24 +229,24 @@ async function publishOne({
 
   const build = await gh.latestSuccessfulBuild(headSha);
   if (!build) {
-    await gh.upsertComment(pr, MARKER, waitingBody(pr, headSha));
+    await gh.upsertComment(pr, MARKER, waitingBody(headSha));
     return false;
   }
 
   const artifact = await fetchArtifact(build.id);
   if (!artifact) {
-    await gh.upsertComment(pr, MARKER, waitingBody(pr, headSha));
+    await gh.upsertComment(pr, MARKER, waitingBody(headSha));
     return false;
   }
 
   const check = validateMeta(artifact.meta, { number: pr, headSha });
   if (!check.ok) {
-    await gh.upsertComment(pr, MARKER, refusedBody(pr, check.reason));
+    await gh.upsertComment(pr, MARKER, refusedBody(check.reason));
     return false;
   }
 
   if (!artifact.dir) {
-    await gh.upsertComment(pr, MARKER, refusedBody(pr, "artifact had no extracted directory"));
+    await gh.upsertComment(pr, MARKER, refusedBody("artifact had no extracted directory"));
     return false;
   }
 
@@ -240,11 +256,11 @@ async function publishOne({
   try {
     unsafe = await findUnsafeEntries(artifact.dir);
   } catch (err) {
-    await gh.upsertComment(pr, MARKER, refusedBody(pr, `could not screen the artifact: ${err.message}`));
+    await gh.upsertComment(pr, MARKER, refusedBody(`could not screen the artifact: ${err.message}`));
     return false;
   }
   if (unsafe.length) {
-    await gh.upsertComment(pr, MARKER, refusedBody(pr, `unsafe entries: ${unsafe.join(", ")}`));
+    await gh.upsertComment(pr, MARKER, refusedBody(`unsafe entries: ${unsafe.join(", ")}`));
     return false;
   }
 
@@ -321,18 +337,18 @@ const publishedBody = (pr, sha) =>
   `### Preview published\n\n${previewUrl(pr)}\n\nBuilt from \`${sha.slice(0, 7)}\`. ` +
   `Staging takes a few minutes to pick up a new push.`;
 
-const waitingBody = (pr, sha) =>
+const waitingBody = (sha) =>
   `### Preview waiting on a build\n\nNo successful build for \`${sha.slice(0, 7)}\` yet. ` +
   `The preview publishes on the next run after the build goes green.`;
 
-const refusedBody = (pr, reason) =>
+const refusedBody = (reason) =>
   `### Preview could not be published\n\nThe build artifact was refused: ${String(reason).slice(0, 200)}`;
 
 const retiredBody = (pr) =>
   `### Preview retired\n\nThe preview for this pull request is no longer published. ` +
   `${previewUrl(pr)} now serves a notice instead.`;
 
-const armedBody = (pr, by) =>
+const armedBody = (by) =>
   `### Preview armed by manual dispatch\n\n` +
   (by ? `@${by} published this preview by dispatching the workflow.` : `This preview was published by manual dispatch.`) +
   ` It will keep tracking this PR's head commit until the PR closes.`;
