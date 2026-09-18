@@ -56,7 +56,7 @@ rectangle dims and its edge is outlined, so what will be captured is visible
 before committing to it. `Escape` cancels. Releasing the drag confirms. A
 minimum size is enforced so a stray click cannot submit a zero-pixel region.
 
-**Capture.** `html2canvas` rasterizes the viewport at `devicePixelRatio`,
+**Capture.** `html2canvas-pro` rasterizes the viewport at `devicePixelRatio`,
 capped at 2 so a retina screen does not produce an eight-megabyte PNG. The
 overlay then composites onto that bitmap: the dimming outside the rectangle,
 the rectangle's outline, and a caption strip along the bottom carrying the page
@@ -138,7 +138,8 @@ supplies this.
 | Situation | Behaviour |
 |---|---|
 | Clipboard write refused (Safari/Firefox permissions) | The PNG downloads instead, and the toast says to drag the file into the comment box |
-| `html2canvas` throws | Toast names the failure; the overlay stays open so the region is not lost |
+| `html2canvas-pro` throws | Toast names the failure; the overlay stays open so the region is not lost |
+| The screenshot library did not load or changed its export shape | Toast says so, rather than the page failing with "not a function" |
 | Popup blocked when opening the PR | Toast shows the pull request's URL as text, for fifteen seconds, to copy by hand |
 | `window.__MAGPIE_PREVIEW__` missing | The button never appears — this is not a preview |
 | No annotated ancestor above the marked region | Conversation tab instead of a diff line; the caption says the source was not resolved |
@@ -155,20 +156,62 @@ pipeline were exactly that shape, and both were expensive to find.
 - **No posting on the reviewer's behalf.** Nothing authenticates, so the
   comment is always theirs, written and submitted by them.
 
-## Vendoring html2canvas
+## Vendoring the capture library
 
-`html2canvas` is MIT, which is ASF Category A. It is vendored into the
-repository at a pinned version rather than fetched from a CDN at publish time —
-a publish should not depend on a third-party host being up, and a pinned file
-in-tree is auditable. `LICENSE` gains the corresponding entry in the same
-change.
+`html2canvas-pro` 2.4.3 is MIT, which is ASF Category A. It is vendored into
+the repository at a pinned version rather than fetched from a CDN at publish
+time — a publish should not depend on a third-party host being up, and a pinned
+file in-tree is auditable. `LICENSE` carries the corresponding entry, and
+`vendor/` is excluded from the pre-commit hooks that rewrite files, so the
+vendored bytes still hash to what the registry delivered.
 
 It is injected only into previews, so it never reaches `magpie.apache.org` and
 never becomes a dependency of the site's own build. A check asserts that.
 
+**Why the fork rather than `html2canvas` itself.** The first implementation
+vendored `html2canvas` 1.4.1 and could not capture a single page of this site:
+
+```
+Could not capture the page: Attempting to parse an unsupported color function "oklch"
+```
+
+That library parses CSS colours itself and predates the modern colour
+functions. This site is Tailwind 4, whose palette is `oklch` throughout, so the
+failure was total rather than incidental — and invisible to every review, because
+nothing was wrong with the code. It took someone opening a preview and dragging
+a box. `html2canvas-pro` is the maintained fork that added `oklch`, `lab`, `lch`
+and `color()`.
+
+**The overlay resolves the library's export shape rather than assuming it.**
+The fork's UMD bundle exposes `window.html2canvas` as a module namespace whose
+`.default` is the function, where the original exposed the function directly.
+A file-only swap would have replaced the colour error with
+`window.html2canvas is not a function`, so the overlay accepts either shape and
+reports a clear failure when it finds neither. A future change of library or
+build output fails loudly instead of mysteriously.
+
 The alternative considered was the native `getDisplayMedia` API, which needs no
 dependency at all — and puts a "share your screen" permission prompt in front
-of every single screenshot. That kills the ergonomics the feature exists for.
+of every single screenshot. That kills the ergonomics the feature exists for. A
+library that renders through SVG `foreignObject` (`html-to-image` and friends)
+would sidestep CSS parsing permanently, since the browser does the rendering;
+it trades that for having to embed web fonts and cross-origin images, both of
+which this site uses. If the fork ever falls behind CSS again, that is the next
+thing to try.
+
+## Saying that a preview is a preview
+
+A staged URL gets forwarded, and `magpie-pr180.staged.apache.org` is visually
+indistinguishable from the published site. So every preview carries a small
+amber bar at the top right naming the repository, the pull request and the
+commit it was built from, and linking to the pull request.
+
+It is deliberately not dismissible. The moment it can be turned off is the
+moment someone screenshots a preview and presents it as the site.
+
+It hides with the rest of the overlay's chrome during a capture, so it never
+appears in a screenshot — the caption burned into the image already carries the
+same facts, in a form that survives being pasted into a comment.
 
 ## Testing
 
