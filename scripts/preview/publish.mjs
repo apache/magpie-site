@@ -49,6 +49,17 @@ export function publishedShaFrom(message) {
   return match ? match[1] : null;
 }
 
+/**
+ * Whether a pull request was opened by a bot — dependabot and friends.
+ *
+ * `user.type` is the authoritative signal; the login suffix is a fallback for
+ * anything the API reports as a User but which is plainly automation.
+ */
+export function isBotAuthored(pull) {
+  if (pull?.user?.type === "Bot") return true;
+  return /\[bot\]$/.test(String(pull?.user?.login ?? ""));
+}
+
 export async function run({
   gh,
   git,
@@ -87,7 +98,12 @@ export async function run({
         armed || hasBotMarker(comments, ARMED_MARKER, { login: "github-actions[bot]" }),
       );
 
-      if (!hasBotMarker(comments, HOWTO_MARKER)) {
+      // Announce to humans only. A dependency-bump bot opens many pull
+      // requests and reads none of them, so the explainer is noise on its
+      // timeline and on commits@. Arming is deliberately not gated the same
+      // way: a maintainer who wants a preview of a bot's PR can still ask for
+      // one, and it will publish.
+      if (!isBotAuthored(pull) && !hasBotMarker(comments, HOWTO_MARKER)) {
         await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number));
       }
     } catch (err) {
