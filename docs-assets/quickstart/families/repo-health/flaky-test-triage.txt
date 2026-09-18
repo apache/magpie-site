@@ -1,0 +1,35 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# Rendered to the .svg beside it by tools/dev/render-screenshot.sh, which
+# strips this header. Edit here, never there.
+
+> /magpie-repo-health:flaky-test-triage
+
+  Reading the last 200 CI runs on main
+
+  FLAKY
+    test_scheduler_timeout    fails 1 run in 9, always on the slow runner
+    test_upload_retry         fails 1 run in 30, no pattern in the runner
+
+  FAILING, NOT FLAKY
+    test_config_defaults      fails every run since the config change
+
+  The last one is a real regression wearing a flake's clothes - it is in
+  the same file as two genuine flakes, which is why nobody looked.
+
+  Read-only.
