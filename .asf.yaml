@@ -1,0 +1,51 @@
+# Apache Software Foundation repository configuration.
+# https://cwiki.apache.org/confluence/display/INFRA/Git+-+.asf.yaml+features
+#
+# The `github:` block below is applied from the default branch (main).
+# The `publish:` block is what serves the website: CI builds the site and
+# force-pushes the generated output (this file included) to the `publish`
+# branch. The `.asf.yaml` on that branch carries `whoami: publish`, which
+# matches the branch name (the asfyaml multi-tenancy guard), so ASF infra
+# publishes it. The hostname is INFERRED from the repository name
+# (magpie-site -> magpie.apache.org) and must NOT be set explicitly: asfyaml
+# forbids naming your own $project.apache.org via the `hostname` field
+# ("It has to be inferred to prevent abuse").
+
+github:
+  description: "Website for Apache Magpie — agent-assisted repository maintainership and development."
+  homepage: https://magpie.apache.org/
+  labels:
+    - apache
+    - magpie
+    - website
+    - astro
+  features:
+    issues: true
+
+  # Branch protection for main. Only checks that run on EVERY pull request may
+  # be listed here: a required context whose workflow does not trigger is never
+  # reported, and the pull request blocks forever with nothing to re-run.
+  #
+  # Deliberately NOT required:
+  #   asf-allowlist-check - path-filtered to .github/**, so it is absent on any
+  #                         pull request that does not touch a workflow.
+  #   deploy              - gated to refs/heads/main; never runs on a PR.
+  #   publish             - schedule / workflow_dispatch only (PR previews).
+  protected_branches:
+    main:
+      required_status_checks:
+        # Not strict: main moves quickly, and requiring every branch to be
+        # up to date would mean rebasing each PR whenever anything merges.
+        strict: false
+        contexts:
+          - lint
+          - build
+
+notifications:
+  commits: commits@magpie.apache.org
+  issues: commits@magpie.apache.org
+  pullrequests: commits@magpie.apache.org
+  discussions: dev@magpie.apache.org
+
+publish:
+  whoami: publish
