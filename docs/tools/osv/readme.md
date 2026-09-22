@@ -1,0 +1,32 @@
+# `tools/osv/`
+
+Rendered page: https://magpie.apache.org/docs/tools/osv/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/tools/osv/readme.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+**Capability:** contract:security-cross-ref
+
+**Kind:** implementation
+
+**Vendor:** OSV.dev
+
+OSV.dev vulnerability cross-reference client.
+Queries the [OSV.dev REST API v1](https://api.osv.dev/v1/) for vulnerability records, aliases (CVE ↔ GHSA ↔ OSV IDs), affected package versions, and vulnerabilities associated with a public upstream commit.
+Complements [`tools/cve-org/`](https://github.com/apache/magpie/tree/main/tools/cve-org/) and [`tools/cve-tool-vulnogram/`](https://github.com/apache/magpie/tree/main/tools/cve-tool-vulnogram/) by providing cross-ecosystem vulnerability records for intended triage consumers (`security-issue-triage`, `security-issue-deduplicate`, `security-cve-allocate`, and `dependency-audit` — not yet wired).
+See [`tool.md`](https://github.com/apache/magpie/blob/main/tools/osv/tool.md) for endpoint recipes, payload structures, and confidentiality boundaries.
+
+## Prerequisites
+
+- **Runtime:** None of its own — this directory documents a read-only adapter; queries are `curl` + `jq` recipes (see `tool.md`).
+- **CLIs:** `curl` and `jq`.
+- **Credentials / auth:** None — OSV.dev is a public vulnerability database with an open, unauthenticated REST API.
+- **Network:** `api.osv.dev` (OSV.dev REST API v1) and `osv.dev` (public web UI).
+
+## Configuration
+
+Adopters select this backend with `<project-config>/project.md` → `security_cross_ref.tool: osv` when performing automated vulnerability cross-referencing.
+The default ecosystem (e.g. `PyPI`, `Maven`, `npm`, `Go`, `crates.io`, `NuGet`, `RubyGems`, `Packagist`) can be configured via `security_cross_ref.ecosystem`.
+The adopter-facing configuration block is declared in [`projects/_template/project.md`](https://github.com/apache/magpie/blob/main/projects/_template/project.md#security-cross-reference).

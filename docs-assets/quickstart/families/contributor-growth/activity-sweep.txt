@@ -1,0 +1,33 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# Rendered to the .svg beside it by tools/dev/render-screenshot.sh, which
+# strips this header. Edit here, never there.
+
+> /magpie-contributor-growth:activity-sweep alex-dev 90d
+
+  GitHub activity, last 90 days
+
+  Authored      7 PRs, 6 merged, 1 open
+  Reviewed      19 PRs, 14 with substantive comments
+  Issues        11 triaged, 3 reproduced
+  Comments      52 across issues and PRs
+
+  Busiest area  providers/aws
+
+  This is what GitHub can see. Mailing lists, release votes and mentoring
+  are not in here, and for most candidates they are half the picture.
