@@ -6,13 +6,40 @@ import { withBase } from "@/ui/lib/utils";
 import "../../styles/terminal-demo.css";
 
 const previewLines = [
-  { kind: "prompt", text: "> Triage the open pull requests for this project." },
-  { kind: "muted", text: "Reading project conventions and 3 open pull requests…" },
-  { kind: "result", text: "#142  Fix empty search results      Needs review" },
-  { kind: "result", text: "#145  Add export documentation     Ready for review" },
-  { kind: "result", text: "#148  Upgrade runtime dependency   Needs testing" },
-  { kind: "muted", text: "No repository changes made." },
-  { kind: "gate", text: "Apply proposed labels?  [y] Approve  [n] Keep as draft" },
+  { kind: "prompt", text: "> Help me triage this private security report." },
+  { kind: "muted", text: "1. Intake — summarize the report in the private workspace." },
+  { kind: "result", text: "2. Triage — check the evidence and affected versions." },
+  { kind: "result", text: "3. Remediation — propose a fix and regression checks." },
+  { kind: "result", text: "4. Disclosure — prepare an advisory for maintainer review." },
+  { kind: "muted", text: "Fictional report. Nothing sent or published." },
+  { kind: "gate", text: "Review each proposal before moving to the next step." },
+];
+
+const securityStages = [
+  {
+    title: '1/4 · Private intake',
+    proposal: 'A reporter says a private export can be opened by another account.\nPrepare an acknowledgement and keep the report in the private security workspace.',
+    details: 'Record the report, the reporter’s contact details, and the affected component privately. Ask for version and reproduction details. Do not copy the report to a public issue.',
+    approved: 'Acknowledgement draft approved in this simulation. Nothing sent. Continue with triage.',
+  },
+  {
+    title: '2/4 · Triage',
+    proposal: 'The fictional report includes a reproduction showing a missing ownership check.\nPropose checking supported versions and recording the impact before deciding severity.',
+    details: 'Evidence in this example: account B can read an export owned by account A. Affected versions and severity are still unconfirmed. The security team reviews those conclusions.',
+    approved: 'Triage plan approved in this simulation. No checks were run. Continue with remediation.',
+  },
+  {
+    title: '3/4 · Remediation',
+    proposal: 'Propose checking export ownership before returning data.\nAdd regression checks for the owner, another account, and an anonymous request.',
+    details: 'Prepare the fix privately. Run regression tests and verify supported versions before accepting it. This demo does not execute tests or claim that the fix is verified.',
+    approved: 'Remediation plan approved in this simulation. No code changed. Continue with disclosure planning.',
+  },
+  {
+    title: '4/4 · Coordinated disclosure',
+    proposal: 'Prepare an advisory draft with impact, affected versions, and the fix.\nLeave unverified fields pending. Coordinate the release, reporter notification, and any CVE steps with the security team.',
+    details: 'Publication remains a separate maintainer decision after the fix and affected versions are verified. Approving here only records review of a fictional disclosure plan.',
+    approved: 'Disclosure plan approved in this simulation. No advisory published, reporter contacted, or CVE requested. Security walkthrough complete.',
+  },
 ];
 
 function CodexStartup() {
@@ -53,16 +80,16 @@ export function TerminalPreview({ paused }: { paused: boolean }) {
   useEffect(() => {sequence.current?.paused(paused || !visible);}, [paused,visible]);
   return <section className="k-section t-preview" id="demo" ref={container}>
     <div className="t-preview-grid">
-      <a className="t-window t-preview-link" href={withBase('/demo')} aria-label="Try the interactive terminal demo">
+      <a className="t-window t-preview-link" href={withBase('/demo?scenario=security')} aria-label="Try the security report walkthrough">
         <div className="t-bar"><span className="t-dots" aria-hidden="true">● ● ●</span><span>codex / example-project</span><span>SIMULATION</span></div>
         <div className="t-preview-output" aria-hidden="true"><CodexStartup /><div className="t-prompt">{typed}<span className="t-cursor">▍</span></div>{previewLines.slice(1).map((entry,index) => <div key={entry.text} className={`t-${entry.kind}`} style={{visibility:index + 2 <= line ? 'visible' : 'hidden'}}>{entry.text}</div>)}</div>
       </a>
-      <div className="t-preview-heading"><h2>Your work.<br /><span>A little assistance.</span></h2><p>One request. A concrete proposal. The next move stays yours.</p><a className="k-button" href={withBase('/demo')}>Try the demo <ArrowUpRight size={18} /></a></div>
+      <div className="t-preview-heading"><h2>Your work.<br /><span>A little assistance.</span></h2><p>Walk through a security report, from private intake to a disclosure plan. Review each step at your own pace.</p><a className="k-button" href={withBase('/demo?scenario=security')}>Try the security demo <ArrowUpRight size={18} /></a></div>
     </div>
   </section>;
 }
 
-type Scenario = 'prs' | 'issues';
+type Scenario = 'prs' | 'issues' | 'security';
 type Entry = { kind: string; text: string };
 const intro: Entry = { kind: 'muted', text: 'Magpie interactive demo\nFictional repository · simulated actions · no account required\nChoose a task below or type help. No shell commands are executed.' };
 const reports = {
@@ -74,6 +101,7 @@ const patch = 'Illustrative diff for PR #142\n\n--- a/search.ts\n+++ b/search.ts
 export default function TerminalDemo() {
   const [entries, setEntries] = useState<Entry[]>([intro]);
   const [scenario, setScenario] = useState<Scenario>('prs');
+  const [securityStep, setSecurityStep] = useState(0);
   const [pending, setPending] = useState(false);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -82,6 +110,9 @@ export default function TerminalDemo() {
   const field = useRef<HTMLInputElement>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   useEffect(() => { if (output.current) output.current.scrollTop = output.current.scrollHeight; }, [entries]);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('scenario') === 'security') run('security');
+  }, []);
   function append(kind: string, text: string) { setEntries(previous => [...previous, {kind, text}]); }
   function run(value: string) {
     const request = value.trim();
@@ -90,22 +121,48 @@ export default function TerminalDemo() {
     append('prompt', `> ${request}`);
     const command = request.toLowerCase();
     if (['help','ajuda','?'].includes(command)) {
-      append('muted', 'Try: triage PRs · triage issues · details · diff · approve · reject · restart\nYou can also ask: “Review the open pull requests”.\nThis guided demo supports these tasks; it is not connected to an LLM.'); return;
+      append('muted', 'Try: security · next · triage PRs · triage issues · details · diff · approve · reject · restart\nYou can also ask: “Review the open pull requests”.\nThis guided demo supports these tasks; it is not connected to an LLM.'); return;
     }
     if (['restart','reset','clear','reiniciar'].includes(command)) { reset(); return; }
+    if (/security|vulnerability|private report/.test(command)) {
+      setScenario('security'); setSecurityStep(0); setPending(true);
+      append('result', `${securityStages[0].title}\n${securityStages[0].proposal}`);
+      append('gate', 'Review this proposal: details · approve · reject. Approval here only advances the simulation.');
+      return;
+    }
+    if (command === 'next') {
+      if (scenario !== 'security') { append('muted', 'Start the security walkthrough to follow its steps.'); return; }
+      if (pending) { append('gate', 'Review and approve this proposal before continuing. Reject keeps it as a draft on this step.'); return; }
+      if (securityStep === securityStages.length - 1) { append('muted', 'Walkthrough complete. Type security to start again, or choose another task.'); return; }
+      const next = securityStep + 1;
+      setSecurityStep(next); setPending(true);
+      append('result', `${securityStages[next].title}\n${securityStages[next].proposal}`);
+      append('gate', 'Review this proposal: details · approve · reject.');
+      return;
+    }
     if (['y','yes','approve','aprovar'].includes(command)) {
       if (!pending) { append('muted','There is no proposal waiting for approval. Start a triage first.'); return; }
+      if (scenario === 'security') {
+        append('result', securityStages[securityStep].approved); setPending(false); return;
+      }
       append('result', scenario === 'prs' ? 'Simulated approval recorded.\n#142 → needs-review\n#145 → ready-for-review\n#148 → needs-testing\n\nAudit: 3 proposed labels approved by you. No merge or external write occurred.' : 'Simulated approval recorded.\n#81 → needs-reproduction\n#84 → possible-duplicate (left open)\n#89 → enhancement\n\nAudit: labels approved by you. No issues were closed or changed externally.');
       setPending(false); return;
     }
     if (['n','no','reject','recusar'].includes(command)) {
       if (!pending) { append('muted','There is no pending proposal. Start a triage first.'); return; }
+      if (scenario === 'security') {
+        append('muted', 'Proposal kept as a draft. The walkthrough stays on this step. Inspect details, approve when ready, or restart.'); return;
+      }
       append('muted','Proposal kept as a draft. No labels applied.\nYou can inspect details, view the diff, or start another task.'); setPending(false); return;
     }
     if (/^(diff|patch|show diff|ver diff)$/.test(command)) {
+      if (scenario === 'security') {
+        append('result', 'No code patch is included in this walkthrough. At remediation, Magpie proposes an ownership check and regression tests for private review.'); return;
+      }
       append('result', scenario === 'prs' ? patch : 'Issue triage has not produced a patch. Reproduce #81 first.\nSwitch to PR triage to inspect the sample diff for #142.'); return;
     }
     if (/^(details|detail|why|explain|detalhes)$/.test(command)) {
+      if (scenario === 'security') { append('result', securityStages[securityStep].details); return; }
       append('result', scenario === 'prs' ? 'Why #148 needs testing:\nThe runtime version changed, but the PR includes no compatibility tests.\nSuggested next step: ask the author to run the supported runtime matrix.\n\nDraft comment: “Could you include the compatibility results for the supported runtimes?”\nThis comment has not been posted.' : 'Why #84 is only a possible duplicate:\nBoth reports mention empty exports, but neither supplies a full reproduction.\nAsk for the version, sample input, and expected result before closing either issue.'); return;
     }
     if (/triage|review|pull request|\bprs?\b|issues|backlog|revis|fila/.test(command)) {
@@ -115,15 +172,15 @@ export default function TerminalDemo() {
       timer.current = setTimeout(() => { append('result', reports[next]); append('gate','Apply these proposed labels? Type approve or reject.\nUse details to inspect the reasoning before deciding.'); setPending(true); setBusy(false); timer.current = null; }, 850);
       return;
     }
-    append('muted','That request is outside this guided demo. Try “triage PRs”, “triage issues”, or “help”. No command was executed.');
+    append('muted','That request is outside this guided demo. Try “security”, “triage PRs”, “triage issues”, or “help”. No command was executed.');
   }
-  function reset() { if (timer.current) clearTimeout(timer.current); timer.current = null; setEntries([intro]); setPending(false); setBusy(false); setInput(''); setScenario('prs'); field.current?.focus(); }
+  function reset() { if (timer.current) clearTimeout(timer.current); timer.current = null; setEntries([intro]); setPending(false); setBusy(false); setInput(''); setScenario('prs'); setSecurityStep(0); field.current?.focus(); }
   return <div className="t-demo-page">
     <header className="t-demo-header"><a href={withBase('/')} aria-label="Back to Magpie homepage"><img src={withBase('/subframe-mark.svg')} width="32" height="32" alt="" />Magpie</a><span>INTERACTIVE DEMO</span><a href={withBase('/docs/quick-start')}>Get started <ArrowUpRight size={16} /></a></header>
     <main className="t-demo-main"><div className="t-demo-intro"><div><span>YOUR AGENT. YOUR CALL.</span><h1>Give it a task.<br />Keep the final say.</h1></div><p>Explore a simulated maintainer session. Read the findings, inspect a diff, and choose what happens next.</p></div>
       <div className="t-window t-interactive"><div className="t-bar"><span>magpie / example-project</span><span>SIMULATION</span><button onClick={reset} aria-label="Restart demo"><RotateCcw size={16} />Restart</button></div>
         <div className="t-transcript" ref={output} role="log" aria-label="Demo terminal output" aria-live="polite" aria-relevant="additions" tabIndex={0}><CodexStartup />{entries.map((entry,index) => <pre key={index} className={`t-${entry.kind}`}>{entry.text}</pre>)}</div>
-        <div className="t-suggestions" aria-label="Suggested demo commands">{(pending ? ['details','diff','approve','reject'] : ['triage PRs','triage issues','help']).map(command => <button key={command} disabled={busy} onClick={() => run(command)}>{command}</button>)}</div>
+        <div className="t-suggestions" aria-label="Suggested demo commands">{(scenario === 'security' && pending ? ['details','approve','reject'] : pending ? ['details','diff','approve','reject'] : scenario === 'security' && securityStep < securityStages.length - 1 ? ['next','details','triage PRs','triage issues'] : ['security','triage PRs','triage issues','help']).map(command => <button key={command} disabled={busy} onClick={() => run(command)}>{command}</button>)}</div>
         <form className="t-prompt-form" onSubmit={event => {event.preventDefault(); run(input);}}><label htmlFor="terminal-input">›</label><input ref={field} id="terminal-input" aria-label="Command or request" value={input} onChange={event => setInput(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && !event.nativeEvent.isComposing) { event.preventDefault(); run(event.currentTarget.value); } }} placeholder={busy ? 'Preparing a proposal…' : 'Ask Magpie, or type help'} autoComplete="off" spellCheck={false} disabled={busy} maxLength={500} /><button disabled={busy || !input.trim()} type="submit">Run ↵</button></form>
       </div><p className="t-demo-disclaimer">Fictional data and simulated actions. Nothing connects to your terminal, repository, or agent account.</p>
     </main>

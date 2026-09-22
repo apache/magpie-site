@@ -1973,159 +1973,6 @@ html:has(.k-home) {
   }
 }
 
-/* Photo fronts and accessible, explicitly controlled detail backs. */
-.k-photo-skill {
-  position: relative;
-  display: block;
-  height: 360px;
-  min-height: 360px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  perspective: 1200px;
-}
-.k-photo-skill:hover {
-  background: transparent;
-  box-shadow: none;
-}
-.k-flip-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(0.22, 0.7, 0.2, 1);
-}
-.k-photo-skill[data-flipped="true"] .k-flip-inner {
-  transform: rotateY(180deg);
-}
-.k-flip-front,
-.k-flip-back {
-  position: absolute;
-  inset: 0;
-  border-radius: 9px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  overflow: hidden;
-}
-.k-flip-front {
-  background: #202127;
-  color: white;
-}
-.k-flip-front > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.k-photo-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    #10162265,
-    transparent 35%,
-    #10162235 50%,
-    #101622ec
-  );
-}
-.k-photo-family {
-  position: absolute;
-  top: 22px;
-  left: 23px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 11px;
-}
-.k-photo-title {
-  position: absolute;
-  bottom: 27px;
-  left: 25px;
-  right: 25px;
-}
-.k-photo-title > span {
-  font-size: 10px;
-  letter-spacing: 0.08em;
-}
-.k-photo-skill .k-photo-title h3 {
-  margin-top: 8px;
-  font-size: 30px;
-  line-height: 1.1;
-  color: white;
-}
-.k-flip-toggle {
-  position: absolute;
-  z-index: 3;
-  top: 15px;
-  right: 15px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  border: 1px solid #ffffff75;
-  background: #202127a8;
-  color: white;
-  padding: 9px 12px;
-  border-radius: 50px;
-  font-size: 11px !important;
-}
-.k-flip-toggle:hover {
-  background: #2359eb;
-}
-.k-flip-toggle:focus-visible {
-  outline-color: #2359eb !important;
-  outline-offset: 4px !important;
-}
-.k-flip-back {
-  transform: rotateY(180deg);
-  background: #e7ebf2;
-  border: 1px solid #c9ced9;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-}
-.k-skill-grow .k-flip-back {
-  background: #edcdbf;
-}
-.k-skill-build .k-flip-back {
-  background: #d7e1ee;
-}
-.k-flip-back h3 {
-  margin-top: 16px;
-  font-size: 25px;
-}
-.k-flip-back p {
-  margin-top: 12px;
-  font-size: 13px;
-  line-height: 1.65;
-}
-.k-flip-back .k-skill-bottom {
-  margin-top: auto;
-  padding-top: 16px;
-}
-.k-flip-docs {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 18px;
-  border-top: 1px solid #20212730;
-  padding-top: 13px;
-  font-size: 12px;
-}
-.k-photo-skill[data-paused="true"] .k-flip-inner {
-  transition: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .k-flip-inner {
-    transition: none;
-  }
-}
-@media (max-width: 600px) {
-  .k-photo-skill {
-    height: 350px;
-    min-height: 350px;
-  }
-}
-
 .k-magpie-model {
   position: absolute;
   inset: -17% -14% -13%;
@@ -2150,20 +1997,6 @@ html:has(.k-home) {
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .k-photo-skill .k-flip-toggle {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .k-photo-skill .k-flip-toggle:focus-visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-.k-photo-skill .k-flip-back p {
-  font-size: 13px;
-  line-height: 1.6;
-}
 .k-magpie-model {
   cursor: grab;
 }
@@ -2178,22 +2011,6 @@ html:has(.k-home) {
 
 .k-hero-mascot:has(.k-magpie-model) .k-magpie-shadow {
   display: none;
-}
-.k-photo-skill {
-  height: 400px;
-  min-height: 400px;
-}
-@media (max-width: 600px) {
-  .k-photo-skill {
-    height: 430px;
-    min-height: 430px;
-  }
-}
-@media (max-width: 600px) {
-  .k-photo-skill .k-flip-toggle {
-    opacity: 1;
-    pointer-events: auto;
-  }
 }
 
 /* Official logo lockup, matching the documentation header. */
@@ -2221,16 +2038,7 @@ html:has(.k-home) {
 .k-start-here strong { font-size: 20px; }
 .k-start-here p { max-width: 720px; margin-top: 8px; color: #616e84; }
 .k-start-here .k-button { flex-shrink: 0; }
-.k-photo-flags {
-  position: absolute;
-  top: 58px;
-  left: 23px;
-  right: 23px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.k-photo-flags span { background: #10213ce8; color: white; border: 1px solid #ffffff60; border-radius: 4px; padding: 5px 8px; font-size: 11px; }
+
 .k-workflow { background: #e7ecf7; }
 .k-resource-heading { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 50px; margin-bottom: 40px; }
 .k-resource-heading h2 { font-size: clamp(40px, 4.5vw, 72px); line-height: 1.02; letter-spacing: -.05em; }
@@ -2290,13 +2098,7 @@ html:has(.k-home) {
 .k-toolkit.k-section { padding-top: 55px; padding-bottom: 55px; }
 .k-toolkit-heading h2 { font-size: clamp(36px, 3.5vw, 56px); }
 .k-skills-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-.k-photo-skill { min-height: 275px; aspect-ratio: auto; height: 275px; }
-.k-photo-skill .k-photo-title h3 { font-size: 23px; }
-.k-flip-back { padding: 20px; }
-.k-flip-back h3 { font-size: 22px; }
-.k-flip-back p { font-size: 12px; line-height: 1.5; }
-.k-flip-back .k-skill-icon { display: none; }
-.k-flip-back .k-skill-bottom { flex-wrap: wrap; gap: 5px; }
+
 .k-start-here { margin: 22px 0; padding: 18px 0; }
 .k-start-here p { font-size: 12px; max-width: 730px; }
 .k-start-here strong { font-size: 17px; }
@@ -2318,10 +2120,10 @@ html:has(.k-home) {
 .k-close { padding-top: 35px; padding-bottom: 35px; }
 .k-close h2 { font-size: clamp(48px, 7vw, 110px); }
 @media (max-width: 1200px) { .k-skills-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
-@media (max-width: 899px) { .k-skills-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .k-photo-skill { height: 310px; } }
+@media (max-width: 899px) { .k-skills-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }  }
 @media (max-width: 600px) {
   .k-skills-grid { grid-template-columns: 1fr; }
-  .k-photo-skill { height: 300px; }
+
   .k-toolkit.k-section, .k-values.k-section, .k-community.k-section { padding-block: 36px; }
 }
 
@@ -2350,3 +2152,10 @@ html:has(.k-home) {
   .k-badge-orbit { width: 190px; height: 190px; }
   .k-badge-mark { width: 110px; height: 110px; }
 }
+
+/* Keep each skill readable without hover, flipping, or fixed card heights. */
+.k-icon-skill > p { font-size: 13px; line-height: 1.65; max-width: none; }
+.k-icon-skill .k-skill-top { margin-bottom: 20px; }
+.k-icon-skill .k-skill-bottom { flex-wrap: wrap; gap: 8px; font-size: 10px; }
+.k-icon-skill:hover { box-shadow: none; }
+.k-skill-docs { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; border-top: 1px solid #20212730; padding-top: 13px; font-size: 12px; }

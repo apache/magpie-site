@@ -6,7 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowUpRight,
   ArrowDown,
-  RotateCw,
   ShieldCheck,
   GitPullRequest,
   Fingerprint,
@@ -169,125 +168,23 @@ function Asterisk({ className = "" }: { className?: string }) {
   );
 }
 
-const skillPhotos: Record<string, string> = {
-  "pr-management": "collaboration",
-  issue: "health-review",
-  security: "security-review",
-  "repo-health": "team-review",
-  "release-management": "release-planning",
-  mentoring: "workshop",
-  "contributor-growth": "maintainer-work",
-  pairing: "building-tools",
-  setup: "pair-work",
-  utilities: "team-discussion",
-};
-
-function SkillPhotoCard({
-  family: f,
-  paused,
-}: {
-  family: (typeof families)[number];
-  paused: boolean;
-}) {
-  const [flipped, setFlipped] = useState(false);
-  const name = f.name.replaceAll("-", " ");
+function SkillCard({ family: f }: { family: (typeof families)[number] }) {
   return (
-    <article
-      className={`k-skill k-photo-skill k-skill-${f.group.toLowerCase()}`}
-      data-flipped={flipped}
-      data-paused={paused}
-      onMouseEnter={() => {
-        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches)
-          setFlipped(true);
-      }}
-      onMouseLeave={(event) => {
-        const box = event.currentTarget.getBoundingClientRect();
-        const inside =
-          event.clientX >= box.left &&
-          event.clientX < box.right &&
-          event.clientY >= box.top &&
-          event.clientY < box.bottom;
-        if (!inside && !event.currentTarget.contains(document.activeElement))
-          setFlipped(false);
-      }}
-      onBlur={(event) => {
-        if (
-          !event.currentTarget.contains(event.relatedTarget) &&
-          !event.currentTarget.matches(":hover")
-        )
-          setFlipped(false);
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          setFlipped(false);
-          event.currentTarget
-            .querySelector<HTMLButtonElement>(".k-flip-toggle")
-            ?.focus();
-        }
-      }}
-    >
-      <button
-        className="k-flip-toggle"
-        onClick={() => setFlipped(!flipped)}
-        aria-expanded={flipped}
-        aria-controls={`skill-details-${f.name}`}
-        aria-label={`${flipped ? "Show photo" : "Show details"} for ${name}`}
-      >
-        <RotateCw size={17} aria-hidden="true" />
-        <span>{flipped ? "Photo" : "Explore"}</span>
-      </button>
-      <div className="k-flip-inner">
-        <div className="k-flip-front" aria-hidden={flipped} inert={flipped}>
-          <img
-            src={withBase(
-              `/photos/${skillPhotos[f.name] || "collaboration"}.jpg`,
-            )}
-            alt=""
-            width="800"
-            height="533"
-            loading="lazy"
-          />
-          <div className="k-photo-shade" />
-          <span className="k-photo-family">
-            <f.icon size={21} strokeWidth={1.5} />
-            {f.group}
-          </span>
-          <div className="k-photo-flags">
-            {f.name === "setup" && <span>Start here</span>}
-            {f.name === "security" && <span>Maintainer-only</span>}
-            {f.experimental && <span>Experimental</span>}
-            {tools.asfFamilies.includes(f.path) && <span>ASF-specific</span>}
-          </div>
-          <div className="k-photo-title">
-            <span>
-              {(counts.counts as Record<string, number>)[f.name]} SKILLS
-            </span>
-            <h3>{name}</h3>
-          </div>
-        </div>
-        <div
-          className="k-flip-back"
-          id={`skill-details-${f.name}`}
-          aria-hidden={!flipped}
-          inert={!flipped}
-        >
-          <span className="k-skill-icon">
-            <f.icon size={25} strokeWidth={1.5} />
-          </span>
-          <h3>{name}</h3>
-          <p>{f.text}</p>
-          <div className="k-skill-bottom">
-            <span>{f.group}</span>
-            {f.name === "security" && <span>Maintainer-only</span>}
-            {f.name === "setup" && <span>Start here</span>}
-            {f.experimental && <span>Experimental</span>}
-            {tools.asfFamilies.includes(f.path) && <span>ASF-specific</span>}
-          </div>
-          <OutLink href={`/docs/${f.path}/readme`} className="k-flip-docs">
-            Explore skills
-          </OutLink>
-        </div>
+    <article className={`k-skill k-icon-skill k-skill-${f.group.toLowerCase()}`}>
+      <div className="k-skill-top">
+        <span className="k-skill-icon"><f.icon size={25} strokeWidth={1.5} aria-hidden="true" /></span>
+        <span>{(counts.counts as Record<string, number>)[f.name]} SKILLS</span>
       </div>
+      <h3>{f.name.replaceAll("-", " ")}</h3>
+      <p>{f.text}</p>
+      <div className="k-skill-bottom">
+        <span>{f.group}</span>
+        {f.name === "security" && <span>Maintainer-only</span>}
+        {f.name === "setup" && <span>Start here</span>}
+        {f.experimental && <span>Experimental</span>}
+        {tools.asfFamilies.includes(f.path) && <span>ASF-specific</span>}
+      </div>
+      <OutLink href={`/docs/${f.path}/readme`} className="k-skill-docs">Explore skills</OutLink>
     </article>
   );
 }
@@ -385,10 +282,8 @@ export default function KineticHome() {
     const ctx = gsap.context(() => {
       if (!paused && !matchMedia("(prefers-reduced-motion: reduce)").matches)
         gsap.from(".k-skill", {
-          y: 18,
           opacity: 0,
-          duration: 0.35,
-          stagger: 0.035,
+          duration: 0.2,
         });
     }, root);
     ScrollTrigger.refresh();
@@ -522,9 +417,9 @@ export default function KineticHome() {
         <section className="k-section k-toolkit" id="skill-families">
           <div className="k-toolkit-heading">
             <h2 data-reveal>
-              Less on your plate.
+              More maintainership.
               <br />
-              <span>Pick your starting point.</span>
+              <span>Less time on routine work.</span>
             </h2>
           </div>
           <aside className="k-start-here">
@@ -559,34 +454,34 @@ export default function KineticHome() {
             {families
               .filter((f) => filter === "All" || f.group === filter)
               .map((f) => (
-                <SkillPhotoCard key={f.name} family={f} paused={paused} />
+                <SkillCard key={f.name} family={f} />
               ))}
           </div>
         </section>
         <section className="k-values k-section" id="privacy-security">
           <h2 data-reveal>
-            Good boundaries.
+            You decide.
             <br />
-            <span>Better assistance.</span>
+            <span>Magpie helps you get there.</span>
           </h2>
           <div className="k-values-grid">
             {[
               {
                 icon: ShieldCheck,
-                title: "Your control.",
-                text: "Explicit confirmation before outward actions. The agent proposes; you review and decide.",
+                title: "You have the final say.",
+                text: "Review what Magpie proposes before it posts a comment or makes a change on your behalf.",
                 href: "/docs/principles",
               },
               {
                 icon: Fingerprint,
-                title: "Your privacy.",
-                text: "Isolated environments, deliberate model routing, and an audit trail for agent-authored actions.",
+                title: "Choose what you share.",
+                text: "Choose which models can see your project data, keep agent work in a separate environment, and see what the agent changed.",
                 href: "/docs/setup/secure-agent-setup",
               },
               {
                 icon: Layers,
-                title: "Your choice.",
-                text: "Use your own models, runtime, and tools. Skills describe capabilities, not vendors.",
+                title: "Work with tools you know.",
+                text: "Bring the models and tools that work for your team. You can switch providers and keep using the same skills.",
                 href: "/docs/vendor-neutrality",
               },
             ].map((v) => (
@@ -605,7 +500,7 @@ export default function KineticHome() {
             <h2>
               Built by people
               <br />
-              who <span>give a fork.</span>
+              who <span>care about open source.</span>
             </h2>
             <Asterisk />
           </div>
@@ -661,17 +556,16 @@ export default function KineticHome() {
         <BadgeHero paused={paused} />
         <section className="k-close">
           <span className="k-section-label">
-            YOUR NEXT GOOD IDEA IS WAITING.
+            MORE TIME FOR YOUR PROJECT.
           </span>
           <h2>
-            GO BUILD
+            MAKE TIME
             <br />
-            SOMETHING
-            <Asterisk />.
+            TO THINK.
           </h2>
           <div>
             <p>
-              Let Magpie help with the rest.
+              Let Magpie help with routine maintenance, so you can focus on what your project needs next.
               <br />
               Free, open source, and always human led.
             </p>
