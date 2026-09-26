@@ -1,0 +1,214 @@
+# Setup skill family
+
+Rendered page: https://magpie.apache.org/docs/setup/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/setup/README.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+> **Scope.** Works on any project, ASF or not — no
+> Apache-Software-Foundation-specific assumptions baked in.
+
+The **setup** skill family is the prerequisite for running any
+framework skill. It walks a new adopter (or a fresh dev machine on
+an existing adopter) through the secure-agent install — pinned
+system tools, the project-scope `.claude/settings.json` sandbox
+block, the `claude-iso` clean-env wrapper, the user-scope hooks —
+and through the ongoing housekeeping (verify install drift, pull
+framework updates, sync shared user-scope config across machines).
+
+Why a dedicated install skill family? The framework's other skills
+run against pre-disclosure CVE content, private mailing lists, and
+in-flight tracker discussions. Without the layered defence the
+setup skills install (sandbox + permission rules + clean-env
+wrapper), a misconfigured agent can leak credentials or
+pre-disclosure content into the model provider's training data or
+into a public PR. The setup family is what makes the rest of the
+framework safe to use.
+
+> [!TIP]
+> **Why this family**
+> - Install, upgrade and adopt the framework without hand-editing a settings file
+> - A sandboxed agent with a clean environment, walked through step by step — nothing runs with sudo behind your back
+> - One command tells you what is installed, what the project expects, and whether the two agree
+
+## Install & first runs
+
+Install just this family — one plugin, 10 skills. Sandbox, clean environment, and the framework's own install/upgrade.
+
+Once you have [added the marketplace](/docs/setup/marketplace-install):
+
+```text
+/plugin install magpie-setup@apache-magpie
+```
+
+New to Magpie? The [quick start](/docs/quick-start) walks the whole path in
+one place — install, the first `/magpie-setup` run, and a recording of it
+happening — plus the other agents and the secure-isolation setup to run next.
+
+### The first run
+
+This family is what the other nine defer to. `/magpie-setup` works out how
+Magpie should be wired into the checkout in front of it, prints the plan, and
+waits — the same run the quick start opens with:
+
+![A `/magpie-setup` run in Claude Code: the picker with the baseline three already ticked, the plugins installed for the user, then the secure-agent setup proposing its changes and waiting for approval before writing anything](/docs-assets/quickstart/magpie-setup.svg)
+
+Nothing is written before you approve it.
+
+### Before the first run
+
+<!-- BEGIN generated: skill-config (tools/dev/check-skill-config.py --fix) -->
+
+**Nothing here has to be configured.** These skills read the file below
+when it exists — yours in `.apache-magpie-local/` or the project's in
+`.apache-magpie-overrides/` — and fall back to a documented default when
+it does not.
+
+**Optional.** Each has a documented fallback; absent, the skill still runs.
+
+| File | What it carries | Read by |
+|---|---|---|
+| [`magpie-setup.md`](https://github.com/apache/magpie/blob/main/projects/_template/magpie-setup.md) | Overrides for the setup family's own checks. Every key has a default. | `setup` |
+| [`privacy-llm.md`](https://github.com/apache/magpie/blob/main/projects/_template/privacy-llm.md) | Which model tier may see which class of content, for projects routing foundation-private information away from third-party models. | `privacy-llm` |
+| [`project.md`](https://github.com/apache/magpie/blob/main/projects/_template/project.md) | Project manifest. Identity, repositories, mailing lists, tools enabled, CVE tooling, GitHub project-board + issue-template field declarations. The single file every skill reads to resolve project-scoped references. | `isolated-setup-install`, `setup` |
+| [`skill-sources.md`](https://github.com/apache/magpie/blob/main/projects/_template/skill-sources.md) | The install gate for pulling skills/families from trusted external repos. Lists the source ids this project trusts and commits each pin. `/magpie-setup` fetches only what is listed here. Leave empty to run only in-tree framework skills. See [`docs/skill-sources/`](/docs/skill-sources/readme). | `setup` |
+
+<!-- END generated: skill-config -->
+
+### Try these first
+
+*Illustrative shapes, not real transcripts — your output will differ. Nothing
+below sends, merges, or posts anything without you confirming it.*
+
+**Put the agent in its sandbox.**
+
+```text
+/magpie-setup:isolated-setup-install
+```
+
+![An isolated-setup-install run listing three proposed changes — settings.json, the user scripts directory, and the shell rc — and waiting for confirmation before any of them](/docs-assets/quickstart/families/setup/isolated-setup-install.svg)
+
+**Check it landed.**
+
+```text
+/magpie-setup:isolated-setup-verify
+```
+
+![An isolated-setup-verify run: four green checks across the settings wiring and pinned tools, and one warning that the docker socket is not exposed inside the sandbox](/docs-assets/quickstart/families/setup/isolated-setup-verify.svg)
+
+**See what is wired up.**
+
+```text
+/magpie-setup:status
+```
+
+![A status run: the install method, the installed plugins, the project's committed floor, and two green checks saying this machine is at or above it](/docs-assets/quickstart/families/setup/status.svg)
+
+## Security mailing-list configuration
+
+Set `security_list` in your project manifest to your project's private
+security mailing list. If it is missing, blank, or still a template TODO,
+security workflows warn and resolve draft CC from
+`security_inbox.foundation_security_address` through the normal
+project/organization/default configuration chain. For ASF adopters the
+organization supplies `security@apache.org`; other adopters use their own
+organization's configured address. If neither address is configured,
+drafting is blocked until configuration is corrected.
+
+The selected address and fallback are shown before draft confirmation.
+This does not configure subscriptions or redirect list searches to the
+organization's mailbox. Configure mail reads separately; read-only work
+can continue only when its own prerequisites are met. See the shared
+[security draft CC resolution](https://github.com/apache/magpie/blob/main/tools/mail-source/contract.md#security-draft-cc-resolution)
+for the complete rule.
+
+## Skills
+
+| Skill | Purpose |
+|---|---|
+| [`setup-isolated-setup-install`](https://github.com/apache/magpie/blob/main/skills/setup-isolated-setup-install/SKILL.md) | First-time install of the secure agent setup. |
+| [`setup-isolated-setup-verify`](https://github.com/apache/magpie/blob/main/skills/setup-isolated-setup-verify/SKILL.md) | Verify the secure setup landed correctly (static checks on settings.json, hooks, pinned versions). |
+| [`setup-isolated-setup-doctor`](https://github.com/apache/magpie/blob/main/skills/setup-isolated-setup-doctor/SKILL.md) | Diagnose in-session sandbox friction (SSH agent, port bind, docker/podman socket) and map each fail to a catalog entry. |
+| [`setup-isolated-setup-update`](https://github.com/apache/magpie/blob/main/skills/setup-isolated-setup-update/SKILL.md) | Surface drift between the installed setup and the framework's latest. |
+| [`setup-privacy-llm`](https://github.com/apache/magpie/blob/main/skills/setup-privacy-llm/SKILL.md) | Configure which LLMs may see this project's private foundation mail, then prove it: detect the stack, write `privacy-llm.md` from the matching variant, and run the approved-LLM gate and the PII redactor end to end. |
+| [`setup`](https://github.com/apache/magpie/blob/main/skills/setup/SKILL.md) | Adopt and maintain the framework in a project repo through installation, verification, updates, overrides, and unadoption. |
+| [`setup upgrade`](https://github.com/apache/magpie/blob/main/skills/setup/upgrade.md) | Pull the framework checkout to latest `origin/main`. |
+| [`setup verify`](https://github.com/apache/magpie/blob/main/skills/setup/verify.md) | Verify the framework is integrated correctly into an adopter tracker. |
+| [`setup-status`](https://github.com/apache/magpie/blob/main/skills/setup-status/SKILL.md) | Render a Markdown adoption dashboard (install pin, drift, wired agent targets, installed skill families, symlink health) and adjust the wiring in place. |
+| [`setup-shared-config-sync`](https://github.com/apache/magpie/blob/main/skills/setup-shared-config-sync/SKILL.md) | Commit + push the user's shared Claude config to its sync repo. |
+| [`setup-override-upstream`](https://github.com/apache/magpie/blob/main/skills/setup-override-upstream/SKILL.md) | Promote a local `.apache-magpie-overrides/<skill>.md` file into a PR against `apache/magpie`; prompts to remove the override once merged and upgraded. |
+| [`setup-upstream-fix`](https://github.com/apache/magpie/blob/main/skills/setup-upstream-fix/SKILL.md) | Turn a framework bug or quirk hit mid-session into a fix PR against `apache/magpie`, after checking for an existing issue or PR that already covers it. |
+
+## Deep documentation
+
+- [**The Apache Magpie Marketplace**](/docs/setup/marketplace) — the one marketplace
+  the project publishes, and the recommended way to install. Every agent that
+  can add it, which families to pick, pinning, updates, and verification
+  status.
+- [**Your first run with a family**](/docs/quick-start/first-run) — the
+  configuration walkthrough in terminal steps: what stops, what the wizard
+  scaffolds, and which files a family needs before it will run.
+- [**Companion skill packages**](/docs/setup/companion-skills) — third-party skill
+  packages that pair with a Magpie family, and the install command for each
+  agent that has one. None is a dependency.
+- [**`secure-agent-setup.md`**](/docs/setup/secure-agent-setup) — full
+  install walkthrough. The authoritative reference the
+  `setup-isolated-setup-install` skill steps through.
+- [**`secure-agent-internals.md`**](/docs/setup/secure-agent-internals) —
+  how the layered defence works (sandbox + permission rules +
+  clean-env wrapper) and why each layer exists.
+- [**`install-recipes.md`**](/docs/quick-start/other-install-methods) — copy-pasteable
+  shell recipes (svn-zip / git-tag / git-branch) for bootstrapping
+  `setup` into a new adopter repo.
+- [**`uninstall.md`**](/docs/setup/uninstall) — counterpart to `install-recipes.md`:
+  remove the framework artefacts the install flow installed. One
+  path, full plan surfaced before any write.
+- [**`sandbox-troubleshooting.md`**](/docs/setup/sandbox-troubleshooting) —
+  catalog of known sandbox-shaped failure modes (SSH agent /
+  Yubikey unreachable, test port-bind blocked, docker/podman
+  socket denied) with symptom → root cause → settings.json fix
+  for each. The page to grep when a normal-looking operation
+  fails in the sandbox in an unexpected way.
+- [**Individual use**](/docs/setup/individual-use) — using Magpie on any repo, adopted
+  or not, with nothing committed and nothing asked of teammates. The default,
+  and the half that asks no one's permission.
+- [**Team adoption**](/docs/setup/team-adoption) — what a repo commits so every
+  contributor arrives with a recommended set: the floor lock, the default
+  plugin set, the shared overrides, and keeping them current. The maintainer
+  half of the pair.
+- [**`per-role-mcp-access.md`**](/docs/setup/per-role-mcp-access) — how to
+  enable an MCP server for yourself only (e.g. a release manager
+  enabling a Policy MCP, a security triage member enabling a
+  private CVE database) without touching shared project config:
+  register the server in user-scope Claude settings, then write a
+  personal `.apache-magpie-local/<skill>.md` override.
+
+## Typical lifecycle
+
+```text
+new dev machine
+  ↓ setup-isolated-setup-install
+isolated setup installed
+  ↓ setup-isolated-setup-verify (any time, especially after Claude Code upgrade)
+verified
+  ↓ setup-isolated-setup-update (monthly / after Claude Code upgrade)
+drift surfaced
+  ↓ setup-upgrade (when framework releases something new)
+framework checkout up to date
+```
+
+`setup-shared-config-sync` is orthogonal — it commits the user's
+`~/.claude/CLAUDE.md` and other shared config to a private sync
+repo so a fresh dev machine can pick it up (run after editing any
+file under `~/.claude-config/`).
+
+## Cross-references
+
+- [Top-level README — Install](https://github.com/apache/magpie/blob/main/README.md#install) — 3-step bootstrap.
+- [`docs/prerequisites.md`](/docs/quick-start/prerequisites) — what each framework
+  skill needs (Claude Code, Gmail MCP, GitHub auth, browser, etc.).
