@@ -91,6 +91,17 @@ find "$DEST" -name '*.md' -exec perl -0777 -pi -e '
   s/<!-- START doctoc.*?<!-- END doctoc.*?-->\s*//gs;
 ' {} +
 
+# apache/magpie stamps each skill's token count into its own frontmatter and
+# leaves a marker on the mode-economics page instead of committing the table
+# (committing it made every two skill PRs conflict). Render it here, before the
+# link rewrite, so the table's skill links are rewritten like any other.
+echo "→ Rendering the skill token table → $DEST/mode-economics.md"
+if [ -d "$TMP/skills" ]; then
+  node "$(dirname "$0")/gen-skill-tokens.mjs" "$TMP/skills" "$DEST/mode-economics.md"
+else
+  echo "⚠ no skills/ in framework checkout; mode-economics.md keeps its marker"
+fi
+
 echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
 node "$(dirname "$0")/rewrite-doc-links.mjs" "$DEST" "${SITE_BASE:-/}"
 
