@@ -1,6 +1,21 @@
 const API = "https://api.github.com";
 
-export function createClient({ repo, token, fetchImpl = fetch }) {
+/**
+ * The workflow whose successful runs carry the preview-site artifact. Another
+ * site sets PREVIEW_BUILD_WORKFLOW; it is interpolated into an API path, so it
+ * is held to a bare workflow file name.
+ */
+export function buildWorkflow(env = process.env) {
+  const name = env.PREVIEW_BUILD_WORKFLOW || "build.yml";
+  if (!/^[A-Za-z0-9_.-]+\.ya?ml$/.test(name) || name.startsWith(".")) {
+    throw new TypeError(
+      `PREVIEW_BUILD_WORKFLOW must be a workflow file name, got ${JSON.stringify(name)}`,
+    );
+  }
+  return name;
+}
+
+export function createClient({ repo, token, fetchImpl = fetch, workflow = buildWorkflow() }) {
   async function request(path, { method = "GET", body } = {}) {
     const res = await fetchImpl(`${API}${path}`, {
       method,
@@ -103,7 +118,7 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
 
     async latestSuccessfulBuild(headSha) {
       const runs = await request(
-        `/repos/${repo}/actions/workflows/build.yml/runs?head_sha=${headSha}&status=success&per_page=1`,
+        `/repos/${repo}/actions/workflows/${workflow}/runs?head_sha=${headSha}&status=success&per_page=1`,
       );
       return runs.workflow_runs?.[0] ?? null;
     },

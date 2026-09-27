@@ -6,6 +6,7 @@ import {
   renderTombstone,
   previewBranch,
   previewUrl,
+  siteName,
 } from "./files.mjs";
 
 test("branch and url agree on the profile", () => {
@@ -51,4 +52,16 @@ test("refuses a missing or non-numeric pr", () => {
 
 test("still accepts a numeric string", () => {
   assert.equal(previewBranch("176"), "preview/pr176-staging");
+});
+
+test("siteName defaults to magpie and accepts another site's label", () => {
+  assert.equal(siteName({}), "magpie");
+  assert.equal(siteName({ PREVIEW_SITE_NAME: "" }), "magpie");
+  assert.equal(siteName({ PREVIEW_SITE_NAME: "tooling-site" }), "tooling-site");
+});
+
+test("siteName refuses anything that is not a hostname label", () => {
+  for (const bad of ["Magpie", "a.b", "-x", "x-", "a\nstaging:", "a b"]) {
+    assert.throws(() => siteName({ PREVIEW_SITE_NAME: bad }), /hostname label/);
+  }
 });

@@ -45,7 +45,7 @@ export default defineConfig({
               plugins: [
                 // Preview builds only: stamps data-magpie-src so the review
                 // overlay can map a marked region back to a diff line.
-                ["./scripts/preview/babel-plugin-magpie-src.mjs", { root: process.cwd() }],
+                ["./scripts/preview/adapters/astro/babel-plugin-magpie-src.mjs", { root: process.cwd() }],
               ],
             },
           }

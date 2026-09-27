@@ -51,6 +51,34 @@ jobs:
       - name: Run unit tests
         run: npm test
 
+  # The Jekyll source-annotation plugin for PR previews. This site is Astro, so
+  # nothing else here builds Jekyll; the test builds a fixture site with the
+  # plugin loaded. It runs in a pinned Ruby image rather than through a
+  # setup-ruby action, so no third-party action is added.
+  jekyll-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    container:
+      image: ruby:3.3@sha256:21e6a5125535e13999143c49b6471f68c92a74d8faad0a3541c51b11de0266ad
+    env:
+      # Install exactly what the lockfile names, checksums included, and fail
+      # rather than re-resolve if the Gemfile and lockfile disagree.
+      BUNDLE_GEMFILE: scripts/preview/adapters/jekyll/test/Gemfile
+      BUNDLE_FROZEN: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the locked test dependencies
+        run: bundle install
+
+      - name: Test the Jekyll adapter
+        run: bundle exec ruby scripts/preview/adapters/jekyll/test/magpie_src_test.rb
+
   build:
     needs: lint
     runs-on: ubuntu-slim

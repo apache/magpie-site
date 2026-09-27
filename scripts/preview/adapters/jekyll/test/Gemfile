@@ -1,0 +1,6 @@
+# Test dependencies for the Jekyll adapter; locked so CI installs exactly
+# these versions. The adapter itself needs only a Jekyll 4 site.
+source "https://rubygems.org"
+
+gem "jekyll", "4.4.1"
+gem "minitest", "~> 5.25"

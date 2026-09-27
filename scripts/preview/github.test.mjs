@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createClient } from "./github.mjs";
+import { createClient, buildWorkflow } from "./github.mjs";
 
 function fakeFetch(routes) {
   const calls = [];
@@ -140,5 +140,26 @@ test("listPullsForHead asks for every state, qualified by the repository owner",
   });
   const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
   assert.deepEqual(await gh.listPullsForHead("fix/x"), []);
+  assert.equal(calls.length, 1);
+});
+
+test("buildWorkflow defaults to build.yml and accepts another file name", () => {
+  assert.equal(buildWorkflow({}), "build.yml");
+  assert.equal(buildWorkflow({ PREVIEW_BUILD_WORKFLOW: "jekyll.yaml" }), "jekyll.yaml");
+});
+
+test("buildWorkflow refuses paths and non-workflow names", () => {
+  for (const bad of ["../x.yml", "a/b.yml", "build", ".yml", "x.yml?y=1"]) {
+    assert.throws(() => buildWorkflow({ PREVIEW_BUILD_WORKFLOW: bad }), /workflow file name/);
+  }
+});
+
+test("latestSuccessfulBuild queries the configured workflow", async () => {
+  const { impl, calls } = fakeFetch({
+    "GET /repos/apache/x-site/actions/workflows/jekyll.yml/runs?head_sha=abc&status=success&per_page=1":
+      { workflow_runs: [{ id: 7 }] },
+  });
+  const gh = createClient({ repo: "apache/x-site", token: "t", fetchImpl: impl, workflow: "jekyll.yml" });
+  assert.deepEqual(await gh.latestSuccessfulBuild("abc"), { id: 7 });
   assert.equal(calls.length, 1);
 });
