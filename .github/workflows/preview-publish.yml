@@ -39,7 +39,9 @@ name: "Publish PR previews"
         type: string
 
 permissions:
-  contents: write # push, force-push and delete preview/* branches
+  # push, force-push and delete preview/* branches, and delete this repo's
+  # head branches once all their pull requests have closed
+  contents: write
   # Commenting on a PULL REQUEST needs pull-requests: write, even though the
   # endpoint is /issues/{n}/comments. issues: write covers issues only — with
   # it alone every comment 403s, which is exactly what happened on the first

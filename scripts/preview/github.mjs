@@ -17,6 +17,8 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
       err.status = res.status;
       throw err;
     }
+    // DELETE answers 204 with no body, and parsing that throws.
+    if (res.status === 204) return null;
     return res.json();
   }
 
@@ -89,6 +91,15 @@ export function createClient({ repo, token, fetchImpl = fetch }) {
 
     deleteBranch: (name) =>
       request(`/repos/${repo}/git/refs/heads/${name}`, { method: "DELETE" }),
+
+    /** Every branch, with its tip SHA and protection flag. */
+    listBranches: () => paginate(`/repos/${repo}/branches`),
+
+    /** Pull requests in any state whose head is this repository's `branch`. */
+    listPullsForHead: (branch) =>
+      paginate(
+        `/repos/${repo}/pulls?state=all&head=${encodeURIComponent(`${repo.split("/")[0]}:${branch}`)}`,
+      ),
 
     async latestSuccessfulBuild(headSha) {
       const runs = await request(

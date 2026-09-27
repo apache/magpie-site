@@ -183,6 +183,15 @@ tombstones a branch does not delete it in the same run — deletion waits for th
 following run, so a propagation delay can never strand live PR content behind a
 deleted branch.
 
+The same step also deletes the **head branches** that pull requests were opened
+from inside this repository, once every pull request from that branch has
+closed or merged. It is guarded against deleting anything someone may still
+want: protected branches, `main`, `publish`, `preview/*` and `asf-*` are never
+touched; a branch no pull request was ever opened from is left alone; and a
+branch whose tip has moved past the closed pull request's head commit — someone
+pushed to it again — is kept. These branches carry no staged site, so they are
+deleted directly with no tombstone.
+
 ### Manual publishing
 
 `workflow_dispatch` with `pr: <N>` publishes that PR immediately, skipping the

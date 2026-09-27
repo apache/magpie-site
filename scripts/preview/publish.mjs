@@ -2,6 +2,7 @@ import { readFile, writeFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { resolveArmed } from "./armed.mjs";
 import { planActions } from "./plan.mjs";
+import { staleHeadBranches } from "./stale.mjs";
 import { validateMeta, findUnsafeEntries } from "./validate.mjs";
 import { buildAnchors } from "./anchors.mjs";
 import {
@@ -200,10 +201,53 @@ export async function run({
     }
   }
 
+  failures += await reapHeadBranches({ gh, repo });
+
   if (failures > 0) {
     console.error(`preview: ${failures} operation(s) failed this run`);
     process.exitCode = 1;
   }
+}
+
+/**
+ * Delete this repository's head branches whose pull requests have all closed.
+ * staleHeadBranches holds the rules; this only gathers state and acts on it.
+ * Returns the number of operations that failed.
+ */
+async function reapHeadBranches({ gh, repo }) {
+  let failures = 0;
+
+  let branches;
+  try {
+    branches = await gh.listBranches();
+  } catch (err) {
+    console.error(`preview: could not list branches: ${err.message}`);
+    return 1;
+  }
+
+  // A branch whose lookup failed gets no entry, and staleHeadBranches keeps it.
+  const pullsByBranch = new Map();
+  for (const branch of branches) {
+    if (branch.protected) continue;
+    try {
+      pullsByBranch.set(branch.name, await gh.listPullsForHead(branch.name));
+    } catch (err) {
+      console.error(`preview: could not list PRs for ${branch.name}: ${err.message}`);
+      failures += 1;
+    }
+  }
+
+  for (const name of staleHeadBranches({ branches, pullsByBranch, repo })) {
+    try {
+      await gh.deleteBranch(name);
+      console.log(`preview: deleted ${name}, whose pull requests are all closed`);
+    } catch (err) {
+      console.error(`preview: delete failed for ${name}: ${err.message}`);
+      failures += 1;
+    }
+  }
+
+  return failures;
 }
 
 /** Returns true only when content was actually published. */

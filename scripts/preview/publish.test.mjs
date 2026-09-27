@@ -35,6 +35,8 @@ function fakes({
   headMessages = {},
   hasBuild = true,
   throwFor = [],
+  repoBranches = [],
+  pullsForHead = {},
 } = {}) {
   const pushed = [];
   const deleted = [];
@@ -57,6 +59,8 @@ function fakes({
     },
     latestSuccessfulBuild: async () => (hasBuild ? { id: 1 } : null),
     branchHeadMessage: async (branch) => headMessages[branch] ?? "",
+    listBranches: async () => repoBranches,
+    listPullsForHead: async (name) => pullsForHead[name] ?? [],
   };
 
   const git = {
@@ -425,4 +429,19 @@ test("injectOverlay injects at the last </body> and only once", async () => {
   // A page that merely mentions the script path still gets the overlay.
   const mentions = "<html><body>see /_preview/review.js for details</body></html>";
   assert.match(injectOverlay(mentions), /magpie-preview-overlay/);
+});
+
+test("deletes this repository's head branch once its pull request has closed", async () => {
+  const closed = { state: "closed", head: { ref: "fix-counts", sha: SHA, repo: { full_name: "apache/magpie-site" } } };
+  const f = fakes({
+    repoBranches: [
+      { name: "main", protected: true, commit: { sha: SHA } },
+      { name: "fix-counts", protected: false, commit: { sha: SHA } },
+      { name: "wip", protected: false, commit: { sha: SHA } },
+    ],
+    pullsForHead: { "fix-counts": [closed] },
+  });
+  await go(f);
+
+  assert.deepEqual(f.deleted, ["fix-counts"]);
 });

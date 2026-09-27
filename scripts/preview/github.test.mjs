@@ -120,3 +120,25 @@ test("upsertComment edits the bot's own marked comment in place", async () => {
   assert.ok(patch, "expected a PATCH to the existing bot comment");
   assert.match(JSON.parse(patch.body).body, /new status/);
 });
+
+test("deleteBranch accepts GitHub's empty 204 response", async () => {
+  const impl = async () => ({
+    ok: true,
+    status: 204,
+    json: async () => {
+      throw new SyntaxError("Unexpected end of JSON input");
+    },
+    text: async () => "",
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  assert.equal(await gh.deleteBranch("fix-counts"), null);
+});
+
+test("listPullsForHead asks for every state, qualified by the repository owner", async () => {
+  const { impl, calls } = fakeFetch({
+    "GET /repos/apache/magpie-site/pulls?state=all&head=apache%3Afix%2Fx&per_page=100&page=1": [],
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  assert.deepEqual(await gh.listPullsForHead("fix/x"), []);
+  assert.equal(calls.length, 1);
+});
