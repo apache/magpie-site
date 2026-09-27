@@ -5,7 +5,7 @@
 
   var armed = false;
   var drag = null;
-  var root, box, button, toast, banner;
+  var root, box, button, toast, banner, mark, panel;
 
   function el(tag, style, text) {
     var n = document.createElement(tag);
@@ -28,6 +28,7 @@
     button.style.display = "none";
     toast.style.display = "none";
     banner.style.display = "none";
+    hideResult();
   }
 
   function showChrome() {
@@ -44,6 +45,59 @@
       node = node.parentElement;
     }
     return null;
+  }
+
+  function hideResult() {
+    mark.style.display = "none";
+    panel.style.display = "none";
+    panel.textContent = "";
+  }
+
+  // The pull request opens from a link the reviewer clicks, not from
+  // window.open: a popup fired after an awaited clipboard write has lost the
+  // click's activation and is blocked, and jumping tabs unasked also hides the
+  // region the reviewer just marked. Leaving the region outlined with the
+  // result beside it lets them see what was captured before they go.
+  function showResult(region, url, source, message) {
+    mark.style.left = region.x + "px"; mark.style.top = region.y + "px";
+    mark.style.width = region.w + "px"; mark.style.height = region.h + "px";
+    mark.style.display = "block";
+
+    panel.textContent = "";
+    panel.appendChild(el("div", "margin-bottom:8px", message));
+    if (source) {
+      panel.appendChild(el("div", "margin-bottom:8px;color:#94a3b8;font:12px ui-monospace,monospace", source));
+    }
+
+    var go = document.createElement("a");
+    go.href = url;
+    go.target = "_blank";
+    go.rel = "noopener";
+    go.style.cssText =
+      "display:inline-block;margin-right:8px;padding:6px 12px;border-radius:6px;" +
+      "background:#e11d48;color:#fff;text-decoration:none;font:600 13px system-ui";
+    go.textContent = "Open PR #" + cfg.pr + (source ? " at this line" : "") + " \u2197";
+    go.addEventListener("click", function () { setTimeout(hideResult, 0); });
+    panel.appendChild(go);
+
+    var done = el("button",
+      "padding:6px 10px;border-radius:6px;border:1px solid #334155;background:transparent;" +
+      "color:#e2e8f0;font:13px system-ui;cursor:pointer", "Dismiss");
+    done.addEventListener("click", hideResult);
+    panel.appendChild(done);
+
+    // Beside the region where it fits: below, else above, else inside it.
+    panel.style.visibility = "hidden";
+    panel.style.display = "block";
+    var ph = panel.offsetHeight, pw = panel.offsetWidth;
+    var top = region.y + region.h + 8;
+    if (top + ph > window.innerHeight - 8) top = region.y - ph - 8;
+    if (top < 8) top = Math.max(8, Math.min(region.y + 8, window.innerHeight - ph - 8));
+    var left = Math.max(8, Math.min(region.x, window.innerWidth - pw - 8));
+    panel.style.top = top + "px";
+    panel.style.left = left + "px";
+    panel.style.visibility = "";
+    go.focus();
   }
 
   function disarm() {
@@ -162,21 +216,14 @@
       a.href = URL.createObjectURL(blob);
       a.download = "preview-pr" + cfg.pr + ".png";
       a.click();
-      say("Clipboard refused — the screenshot was downloaded; drag it into the comment box");
+      disarm();
+      showResult(region, url, source,
+        "Clipboard refused \u2014 the screenshot was downloaded; drag it into the comment box");
     } else {
-      say("Screenshot copied — paste it into the comment box");
+      disarm();
+      showResult(region, url, source,
+        "Screenshot copied \u2014 paste it into the comment box");
     }
-
-    // window.open returns null whenever "noopener" is passed, blocked or not,
-    // so the opener is cleared manually instead and a null result genuinely
-    // means the popup was blocked.
-    var opened = window.open(url, "_blank");
-    if (opened) {
-      try { opened.opener = null; } catch (err) { /* cross-origin, already safe */ }
-    } else {
-      say("Popup blocked — open the pull request manually: " + url, 15000);
-    }
-    disarm();
   }
 
   function build() {
@@ -185,6 +232,7 @@
       "border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;" +
       "font:13px system-ui;cursor:pointer", "Comment on this preview");
     button.addEventListener("click", function () {
+      hideResult();
       armed = !armed;
       root.style.display = armed ? "block" : "none";
       button.textContent = armed ? "Cancel (Esc)" : "Comment on this preview";
@@ -207,6 +255,17 @@
     root = el("div", "position:fixed;inset:0;z-index:2147483645;display:none;cursor:crosshair");
     box = el("div", "position:absolute;border:2px solid #e11d48;background:rgba(225,29,72,0.08);display:none");
     root.appendChild(box);
+
+    // Outlines the captured region after submit; the spread shadow dims the
+    // rest of the page. pointer-events:none keeps the page usable meanwhile.
+    mark = el("div",
+      "position:fixed;z-index:2147483645;display:none;pointer-events:none;" +
+      "border:2px solid #e11d48;box-shadow:0 0 0 100vmax rgba(15,23,42,0.35)");
+
+    panel = el("div",
+      "position:fixed;z-index:2147483647;display:none;max-width:min(420px,calc(100vw - 16px));" +
+      "padding:10px 12px;border-radius:8px;background:#0f172a;color:#e2e8f0;" +
+      "font:13px system-ui;box-shadow:0 4px 16px rgba(0,0,0,.35)");
 
     toast = el("div",
       "position:fixed;left:16px;bottom:16px;z-index:2147483647;display:none;max-width:60vw;" +
@@ -235,6 +294,7 @@
 
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && armed) disarm();
+      else if (e.key === "Escape" && panel.style.display !== "none") hideResult();
       if (
         e.key === "c" &&
         !armed &&
@@ -259,6 +319,8 @@
 
     document.body.appendChild(banner);
     document.body.appendChild(root);
+    document.body.appendChild(mark);
+    document.body.appendChild(panel);
     document.body.appendChild(button);
     document.body.appendChild(toast);
   }

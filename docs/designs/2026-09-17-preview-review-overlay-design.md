@@ -67,8 +67,13 @@ would not.
 
 **Delivery.** `navigator.clipboard.write()` puts the PNG on the clipboard from
 inside the click handler, which is what satisfies the user-gesture requirement.
-The pull request's conversation tab then opens in a new tab, and a toast reads
-*Screenshot copied — paste it into the comment box*.
+The overlay then stays on the page instead of leaving it: the marked region
+remains outlined with the rest dimmed, and a panel beside it reads
+*Screenshot copied — paste it into the comment box*, with an **Open PR** button
+that goes to the target below in a new tab, and a Dismiss. The reviewer sees
+what was captured before going anywhere, and the tab is opened by their own
+click — a `window.open` after the awaited clipboard write has lost the click's
+activation, and browsers block it as a popup.
 
 The reviewer writes their prose in GitHub, not in the overlay. That is a
 deliberate choice and it removes an entire problem: a clipboard holds one
@@ -137,10 +142,9 @@ supplies this.
 
 | Situation | Behaviour |
 |---|---|
-| Clipboard write refused (Safari/Firefox permissions) | The PNG downloads instead, and the toast says to drag the file into the comment box |
+| Clipboard write refused (Safari/Firefox permissions) | The PNG downloads instead, and the panel says to drag the file into the comment box |
 | `html2canvas-pro` throws | Toast names the failure; the overlay stays open so the region is not lost |
 | The screenshot library did not load or changed its export shape | Toast says so, rather than the page failing with "not a function" |
-| Popup blocked when opening the PR | Toast shows the pull request's URL as text, for fifteen seconds, to copy by hand |
 | `window.__MAGPIE_PREVIEW__` missing | The button never appears — this is not a preview |
 | No annotated ancestor above the marked region | Conversation tab instead of a diff line; the caption says the source was not resolved |
 | Source line is outside the diff | Conversation tab; the caption still names the `file:line` |
