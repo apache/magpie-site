@@ -10,7 +10,7 @@
   --title-detail:clamp(1.375rem,2.2vw,1.75rem);
   --weight-heading:600; --leading-body:1.7; --leading-heading:1.25;
   --icon-stroke:1.5px;
-  --motion-fast:180ms; --motion-content:280ms; --motion-ease:cubic-bezier(.22,.7,.3,1);
+  --motion-fast:180ms; --motion-content:280ms; --motion-slide:400ms; --motion-ease:cubic-bezier(.22,.7,.3,1);
   --shadow-contact:#17272324; --shadow-ambient:#17272326;
   --surface-shadow:0 5px 8px var(--shadow-contact),0 20px 36px var(--shadow-ambient);
   --surface-light:linear-gradient(145deg,#ffffff50,transparent 65%);

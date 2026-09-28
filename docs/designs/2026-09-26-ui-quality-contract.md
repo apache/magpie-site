@@ -271,6 +271,10 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   stage in either direction. The section title and introduction belong inside
   the pinned panel, so their context remains visible through every stage.
   Browser checks reject a title that disappears above the viewport.
+  The slide container must not add vertical layout padding that disables
+  progression in a previously fitting viewport. At 1524 × 1180 with normal
+  motion, both walkthroughs must advance through all six stages by wheel
+  scrolling and reverse cleanly, with their heading still visible.
   Short, narrow and reduced-motion viewports use
   ordinary page flow with the same stage tabs and round arrow controls.
   The security walkthrough belongs inside the Airflow case-study article,
@@ -294,6 +298,12 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   The hero and both walkthroughs share a 400ms horizontal slide with a stable
   content envelope. Panels remain assembled when switching stages: puzzle
   assembly and its faint sheen run only on the first introduction to a sequence.
+  The slider reserves paint overflow for the full contact and ambient shadow,
+  without changing its layout height or introducing a native scroll container.
+  Inactive panels disappear after their exit transition, so the shadow area
+  never exposes neighboring content at rest. Pixel checks compare the shadow
+  fade against an unclipped reference on desktop and phone in both themes;
+  a deliberately clipped fixture must fail that comparison.
   Titles retain a 280ms fade with a 6px settling motion;
   control colours and markers use 180ms transitions. Inactive content remains
   inert and hidden from assistive technology throughout the transition.

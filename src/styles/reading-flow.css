@@ -25,11 +25,15 @@
 #hero-question > span, .security-prompts > h4 { opacity:1; transform:translateY(0); visibility:visible; transition:opacity var(--motion-content) var(--motion-ease),transform var(--motion-content) var(--motion-ease),visibility 0s; }
 :is(#hero-question > span,.security-prompts > h4)[aria-hidden=true] { opacity:0; transform:translateY(6px); visibility:hidden; pointer-events:none; transition-delay:0s,0s,var(--motion-content); }
 .hero-copy + .workflow-reel { margin-top:var(--block-gap); }
-/* Clip the moving rail without creating a scroll container that focus can move. */
-.sequence-window { overflow:clip; }
-.sequence-track { display:flex; transition:transform 400ms var(--motion-ease); }
-.sequence-track > * { display:grid; align-content:center; flex:0 0 100%; min-width:0; padding:var(--space-4); }
-.sequence-track > [aria-hidden=true] { pointer-events:none; }
+/* Paint the complete shadow outside the rail without adding layout height:
+   padding here would disable scroll progression in otherwise fitting viewports.
+   Clip does not create a scroll container that keyboard focus can move. */
+.sequence-window { overflow-x:clip; overflow-y:visible; overflow-clip-margin:var(--page-gutter); }
+.sequence-track { display:flex; transition:transform var(--motion-slide) var(--motion-ease); }
+.sequence-track > * { display:grid; align-content:center; flex:0 0 100%; min-width:0; padding-inline:var(--space-4); visibility:visible; transition:visibility 0s; }
+/* Keep the departing panel painted through its slide, then hide it so the
+   extra shadow area cannot reveal a neighboring panel at rest. */
+.sequence-track > [aria-hidden=true] { pointer-events:none; visibility:hidden; transition-delay:var(--motion-slide); }
 .reel-flow { list-style:none; padding:0; margin:0; }
 .reel-flow, .lifecycle-flow, .card-flow { display:grid; gap:var(--flow-gap); }
 .reel-flow, .lifecycle-flow { grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; max-width:calc(3 * var(--card-width) + 2 * var(--flow-gap)); margin-inline:auto; }
