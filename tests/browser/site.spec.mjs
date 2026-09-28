@@ -216,14 +216,15 @@ test('shared control hover, keyboard focus and disabled presentation across page
   }
 });
 
-test('workflow connectors share one icon and breathing room between cards', async ({page}) => {
+test('all process families share mating puzzle edges across responsive layouts', async ({page}) => {
   await page.goto('/');
   for (const width of [375,1000,1524]) {
     await page.setViewportSize({width,height:1000});
     await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Review',exact:true}).click();
     for (const selector of ['.reel-slide:not([inert]) .reel-flow','.lifecycle-detail .lifecycle-flow','.card-flow']) {
       for (const flow of await page.locator(selector).all()) {
-        await expect(flow.locator('.flow-arrow.lucide-arrow-right')).toHaveCount(await flow.locator(':scope > .workflow-card').count()-1);
+        await expect(flow).toHaveClass(/puzzle-flow/);
+        await expect(flow.locator(':scope > .workflow-card')).toHaveCount(selector === '.card-flow' ? 2 : 3);
       }
     }
     await checkLayout(page);
