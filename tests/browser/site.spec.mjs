@@ -282,8 +282,15 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   const dataLink = page.locator('.airflow-chart-story .chart-note a');
   await expect(dataLink).toHaveAttribute('href','/stories/airflow');
   await expect(dataLink.locator('.cta-arrow')).toHaveCount(1);
-  await mkdir('.builds/visual',{recursive:true});
-  for (const width of [375,1440,1524]) for (const theme of ['light','dark']) {
+});
+
+// One test per viewport and theme. Each captures every homepage section and its
+// interactive states, which as a single test overran the per-test timeout on a
+// one-CPU runner; split, the shards can also spread them.
+for (const width of [375,1440,1524]) for (const theme of ['light','dark']) {
+  test(`homepage visuals at ${width} in ${theme}`, async ({ page }) => {
+    await mkdir('.builds/visual',{recursive:true});
+    await page.goto('/');
     await page.setViewportSize({width,height:1000});
     await page.evaluate(theme => localStorage.setItem('magpie-theme',theme),theme); await page.reload();
     await page.evaluate(() => document.fonts.ready); await checkLayout(page);
@@ -332,5 +339,5 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
       const stage = (await tab.textContent()).trim().toLowerCase();
       await page.locator('.security-scene[aria-hidden=false]').screenshot({path:`.builds/visual/home-story-${stage}-${width}-${theme}.png`,style:'.site-header, .site-header *, .skip-link { visibility:hidden; }'});
     }
-  }
-});
+  });
+}
