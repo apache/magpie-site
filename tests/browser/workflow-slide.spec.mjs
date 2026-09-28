@@ -16,6 +16,13 @@ async function sampleSlide(panel, progress) {
   },progress);
 }
 
+// Reaching a scroll-driven walkthrough can already move it off its first stage,
+// so selecting that stage starts a slide of its own. Measure from rest.
+async function settle(workbench) {
+  await workbench.evaluate(el=>Promise.all(el.getAnimations({subtree:true})
+    .filter(a=>a.transitionProperty==='transform'&&a.playState==='running').map(a=>a.finished)));
+}
+
 for(const width of [375,1524]) test(`workflow panels slide horizontally without vertical jumps at ${width}`,async({page})=>{
   await mkdir('.builds/visual',{recursive:true});
   await page.setViewportSize({width,height:1495});
@@ -25,6 +32,7 @@ for(const width of [375,1524]) test(`workflow panels slide horizontally without 
   for(const name of ['software','security']) {
     const workbench=page.locator(`.${name}-workbench`), tabs=workbench.getByRole('tab');
     await tabs.first().click();
+    await settle(workbench);
     // Move in both directions, including a direct jump to a distant stage.
     for(const index of [1,4,0]) {
       const before=await workbench.boundingBox();
