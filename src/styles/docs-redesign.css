@@ -43,6 +43,7 @@
 .docs-overview-section { margin-block:var(--block-gap); }
 .docs-overview-section > h2:first-child { margin-block:0 var(--heading-gap); }
 .docs-card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr)); gap:var(--card-gap); }
+.docs-workflow-links { display:none; }
 .docs-card { grid-row:span 2; grid-template-rows:subgrid; text-decoration:none; }
 .docs-card p { margin:0; }
 .docs-more-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-4) var(--space-6); margin:var(--space-6) 0 var(--space-8); }
@@ -81,7 +82,8 @@
 @media(max-width:800px) {
   .docs-menu-toggle { display:flex; }
   .docs-menu-toggle span { display:none; }
-  .docs-search-trigger { width:auto; }
+  .docs-search-trigger { width:44px; justify-content:center; padding:10px; }
+  .docs-search-trigger span { display:none; }
   .docs-search-trigger kbd { display:none; }
   .docs-shell { display:block; }
   .docs-sidebar { display:none; }
@@ -89,6 +91,16 @@
   .docs-sidebar nav a, .docs-sidebar .tree-summary { font-size:1rem; }
   .docs-main { padding:var(--space-6) 0 var(--space-16); }
   .search-dialog { margin-top:10vh; }
+  .docs-workflow-cards { display:none; }
+  .docs-workflow-links { display:grid; }
+  .docs-prose .docs-workflow-link { display:grid; grid-template-columns:28px minmax(0,1fr) 20px; align-items:center; gap:var(--space-2); padding:var(--space-5) 0; border-bottom:1px solid var(--line); text-decoration:none; }
+  .docs-workflow-link:first-child { border-top:1px solid var(--line); }
+  .docs-workflow-link > svg { width:28px; height:28px; }
+  .docs-workflow-link > .cta-arrow { width:20px; height:20px; }
+  .docs-workflow-link > span { display:grid; gap:var(--space-1); }
+  .docs-workflow-link strong { font-size:var(--text-body); }
+  .docs-workflow-link span span { color:var(--muted); font-size:var(--text-reading); line-height:1.5; }
+  .docs-prose .docs-workflow-link:is(:hover,:focus-visible) { background:var(--surface); text-decoration:none; }
 }
 @media(max-width:600px) { .docs-card-grid, .docs-more-links { grid-template-columns:1fr; } }
 @media(max-width:380px) { .docs-search-trigger span { display:none; } }

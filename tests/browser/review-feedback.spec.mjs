@@ -58,6 +58,7 @@ test('isolation comparison aligns cards and keeps compact labels legible', async
     await expect(page.locator('.exposed-resources > li')).toHaveCount(3);
     await expect(page.locator('.layer-label')).toHaveCount(4);
     await expect(page.locator('.yolo-wildcard')).toContainText('A loan for Hawaii next?');
+    if(width<=800) await page.getByRole('button',{name:'In YOLO mode',exact:true}).click();
     const tiles=await page.locator('.exposed-resources > li').evaluateAll(nodes => nodes.map(el => el.getBoundingClientRect().toJSON()));
     for (let i=1;i<tiles.length;i++) expect(tiles[i].top).toBeGreaterThan(tiles[i-1].bottom);
     const diagram=await page.locator('.isolation-open .agent-diagram').boundingBox();
@@ -69,6 +70,7 @@ test('isolation comparison aligns cards and keeps compact labels legible', async
       const open=await page.locator('.isolation-open .agent-diagram').boundingBox();
       expect(Math.abs(layers.y+layers.height-open.y-open.height)).toBeLessThan(1);
     }
+    if(width<=800) await page.getByRole('button',{name:'With Magpie',exact:true}).click();
     for (const label of await page.locator('.layer-label').all()) {
       expect(await label.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
     }

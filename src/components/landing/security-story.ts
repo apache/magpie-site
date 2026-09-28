@@ -13,7 +13,7 @@ export const securityStory = [
     label: "Triage", kind: "triage", prompt: "You need to know whether the report is valid",
     frustration: "Do I have to start from scratch again?", relief: "I’ve got something concrete to go on.",
     title: "You can assess the recommendation against the evidence.",
-    work: ["You review checks against those rules", "You review matching past reports", "You review the suggested next step"],
+    work: ["You review checks against the security rules", "You review matching past reports", "You review the suggested next step"],
     handoff: "Your security team confirms the decision.",
   },
   {

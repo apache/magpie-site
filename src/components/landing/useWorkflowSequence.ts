@@ -31,7 +31,7 @@ export function useWorkflowSequence(count: number, tabPrefix: string) {
     const scene = sceneRef.current, panel = panelRef.current, content = contentRef.current;
     const intro = panel?.firstElementChild as HTMLElement | null;
     if (!scene || !panel || !content || !intro) return;
-    const media = matchMedia("(min-width: 901px) and (prefers-reduced-motion: no-preference)");
+    const media = matchMedia("(min-width: 1101px) and (prefers-reduced-motion: no-preference)");
     let frame = 0, driven = false;
     const update = () => {
       if (!driven) return;
@@ -90,7 +90,7 @@ export function useWorkflowKeyboard(panelRef: RefObject<HTMLDivElement | null>, 
     if (!panel) return;
     keyboardPanels.add(panel);
     const navigate = (event: KeyboardEvent) => {
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || !panel.querySelector<HTMLElement>(controls)?.checkVisibility()) return;
       const next = workflowKeyIndex(event, active, count);
       if (next === undefined) return;
       const top = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;

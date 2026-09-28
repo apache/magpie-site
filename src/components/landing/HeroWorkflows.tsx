@@ -31,10 +31,10 @@ export default function HeroWorkflows() {
   useEffect(() => {
     // Choose once after hydration: SSR stays stable, while repeat visits show
     // different examples. Manual selection and autoplay share the same state.
-    setSelected(Math.floor(Math.random() * examples.length));
-    const media = matchMedia("(prefers-reduced-motion: reduce)");
-    setMotionAllowed(!media.matches);
-    const change = () => setMotionAllowed(!media.matches);
+    if (matchMedia("(min-width: 1101px)").matches) setSelected(Math.floor(Math.random() * examples.length));
+    const media = matchMedia("(min-width: 1101px) and (prefers-reduced-motion: no-preference)");
+    setMotionAllowed(media.matches);
+    const change = () => setMotionAllowed(media.matches);
     media.addEventListener("change", change);
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: .3 });
     if (root.current) observer.observe(root.current);
@@ -73,11 +73,14 @@ export default function HeroWorkflows() {
     }, 8000);
     return () => clearInterval(timer);
   }, [advancing]);
-  return <>
+  return <div className="hero-experience">
   <div className="hero-copy">
-    <h1 id="hero-title">Still manually<br /><span id="hero-question">{examples.map((item, i) => <span key={item.scene} aria-hidden={selected !== i}>{item.question}</span>)}</span></h1>
+    <h1 id="hero-title"><span className="hero-desktop-title">Still manually<br /><span id="hero-question">{examples.map((item, i) => <span key={item.scene} aria-hidden={selected !== i}>{item.question}</span>)}</span></span><span className="hero-mobile-title">Put your coding agent to work</span></h1>
   </div>
+  <p className="hero-story"><span className="hero-expertise">Apache Magpie is an open-source library of <strong><mark>dozens of reusable agent skills</mark></strong><span className="hero-story-detail"> across the software lifecycle, already used to handle thousands of issues in software the world depends on</span>.</span></p>
+  <a className="button hero-start" href="/start" target="_blank" rel="noreferrer">Get started</a>
   <div ref={root} className="workflow-reel" role="region" aria-roledescription="carousel" aria-label="Nine ways maintainers use Magpie" tabIndex={0}>
+    <label className="mobile-example-picker">Try an example<select className="field-control" value={selected} onChange={event => select(Number(event.target.value))}>{examples.map((item,i) => <option key={item.scene} value={i}>{item.input}</option>)}</select></label>
     <SequenceNavigation previousLabel="Previous use case" nextLabel="Next use case" onPrevious={() => select((selected - 1 + examples.length) % examples.length)} onNext={() => select((selected + 1) % examples.length)} content={
     <SequenceSlides className="reel-window" active={selected} live={advancing ? "off" : "polite"}>
         {examples.map((item, i) => <div className="reel-slide" key={item.scene} aria-hidden={i !== selected} inert={i !== selected} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${examples.length}: ${item.input}`}>
@@ -93,5 +96,5 @@ export default function HeroWorkflows() {
       {examples.map((item, i) => <button className="reel-dot" key={item.scene} type="button" aria-label={`${i + 1}: ${item.input}`} aria-pressed={selected === i} title={item.input} onClick={() => select(i)}><span /></button>)}
     </div>
     </SequenceNavigation>
-  </div></>;
+  </div></div>;
 }

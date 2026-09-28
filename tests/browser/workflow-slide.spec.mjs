@@ -23,7 +23,7 @@ async function settle(workbench) {
     .filter(a=>a.transitionProperty==='transform'&&a.playState==='running').map(a=>a.finished)));
 }
 
-for(const width of [375,1524]) test(`workflow panels slide horizontally without vertical jumps at ${width}`,async({page})=>{
+for(const width of [1280,1524]) test(`workflow panels slide horizontally without vertical jumps at ${width}`,async({page})=>{
   await mkdir('.builds/visual',{recursive:true});
   await page.setViewportSize({width,height:1495});
   await page.emulateMedia({reducedMotion:'no-preference'});

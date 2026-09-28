@@ -10,8 +10,9 @@ for (const width of [375, 1440]) test(`passive section URLs preserve navigation 
   await page.goto('/brand');
   await page.goto('/?campaign=reading');
   await page.evaluate(() => document.fonts.ready);
-  const selected = page.locator('.reel-dot').nth(2);
-  await selected.click();
+  const selected = width<=1100?page.getByLabel('Try an example'):page.locator('.reel-dot').nth(2);
+  if(width<=1100) { await selected.selectOption('2'); await selected.focus(); }
+  else await selected.click();
   const baseline = await page.evaluate(() => {
     history.replaceState({...history.state, readingTest:'preserve'}, '', location.href);
     return history.length;
@@ -19,7 +20,8 @@ for (const width of [375, 1440]) test(`passive section URLs preserve navigation 
   for (const id of ['airflow', 'how-it-works', 'learning']) {
     await readSection(page, '#'+id);
     await expect.poll(() => page.evaluate(() => location.hash)).toBe('#'+id);
-    await expect(selected).toHaveAttribute('aria-pressed', 'true');
+    if(width<=1100) await expect(selected).toHaveValue('2');
+    else await expect(selected).toHaveAttribute('aria-pressed', 'true');
     await expect(selected).toBeFocused();
     expect(await page.evaluate(() => ({length:history.length, state:history.state.readingTest, query:location.search})))
       .toEqual({length:baseline, state:'preserve', query:'?campaign=reading'});

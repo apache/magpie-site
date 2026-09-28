@@ -6,6 +6,7 @@ import MagpieCard, { ManualCard } from "./MagpieCard";
 import WorkflowStages from "./WorkflowStages";
 import SequenceNavigation from "./SequenceNavigation";
 import SequenceSlides from "./SequenceSlides";
+import MobileWorkflows from "./MobileWorkflows";
 
 export default function WorkflowExplorer() {
   const {active:stage, scrollDriven, scrollLayout, sceneRef, panelRef, contentRef, select} = useWorkflowSequence(securityStory.length, "security-tab-");
@@ -24,6 +25,7 @@ export default function WorkflowExplorer() {
         </section>)}</SequenceSlides>
         } />
       </div>
+      <MobileWorkflows name="security-mobile" items={securityStory.map(phase => ({label:phase.label, prompt:phase.prompt, work:phase.work, before:phase.without}))} />
     </div>
   </div>;
 }

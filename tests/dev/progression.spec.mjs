@@ -1,11 +1,13 @@
 import { test, expect } from '../browser/fixtures.mjs';
 import { criticalProgressionTests } from '../browser/progression.mjs';
+import { mobileExperienceTests } from '../browser/mobile.mjs';
 import { measureLayout } from '../browser/layout.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { randomUUID } from 'node:crypto';
 
 criticalProgressionTests();
+mobileExperienceTests();
 test('development preview survives a production build without losing interactive state', async ({page}) => {
   const build = () => promisify(execFile)(process.execPath,['node_modules/astro/bin/astro.mjs','build','--outDir',output], {env:{...process.env,ASTRO_TELEMETRY_DISABLED:'1'},maxBuffer:4*1024*1024});
   const output = `.builds/dev-concurrency-${randomUUID()}`;

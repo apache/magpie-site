@@ -24,12 +24,15 @@
 #hero-question > span { grid-area:1 / 1; }
 #hero-question > span, .security-prompts > h4 { opacity:1; transform:translateY(0); visibility:visible; transition:opacity var(--motion-content) var(--motion-ease),transform var(--motion-content) var(--motion-ease),visibility 0s; }
 :is(#hero-question > span,.security-prompts > h4)[aria-hidden=true] { opacity:0; transform:translateY(6px); visibility:hidden; pointer-events:none; transition-delay:0s,0s,var(--motion-content); }
-.hero-copy + .workflow-reel { margin-top:var(--block-gap); }
+.hero-experience { display:flex; flex-direction:column; }
+.hero-experience .workflow-reel { order:2; margin-top:var(--block-gap); }
+.hero-experience .hero-story { order:3; }
+.hero-mobile-title, .hero-start, .mobile-example-picker, .mobile-workflows, .isolation-choice { display:none; }
 /* Paint the complete shadow outside the rail without adding layout height:
    padding here would disable scroll progression in otherwise fitting viewports.
    Clip does not create a scroll container that keyboard focus can move. */
 .sequence-window { overflow-x:clip; overflow-y:visible; overflow-clip-margin:var(--page-gutter); }
-.sequence-track { display:flex; transition:transform var(--motion-slide) var(--motion-ease); }
+.sequence-track { display:flex; transform:translateX(calc(var(--sequence-index) * -100%)); transition:transform var(--motion-slide) var(--motion-ease); }
 .sequence-track > * { display:grid; align-content:center; flex:0 0 100%; min-width:0; padding-inline:var(--space-4); visibility:visible; transition:visibility 0s; }
 /* Keep the departing panel painted through its slide, then hide it so the
    extra shadow area cannot reveal a neighboring panel at rest. */
@@ -62,7 +65,7 @@
 .case-heading { --heading-gap:var(--block-gap); max-width:900px; }
 .case-walkthrough { padding-top:var(--block-gap); border-top:1px solid var(--line); }
 .case-evidence { width:100%; max-width:916px; margin-inline:auto; }
-.case-layout { --title-section:var(--title-detail); font-size:var(--text-reading); display:grid; gap:var(--block-gap); }
+.case-layout { grid-template-columns:minmax(0,1fr); --title-section:var(--title-detail); font-size:var(--text-reading); display:grid; gap:var(--block-gap); }
 .case-intro { display:grid; justify-items:start; gap:var(--heading-gap); width:100%; max-width:900px; margin-inline:auto; text-align:left; }
 .case-quote { display:grid; gap:var(--content-gap); width:100%; max-width:900px; margin-inline:auto; padding-left:var(--heading-gap); border-left:2px solid var(--prepared-border); text-align:left; }
 .case-attribution { display:flex; align-items:center; justify-content:flex-start; gap:var(--heading-gap); flex-wrap:wrap; }
@@ -191,4 +194,59 @@
    tighter shared spacing. The intro may scroll away; the stages still fit. */
 @media(min-width:1101px) and (max-height:1100px) {
   .workflow-sequence { --block-gap:var(--space-6); --heading-gap:var(--space-6); --content-gap:var(--space-3); --sequence-puzzle-padding:var(--space-8); --sequence-puzzle-cross-radius:16px; --sequence-puzzle-cross-neck:8px; }
+}
+
+/* Narrow screens have a reading flow of their own. No pinned scenes, tall
+   comparison sliders or autoplay competing with a finger scrolling the page. */
+@media(max-width:1100px) {
+  .hero-desktop-title, .hero-story-detail { display:none; }
+  .hero-mobile-title { display:block; }
+  .hero-copy { max-width:22rem; }
+  .hero-experience .hero-story { order:1; margin-top:var(--space-5); max-width:34rem; font-size:var(--text-reading); }
+  .hero-start { display:inline-flex; order:2; align-self:center; margin-top:var(--space-6); }
+  .hero-experience .workflow-reel { order:3; margin-top:var(--space-8); width:100%; max-width:30rem; margin-inline:auto; --content-gap:var(--space-3); }
+  .mobile-example-picker { display:grid; gap:var(--space-2); margin-bottom:var(--space-4); font-size:var(--text-reading); color:var(--muted); }
+  .mobile-example-picker select { width:100%; }
+  .workflow-reel .sequence-body { display:block; }
+  .workflow-reel .sequence-body > button, .workflow-reel .sequence-navigation-middle { display:none; }
+  .workflow-reel .sequence-track { display:block; transform:none; transition:none; }
+  .workflow-reel .sequence-track > [inert] { display:none; }
+  .workflow-reel .sequence-track > * { padding-inline:0; transition:none; }
+  .workflow-reel :is(.reel-source,.reel-delivery) > .workflow-card-body, .reel-flow .workflow-card-emphasis { display:none; }
+  .workflow-reel .reel-flow > .workflow-card { grid-template-rows:auto; }
+  .workflow-reel .reel-flow > .magpie-card { grid-template-rows:auto auto; }
+  .adapter-strip { margin-top:var(--space-6); gap:var(--space-3); }
+  .supported-agents { gap:var(--space-2) var(--space-4); }
+  .supported-agents a { min-height:44px; }
+  .workflow-sequence-content { display:none; }
+  .mobile-workflows { display:block; max-width:42rem; margin-inline:auto; }
+  .mobile-workflow { border-bottom:1px solid var(--line); }
+  .mobile-workflow:first-child { border-top:1px solid var(--line); }
+  .mobile-workflow > summary { display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); padding:var(--space-5) 0; list-style:none; }
+  .mobile-workflow > summary::-webkit-details-marker { display:none; }
+  .mobile-workflow > summary > span { display:grid; gap:var(--space-1); }
+  .mobile-workflow > summary strong { font-size:var(--text-body); color:var(--ink); }
+  .mobile-workflow > summary span span { font-size:var(--text-reading); line-height:1.5; color:var(--muted); }
+  .mobile-workflow > summary > svg { width:24px; height:24px; flex:none; color:var(--blue); }
+  .mobile-workflow[open] > summary > svg { transform:rotate(180deg); }
+  .mobile-workflow-body { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-5); padding:var(--space-5); margin-bottom:var(--space-5); border-radius:var(--radius-card); background:var(--surface-light),var(--prepared-bg); color:var(--prepared-ink); --content-gap:var(--space-3); }
+  .mobile-workflow-brand { display:flex; align-items:center; justify-content:center; gap:var(--space-3); }
+  .mobile-workflow-brand > svg { width:36px; height:auto; }
+  .mobile-workflow-context, .mobile-workflow-result p { margin:0; font-size:var(--text-reading); line-height:var(--leading-body); }
+  .mobile-workflow-result { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-3); padding-top:var(--space-4); border-top:1px solid var(--prepared-border); }
+  .mobile-workflow-before { border-top:1px solid var(--prepared-border); padding-top:var(--space-4); }
+  .mobile-workflow-before > summary { min-height:44px; font-size:var(--text-reading); line-height:1.5; }
+  .mobile-workflow-before .workflow-checklist { margin-top:var(--space-3); }
+}
+@media(max-width:800px) {
+  .isolation-choice { display:flex; justify-content:center; gap:var(--space-2); margin-bottom:var(--space-6); }
+  .isolation-choice button[aria-pressed=false] { --button-bg:transparent; --button-ink:var(--muted); }
+  .isolation-choice button[aria-pressed=true] { --button-bg:var(--action-soft-bg); --button-ink:var(--blue); }
+  .isolation-sides[data-mobile-side=protected] .isolation-open, .isolation-sides[data-mobile-side=open] .isolation-protected { display:none; }
+  .isolation-protected .protection-layer .protection-layer { display:contents; }
+  .isolation-protected .protection-layer { padding:var(--space-3); }
+  .isolation-protected .layer-label { margin-bottom:var(--space-4); }
+  .isolation-protected .protected-workspace { margin-top:var(--space-2); }
+  .section-followup > .button { width:100%; max-width:26rem; }
+  .case-attribution .quote-person { align-items:flex-start; }
 }

@@ -1,7 +1,7 @@
 export function measurePuzzles() {
   const errors=[];
   for (const flow of document.querySelectorAll('.puzzle-flow')) {
-    if (flow.closest('[inert],[aria-hidden=true]')) continue;
+    if (!flow.checkVisibility() || flow.closest('[inert],[aria-hidden=true]')) continue;
     const flowStyle=getComputedStyle(flow);
     const cards=[...flow.children], horizontal=flowStyle.gridTemplateColumns.split(' ').length>1;
     if (flowStyle.filter==='none' || flowStyle.boxShadow!=='none') errors.push('puzzle group has no silhouette shadow');

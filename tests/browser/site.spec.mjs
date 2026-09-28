@@ -56,11 +56,21 @@ test('all carousel and tab states, keyboard, long copy and text zoom', async ({ 
       else baseline.push(...offsets);
     };
     const heroColumns = [];
-    for (const dot of await page.locator('.reel-dot').all()) {
-      await dot.click(); await expect(dot).toHaveAttribute('aria-pressed','true'); await checkLayout(page);
+    for (const [index,dot] of (await page.locator('.reel-dot').all()).entries()) {
+      if(width<=1100) await page.getByLabel('Try an example').selectOption(String(index));
+      else await dot.click(); await expect(dot).toHaveAttribute('aria-pressed','true'); await checkLayout(page);
       await checkColumns(page.locator('.reel-slide:not([inert])'),heroColumns);
     }
     for (const name of ['Software lifecycle phases','Security lifecycle phases']) {
+      if(width<=1100) {
+        const scene=page.locator(name.startsWith('Software')?'.software-lifecycle':'.security-walkthrough');
+        for(const row of await scene.locator('.mobile-workflow').all()) {
+          await row.locator(':scope > summary').click();
+          await expect(row.locator('.mobile-workflow-body')).toBeVisible();
+          await checkLayout(page);
+        }
+        continue;
+      }
       const tabs = page.getByRole('tablist', { name }).getByRole('tab');
       const columns = [];
       const states = await tabs.all();
@@ -220,7 +230,7 @@ test('all process families share mating puzzle edges across responsive layouts',
   await page.goto('/');
   for (const width of [375,1000,1524]) {
     await page.setViewportSize({width,height:1000});
-    await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Review',exact:true}).click();
+    if(width>1100) await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Review',exact:true}).click();
     for (const selector of ['.reel-slide:not([inert]) .reel-flow','.lifecycle-detail .lifecycle-flow','.card-flow']) {
       for (const flow of await page.locator(selector).all()) {
         await expect(flow).toHaveClass(/puzzle-flow/);
@@ -317,20 +327,30 @@ for (const width of [375,1440,1524]) for (const theme of ['light','dark']) {
       return Object.fromEntries(['font-family','font-size','font-weight','line-height','letter-spacing'].map(property => [property,style.getPropertyValue(property)]));
     });
     for (const [property,value] of Object.entries(introStyle)) await expect(page.locator('.case-intro p')).toHaveCSS(property,value);
-    for (const [name,selector] of [['hero','.hero'],['airflow','#airflow'],['story','.story-comparison'],['isolation','.isolation-comparison'],['project','.project-fit'],['learning','.learn-skills']]) {
+    for (const [name,selector] of [['hero','.hero'],['airflow','#airflow'],['story',width<=1100?'.security-walkthrough .mobile-workflows':'.story-comparison'],['isolation','.isolation-comparison'],['project','.project-fit'],['learning','.learn-skills']]) {
       // Hide only fixed chrome while capturing a tall section: otherwise the
       // header is composited across its middle. Geometry checks run unmodified.
       await page.locator(selector).first().screenshot({path:`.builds/visual/home-${name}-${width}-${theme}.png`,style:'.site-header, .site-header *, .skip-link { visibility:hidden; }'});
     }
     for (const [index,name] of [[1,'review'],[4,'contributor'],[5,'dependencies']]) {
-      await page.locator('.reel-dot').nth(index).click();
+      if(width<=1100) await page.getByLabel('Try an example').selectOption(String(index));
+      else await page.locator('.reel-dot').nth(index).click();
       await checkLayout(page);
       await page.locator('.hero').screenshot({path:`.builds/visual/home-hero-${name}-${width}-${theme}.png`,style:'.site-header, .site-header *, .skip-link { visibility:hidden; }'});
     }
     for (const name of ['Review','Grow']) {
-      await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name,exact:true}).click();
+      if(width<=1100) await page.locator('.software-lifecycle .mobile-workflow > summary').filter({has:page.locator('strong',{hasText:name})}).click();
+      else await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name,exact:true}).click();
       await checkLayout(page);
       await page.locator('.choose-work').screenshot({path:`.builds/visual/home-lifecycle-${name.toLowerCase()}-${width}-${theme}.png`,style:'.site-header, .site-header *, .skip-link { visibility:hidden; }'});
+    }
+    if(width<=1100) {
+      for(const [index,row] of (await page.locator('.security-walkthrough .mobile-workflow').all()).entries()) {
+        await row.locator(':scope > summary').click();
+        await checkLayout(page);
+        await row.screenshot({path:`.builds/visual/home-story-${index}-${width}-${theme}.png`});
+      }
+      return;
     }
     for (const tab of await page.getByRole('tablist',{name:'Security lifecycle phases'}).getByRole('tab').all()) {
       await tab.click();

@@ -28,5 +28,5 @@
   --section-padding:clamp(64px,8vw,112px);
 }
 @media(max-width:800px) {
-  :root { --page-gutter:20px;--page-padding:48px;--card-padding:20px;--card-gap:24px;--heading-gap:24px;--block-gap:48px; }
+  :root { --page-gutter:20px;--page-padding:32px;--card-padding:20px;--card-gap:24px;--heading-gap:24px;--block-gap:32px;--section-padding:56px; }
 }

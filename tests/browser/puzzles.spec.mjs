@@ -10,7 +10,8 @@ test('process puzzles mate only through Magpie on desktop and phones',async({pag
   for(const width of [375,900,1440]) for(const theme of ['light','dark']) {
     await page.setViewportSize({width,height:1100}); await page.goto('/');
     await page.evaluate(theme=>localStorage.setItem('magpie-theme',theme),theme); await page.reload();
-    await page.locator('.reel-dot').first().click();
+    if(width<=1100) await page.getByLabel('Try an example').selectOption('0');
+    else await page.locator('.reel-dot').first().click();
     await expect(page.locator('.reel-flow.puzzle-flow')).toHaveCount(9);
     await expect(page.locator('.lifecycle-flow.puzzle-flow')).toHaveCount(6);
     await expect(page.locator('.card-flow.puzzle-flow')).toHaveCount(1);
@@ -74,6 +75,13 @@ for (const width of [375,1440]) test(`pieces assemble once and pass light throug
   await page.goto('/');
   await expect(page.locator('.reel-slide:not([inert]) .puzzle-flow')).toHaveAttribute('data-puzzle-ready','true');
   const flow=page.locator('.reel-slide:not([inert]) .puzzle-flow');
+  if(width<=1100) {
+    expect(await flow.evaluate(el=>el.getAnimations({subtree:true}).filter(a=>a.animationName?.startsWith('puzzle-')).length)).toBe(0);
+    expect(await page.evaluate(measurePuzzles)).toEqual([]);
+    await page.getByLabel('Try an example').selectOption('1');
+    expect(await page.evaluate(measurePuzzles)).toEqual([]);
+    return;
+  }
   await expect(flow).toHaveAttribute('data-puzzle-shine','true');
   const sample=async(time)=>flow.evaluate((el,time)=>{
     const animations=el.getAnimations({subtree:true}).filter(a=>a.animationName?.startsWith('puzzle-'));

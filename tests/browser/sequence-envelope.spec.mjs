@@ -9,16 +9,18 @@ for(const width of [375,1524]) test(`sequence shadows retain their full fade at 
     await page.evaluate(theme=>localStorage.setItem('magpie-theme',theme),theme); await page.reload();
     await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
     await page.evaluate(()=>document.fonts.ready);
-    await page.locator('.reel-dot').first().click();
+    if(width<=1100) await page.getByLabel('Try an example').selectOption('0');
+    else await page.locator('.reel-dot').first().click();
     for(const [name,selector,all,controls] of [
       ['hero','.reel-slide:not([inert]) .puzzle-flow','.reel-slide .puzzle-flow','.reel-dot'],
       ['security','.security-scene:not([inert]) .story-comparison','.security-scene .story-comparison','.security-workbench [role=tab]'],
       ['software','.lifecycle-scene:not([inert]) .puzzle-flow','.lifecycle-scene .puzzle-flow','.software-workbench [role=tab]'],
-    ]) {
+    ].filter(([name])=>width>1100||name==='hero')) {
       // The tallest panel reaches the shared envelope's edge. Shorter panels
       // can accidentally hide clipping behind the rail's reserved empty space.
       const tallest=await page.locator(all).evaluateAll(nodes=>nodes.reduce((best,el,index)=>el.getBoundingClientRect().height>nodes[best].getBoundingClientRect().height?index:best,0));
-      await page.locator(controls).nth(tallest).click();
+      if(width<=1100) await page.getByLabel('Try an example').selectOption(String(tallest));
+      else await page.locator(controls).nth(tallest).click();
       const surface=page.locator(selector), window=surface.locator('xpath=ancestor::div[contains(@class,"sequence-window")]');
       await surface.evaluate(el=>el.scrollIntoView({block:'end',behavior:'instant'}));
       const before=await page.evaluate(()=>scrollY);

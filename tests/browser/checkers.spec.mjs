@@ -47,7 +47,7 @@ test('section follow-ups center their shared soft CTA', async ({page}) => {
   for (const width of [375,1524]) {
     await page.setViewportSize({width,height:900});
     expect(await page.evaluate(measureLayout)).toEqual([]);
-    await page.locator('a').evaluate(el => el.style.alignSelf = 'flex-end');
+    await page.locator('a').evaluate(el => {el.style.width='50%';el.style.alignSelf='flex-end';});
     expect((await page.evaluate(measureLayout)).join('\n')).toContain('off-center section follow-up');
     await page.locator('a').evaluate(el => { el.removeAttribute('style'); el.classList.remove('button-soft'); });
     expect((await page.evaluate(measureLayout)).join('\n')).toContain('section follow-up missing shared CTA');

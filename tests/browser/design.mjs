@@ -15,7 +15,7 @@ export function measureDesign() {
   const controlRadius = token('--radius-control'), roundRadius = token('--radius-round'), cardRadius = token('--radius-card');
   const badgeSize = token('--card-badge-size'), iconStroke = token('--icon-stroke');
   const displayIconHeight = badgeSize - token('--space-3');
-  const puzzlePadding = token(innerWidth<=1100?'--space-10':'--space-12'), compactPuzzlePadding = token('--space-8');
+  const puzzlePadding = token(innerWidth<=1100?'--space-6':'--space-12'), compactPuzzlePadding = token('--space-8');
   const padding = token('--card-padding'), gap = token('--space-2'), title = token('--title-card','fontSize');
   const pageTitle = token('--title-page','fontSize'), leadSize = token('--text-lead','fontSize');
   const sectionPadding = token('--section-padding');

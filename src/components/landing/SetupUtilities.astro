@@ -9,7 +9,11 @@ import SectionHeading from "./SectionHeading";
     <SectionHeading id="setup-utilities-title" target="agent-isolation">Give your agent a workspace, not your whole machine</SectionHeading>
     <p>Magpie installs and verifies layered protection so you can work on untrusted software locally, without a separate VM on macOS or Linux.</p>
   </div>
-  <div class="isolation-sides">
+  <div class="isolation-choice" aria-label="Compare agent access">
+    <button class="button button-soft" type="button" aria-pressed="true" data-isolation-choice="protected">With Magpie</button>
+    <button class="button button-quiet" type="button" aria-pressed="false" data-isolation-choice="open">In YOLO mode</button>
+  </div>
+  <div class="isolation-sides" data-mobile-side="protected">
     <WorkflowCard className="isolation-side isolation-open" tone="risk" title="In YOLO mode" emphasis="What if my agent deletes all my files?">
       <TriangleAlert slot="icon" size={48} aria-hidden="true" />
       <div class="agent-diagram">
@@ -48,6 +52,11 @@ import SectionHeading from "./SectionHeading";
 </section>
 
 <script>
+  const choices = document.querySelectorAll<HTMLButtonElement>('[data-isolation-choice]');
+  for (const choice of choices) choice.addEventListener('click', () => {
+    document.querySelector<HTMLElement>('.isolation-sides')!.dataset.mobileSide = choice.dataset.isolationChoice;
+    for (const button of choices) button.setAttribute('aria-pressed', String(button === choice));
+  });
   const diagram = document.querySelector<HTMLElement>('.isolation-protected .agent-diagram');
   if (diagram) {
     const route = diagram.querySelector<SVGSVGElement>('.protection-route')!;

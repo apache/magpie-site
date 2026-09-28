@@ -14,7 +14,7 @@ test('documentation shares the site grid, card anatomy and reading rhythm', asyn
     expect(await page.evaluate(measureDesign)).toEqual([]);
     await expect(page.locator('.docs-card-grid .workflow-card-heading > .card-badge > svg')).toHaveCount(4);
     const gap = await page.locator('.docs-overview-section').first().evaluate(el => parseFloat(getComputedStyle(el).marginTop));
-    expect(gap).toBe(width <= 800 ? 48 : 64);
+    expect(gap).toBe(width <= 800 ? 32 : 64);
     await page.screenshot({path:`.builds/visual/docs-overview-${width}-${theme}.png`});
     if (width === 375) {
       await page.getByRole('button',{name:'Browse documentation',exact:true}).click();

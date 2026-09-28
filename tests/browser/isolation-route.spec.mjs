@@ -16,7 +16,9 @@ function inspectRoute() {
   if (Math.abs(points[0].x-(agent.left+agent.right)/2)>1 || points[0].y<agent.bottom) errors.push('route misses agent');
   if (Math.abs(end.x-(workspace.left+workspace.right)/2)>1 || end.y<workspace.top+8 || end.y>icon.top-4) errors.push('route misses workspace');
   for (const layer of diagram.querySelectorAll('.protection-layer')) {
-    const r=layer.getBoundingClientRect();
+    // Mobile uses full-width labels in a single boundary so they remain
+    // readable. The route must still pass each layer's top in order.
+    const r=(getComputedStyle(layer).display==='contents'?layer.querySelector('.layer-label'):layer).getBoundingClientRect();
     if (!segments.some(([a,b])=>Math.abs(a.x-b.x)<1 && a.x>r.left && a.x<r.right && Math.min(a.y,b.y)<r.top && Math.max(a.y,b.y)>r.top)) errors.push('route skips a protection layer');
   }
   for (const label of diagram.querySelectorAll('.layer-label > span,.layer-label > svg')) {

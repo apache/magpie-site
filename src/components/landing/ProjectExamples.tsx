@@ -6,6 +6,7 @@ import WorkflowStages from "./WorkflowStages";
 import SequenceNavigation from "./SequenceNavigation";
 import SequenceSlides from "./SequenceSlides";
 import PuzzleFlow from "./PuzzleFlow";
+import MobileWorkflows from "./MobileWorkflows";
 import { useWorkflowSequence } from "./useWorkflowSequence";
 import { ArrowRight, Boxes, Bug, ClipboardCheck, Compass, FileCheck2, GitPullRequest, Inbox, MessageSquareText, Package, PackageCheck, SlidersHorizontal, UserRound, Wrench } from "lucide-react";
 
@@ -45,6 +46,7 @@ export function SoftwareLifecycle() {
           <a className="button button-soft" href={lifecycle[active].link} target="_blank" rel="noreferrer"><span>Explore {lifecycle[active].label.toLowerCase()} workflows</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a>
         </SequenceNavigation>
       </div>
+      <MobileWorkflows name="lifecycle-mobile" items={lifecycle.map(phase => ({label:phase.label, prompt:phase.input, context:phase.inputs.join(" "), work:phase.work, outcome:phase.outcome, outputs:phase.outputs, href:phase.link}))} />
     </div>
   </div>;
 }

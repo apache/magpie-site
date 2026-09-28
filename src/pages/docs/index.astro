@@ -1,7 +1,7 @@
 ---
 import { CardHeading } from "../../components/landing/WorkflowCard";
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import { ShieldCheck, GitPullRequest, Bug, PackageCheck } from "lucide-react";
+import { ShieldCheck, GitPullRequest, Bug, PackageCheck, ArrowRight } from "lucide-react";
 const workflows = [
   { title: "Security reports", description: "Assess, coordinate, fix, and disclose.", href: "/docs/security/readme", icon: ShieldCheck },
   { title: "Pull requests", description: "Triage the queue and prepare reviews.", href: "/docs/pr-management/readme", icon: GitPullRequest },
@@ -16,7 +16,8 @@ const more = [["Repository health", "/docs/repo-health/readme"], ["Mentoring", "
   <a href="/start" class="button button-soft">Install Magpie</a>
   <section class="docs-overview-section" aria-labelledby="workflows">
   <h2 id="workflows">What would you like help with?</h2>
-  <div class="docs-card-grid">{workflows.map(item => <a href={item.href} class="surface-card workflow-card card-link docs-card"><CardHeading title={item.title} linkArrow><item.icon slot="icon" aria-hidden="true" /></CardHeading><div class="workflow-card-body"><p>{item.description}</p></div></a>)}</div>
+  <div class="docs-card-grid docs-workflow-cards">{workflows.map(item => <a href={item.href} class="surface-card workflow-card card-link docs-card"><CardHeading title={item.title} linkArrow><item.icon slot="icon" aria-hidden="true" /></CardHeading><div class="workflow-card-body"><p>{item.description}</p></div></a>)}</div>
+  <div class="docs-workflow-links">{workflows.map(item => <a href={item.href} class="text-link docs-workflow-link"><item.icon aria-hidden="true" /><span><strong>{item.title}</strong><span>{item.description}</span></span><ArrowRight className="cta-arrow" aria-hidden="true" /></a>)}</div>
   <div class="docs-more-links">{more.map(([title,href]) => <a href={href}>{title}</a>)}</div>
   </section>
   <section class="docs-overview-section" aria-labelledby="understand">

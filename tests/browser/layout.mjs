@@ -1,7 +1,7 @@
 // Shared by real-page checks and intentionally broken browser fixtures.
 export function measureLayout() {
   const errors = [], tolerance = 2, width = document.documentElement.clientWidth;
-  const visible = el => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !el.closest('[inert],[aria-hidden=true]');
+  const visible = el => el.checkVisibility({visibilityProperty:true}) && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !el.closest('[inert],[aria-hidden=true]');
   if (document.documentElement.scrollWidth > width + tolerance) errors.push('document overflow: ' + document.documentElement.scrollWidth + ' > ' + width);
   for (const el of document.querySelectorAll('body *')) {
     if (!visible(el) || el.closest('svg') || ['SCRIPT','STYLE','ASTRO-ISLAND','ASTRO-SLOT','ASTRO-STATIC-SLOT'].includes(el.tagName)) continue;
@@ -177,7 +177,7 @@ export function measureLayout() {
     const style = getComputedStyle(card), padding = parseFloat(style.getPropertyValue('--card-padding'));
     if (Math.abs(parseFloat(style.rowGap) - parseFloat(style.getPropertyValue('--content-gap'))) > tolerance) errors.push('inconsistent card content gap: ' + card.className);
     const reaction = card.querySelector(':scope > .workflow-card-emphasis'), body = card.querySelector(':scope > .workflow-card-body');
-    if (reaction && body && reaction.getBoundingClientRect().top - body.getBoundingClientRect().bottom < parseFloat(style.getPropertyValue('--heading-gap')) - tolerance) errors.push('crowded card reaction');
+    if (reaction && body && visible(reaction) && visible(body) && reaction.getBoundingClientRect().top - body.getBoundingClientRect().bottom < parseFloat(style.getPropertyValue('--heading-gap')) - tolerance) errors.push('crowded card reaction');
     for (const edge of ['Top','Right','Bottom','Left']) if (Math.abs(parseFloat(style['padding' + edge]) - padding) > tolerance) errors.push('inconsistent card padding: ' + card.className + ` ${edge}: ${style['padding' + edge]} expected ${padding}`);
     if (card.matches('.isolation-side')) {
       const diagram = card.querySelector('.agent-diagram'), prose = card.querySelector('.workflow-card-body > p');

@@ -105,11 +105,11 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   breadcrumb widths. Documentation entry cards reuse the workflow-card heading,
   badge and body anatomy; longer articles retain their own prose hierarchy.
 - Homepage sections retain at least the shared responsive section-padding
-  token on both vertical edges (64–112px). Local
+  token on both vertical edges (56px on phones, up to 112px on desktop). Local
   compression fails the checker; deliberately broken phone/desktop fixtures
   verify both edges. Shared card gaps are 24px on phones and 32px on desktop;
   Headings use 32px between their title and lead; consecutive explanatory blocks
-  use 64px (24px and 48px on phones). The stage rail, prompt and cards follow
+  use 64px (24px and 32px on phones). The stage rail, prompt and cards follow
   that same rhythm. Security stage titles retain clearance before the comparison cards.
   Heading/body spacing and checklist items use a separate 20px content gap.
   The card checker rejects heading/body gaps that depart from this token.
@@ -145,8 +145,9 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   Hero examples, lifecycle phases and project rules use one puzzle-flow owner.
   Matching pieces meet flush along their straight edges and curved joins. The
   middle Magpie piece joins two distinct connector positions, so the outside pieces cannot mate directly. All process
-  flows stack below 1101px. Puzzle padding is 48px on desktop and 40px when
-  stacked, keeping copy clear of every notch. Alternating tabs and sockets on
+  flows use a compact composition below 1101px: the hero and project-rule
+  pieces stack, while the walkthroughs become disclosures. Puzzle padding is
+  48px on desktop and 24px when stacked, keeping copy clear of every notch. Alternating tabs and sockets on
   the exposed sides make each piece recognizable beyond the internal joins.
   Mask bounds fit the exposed silhouette so invisible extensions cannot cause
   horizontal overflow on narrow screens. The painted surface owns the mask;
@@ -154,11 +155,11 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   exterior shadow; individual pieces never cast shadows on their neighbors.
   Join geometry is tested on both axes, with invalid mismatched joins and a pair
   of incorrectly matching outside pieces. Comparisons and independent cards
-  retain their ordinary surfaces. On first entry and stage selection, process
+  retain their ordinary surfaces. On first desktop entry, process
   pieces briefly assemble from separated positions. A slower light sweep passes
   through the connection only on the first introduction of each sequence, not
   on every slide change. There is no electric outline pulse. The sweep follows
-  the vertical flow on phones. Reduced motion shows the assembled shape immediately;
+  the horizontal desktop flow. Phones and reduced motion show the assembled shape immediately;
   neither effect loops or changes document layout.
   The learning guides use lavender surfaces with centered shared headings and aligned links,
   rather than a second set of colored flow cards. They stack on phones.
@@ -278,18 +279,24 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   reverse cleanly. Tabs, complete active card content and next-step controls
   remain visible below the header; the tall layout also retains the heading.
   Resizing between these layouts must preserve working scroll and keyboard
-  controls. Narrow, reduced-motion and genuinely too-short viewports (where
+  controls. Wide reduced-motion and genuinely too-short viewports (where
   the stage content itself cannot fit) use ordinary page flow with the same
-  stage tabs and round arrow controls. Never treat a typical laptop window as
+  stage tabs and round arrow controls. At 1100px and below, both walkthroughs
+  instead offer six native disclosures in ordinary page flow, with no pinning
+  or horizontal slider. Opening another step closes the previous one; all work,
+  outcomes, manual comparisons and documentation links remain reachable.
+  Enter/Space and normal Tab navigation work without carousel keyboard handling. Never treat a typical laptop window as
   this fallback merely because the full introduction cannot remain pinned.
   The security walkthrough belongs inside the Airflow case-study article,
   following its result chart on the same sheet. The broader skill families follow
   in their own section. Every family retains its full problem/work/result
   content and documentation CTA. Family examples sit directly on their section
-  surface; neither walkthrough has nested topic navigation or duplicate summaries.
-  The nine-example carousel retains compact dots for its separate
+  surface; the desktop walkthrough has no nested topic navigation or duplicate summaries.
+  The mobile security disclosure offers the manual comparison on request; it
+  does not make readers scroll two full comparison cards for every step.
+  Above 1100px, the nine-example carousel retains compact dots for its separate
   autoplay model. Hover and keyboard focus pause rotation temporarily; selecting
-  a dot stops it for the visit, including on touch devices. System motion changes
+  a dot stops it for the visit. System motion changes
   must not override that explicit selection. There is no separate play/pause button.
   All three sequences share `useWorkflowKeyboard`: Left/Right wrap through items,
   Home/End select the endpoints and focus follows the selected control. Keys
@@ -300,7 +307,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   controls keep their keys.
   Keyboard
   selection stops hero autoplay just like clicking a dot.
-  The hero and both walkthroughs share a 400ms horizontal slide with a stable
+  On desktop, the hero and both walkthroughs share a 400ms horizontal slide with a stable
   content envelope. Panels remain assembled when switching stages: puzzle
   assembly and its faint sheen run only on the first introduction to a sequence.
   The slider reserves paint overflow for the full contact and ambient shadow,
@@ -316,6 +323,33 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   horizontal panel movement and title fades after real selections, without
   vertical jumps or repeated puzzle assembly, and verify their absence
   with reduced motion enabled.
+- Mobile is a separate reading composition, not the desktop sequence stacked
+  into a tall carousel. At 1100px and below, the hero introduces the library,
+  offers Get started in the first phone viewport and puts a native example
+  picker before the example. All nine examples are available. The connected
+  pieces retain the problem, Magpie's work and the result; repeated illustrations
+  and reaction quotes are omitted here. Examples never autoplay, animate their
+  assembly or slide horizontally on phones, even with normal motion enabled.
+  Native select keys and ordinary page navigation retain their behavior.
+  The initial hero is below 1300px at 390px and below 1500px at 320px, including
+  the supported-agent links; text stays at reading size. Tests intentionally
+  inflate the hero and disclosure content to prove the bounds checks fail.
+- At 800px and below, agent isolation defaults to the protected workspace with
+  an explicit With Magpie / In YOLO mode switch. Only the chosen comparison is
+  visible. Protection labels use the full inner width, not progressively narrower
+  nested boxes. The access arrow still passes each layer without crossing text
+  and ends inside the workspace. The desktop comparison keeps both nested
+  diagrams side by side.
+- Phone documentation uses compact icon/title/description navigation rows.
+  The search trigger is a named 44px icon button, keeping the logo, search,
+  theme and navigation in a single header row. Desktop documentation retains
+  its shared surface cards. Keyboard activation, focus and Escape still work.
+- Production and development suites exercise the phone flows at 320, 390, 768
+  and 1024px, every example and disclosure, no-autoplay behavior, light/dark
+  documentation, comparison controls and resizing back to desktop progression.
+  Closed native disclosure content is excluded from painted-geometry checks;
+  the same content is fully checked when opened. An invalid overflow fixture
+  verifies that the visibility handling cannot hide an actual open-row defect.
 - Every discovered HTML route runs at 320, 375, 600, 800, 801, 1150, 1151, 1440,
   1524 and 1920 px. Axe WCAG 2 A/AA and 2.1 AA runs in light/dark at 375 and 1280 px.
 - Interaction tests cover every carousel/tab state, filter dimensions and result

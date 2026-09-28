@@ -66,7 +66,7 @@ export function criticalProgressionTests() {
       ['.security-workbench .workflow-sequence-content','[role=tab]','aria-selected'],
       ['.software-workbench .workflow-sequence-content','[role=tab]','aria-selected'],
     ];
-    for (const mode of [{width:1524,height:1495,motion:'no-preference'},{width:1524,height:700,motion:'no-preference'},{width:375,height:900,motion:'reduce'}]) {
+    for (const mode of [{width:1524,height:1495,motion:'no-preference'},{width:1524,height:700,motion:'no-preference'},{width:1280,height:900,motion:'reduce'}]) {
       await page.setViewportSize({width:mode.width,height:mode.height});
       await page.emulateMedia({reducedMotion:mode.motion});
       await page.goto('/');
@@ -183,28 +183,26 @@ export function criticalProgressionTests() {
     await page.clock.fastForward(16000); await selected(count-1);
   });
 
-  test.describe('touch carousel controls', () => {
+  test.describe('touch example controls', () => {
     test.use({hasTouch:true, isMobile:true, viewport:{width:430,height:932}});
-    test('critical progression: tapping a dot selects and stops autoplay without hover', async ({page}) => {
+    test('critical progression: phone examples change only on request', async ({page}) => {
       await page.emulateMedia({reducedMotion:'no-preference'});
       await page.clock.install();
       await page.goto('/');
       await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
-      const dots = page.locator('.reel-dot');
-      await dots.nth(2).tap();
-      await expect(dots.nth(2)).toHaveAttribute('aria-pressed','true');
+      const picker = page.getByLabel('Try an example');
+      await picker.tap();
+      await picker.selectOption('2');
       await page.locator('#hero-title').tap();
       await page.emulateMedia({reducedMotion:'reduce'});
       await page.emulateMedia({reducedMotion:'no-preference'});
       await page.clock.fastForward(24000);
-      await expect(dots.nth(2)).toHaveAttribute('aria-pressed','true');
+      await expect(picker).toHaveValue('2');
       await expect(page.locator('.reel-window')).toHaveAttribute('aria-live','polite');
-      await dots.nth(5).tap();
-      await expect(dots.nth(5)).toHaveAttribute('aria-pressed','true');
-      await page.getByRole('button',{name:'Next use case',exact:true}).tap();
-      await expect(dots.nth(6)).toHaveAttribute('aria-pressed','true');
-      await page.getByRole('button',{name:'Previous use case',exact:true}).tap();
-      await expect(dots.nth(5)).toHaveAttribute('aria-pressed','true');
+      for(const index of [5,8,0]) {
+        await picker.selectOption(String(index));
+        await expect(page.locator('.reel-slide:not([inert])')).toHaveAttribute('aria-label',new RegExp(`^${index+1} of 9:`));
+      }
     });
   });
 
@@ -273,11 +271,18 @@ export function criticalProgressionTests() {
         await page.setViewportSize({width:mode.width,height:mode.height});
         await page.emulateMedia({reducedMotion:mode.motion});
         await expect(scene).toHaveAttribute('data-scroll-driven','false');
+        if(mode.width<=1100) {
+          const rows=scene.locator('.mobile-workflow');
+          for(let i=0;i<count;i++) {
+            await rows.nth(i).locator(':scope > summary').click();
+            await expect(scene.locator('.mobile-workflow[open]')).toHaveCount(1);
+            await expect(rows.nth(i).locator('.mobile-workflow-body')).toBeVisible();
+          }
+          await expect.poll(() => page.evaluate(measureLayout)).toEqual([]);
+          continue;
+        }
         for (let i=0;i<count;i++) { await tabs.nth(i).click(); await selected(i); }
         await scene.locator('[role=tabpanel]:not([inert])').focus();
-        // On a phone the content is taller than the viewport. Keep navigating
-        // from its bottom even after keyboard focus moves to an offscreen tab.
-        if (mode.width === 320) await scene.locator('[role=tabpanel]:not([inert])').evaluate(el => el.scrollIntoView({block:'end',behavior:'instant'}));
         await page.keyboard.press('ArrowRight'); await selected(0);
         await page.keyboard.press('End'); await selected(count-1);
         await page.keyboard.press('Home'); await selected(0);
