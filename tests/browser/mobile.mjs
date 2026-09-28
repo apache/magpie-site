@@ -98,14 +98,16 @@ test('phone examples stay still and disclosures retain ordinary keyboard access'
 test('phone bounds detect oversized introductions and open disclosure overflow',async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
-  // The checks below write styles onto island markup. Before hydration React
-  // would find them and report a mismatch; the dev server hydrates late.
   await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
   expect(await page.evaluate(measureMobileHero)).toEqual([]);
   await page.locator('#overview').evaluate(el=>el.style.minHeight='1800px');
   expect(await page.evaluate(measureMobileHero)).toContain('oversized phone hero');
   await page.locator('#overview').evaluate(el=>el.removeAttribute('style'));
   const row=page.locator('.security-walkthrough .mobile-workflow').first();
+  // Astro drops the ssr marker when it starts hydrating, but React hydrates
+  // concurrently and finishes later. Wait for React to own this very node
+  // before writing to it, or a slow runner still reports a mismatch.
+  await expect.poll(()=>row.locator('.mobile-workflow-body').evaluate(el=>Object.keys(el).some(key=>key.startsWith('__reactProps$')))).toBe(true);
   await row.locator('.mobile-workflow-body').evaluate(el=>el.style.width='700px');
   expect(await page.evaluate(measureLayout)).toEqual([]);
   await row.locator(':scope > summary').click();
