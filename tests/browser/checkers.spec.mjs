@@ -558,7 +558,6 @@ test('isolation comparison flags unequal card heights', async ({page}) => {
   await page.setContent('<div class="isolation-sides"><div class="surface-card workflow-card"><h3>Open access</h3><p>One explanation</p></div><div class="surface-card workflow-card"><h3>Protected access</h3><p>Another explanation</p></div></div>');
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   expect(await page.evaluate(measureLayout)).toEqual([]);
-  await page.locator('.workflow-card').first().evaluate(el => el.style.height = '300px');
-  await page.locator('.workflow-card').last().evaluate(el => el.style.height = '200px');
+  await page.locator('.workflow-card').last().evaluate(el => {el.style.transform = 'scaleY(.7)'; el.style.transformOrigin = 'top';});
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('unequal card bottoms: isolation-sides');
 });

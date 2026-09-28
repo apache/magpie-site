@@ -116,6 +116,7 @@ body.docs-navigation-open { overflow:hidden; }
 
 /* A compact contents disclosure fits the existing header on desktop and phone. */
 .home-navigation { position:relative; }
+.home-navigation:not([open]) > nav { display:none; }
 .home-navigation summary { display:flex; align-items:center; gap:var(--space-2); min-height:44px; color:var(--ink); font-size:var(--text-reading); list-style:none; }
 .home-navigation summary::-webkit-details-marker { display:none; }
 .home-navigation summary:hover { color:var(--blue); }

@@ -168,3 +168,8 @@
 .section-heading > a { color:inherit; text-decoration:none; }
 .section-heading > a > svg { display:inline-block; width:18px; height:18px; margin-left:var(--space-2); vertical-align:middle; color:var(--muted); }
 .section-heading > a:is(:hover,:focus-visible) { text-decoration:underline; text-decoration-thickness:1px; }
+
+@media(hover:hover) {
+  .section-heading > a > svg { opacity:0; transition:opacity var(--motion-fast); }
+  .section-heading > a:is(:hover,:focus-visible) > svg { opacity:1; }
+}
