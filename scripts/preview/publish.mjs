@@ -152,7 +152,7 @@ export async function run({
       // way: a maintainer who wants a preview of a bot's PR can still ask for
       // one, and it will publish.
       if (!isBotAuthored(pull) && !hasBotMarker(comments, HOWTO_MARKER)) {
-        await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number, label));
+        await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(label));
       }
     } catch (err) {
       // One PR's transient failure must not abort every other publish and the
@@ -453,11 +453,13 @@ const armedBody = (pr, by, label) =>
   (by ? `@${by} armed this preview by dispatching the workflow.` : `This preview was armed by manual dispatch.`) +
   ` The \`${label}\` label now tracks this PR's head commit; remove the label to retire the preview.`;
 
-const howtoBody = (pr, label) =>
+// No URL here: the PR has no preview yet, and a link that does not resolve is
+// worse than none. The URL is posted with the preview, once it is published.
+const howtoBody = (label) =>
   `### Preview this pull request\n\nA committer can publish a live preview of this PR by ` +
   `adding the \`${label}\` label, or by commenting \`/show-preview\` on its own line, which ` +
-  `adds the label. It will appear at ${previewUrl(pr)} and then track this PR's head commit ` +
-  `until it closes or the label is removed.\n\nStaging takes a few minutes to pick up each push.`;
+  `adds the label. The preview's link is posted here once it is published, and it then tracks ` +
+  `this PR's head commit until the PR closes or the label is removed.`;
 
 import { createClient } from "./github.mjs";
 import { createGit } from "./git.mjs";

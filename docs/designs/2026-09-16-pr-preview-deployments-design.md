@@ -176,9 +176,9 @@ One run does four things, in order:
 
 **1. Announce.** For each open PR with no explainer comment yet, post one. The
 comment states that a maintainer can publish a preview with the `preview` label
-or `/show-preview`,
-gives the URL the preview will take, and notes the few-minute propagation delay.
-It carries a stable HTML marker comment so the next run recognises it and does
+or `/show-preview`. It deliberately carries no URL: an unarmed PR has no
+preview, and a link that does not resolve is worse than none. The URL is posted
+once the preview is published. It carries a stable HTML marker comment so the next run recognises it and does
 not post twice.
 
 **2. Resolve the armed set.** A PR is *armed* when it carries the `preview`

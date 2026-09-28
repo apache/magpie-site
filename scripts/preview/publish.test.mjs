@@ -100,7 +100,9 @@ test("announces on an open PR that has not been told about previews", async () =
 
   const announce = f.posted.find((p) => p.marker === "magpie-preview-howto");
   assert.ok(announce, "expected an explainer comment");
-  assert.match(announce.body, /magpie-pr5\.staged\.apache\.org/);
+  assert.match(announce.body, /`preview` label/);
+  assert.doesNotMatch(announce.body, /staged\.apache\.org/,
+    "an unarmed PR has no preview; its link is posted only once published");
 });
 
 test("isBotAuthored reads the type, and falls back to the login suffix", () => {
