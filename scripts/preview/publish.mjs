@@ -1,5 +1,3 @@
-import { readFile, writeFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
 import {
   resolveArmed,
   pendingArmingCommands,
@@ -11,6 +9,7 @@ import { planActions } from "./plan.mjs";
 import { staleHeadBranches } from "./stale.mjs";
 import { validateMeta, findUnsafeEntries } from "./validate.mjs";
 import { sanitizeAnchors } from "./anchors.mjs";
+import { overlayFiles, injectOverlay, injectIntoTree } from "./overlay-files.mjs";
 import {
   renderAsfYaml,
   renderRobots,
@@ -352,28 +351,13 @@ async function publishOne({
   // Computed by the unprivileged build: the diff is pull-request content, and
   // the publisher never reads it.
   const anchors = sanitizeAnchors(artifact.meta?.anchors);
-  const logic = await readFile(new URL("./overlay/logic.mjs", import.meta.url), "utf8");
-  const overlay = await readFile(new URL("./overlay/review.js", import.meta.url), "utf8");
-  const vendor = await readFile(
-    new URL("../../vendor/html2canvas-pro/html2canvas-pro.min.js", import.meta.url), "utf8",
-  );
-
   const generated = {
     ".asf.yaml": renderAsfYaml(pr),
     "robots.txt": renderRobots(),
-    "_preview/html2canvas-pro.min.js": vendor,
-    // The overlay's pure logic is unit-tested as a module and inlined here; the
-    // browser file has no build step and no imports.
-    "_preview/review.js":
-      logic.replace(/^export /gm, "") +
-      `\nwindow.__MAGPIE_PREVIEW__ = ${JSON.stringify({
-        repo, pr, sha: headSha.slice(0, 7), anchors,
-      })};\n` + overlay,
+    ...(await overlayFiles({ repo, pr, sha: headSha.slice(0, 7), anchors })),
   };
 
-  for (const page of await findHtmlFiles(artifact.dir)) {
-    await writeFile(page, injectOverlay(await readFile(page, "utf8")));
-  }
+  await injectIntoTree(artifact.dir);
 
   await git.pushTree(
     previewBranch(pr),
@@ -390,39 +374,8 @@ async function publishOne({
   return true;
 }
 
-const OVERLAY_MARKER = "<!-- magpie-preview-overlay -->";
-const OVERLAY_TAGS =
-  OVERLAY_MARKER + "\n" +
-  '<script src="/_preview/html2canvas-pro.min.js"></script>\n' +
-  '<script src="/_preview/review.js"></script>\n';
-
-/**
- * Add the overlay's script tags to a page, exactly once.
- *
- * Guarded on a marker comment rather than on the script path: a page whose
- * CONTENT mentions "/_preview/review.js" — this feature's own design document,
- * once published — would otherwise silently get no overlay. Injected at the
- * LAST </body>, because an earlier one can appear inside an inline script or a
- * serialised island prop, and injecting there corrupts the page.
- */
-export function injectOverlay(html) {
-  if (typeof html !== "string") return html;
-  if (html.includes(OVERLAY_MARKER)) return html;
-
-  const at = html.lastIndexOf("</body>");
-  if (at === -1) return html;
-  return html.slice(0, at) + OVERLAY_TAGS + html.slice(at);
-}
-
-async function findHtmlFiles(root) {
-  const out = [];
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    const full = join(root, entry.name);
-    if (entry.isDirectory() && !entry.isSymbolicLink()) out.push(...(await findHtmlFiles(full)));
-    else if (entry.isFile() && entry.name.endsWith(".html")) out.push(full);
-  }
-  return out;
-}
+// Re-exported for the tests and any caller that imported it from here.
+export { injectOverlay };
 
 // Every preview comment leads with the preview URL on its own line, so it is
 // one click away whatever the comment is about.

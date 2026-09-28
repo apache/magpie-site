@@ -14,6 +14,13 @@ concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  # Ship the published site (built from main) with the review overlay: one
+  # "Comment / Suggest a change" button, where a comment marks a region,
+  # copies a screenshot and opens a new issue linking the source on main.
+  # "false" publishes exactly the plain production build.
+  MAIN_REVIEW_OVERLAY: "true"
+
 jobs:
   lint:
     runs-on: ubuntu-slim
@@ -117,6 +124,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Checks the plain build. With MAIN_REVIEW_OVERLAY on, the published site
+      # is then rebuilt annotated on purpose, in the next step.
       - name: Assert the production build carries no preview annotation
         run: |
           if grep -rq "data-magpie-src" dist/; then
@@ -125,6 +134,14 @@ jobs:
             exit 1
           fi
           echo "production build is clean of preview annotation"
+
+      - name: Build the published site with the review overlay
+        if: github.ref == 'refs/heads/main' && env.MAIN_REVIEW_OVERLAY == 'true'
+        env:
+          MAGPIE_PREVIEW_ANNOTATE: "1"
+        run: |
+          npm run build
+          node scripts/preview/inject-main.mjs dist
 
       - name: Build the preview site with source annotation
         if: github.event_name == 'pull_request'

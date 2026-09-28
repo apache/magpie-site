@@ -68,6 +68,15 @@ the endpoint allowlist deterministically. Every
 publish posts a new comment on the PR, and every preview comment leads with the
 preview URL.
 
+## The overlay on the published site
+
+With `MAIN_REVIEW_OVERLAY: "true"` in `build.yml`, the main build is annotated
+and `inject-main.mjs` adds the overlay in main mode: no preview banner, and a
+comment opens a new issue linking the source line on main. On every page it
+runs, the overlay replaces the site's "Suggest a change" button with one
+"Comment / Suggest a change" menu. `overlay-files.mjs` generates the overlay
+for both the PR publisher and the main build.
+
 ## Settings for another site
 
 All default to this site's values.

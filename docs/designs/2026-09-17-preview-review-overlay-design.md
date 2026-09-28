@@ -12,6 +12,31 @@ pasted by hand. That half was never built. This supersedes it: the same
 source-line resolution, but the reviewer marks a region, gets a screenshot, and
 lands on the diff line itself rather than assembling a comment from text.
 
+## On the published site, and one button (2026-09-28)
+
+The overlay also runs on magpie.apache.org itself, switched by
+`MAIN_REVIEW_OVERLAY` in `build.yml`. On main the site is built annotated
+(`MAGPIE_PREVIEW_ANNOTATE=1`) and `scripts/preview/inject-main.mjs` adds the
+overlay with `mode: "main"`. The differences from a PR preview:
+
+- **No banner.** It is the published site, so "Preview of #N · sha · not the
+  published site" would be wrong.
+- **A comment opens a new issue**, not a pull request. The issue is prefilled
+  with the page URL, the build's commit and, when the region resolves, the
+  source line on main (`blob/main/<file>#L<line>`); the reviewer pastes the
+  screenshot from the clipboard. Lines in `src/content/docs/` are not linked:
+  those pages are synced from apache/magpie and their files are not here.
+
+On every page it runs, the overlay replaces the site's "Suggest a change"
+pencil with one "Comment / Suggest a change" button. It opens a menu:
+"Comment on a region of this page" (the screenshot flow) and "Suggest a
+change", which is the page's own edit link, unchanged. Where the overlay does
+not run — production with the switch off — the pencil stays.
+
+With the switch off, main publishes the plain production build, and the
+"no `data-magpie-src` in production" assertion guards it as before; it always
+runs on the plain build, before the annotated rebuild.
+
 ## What already exists
 
 The publishing pipeline shipped. A maintainer comments `/show-preview`, a
