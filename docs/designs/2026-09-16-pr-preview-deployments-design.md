@@ -11,8 +11,8 @@ workflow does the publishing; nothing privileged ever runs pull-request code.
 
 > **Revised 2026-09-28.** The original design armed PRs by comment and
 > published from a 15-minute schedule. Both changed: the `preview` label is now
-> the armed state, and the schedule is gone in favour of `pull_request_target`
-> and `issue_comment` triggers used purely as signals. The sections below are
+> the armed state, and the schedule is gone in favour of `workflow_run` and
+> `issue_comment` triggers used purely as signals. The sections below are
 > updated in place; "Why polling rather than events" records the reasoning.
 
 A preview is also reviewable in place: a reviewer can point at any element on the
@@ -60,23 +60,53 @@ step is designed around it below.
 
 ## Constraints
 
-**`pull_request_target` is a trigger only, never a source.** Everything
-privileged runs the default branch's copy of the workflow and its scripts, and
-can never be influenced by a pull request's contents. The original design
-excluded `pull_request_target` outright; it was later admitted (2026-09-28),
-together with `issue_comment`, for one narrow purpose — learning that something
-relevant to a preview changed — under these rules:
+**`pull_request_target` is not used.** Not discouraged — excluded, and GitHub
+is restricting it further. Everything privileged runs the default branch's copy
+of the workflow and its scripts, and can never be influenced by a pull
+request's contents. The privileged workflow is triggered only by
+`workflow_run`, `issue_comment` and `workflow_dispatch`, all of which always
+run the default branch's copy of themselves, under these rules:
 
-- no job sets `actions/checkout`'s `ref`, so it checks out the base branch; no
-  step reads, builds or executes anything from the pull request's tree;
-- the only value taken from the event into a step is the PR number, passed
-  through `env` and validated as digits; the head SHA is re-read from the API.
-  The action, label name, comment body and author association are read in job
-  `if:` expressions only, as cheap filters, never in a shell;
-- the site content still arrives only through the unprivileged build's
-  artifact, screened exactly as it always was;
+- no job sets `actions/checkout`'s `ref`, so it checks out the default branch;
+  no step reads, builds or executes anything from the pull request's tree;
+- nothing from the triggering event reaches a step. The triggering run's event
+  type and the comment body are read in the job's `if:` expression only, as a
+  cheap filter, never in a shell;
+- the site content arrives only through the unprivileged build's artifact,
+  screened exactly as it always was;
 - no trigger arms a preview by itself. Every run re-derives the armed state
   from the API, as described under "Resolve the armed set".
+
+**What the publisher may learn about a pull request** is fixed, and enforced
+in code rather than by convention. Every GitHub response passes through a
+projection in `scripts/preview/github.mjs` before any other code sees it, so
+the fields below are all that exists as far as the publisher is concerned:
+
+| Field | Why |
+|---|---|
+| PR number | Identifies the PR and its preview |
+| Label names | The arming state |
+| Head SHA (40-hex) | Binds the build artifact to the PR's current head |
+| Author login and type | Skips the explainer on bot-authored PRs |
+| Comment id, author and type | Finds arming commands and the publisher's own markers |
+| Comment body — **only** when it is exactly `/show-preview`, or bot-authored | The command itself; human discussion is dropped |
+| Actor of the last `labeled` event | Who armed it, for the write-access check |
+| The build's artifact | The site being previewed — screened, never executed |
+
+Never the PR's code, diff, title, description, branch name or commit
+messages. Workflow-run objects are reduced to their id, because they carry the
+PR's branch name, title and head commit message. The diff is needed only for
+the review overlay's anchors, so the unprivileged build computes the anchor
+manifest (`write-meta.mjs`) and ships it in `preview-meta.json`; the publisher
+sanitises it and recomputes every anchor from its path.
+
+`scripts/preview/boundary.test.mjs` checks all of this deterministically on
+every pull request: it parses the workflows (no `pull_request_target`, no
+checkout `ref` or `repository`, no event data in any step, a fixed set of
+`github.*` contexts), runs the whole publisher against GitHub responses whose
+every forbidden field carries a marker string and fails if the marker reaches
+the publisher or anything it writes, and fails on any API endpoint outside a
+fixed allowlist.
 
 **`pr<N>.dev.magpie.apache.org` is not available.** asfyaml refuses to let a
 project name its own `$project.apache.org` space ("It has to be inferred to
@@ -118,22 +148,24 @@ privileged side re-reads the workflow from the default branch.
 
 ### `preview-publish.yml` — privileged, event-driven
 
-Triggered by `pull_request_target` (`opened`, `reopened`, `synchronize`,
-`labeled`, `unlabeled`, `closed`), by `issue_comment` (`created`), and by
-`workflow_dispatch` with an optional `pr` input naming a single PR number.
+Triggered by:
 
-Two jobs. `await-build` holds a read-only token and starts only for a PR
-carrying the `preview` label, or for a `/show-preview` comment from someone
-GitHub lists as an owner, member or collaborator. It waits — up to 50 minutes,
-in a per-PR concurrency group where a newer event cancels the older wait — for
-the unprivileged build of the PR's current head commit. `publish` then runs the
-publisher when that build is green, after a maintainer's command whatever the
-build state, when a PR opens, reopens or closes, when the `preview` label is
-removed, and on dispatch. Its permissions: `contents: write` (push and delete
-preview branches), `pull-requests: write` and `issues: write` (comment, label,
-react), `actions: read` (download artifacts). Concurrency group
-`preview-publish` with `cancel-in-progress: false`, so two runs never race on
-the same branches.
+- `workflow_run` on completion of **`build.yml`** — the moment a pull
+  request's build finishes, so a push to an armed PR publishes with no waiting
+  or polling — and of **`preview-signal.yml`**, a no-op `pull_request` workflow
+  with no permissions that exists only to be completed on the PR events that
+  start no build (`labeled`, `unlabeled`, `closed`, plus `opened` and
+  `reopened` so the explainer does not wait for a build). Runs triggered by a
+  build of `main` are filtered out;
+- `issue_comment` on any pull-request comment, so a `/show-preview` command
+  publishes immediately when the build is already green. The workflow does not
+  inspect the comment; the publisher finds commands through the API;
+- `workflow_dispatch` with an optional `pr` input naming a single PR number.
+
+One `publish` job. Permissions: `contents: write` (push and delete preview
+branches), `pull-requests: write` and `issues: write` (comment, label, react),
+`actions: read` (download artifacts). Concurrency group `preview-publish` with
+`cancel-in-progress: false`, so two runs never race on the same branches.
 
 Every publish run is a full reconcile of all open PRs and preview branches, not
 just the one whose event triggered it. That is what makes the event-driven
@@ -197,8 +229,9 @@ head SHA and download its artifact. Then:
   `profile: pr<N>`, `whoami: preview/pr<N>-staging`.
 - Add `robots.txt` with `Disallow: /`, so previews never compete with
   `magpie.apache.org` in search results.
-- Inject the reviewing overlay: write `_preview/review.js` and
-  `_preview/anchors.json` (computed from the PR diff), and add the one-line
+- Inject the reviewing overlay: write `_preview/review.js` with the anchor
+  manifest (computed by the unprivileged build from the PR diff, sanitised
+  here), and add the one-line
   `<script>` tag to each HTML file. Injecting here rather than in the build is
   what keeps the tool outside the pull request's reach.
 - Force-push the result to `preview/pr<N>-staging`.
@@ -327,9 +360,10 @@ rather than to a bot speaking for them.
 
 ### Landing it in the right place
 
-The publisher knows the diff — it has API access and the PR number — so it
-writes `_preview/anchors.json` beside the site: for each changed file, its diff
-anchor and the line ranges the diff actually touches.
+The unprivileged build lists the PR's changed files and writes the anchor
+manifest into `preview-meta.json`: for each changed file, its diff anchor and
+the line ranges the diff actually touches. The publisher never reads the diff
+itself; it sanitises the manifest and recomputes each anchor from its path.
 
 - **Source line inside the diff** → open the Files tab anchored at that line, so
   the paste target is the inline comment box on the very line the element came
@@ -365,20 +399,27 @@ scheduled runs well past their interval, and a pull-request build takes up to
 half an hour, so a push to an armed PR could take 40 minutes to reach its
 preview, and the publish only edited the status comment, which notifies nobody.
 
-So on 2026-09-28 the schedule was replaced by events. `pull_request_target` and
-`issue_comment` are admitted strictly as signals (see Constraints); the single
-privileged entry point survives as the one `publish` job, and the full-reconcile
-run keeps it simple to reason about — any event on any PR converges every
-preview. What the schedule used to do now happens on:
+So on 2026-09-28 the schedule was replaced by events. `workflow_run` and
+`issue_comment` are admitted strictly as signals (see Constraints) — the
+original objection to them was the number of privileged entry points, and the
+single `publish` job keeps that at one. The full-reconcile run keeps it simple
+to reason about: any event on any PR converges every preview. What the
+schedule used to do now happens on:
 
 | Was done by the schedule | Now triggered by |
 |---|---|
-| Publish after a push to an armed PR | `synchronize`, once `await-build` sees the build go green |
-| Publish after arming | `labeled` or a `/show-preview` comment, after `await-build` |
-| Explainer comment | `opened` |
-| Retire a closed or disarmed PR's preview | `closed`, or `unlabeled` for the `preview` label |
+| Publish after a push to an armed PR | `build.yml` completing (`workflow_run`) |
+| Publish after arming | `/show-preview` (`issue_comment`), or `labeled` via `preview-signal.yml` |
+| Explainer comment | `opened` via `preview-signal.yml` |
+| Retire a closed or disarmed PR's preview | `closed` or `unlabeled` via `preview-signal.yml` |
 | Delete tombstoned and stale head branches | Any later run |
 
+A short-lived intermediate version used `pull_request_target` with a job that
+polled for the build; it was replaced the same day, because `workflow_run`
+fires exactly when the build ends and `pull_request_target` is being
+restricted.
+
+Every preview comment leads with the preview URL on its own line.
 Each successful publish also posts a new comment naming the commit and URL,
 besides editing the status comment, so everyone following the PR is notified.
 
@@ -390,7 +431,7 @@ besides editing the status comment, so everyone following the PR is notified.
 | Artifact expired | Terminal until the PR is pushed to again — the publisher never rebuilds. Status comment asks for a rebuild; artifact retention is set long enough that this only reaches dormant PRs |
 | Artifact fails validation | Publish is skipped and the run logs why; the branch is left as it was |
 | Force-push to a preview branch fails | Run fails loudly; the next event on any PR, or a dispatch, retries |
-| Build still running when the PR is armed or pushed to | `await-build` waits for it, up to 50 minutes; past that, the next push, label or dispatch retries |
+| Build still running when the PR is armed | Status comment says it is waiting; the build's completion triggers the publish |
 | PR closed mid-run | Next run tombstones the preview; the run after deletes the branch |
 | Two runs overlap | Prevented by the concurrency group |
 | Nothing changed since the last publish | The run does nothing for that PR — no push, no comment, no `commits@` mail |

@@ -25,24 +25,38 @@
 # default branch, which consume an already-built artifact produced by the
 # unprivileged `pull_request` run in build.yml (screened by validate.mjs).
 #
-# pull_request_target and issue_comment are used only as signals that
-# something changed. Under both, actions/checkout with no `ref` checks out the
-# default branch: no job here sets `ref`, and none may ever point it at
-# github.event.pull_request.*. The only value taken from the event into a step
-# is the PR number (validated as digits); the label name, action, comment body
-# and author association are read in `if:` expressions only, never in a shell.
-# Neither trigger arms anything by itself: the publisher re-derives arming from
-# the API — the `preview` label, added by someone with write access.
+# It does not use pull_request_target. Its triggers are signals only:
+#   - workflow_run fires when build.yml or preview-signal.yml completes for a
+#     pull request. It always runs this file from the default branch — that
+#     is the property that makes it safe — and fires the moment a build
+#     finishes, so a push to an armed PR publishes with no waiting or polling.
+#     preview-signal.yml covers the PR events that start no build (label
+#     added or removed, PR closed).
+#   - issue_comment fires on any PR comment, so a /show-preview command
+#     publishes at once when the build is already green. The comment itself is
+#     not inspected here; the publisher finds commands through the API.
+# Nothing is taken from any event into a step. The `if:` below reads only the
+# event name, the triggering run's event type and whether the issue is a PR —
+# never a title, body, branch name, SHA or comment text. No trigger arms
+# anything: the publisher re-derives arming from the API — the `preview`
+# label, added by someone with write access.
 #
-# There is no schedule. Every publish run is a full reconcile of all open pull
-# requests and preview branches, so a run that concurrency drops is covered by
-# the next one. A run that fails part-way is retried by the next event on any
-# PR, or by a manual dispatch with no PR number.
+# What the publisher may read about a pull request is fixed by the
+# projections in scripts/preview/github.mjs: PR number, label names, head SHA,
+# author login/type, and comment bodies only when they are the exact
+# /show-preview command or bot-authored. Plus the build's artifact, screened
+# and never executed. scripts/preview/boundary.test.mjs checks this file, and
+# the client's endpoints and projections, deterministically on every PR.
+#
+# Every run is a full reconcile of all open pull requests and preview
+# branches, so a run that concurrency drops is covered by the next one. A run
+# that fails part-way is retried by the next event on any PR, or by a manual
+# dispatch with no PR number.
 name: "Publish PR previews"
 "on":
-  pull_request_target: # zizmor: ignore[dangerous-triggers] -- default-branch code only; see header
-    branches: [main]
-    types: [opened, reopened, synchronize, labeled, unlabeled, closed]
+  workflow_run: # zizmor: ignore[dangerous-triggers] -- default-branch code, no PR input; see header
+    workflows: ["Build and Deploy", "Preview signal"]
+    types: [completed]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -55,69 +69,11 @@ name: "Publish PR previews"
 permissions: {}
 
 jobs:
-  # Wait for the unprivileged build of the PR's head commit, so an armed
-  # preview publishes minutes after its build goes green. Starts only for a PR
-  # carrying the preview label, or for a /show-preview command from someone
-  # GitHub lists as a member or collaborator (the publisher re-checks write
-  # access). Holds no write permission, and runs outside the publish
-  # concurrency group so a long wait never blocks other publishes.
-  await-build:
-    if: >-
-      (github.event_name == 'pull_request_target' &&
-       contains(fromJSON('["opened","reopened","synchronize","labeled"]'), github.event.action) &&
-       contains(github.event.pull_request.labels.*.name, 'preview') &&
-       (github.event.action != 'labeled' || github.event.label.name == 'preview')) ||
-      (github.event_name == 'issue_comment' &&
-       github.event.issue.pull_request &&
-       contains(github.event.comment.body, '/show-preview') &&
-       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
-    runs-on: ubuntu-slim
-    timeout-minutes: 55
-    permissions:
-      pull-requests: read # read the PR's state and head SHA
-      actions: read # read build.yml runs for the head SHA
-    concurrency:
-      # A newer event on the same PR supersedes the wait for an older one.
-      group: preview-await-${{ github.event.pull_request.number || github.event.issue.number }}
-      cancel-in-progress: true
-    outputs:
-      ready: ${{ steps.wait.outputs.ready }}
-    steps:
-      - name: Checkout the default branch (never the pull request)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: "22"
-
-      - name: Wait for the build of the head commit
-        id: wait
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
-        run: node scripts/preview/await-build.mjs
-
   publish:
-    needs: await-build
-    # Runs when:
-    #   - the awaited build is green (push / label / reopen of an armed PR);
-    #   - a maintainer's command was seen, green or not — arming adds the label
-    #     and, without a build, posts the waiting status;
-    #   - a PR opens (explainer), reopens, closes, or loses the preview label
-    #     (retire the preview);
-    #   - a manual dispatch.
     if: >-
-      !cancelled() && (
-        needs.await-build.outputs.ready == 'true' ||
-        github.event_name == 'workflow_dispatch' ||
-        (github.event_name == 'issue_comment' && needs.await-build.result == 'success') ||
-        (github.event_name == 'pull_request_target' &&
-         (contains(fromJSON('["opened","reopened","closed"]'), github.event.action) ||
-          (github.event.action == 'unlabeled' && github.event.label.name == 'preview'))))
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request') ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request)
     runs-on: ubuntu-slim
     timeout-minutes: 20
     permissions:

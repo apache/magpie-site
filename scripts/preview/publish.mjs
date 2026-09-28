@@ -10,7 +10,7 @@ import {
 import { planActions } from "./plan.mjs";
 import { staleHeadBranches } from "./stale.mjs";
 import { validateMeta, findUnsafeEntries } from "./validate.mjs";
-import { buildAnchors } from "./anchors.mjs";
+import { sanitizeAnchors } from "./anchors.mjs";
 import {
   renderAsfYaml,
   renderRobots,
@@ -129,7 +129,7 @@ export async function run({
           await arm(pull.number);
           labelled = true;
           if (only === pull.number) {
-            await gh.createComment(pull.number, armedBody(dispatchedBy, label));
+            await gh.createComment(pull.number, armedBody(pull.number, dispatchedBy, label));
           }
         }
         armedHere = true;
@@ -314,24 +314,24 @@ async function publishOne({
 
   const build = await gh.latestSuccessfulBuild(headSha);
   if (!build) {
-    await gh.upsertComment(pr, MARKER, waitingBody(headSha));
+    await gh.upsertComment(pr, MARKER, waitingBody(pr, headSha));
     return false;
   }
 
   const artifact = await fetchArtifact(build.id);
   if (!artifact) {
-    await gh.upsertComment(pr, MARKER, waitingBody(headSha));
+    await gh.upsertComment(pr, MARKER, waitingBody(pr, headSha));
     return false;
   }
 
   const check = validateMeta(artifact.meta, { number: pr, headSha });
   if (!check.ok) {
-    await gh.upsertComment(pr, MARKER, refusedBody(check.reason));
+    await gh.upsertComment(pr, MARKER, refusedBody(pr, check.reason));
     return false;
   }
 
   if (!artifact.dir) {
-    await gh.upsertComment(pr, MARKER, refusedBody("artifact had no extracted directory"));
+    await gh.upsertComment(pr, MARKER, refusedBody(pr, "artifact had no extracted directory"));
     return false;
   }
 
@@ -341,15 +341,17 @@ async function publishOne({
   try {
     unsafe = await findUnsafeEntries(artifact.dir);
   } catch (err) {
-    await gh.upsertComment(pr, MARKER, refusedBody(`could not screen the artifact: ${err.message}`));
+    await gh.upsertComment(pr, MARKER, refusedBody(pr, `could not screen the artifact: ${err.message}`));
     return false;
   }
   if (unsafe.length) {
-    await gh.upsertComment(pr, MARKER, refusedBody(`unsafe entries: ${unsafe.join(", ")}`));
+    await gh.upsertComment(pr, MARKER, refusedBody(pr, `unsafe entries: ${unsafe.join(", ")}`));
     return false;
   }
 
-  const anchors = buildAnchors(await gh.listPullFiles(pr));
+  // Computed by the unprivileged build: the diff is pull-request content, and
+  // the publisher never reads it.
+  const anchors = sanitizeAnchors(artifact.meta?.anchors);
   const logic = await readFile(new URL("./overlay/logic.mjs", import.meta.url), "utf8");
   const overlay = await readFile(new URL("./overlay/review.js", import.meta.url), "utf8");
   const vendor = await readFile(
@@ -422,27 +424,32 @@ async function findHtmlFiles(root) {
   return out;
 }
 
+// Every preview comment leads with the preview URL on its own line, so it is
+// one click away whatever the comment is about.
+const urlLine = (pr) => `**Preview:** ${previewUrl(pr)}`;
+
 const publishedBody = (pr, sha) =>
-  `### Preview published\n\n${previewUrl(pr)}\n\nBuilt from \`${sha.slice(0, 7)}\`. ` +
+  `### Preview published\n\n${urlLine(pr)}\n\nBuilt from \`${sha.slice(0, 7)}\`. ` +
   `Staging takes a few minutes to pick up a new push.`;
 
 const announceBody = (pr, sha) =>
-  `Preview updated to \`${sha.slice(0, 7)}\`: ${previewUrl(pr)}\n\n` +
+  `### Preview updated to \`${sha.slice(0, 7)}\`\n\n${urlLine(pr)}\n\n` +
   `Staging usually serves it within a few minutes.`;
 
-const waitingBody = (sha) =>
-  `### Preview waiting on a build\n\nNo successful build for \`${sha.slice(0, 7)}\` yet. ` +
-  `The preview publishes on the next run after the build goes green.`;
+const waitingBody = (pr, sha) =>
+  `### Preview waiting on a build\n\n${urlLine(pr)}\n\nNo successful build for \`${sha.slice(0, 7)}\` yet. ` +
+  `The preview publishes as soon as the build goes green.`;
 
-const refusedBody = (reason) =>
-  `### Preview could not be published\n\nThe build artifact was refused: ${String(reason).slice(0, 200)}`;
+const refusedBody = (pr, reason) =>
+  `### Preview could not be published\n\n${urlLine(pr)} (unchanged)\n\n` +
+  `The build artifact was refused: ${String(reason).slice(0, 200)}`;
 
 const retiredBody = (pr) =>
   `### Preview retired\n\nThe preview for this pull request is no longer published. ` +
   `${previewUrl(pr)} now serves a notice instead.`;
 
-const armedBody = (by, label) =>
-  `### Preview armed by manual dispatch\n\n` +
+const armedBody = (pr, by, label) =>
+  `### Preview armed by manual dispatch\n\n${urlLine(pr)}\n\n` +
   (by ? `@${by} armed this preview by dispatching the workflow.` : `This preview was armed by manual dispatch.`) +
   ` The \`${label}\` label now tracks this PR's head commit; remove the label to retire the preview.`;
 
@@ -503,7 +510,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     gh,
     git: createGit({ repo, token }),
     repo,
-    fetchArtifact: createArtifactFetcher({ gh, repo, token }),
+    fetchArtifact: createArtifactFetcher({ gh, token }),
     only,
     dispatchedBy: process.env.GITHUB_ACTOR ?? null,
   });

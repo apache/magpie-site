@@ -35,10 +35,10 @@ test("hasWriteAccess is false when the lookup 404s", async () => {
 
 test("sends the token and the api version header", async () => {
   const { impl, calls } = fakeFetch({
-    "GET /repos/apache/magpie-site/pulls/1": { number: 1 },
+    "GET /repos/apache/magpie-site/labels/preview": { name: "preview" },
   });
   const gh = createClient({ repo: "apache/magpie-site", token: "secret", fetchImpl: impl });
-  await gh.getPull(1);
+  await gh.ensureLabel("preview");
 
   assert.equal(calls.length, 1);
   assert.equal(calls[0].headers.authorization, "Bearer secret");
@@ -156,11 +156,13 @@ test("buildWorkflow refuses paths and non-workflow names", () => {
 
 test("latestSuccessfulBuild queries the configured workflow", async () => {
   const { impl, calls } = fakeFetch({
-    "GET /repos/apache/x-site/actions/workflows/jekyll.yml/runs?head_sha=abc&status=success&per_page=1":
-      { workflow_runs: [{ id: 7 }] },
+    [`GET /repos/apache/x-site/actions/workflows/jekyll.yml/runs?head_sha=${"a".repeat(40)}&status=success&per_page=1`]:
+      { workflow_runs: [{ id: 7, display_title: "a PR title", head_branch: "b" }] },
   });
   const gh = createClient({ repo: "apache/x-site", token: "t", fetchImpl: impl, workflow: "jekyll.yml" });
-  assert.deepEqual(await gh.latestSuccessfulBuild("abc"), { id: 7 });
+  assert.deepEqual(await gh.latestSuccessfulBuild("a".repeat(40)), { id: 7 },
+    "a run's title and branch are PR data and must be dropped");
+  await assert.rejects(gh.latestSuccessfulBuild("abc&x=1"), /bad head SHA/);
   assert.equal(calls.length, 1);
 });
 
@@ -173,17 +175,6 @@ test("createComment posts a new comment", async () => {
 
   assert.equal(calls.length, 1);
   assert.deepEqual(JSON.parse(calls[0].body), { body: "hello" });
-});
-
-test("latestBuild returns the newest run for a commit in any state", async () => {
-  const sha = "b".repeat(40);
-  const { impl } = fakeFetch({
-    [`GET /repos/apache/magpie-site/actions/workflows/build.yml/runs?head_sha=${sha}&per_page=1`]: {
-      workflow_runs: [{ id: 9, status: "in_progress" }],
-    },
-  });
-  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl, workflow: "build.yml" });
-  assert.deepEqual(await gh.latestBuild(sha), { id: 9, status: "in_progress" });
 });
 
 test("addLabel posts the label to the pull request", async () => {

@@ -73,7 +73,6 @@ function fakes({
       reacted.push(id);
     },
     listPreviewBranches: async () => branches,
-    listPullFiles: async () => [],
     deleteBranch: async (name) => {
       deleted.push(name);
     },
@@ -537,4 +536,23 @@ test("deletes this repository's head branch once its pull request has closed", a
   await go(f);
 
   assert.deepEqual(f.deleted, ["fix-counts"]);
+});
+
+test("every status comment leads with the preview URL", async () => {
+  const url = /\*\*Preview:\*\* https:\/\/magpie-pr5\.staged\.apache\.org\//;
+
+  const waiting = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd()] }, hasBuild: false });
+  await go(waiting);
+  assert.match(waiting.posted.at(-1).body, url);
+
+  const dir = await artifactDir({ withSymlink: true });
+  const refused = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd()] } });
+  await go(refused, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+  assert.match(refused.posted.at(-1).body, url);
+
+  const ok = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd()] } });
+  const okDir = await artifactDir();
+  await go(ok, { fetchArtifact: async () => ({ dir: okDir, meta: { pr: 5, headSha: SHA } }) });
+  assert.match(ok.posted.at(-1).body, url);
+  assert.match(ok.created.at(-1).body, url);
 });

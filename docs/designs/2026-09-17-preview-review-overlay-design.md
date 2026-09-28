@@ -104,9 +104,11 @@ and 159 markdown files, so the landing page is covered and the docs are not.
 
 ## Landing it on the diff line
 
-The publisher knows the diff — it has the PR number and an API token — so it
-embeds an anchors payload in `window.__MAGPIE_PREVIEW__`: for each changed
-file, its diff anchor and the line ranges the diff actually touches.
+The publisher embeds an anchors payload in `window.__MAGPIE_PREVIEW__`: for
+each changed file, its diff anchor and the line ranges the diff actually
+touches. Since 2026-09-28 the unprivileged build computes it from the PR's
+changed files and ships it in `preview-meta.json`; the publisher, which may not
+read pull-request content, only sanitises it and recomputes each anchor.
 
 - **Source line inside the diff** → the overlay opens the Files tab anchored at
   that line (`/pull/<N>/files#diff-<anchor>R<line>`). The reviewer clicks the

@@ -28,8 +28,10 @@ unprivileged pull-request build produced, and this is all it expects of it:
    build workflow for the pull request's head commit, holding the built static
    site. Upload with `include-hidden-files: true` if the site has dotfiles.
 2. **`preview-meta.json` at its root**:
-   `{"pr": <number>, "headSha": "<40-hex head commit>"}`. The publisher checks
-   both against the pull request and refuses a mismatch.
+   `{"pr": <number>, "headSha": "<40-hex head commit>", "anchors": {...}}`. The
+   publisher checks `pr` and `headSha` against the pull request and refuses a
+   mismatch. `anchors` is optional — `write-meta.mjs` produces it from the PR's
+   changed files — and is sanitised before use.
 3. **Optionally, `data-magpie-src="<repo-relative path>:<line>"`** on rendered
    elements. The overlay walks up from the marked region to the nearest stamped
    element and, when that line is in the diff, opens the Files tab on it. An
@@ -47,13 +49,24 @@ access — directly, by commenting `/show-preview` (the publisher adds the label
 and reacts 🚀), or by dispatching the workflow for that PR. Removing the label
 retires the preview.
 
-`preview-publish.yml` has no schedule. `pull_request_target` and
-`issue_comment` are used as signals only: both jobs check out the default
-branch, and only the PR number reaches a step. `await-build.mjs` waits for the
-unprivileged build of the PR's head commit, then `publish.mjs` reconciles every
-open PR and preview branch. Every publish posts a new comment on the PR with
-the commit and URL, besides updating the sticky status comment, because an edit
-notifies nobody.
+`preview-publish.yml` has no schedule and does not use `pull_request_target`.
+It runs on `workflow_run` when `build.yml` completes — so a push to an armed PR
+publishes the moment its build ends — and when `preview-signal.yml` completes,
+a no-op `pull_request` workflow that exists only to signal label changes,
+opens and closes. It also runs on any PR comment (`issue_comment`, so a
+`/show-preview` publishes at once) and on manual dispatch. Every run checks out
+the default branch only, takes nothing from the event, and reconciles every
+open PR and preview branch.
+
+What the publisher may learn about a PR is fixed by the projections in
+`github.mjs`: number, label names, head SHA, author login/type, and a comment's
+body only when it is exactly `/show-preview` or bot-authored — never code,
+diff, title, description, branch name or commit messages. The diff-derived
+anchor manifest is computed by the build (`write-meta.mjs`) and sanitised by
+the publisher. `boundary.test.mjs` enforces the workflows, the projections and
+the endpoint allowlist deterministically. Every
+publish posts a new comment on the PR, and every preview comment leads with the
+preview URL.
 
 ## Settings for another site
 
@@ -63,6 +76,6 @@ All default to this site's values.
 |---|---|---|
 | `PREVIEW_SITE_NAME` | `magpie` | First label of the staging hostname. ASF staging derives it from the repository, so it must match what infra serves. |
 | `PREVIEW_BUILD_WORKFLOW` | `build.yml` | File name of the workflow whose runs carry the `preview-site` artifact |
-| `PREVIEW_LABEL` | `preview` | The arming label. The workflow's `if:` expressions name it literally too — change both. |
+| `PREVIEW_LABEL` | `preview` | The arming label |
 
 Set them in the `env:` of the publish step in `preview-publish.yml`.

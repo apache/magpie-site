@@ -85,6 +85,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+      pull-requests: read # list the PR's changed files for the preview anchors
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -131,13 +132,17 @@ jobs:
           MAGPIE_PREVIEW_ANNOTATE: "1"
         run: npm run build
 
+      # Includes the anchor manifest, derived from the PR's diff here rather than
+      # in the privileged publisher, which never reads pull-request content.
       - name: Write preview metadata
         if: github.event_name == 'pull_request'
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          printf '{"pr":%s,"headSha":"%s"}\n' "$PR_NUMBER" "$HEAD_SHA" > dist/preview-meta.json
+          OUT: dist/preview-meta.json
+        run: node scripts/preview/write-meta.mjs
 
       - name: Upload preview artifact
         if: github.event_name == 'pull_request'
