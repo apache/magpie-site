@@ -33,7 +33,7 @@
 .puzzle-flow {
   --puzzle-radius:24px;
   --puzzle-cross-radius:24px;
-  --puzzle-gap:4px;
+  --puzzle-gap:0px;
   --puzzle-neck:12px;
   --puzzle-cross-neck:12px;
   --puzzle-bleed:calc(var(--puzzle-cross-radius) + var(--puzzle-cross-neck));
@@ -52,12 +52,12 @@
 .puzzle-flow > .workflow-card {
   --puzzle-in:.36; --puzzle-out:.36;
   --piece-extension:calc(2 * var(--puzzle-radius));
-  --piece-cross-extension:calc(2 * var(--puzzle-cross-radius));
+  --piece-cross-extension:var(--puzzle-bleed);
   --piece-cross-tab:calc(var(--piece-cross-extension) - var(--puzzle-cross-neck));
   --piece-cross-socket:calc(100% - var(--piece-cross-extension) - var(--puzzle-cross-neck));
   --piece-in-position:calc(var(--piece-cross-extension) + (100% - 2 * var(--piece-cross-extension)) * var(--puzzle-in));
   --piece-out-position:calc(var(--piece-cross-extension) + (100% - 2 * var(--piece-cross-extension)) * var(--puzzle-out));
-  --piece-socket:radial-gradient(circle at var(--puzzle-neck) var(--piece-in-position),transparent calc(var(--puzzle-radius) + 2px),#000 calc(var(--puzzle-radius) + 2.5px));
+  --piece-socket:radial-gradient(circle at var(--puzzle-neck) var(--piece-in-position),transparent calc(var(--puzzle-radius) - 1px),#000 calc(var(--puzzle-radius) - .5px));
   --piece-tab:radial-gradient(circle at calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)) var(--piece-out-position),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
   --piece-cross-hole:radial-gradient(circle at calc((100% - var(--piece-extension)) / 2) var(--piece-cross-socket),transparent calc(var(--puzzle-cross-radius) + 2px),#000 calc(var(--puzzle-cross-radius) + 2.5px));
   --piece-cross-cap:radial-gradient(circle at calc((100% - var(--piece-extension)) / 2) var(--piece-cross-tab),#000 calc(var(--puzzle-cross-radius) - .5px),transparent var(--puzzle-cross-radius));
@@ -115,7 +115,7 @@
     grid-row:auto; grid-template-rows:auto auto auto;
     --piece-start-x:0px;
     --piece-start-y:calc(var(--piece-direction) * var(--puzzle-travel));
-    --piece-socket:radial-gradient(circle at var(--piece-in-position) var(--puzzle-neck),transparent calc(var(--puzzle-radius) + 2px),#000 calc(var(--puzzle-radius) + 2.5px));
+    --piece-socket:radial-gradient(circle at var(--piece-in-position) var(--puzzle-neck),transparent calc(var(--puzzle-radius) - 1px),#000 calc(var(--puzzle-radius) - .5px));
     --piece-tab:radial-gradient(circle at var(--piece-out-position) calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
     --piece-cross-hole:radial-gradient(circle at var(--piece-cross-socket) calc((100% - var(--piece-extension)) / 2),transparent calc(var(--puzzle-cross-radius) + 2px),#000 calc(var(--puzzle-cross-radius) + 2.5px));
     --piece-cross-cap:radial-gradient(circle at var(--piece-cross-tab) calc((100% - var(--piece-extension)) / 2),#000 calc(var(--puzzle-cross-radius) - .5px),transparent var(--puzzle-cross-radius));

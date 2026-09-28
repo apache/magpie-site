@@ -175,6 +175,8 @@
   .section-heading > a > svg { width:16px; height:16px; margin-left:var(--space-1); }
 }
 .section-heading > a:is(:hover,:focus-visible) { text-decoration:underline; text-decoration-thickness:1px; }
+.copy-link-status { position:fixed; z-index:100; left:50%; bottom:var(--space-6); transform:translateX(-50%); max-width:calc(100% - 2 * var(--page-gutter)); padding:var(--space-2) var(--space-4); border:1px solid var(--line); border-radius:var(--radius-control); background:var(--paper); color:var(--ink); font-size:var(--text-small); text-align:center; box-shadow:var(--surface-shadow); pointer-events:none; }
+.copy-link-status:empty { display:none; }
 
 @media(hover:hover) {
   .section-heading > a > svg { opacity:0; transition:opacity var(--motion-fast); }

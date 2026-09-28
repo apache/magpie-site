@@ -36,7 +36,11 @@ test('puzzle checker rejects mismatched joins and matching outside pieces',async
 
 test('plain outside edges and displaced workspace contents fail the visual contract',async({page})=>{
   await page.goto('/');
-  const piece=page.locator('.reel-slide:not([inert]) .workflow-card').first();
+  const flow=page.locator('.reel-slide:not([inert]) .puzzle-flow');
+  await flow.evaluate(el=>el.style.columnGap='4px');
+  expect(await page.evaluate(measurePuzzles)).toContain('puzzle pieces leave an open seam');
+  await flow.evaluate(el=>el.style.removeProperty('column-gap'));
+  const piece=flow.locator('.workflow-card').first();
   await piece.evaluate(el=>el.style.setProperty('--piece-cross-cap','linear-gradient(transparent,transparent)'));
   expect(await page.evaluate(measurePuzzles)).toContain('missing multi-sided puzzle silhouette');
   await page.locator('.protected-workspace').evaluate(el=>el.style.alignItems='flex-start');
@@ -62,7 +66,7 @@ for (const width of [375,1440]) test(`pieces assemble once and pass light throug
   expect(apart.iterations.every(i=>i===1)).toBe(true);
   await flow.screenshot({path:`.builds/visual/puzzle-apart-${width}.png`});
   const joined=await sample(1300);
-  expect(joined.gaps.every(g=>g>=2&&g<=6)).toBe(true);
+  expect(joined.gaps.every(g=>Math.abs(g)<=.5)).toBe(true);
   expect(joined.filters).toEqual(apart.filters);
   expect(new Set(joined.light).size).toBeGreaterThan(1);
   await flow.screenshot({path:`.builds/visual/puzzle-connection-light-${width}.png`});

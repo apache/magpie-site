@@ -13,7 +13,7 @@ export function measurePuzzles() {
       const a=bounds[i],b=bounds[i+1];
       if (Math.abs(point(i,'--puzzle-out')-point(i+1,'--puzzle-in'))>1) errors.push('puzzle connections do not meet');
       const gap=horizontal?b.left-a.right:b.top-a.bottom;
-      if (gap<2 || gap>6) errors.push('puzzle seam is not close fitting');
+      if (Math.abs(gap)>.5) errors.push('puzzle pieces leave an open seam');
       if (horizontal && (Math.abs(a.top-b.top)>1 || Math.abs(a.bottom-b.bottom)>1)) errors.push('puzzle edges have unequal height');
       if (!horizontal && (Math.abs(a.left-b.left)>1 || Math.abs(a.right-b.right)>1)) errors.push('puzzle edges have unequal width');
     }

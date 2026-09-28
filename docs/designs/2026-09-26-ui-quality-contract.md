@@ -84,8 +84,10 @@ Browser checks cover desktop/phone widths, keyboard navigation and documentation
 The homepage also exposes native section links in its headings and a compact
 contents menu. The menu closes on selection, outside clicks and Escape, restoring
 appropriate keyboard focus. Permalink icons appear beside the centered text without reserving heading width,
-on hover or keyboard focus; touch users retain a visible affordance. Common
-hairline separators mark section boundaries.
+on hover or keyboard focus; touch users retain a visible affordance. Activating
+a heading link copies its full URL and announces success or clipboard refusal,
+while preserving native navigation, query parameters and keyboard behavior.
+Common hairline separators mark section boundaries.
 The hero chooses its first example after hydration and advances from that state;
 repeatable tests cover different starting examples, wraparound and manual pause.
 
@@ -139,12 +141,14 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   The largest visible content determines the row height, not an inactive stage.
   Broken fixtures reject inflated rows, overwide prose and misaligned content.
   Hero examples, lifecycle phases and project rules use one puzzle-flow owner.
-  Matching pieces share a narrow seam; the middle Magpie piece joins two distinct
-  connector positions, so the outside pieces cannot mate directly. All process
+  Matching pieces meet flush along their straight edges and curved joins. The
+  middle Magpie piece joins two distinct connector positions, so the outside pieces cannot mate directly. All process
   flows stack below 1101px. Puzzle padding is 48px on desktop and 40px when
   stacked, keeping copy clear of every notch. Alternating tabs and sockets on
   the exposed sides make each piece recognizable beyond the internal joins.
-  The painted surface owns the mask; readable content and focus stay unmasked.
+  Mask bounds fit the exposed silhouette so invisible extensions cannot cause
+  horizontal overflow on narrow screens. The painted surface owns the mask;
+  readable content and focus stay unmasked.
   Join geometry is tested on both axes, with invalid mismatched joins and a pair
   of incorrectly matching outside pieces. Comparisons and independent cards
   retain their ordinary surfaces. On first entry and stage selection, process
