@@ -282,10 +282,12 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   The Airflow quotation, chart and security walkthrough form one article in
   a quiet section wash. There is no enclosing card or stacked-paper decoration
   around the long scroll sequence.
-  One outcome heading leads straight into the chart. The quotation and its
-  attribution follow the evidence, before the security walkthrough. There is
-  no generic collection heading, repeated chart subtitle or competing story
-  link beside the attribution; the chart caption links to the story and data.
+  A general collection heading introduces project stories. Each article has
+  its own subordinate outcome title, so the first example does not define
+  the whole section. The quotation and its attribution follow the chart,
+  before the security walkthrough. There is no repeated chart subtitle or
+  competing story link beside the attribution; the chart caption links to
+  the story and data.
   Completed results and the protected agent workspace share the fresh green
   success palette. The Airflow section uses an 18% wash of that palette over the
   page surface, so the backdrop does not compete with the story and chart. The chart's with-Magpie curve and recovered-time

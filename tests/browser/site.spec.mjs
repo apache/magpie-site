@@ -262,8 +262,10 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   await expect(page.locator('.project-fit .workflow-card > .card-badge > svg')).toHaveCount(2);
   await expect(page.locator('.case-layout .security-walkthrough')).toHaveCount(1);
   const articleOrder = await page.locator('.case-layout').evaluate(el => [...el.children].map(child => child.className));
-  expect(articleOrder).toEqual(['case-evidence','case-quote','case-walkthrough']);
+  expect(articleOrder).toEqual(['case-intro','case-evidence','case-quote','case-walkthrough']);
   await expect(page.locator('#airflow > .container > h2')).toHaveCount(1);
+  await expect(page.locator('#airflow')).toHaveAccessibleName('Magpie in practice');
+  await expect(page.locator('.case-intro h3')).toHaveText('Magpie helped Airflow keep up with security reports');
   await expect(page.locator('.case-quote :is(h2,h3,a)')).toHaveCount(0);
   const dataLink = page.locator('.airflow-chart-story .chart-note a');
   await expect(dataLink).toHaveAttribute('href','/stories/airflow');

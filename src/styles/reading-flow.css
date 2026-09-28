@@ -70,6 +70,7 @@
 .case-walkthrough { padding-top:var(--block-gap); border-top:1px solid var(--line); }
 .case-evidence { width:100%; max-width:916px; margin-inline:auto; }
 .case-layout { --title-section:var(--title-detail); font-size:var(--text-reading); display:grid; gap:var(--block-gap); }
+.case-intro h3 { max-width:900px; margin:0 auto; font-size:var(--text-lead); font-weight:550; line-height:var(--leading-body); text-wrap:balance; }
 .case-quote { display:grid; gap:var(--heading-gap); width:100%; max-width:900px; margin-inline:auto; text-align:center; }
 .case-attribution { display:flex; align-items:center; justify-content:center; gap:var(--heading-gap); flex-wrap:wrap; }
 .airflow-brand { width:120px; height:auto; }
