@@ -1,5 +1,6 @@
 ---
-import { ArrowRight, BrainCircuit, Coffee } from "lucide-react";
+import { ArrowRight, BrainCircuit } from "lucide-react";
+import { goodOldDays } from "../landing/story-labels";
 import { MagpieToolkit } from "../landing/MagpieCard";
 import CenteredLabel from "../landing/CenteredLabel";
 import report from "../../data/airflow.json";
@@ -39,7 +40,7 @@ const ticks = [
 <figure class="airflow-chart-story">
   <div class="chart-frame">
     <div class="chart-phases" style={`grid-template-columns:${boom}fr ${adoption - boom}fr ${900 - adoption}fr`}>
-      <div><span class="card-badge" aria-hidden="true"><Coffee /></span><CenteredLabel>Good old days</CenteredLabel></div>
+      <div><span class="card-badge" aria-hidden="true"><goodOldDays.icon /></span><CenteredLabel>{goodOldDays.title}</CenteredLabel></div>
       <div class="chart-boom"><span class="card-badge" aria-hidden="true"><BrainCircuit /></span><CenteredLabel>The AI boom</CenteredLabel></div>
       <div class="chart-adoption"><span class="card-badge" aria-hidden="true"><MagpieToolkit /></span><CenteredLabel>Magpie introduced</CenteredLabel></div>
     </div>

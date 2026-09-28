@@ -183,8 +183,9 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   must fail. Stacked phone lists use natural item heights; matching row heights
   apply only to side-by-side comparisons.
 - Shared label text remains centred with or without icons. Stacked label icons
-  share its axis and cannot overlap text. Workflow icons sit in the heading
-  row, aligned beside their title and wholly inside their card. Chart phase
+  share its axis and cannot overlap text. Workflow icons sit centered above their title and wholly inside their card.
+  Both title and icon keep the card’s center axis; identical story labels share
+  one icon definition across charts and walkthroughs. Chart phase
   icons sit inside each phase header above its label. Both use the same
   `card-badge` primitive and icon scale. Missing, displaced, overlapping,
   resized or clipped icons fail the gate; floating absolute badges are rejected.
@@ -351,3 +352,12 @@ not a blocking network dependency of this suite. Upstream docs are mutable when
 syncing `main`; checks apply to the actual synced snapshot. New upstream defects
 must be fixed or narrowly normalised in the generator, never hidden by disabling
 an accessibility rule or hand-editing generated Markdown.
+
+Copyable commands and requests share a surface, padding and copy control. Text
+and control start on the same row on desktop; phones stack the control below
+full-width text. These functional blocks use reading-size prose and small
+monospace/control text. Card links highlight their destination title on hover,
+never underline whole descriptions, and preserve a visible keyboard focus ring. Linked documentation cards use one
+trailing right arrow as an entry cue. Semantic fills use the shared warm, blue
+and green palettes, with a shared light gradient and elevation in both themes;
+learning uses the same card heading anatomy on lavender surfaces.

@@ -111,7 +111,7 @@ export function measureDesign() {
   }
   for (const card of document.querySelectorAll('.surface-card,.tool-entry,.case-quote')) {
     if (!visible(card)) continue;
-    const allowedSizes = card.matches('.case-quote') ? [reading,leadSize] : [reading,title];
+    const allowedSizes = card.matches('.case-quote') ? [reading,leadSize] : card.matches('.copy-block') ? [reading,small] : [reading,title];
     const walker = document.createTreeWalker(card,NodeFilter.SHOW_TEXT), sizes = new Set();
     let node;
     while ((node = walker.nextNode())) {
@@ -147,6 +147,16 @@ export function measureDesign() {
       }
     }
   }
+  // Repeated labels carry the same meaning even in inactive walkthrough stages.
+  const labelIcons = new Map();
+  for (const owner of document.querySelectorAll('.workflow-card-heading,.chart-phases > div')) {
+    const title = owner.querySelector('.workflow-card-title,.centered-label-text')?.textContent.trim();
+    const icon = owner.querySelector('.card-badge > svg');
+    if (!title || !icon) continue;
+    const drawing = icon.getAttribute('viewBox') + icon.innerHTML;
+    if (labelIcons.has(title) && labelIcons.get(title) !== drawing) errors.push('same title has different icons: ' + title);
+    labelIcons.set(title,drawing);
+  }
   for (const icon of document.querySelectorAll('.illustration-pair > div > svg')) {
     if (!icon.getClientRects().length || getComputedStyle(icon).visibility === 'hidden' || icon.closest('[inert]')) continue;
     for (const surface of [icon,icon.parentElement]) {
@@ -171,6 +181,7 @@ export function measureDesign() {
     if (!visible(control)) continue;
     if (control.querySelector('.lucide-arrow-up-right,.lucide-arrow-left') || /[↗↵]/.test(control.textContent)) errors.push('decorative control arrow: ' + control.textContent.trim());
     for (const arrow of control.querySelectorAll('.lucide-arrow-right,.cta-arrow')) {
+      if (arrow.matches('.lucide-arrow-right.card-link-arrow') && control.matches('a.surface-card.card-link') && arrow === control.lastElementChild && control.querySelectorAll('.card-link-arrow').length === 1) continue;
       if (!arrow.matches('.lucide-arrow-right.cta-arrow') || !control.matches('a:is(.button,.text-link)') || arrow !== control.lastElementChild || control.querySelectorAll('.cta-arrow').length !== 1) errors.push('invalid CTA arrow: ' + control.textContent.trim());
     }
   }

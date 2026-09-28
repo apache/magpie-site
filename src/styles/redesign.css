@@ -1,6 +1,6 @@
 /* Shared chrome and controls. Page-specific geometry belongs to its layout. */
 :root {
-  --paper:#fffdf7; --surface:#f0f2ed; --ink:#172723; --muted:#52635a;
+  --paper:#fffdf7; --surface:#e8effb; --ink:#172723; --muted:#52635a;
   --line:#dce4db; --blue:#004aad; --citrus:#edf4bd; --warning:#795619;
   --radius-control:8px; --radius-card:14px; --header-height:80px; --content-width:1120px;
   --text-small:.875rem; --text-reading:1rem; --text-body:1.125rem;
@@ -11,12 +11,13 @@
   --weight-heading:600; --leading-body:1.7; --leading-heading:1.25;
   --icon-stroke:1.5px;
   --motion-fast:180ms; --motion-content:280ms; --motion-ease:cubic-bezier(.22,.7,.3,1);
-  --surface-shadow:0 1px 2px #1727230d;
+  --surface-shadow:0 2px 4px #1727230a,0 10px 28px #1727230a;
+  --surface-light:linear-gradient(145deg,#ffffff50,transparent 65%);
   --action-bg:#004aad; --action-hover:#003b8b; --action-ink:white;
   --action-soft-bg:#d3e3f9; --action-soft-hover:#c2d8f4;
   --radius-round:999px;
   --code-bg:#131f2c; --code-ink:#e5eaf4; --code-line:#405269;
-  --tint-blue:#eef4fb; --tint-lavender:#f1eef6;
+  --tint-blue:#dceaff; --tint-lavender:#eae1fa;
 }
 html { scroll-behavior:smooth; scroll-padding-top:calc(var(--header-height) + 24px); }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-sans); -webkit-font-smoothing:antialiased; overflow-wrap:anywhere; }
@@ -55,9 +56,13 @@ a, button, summary { -webkit-tap-highlight-color:transparent; transition:color v
 .button > svg { width:20px; height:20px; flex:none; }
 .button-small > svg { width:18px; height:18px; }
 .field-control { min-height:44px; max-width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:var(--radius-control); background:var(--paper); color:var(--ink); font-size:var(--text-reading); line-height:1.5; }
-.surface-card { padding:var(--card-padding); border-radius:var(--radius-card); background:var(--surface); min-width:0; font-size:var(--text-reading); }
+.surface-card { padding:var(--card-padding); border-radius:var(--radius-card); background:var(--surface-light),var(--surface); min-width:0; font-size:var(--text-reading); }
 .surface-card,.chart-frame,.reference-table,.docs-prose table,.chart-table-scroll { box-shadow:var(--surface-shadow); }
 .surface-card :is(h2,h3) { font-size:var(--title-card); line-height:var(--leading-heading); font-weight:var(--weight-heading); letter-spacing:-.02em; }
+.card-link-arrow { width:20px; height:20px; justify-self:end; color:var(--blue); }
+a.surface-card { text-decoration:none; }
+a.surface-card:hover { outline:1px solid var(--blue); outline-offset:0; text-decoration:none; }
+a.surface-card:is(:hover,:focus-visible) .workflow-card-title { color:var(--blue); }
 .surface-card p { font-size:var(--text-reading); line-height:var(--leading-body); }
 .card-badge { display:grid; place-items:center; flex:none; width:var(--card-badge-size); height:var(--card-badge-size); padding:6px; }
 .card-badge > svg, .illustration-pair > div > svg { display:block; width:auto; height:calc(var(--card-badge-size) - var(--space-3)); max-width:none; fill:color-mix(in srgb,currentColor 18%,var(--paper)); }

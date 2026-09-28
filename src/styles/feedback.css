@@ -1,19 +1,20 @@
 /* Theme differences are expressed through the same tokens as the light UI. */
 html[data-theme=dark] {
   color-scheme:dark;
-  --paper:#121c25; --surface:#1b2935; --ink:#e4edf1; --muted:#b1c1c9;
+  --paper:#121c25; --surface:#20354e; --ink:#e4edf1; --muted:#b1c1c9;
   --line:#3b4a57; --blue:#89b9ff; --citrus:#293e30; --warning:#e3bd7b;
   --action-bg:#175daf; --action-hover:#124b90;
   --action-soft-bg:#233c59; --action-soft-hover:#2e4c70;
-  --tint-blue:#1c2c40; --tint-lavender:#242738;
-  --surface-shadow:0 1px 2px #00000024;
+  --tint-blue:#173451; --tint-lavender:#332e53;
+  --surface-shadow:0 2px 4px #00000024,0 10px 28px #00000024;
+  --surface-light:linear-gradient(145deg,#ffffff0d,transparent 65%);
 }
 html[data-theme=dark] .redesign-home {
   --risk-ink:#f6a396;
-  --manual-bg:#292726; --manual-ink:#edb59d; --manual-border:#624e42;
-  --prepared-bg:#1c2937; --prepared-ink:#cee0fa;
+  --manual-bg:#4a2d25; --manual-ink:#ffcab1; --manual-border:#624e42;
+  --prepared-bg:#203f65; --prepared-ink:#cee0fa;
   --prepared-border:#3b526f; --prepared-accent:#89b9ff;
-  --result-bg:#232e29; --result-ink:#c5e5ce; --result-border:#4d795b; --result-accent:#86efac;
+  --result-bg:#204b37; --result-ink:#c5e5ce; --result-border:#4d795b; --result-accent:#86efac;
 }
 html[data-theme=dark] .theme-moon { display:none; }
 html[data-theme=dark] .theme-sun { display:block; }

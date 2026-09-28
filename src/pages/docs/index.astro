@@ -1,11 +1,11 @@
 ---
 import { CardHeading } from "../../components/landing/WorkflowCard";
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import { ShieldCheck, GitPullRequest, Inbox, PackageCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, GitPullRequest, Bug, PackageCheck } from "lucide-react";
 const workflows = [
   { title: "Security reports", description: "Assess, coordinate, fix, and disclose.", href: "/docs/security/readme", icon: ShieldCheck },
   { title: "Pull requests", description: "Triage the queue and prepare reviews.", href: "/docs/pr-management/readme", icon: GitPullRequest },
-  { title: "Issues", description: "Reproduce bugs and find the next step.", href: "/docs/issue-management/readme", icon: Inbox },
+  { title: "Issues", description: "Reproduce bugs and find the next step.", href: "/docs/issue-management/readme", icon: Bug },
   { title: "Releases", description: "Work through the ASF release lifecycle.", href: "/docs/release-management/readme", icon: PackageCheck },
 ];
 const more = [["Repository health", "/docs/repo-health/readme"], ["Mentoring", "/docs/mentoring/readme"], ["Contributor growth", "/docs/contributor-growth/readme"], ["Pairing", "/docs/pairing/readme"], ["Tools & adapters", "/tools"], ["Extending Magpie", "/docs/extending"]];
@@ -16,7 +16,7 @@ const more = [["Repository health", "/docs/repo-health/readme"], ["Mentoring", "
   <a href="/start" class="button button-soft">Install Magpie</a>
   <section class="docs-overview-section" aria-labelledby="workflows">
   <h2 id="workflows">What would you like help with?</h2>
-  <div class="docs-card-grid">{workflows.map(item => <a href={item.href} class="surface-card workflow-card docs-card"><CardHeading title={item.title}><item.icon slot="icon" aria-hidden="true" /></CardHeading><div class="workflow-card-body"><p>{item.description}</p></div></a>)}</div>
+  <div class="docs-card-grid">{workflows.map(item => <a href={item.href} class="surface-card workflow-card card-link docs-card"><CardHeading title={item.title}><item.icon slot="icon" aria-hidden="true" /></CardHeading><div class="workflow-card-body"><p>{item.description}</p></div><ArrowRight className="card-link-arrow" aria-hidden="true" /></a>)}</div>
   <div class="docs-more-links">{more.map(([title,href]) => <a href={href}>{title}</a>)}</div>
   </section>
   <section class="docs-overview-section" aria-labelledby="understand">

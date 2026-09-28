@@ -28,7 +28,7 @@
 .docs-prose ol { list-style:decimal; }
 .docs-prose a { color:var(--blue); }
 .docs-prose :is(p,li,td,th) a { text-decoration:underline; }
-.docs-prose a:hover { text-decoration:underline; }
+.docs-prose :where(a:hover) { text-decoration:underline; }
 .docs-prose pre { overflow-x:auto; font-size:var(--text-small); padding:var(--card-padding); border-radius:var(--radius-control); background:var(--code-bg); color:var(--code-ink); line-height:var(--leading-body); margin-block:var(--space-4); }
 .docs-prose code { font-size:.86em; background:var(--surface); padding:2px 5px; border-radius:3px; }
 .docs-prose pre code { background:transparent; padding:0; color:inherit; font-size:inherit; }
@@ -43,8 +43,7 @@
 .docs-overview-section { margin-block:var(--block-gap); }
 .docs-overview-section > h2:first-child { margin-block:0 var(--heading-gap); }
 .docs-card-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--card-gap); }
-.docs-card { grid-row:span 2; grid-template-rows:subgrid; text-decoration:none; color:var(--ink); }
-.docs-card:is(:hover,:focus-visible) { outline:1px solid var(--blue); text-decoration:none; }
+.docs-card { grid-row:span 3; grid-template-rows:subgrid; text-decoration:none; color:var(--ink); }
 .docs-prose .docs-card { color:var(--ink); }
 .docs-card p { margin:0; }
 .docs-more-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-4) var(--space-6); margin:var(--space-6) 0 var(--space-8); }

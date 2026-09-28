@@ -300,13 +300,13 @@ test('layout checker rejects displaced, clipped and overlapping card badges', as
   await page.setContent('<style>*{box-sizing:border-box}.workflow-card{width:400px}</style><div class="surface-card workflow-card"><h2 class="workflow-card-heading"><span class="card-badge" aria-hidden="true">◇</span><span class="workflow-card-title">Card title</span></h2><div class="workflow-card-body">Content</div></div>');
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/components/landing/workflow-card.css','src/components/landing/centered-label.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   expect(await page.evaluate(measureLayout)).toEqual([]);
-  await page.locator('.card-badge').evaluate(el => el.style.transform = 'translateX(-80px)');
+  await page.locator('.card-badge').evaluate(el => el.style.transform = 'translateX(-220px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/misplaced card badge/);
   await page.locator('.workflow-card').evaluate(el => el.style.overflow = 'hidden');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/clipped card badge/);
   await page.locator('.workflow-card').evaluate(el => el.removeAttribute('style'));
   await page.locator('.card-badge').evaluate(el => el.removeAttribute('style'));
-  await page.locator('.workflow-card-title').evaluate(el => el.style.transform = 'translateX(-60px)');
+  await page.locator('.workflow-card-title').evaluate(el => el.style.transform = 'translateY(-40px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/card badge overlaps title/);
 });
 
@@ -572,4 +572,23 @@ test('documentation detects independent shell and breadcrumb widths', async ({pa
   await page.locator('.docs-shell').evaluate(el => el.removeAttribute('style'));
   await page.locator('.docs-breadcrumb').evaluate(el => el.style.width = 'calc(100% - 80px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('documentation breadcrumb differs from reading column');
+});
+
+
+test('repeated labels keep the same icon across chart phases and workflow cards', async ({page}) => {
+  const badge = '<span class="card-badge"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" /></svg></span>';
+  await page.setContent(`<div class="chart-phases"><div>${badge}<span class="centered-label-text">Good old days</span></div></div><h3 class="workflow-card-heading">${badge}<span class="workflow-card-title">Good old days</span></h3>`);
+  expect((await page.evaluate(measureDesign)).join('\n')).not.toContain('same title has different icons');
+  await page.locator('.workflow-card-heading path').evaluate(el => el.setAttribute('d','M4 4L20 20'));
+  expect((await page.evaluate(measureDesign)).join('\n')).toContain('same title has different icons: Good old days');
+});
+
+
+test('copyable text uses reading and code sizes without arbitrary typography', async ({page}) => {
+  await page.setContent('<div class="surface-card copy-block"><pre>command</pre><button class="button button-small">Copy</button></div>');
+  for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/content-pages.css','src/styles/start.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
+  await page.locator('pre').evaluate(el => el.style.fontSize='var(--text-small)');
+  expect((await page.evaluate(measureDesign)).join('\n')).not.toContain('unsupported card text size');
+  await page.locator('pre').evaluate(el => el.style.fontSize='30px');
+  expect((await page.evaluate(measureDesign)).join('\n')).toContain('unsupported card text size');
 });

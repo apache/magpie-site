@@ -1,6 +1,6 @@
 import WorkflowCard, { type WorkflowCardProps } from "./WorkflowCard";
 import { withBase } from "@/ui/lib/utils";
-import { NotebookPen } from "lucide-react";
+import { goodOldDays } from "./story-labels";
 
 export function MagpieToolkit() { return <svg className="magpie-toolkit" viewBox="0 0 64 56" fill="none" stroke="currentColor" aria-hidden="true">
       <path d="M23 13V9a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4" />
@@ -12,8 +12,8 @@ export function MagpieToolkit() { return <svg className="magpie-toolkit" viewBox
 type BrandedCardProps = Omit<WorkflowCardProps, "title" | "icon" | "tone"> & { title?: string };
 
 export function ManualCard(props: BrandedCardProps) {
-  const { title = "Good old days", ...rest } = props;
-  return <WorkflowCard {...rest} title={title} icon={<NotebookPen aria-hidden="true" />} tone="manual" />;
+  const { title = goodOldDays.title, ...rest } = props;
+  return <WorkflowCard {...rest} title={title} icon={<goodOldDays.icon aria-hidden="true" />} tone="manual" />;
 }
 
 export default function MagpieCard({ title = "Magpie", className = "", tone = "prepared", ...props }: BrandedCardProps & { tone?: "prepared" | "result" }) {

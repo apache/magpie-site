@@ -1,9 +1,9 @@
 /* Homepage geometry, composed from shared spacing and card primitives. */
 .redesign-home {
-  --manual-bg:#f6f1e9; --manual-ink:#8e503b; --manual-border:#e9d2c4;
-  --prepared-bg:#f0f4f8; --prepared-ink:#233f60;
-  --prepared-border:#c9daf0; --prepared-accent:#004aad;
-  --result-bg:#f0f4eb; --result-ink:#315c3e; --result-border:#a9c3a9; --result-accent:#126b35;
+  --manual-bg:#ffdec6; --manual-ink:#793c25; --manual-border:#d89c78;
+  --prepared-bg:#c9dfff; --prepared-ink:#16385d;
+  --prepared-border:#8ab5ee; --prepared-accent:#004aad;
+  --result-bg:#b8e8c4; --result-ink:#205133; --result-border:#73b58c; --result-accent:#126b35;
   --risk-ink:#a52a26;
   position:relative; isolation:isolate;
 }
@@ -108,9 +108,7 @@
 .redesign-home .learning-intro .lifecycle-heading { margin:0; text-align:left; }
 .redesign-home .learning-intro h2 { text-align:left; }
 .learning-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--card-gap); }
-.learning-path { display:grid; grid-template-rows:subgrid; grid-row:span 3; gap:var(--content-gap); padding-block:var(--heading-gap); border-top:1px solid var(--line); }
-.redesign-home .learning-path h3 { display:flex; align-items:center; gap:var(--space-3); margin:0; text-align:left; font-size:var(--title-card); }
-.learning-path h3 > svg { width:24px; height:24px; flex:none; color:var(--muted); }
+.learning-path { display:grid; grid-template-rows:subgrid; grid-row:span 3; gap:var(--content-gap); background:var(--surface-light),var(--tint-lavender); }
 .learning-path p { margin:0; font-size:var(--text-reading); line-height:var(--leading-body); color:var(--muted); }
 .learning-path a { align-self:end; }
 @media(max-width:800px) {

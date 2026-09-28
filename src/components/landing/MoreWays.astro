@@ -1,4 +1,5 @@
 ---
+import { CardHeading } from "./WorkflowCard";
 import SectionHeading from "./SectionHeading";
 import { ArrowRight, BookOpen, MessagesSquare, Wrench } from "lucide-react";
 import SetupUtilities from "./SetupUtilities.astro";
@@ -20,18 +21,18 @@ import { ProjectRules } from "./ProjectExamples";
     </div>
   </div>
   <div class="learning-grid">
-    <article class="learning-path">
-      <h3><BookOpen aria-hidden="true" /><span>Start with the basics</span></h3>
+    <article class="surface-card learning-path">
+      <CardHeading title="Start with the basics"><BookOpen slot="icon" aria-hidden="true" /></CardHeading>
       <p><strong><q>Where do I even start?</q></strong> Start with how agents use models, tools and context to work through a task.</p>
       <a class="text-link" href="/docs/education/what-agents-are" target="_blank" rel="noreferrer">Meet your agent</a>
     </article>
-    <article class="learning-path">
-      <h3><MessagesSquare aria-hidden="true" /><span>Work better together</span></h3>
+    <article class="surface-card learning-path">
+      <CardHeading title="Work better together"><MessagesSquare slot="icon" aria-hidden="true" /></CardHeading>
       <p><strong><q>I’m getting the hang of this!</q></strong> Give clearer instructions, steer the work and know when to step in.</p>
       <a class="text-link" href="/docs/education/working-with-agents" target="_blank" rel="noreferrer">Build good habits</a>
     </article>
-    <article class="learning-path">
-      <h3><Wrench aria-hidden="true" /><span>Make a skill of your own</span></h3>
+    <article class="surface-card learning-path">
+      <CardHeading title="Make a skill of your own"><Wrench slot="icon" aria-hidden="true" /></CardHeading>
       <p><strong><q>I could turn this into a skill!</q></strong> Turn a familiar task into a skill your agent can use again.</p>
       <a class="text-link" href="/docs/education/your-first-skill" target="_blank" rel="noreferrer">Try your first skill</a>
     </article>

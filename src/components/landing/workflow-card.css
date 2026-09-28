@@ -7,10 +7,10 @@
   align-items:stretch; gap:var(--content-gap);
   text-align:left; overflow-wrap:anywhere;
 }
-.workflow-card[data-card-tone=manual] { background:var(--manual-bg); color:var(--manual-ink); }
-.workflow-card[data-card-tone=prepared] { background:var(--prepared-bg); color:var(--prepared-ink); }
-.workflow-card[data-card-tone=result] { background:var(--result-bg); color:var(--result-ink); }
-.workflow-card-heading { display:flex; align-items:center; gap:var(--space-3); margin:0; font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:left; }
+.workflow-card[data-card-tone=manual] { background:var(--surface-light),var(--manual-bg); color:var(--manual-ink); }
+.workflow-card[data-card-tone=prepared] { background:var(--surface-light),var(--prepared-bg); color:var(--prepared-ink); }
+.workflow-card[data-card-tone=result] { background:var(--surface-light),var(--result-bg); color:var(--result-ink); }
+.workflow-card-heading { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); margin:0; font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:center; }
 .workflow-card-title { min-width:0; text-wrap:pretty; }
 .workflow-card[data-card-tone=prepared] > .workflow-card-heading { color:var(--prepared-accent); }
 .workflow-card-body { min-width:0; }
