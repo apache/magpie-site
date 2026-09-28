@@ -185,3 +185,50 @@ test("latestBuild returns the newest run for a commit in any state", async () =>
   const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl, workflow: "build.yml" });
   assert.deepEqual(await gh.latestBuild(sha), { id: 9, status: "in_progress" });
 });
+
+test("addLabel posts the label to the pull request", async () => {
+  const { impl, calls } = fakeFetch({
+    "POST /repos/apache/magpie-site/issues/7/labels": [],
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  await gh.addLabel(7, "preview");
+  assert.deepEqual(JSON.parse(calls[0].body), { labels: ["preview"] });
+});
+
+test("ensureLabel creates the label only when it is missing", async () => {
+  const calls = [];
+  const impl = async (url, options = {}) => {
+    calls.push(`${options.method ?? "GET"} ${url.replace("https://api.github.com", "")}`);
+    if (options.method === "GET") return { ok: false, status: 404, json: async () => ({}) };
+    return { ok: true, status: 201, json: async () => ({}) };
+  };
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  await gh.ensureLabel("preview");
+  assert.deepEqual(calls, [
+    "GET /repos/apache/magpie-site/labels/preview",
+    "POST /repos/apache/magpie-site/labels",
+  ]);
+});
+
+test("listLabelEvents keeps only labeled and unlabeled events", async () => {
+  const { impl } = fakeFetch({
+    "GET /repos/apache/magpie-site/issues/7/events?per_page=100&page=1": [
+      { event: "labeled", label: { name: "preview" } },
+      { event: "head_ref_force_pushed" },
+      { event: "unlabeled", label: { name: "preview" } },
+    ],
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  assert.deepEqual((await gh.listLabelEvents(7)).map((e) => e.event), ["labeled", "unlabeled"]);
+});
+
+test("hasReaction matches the reacting login exactly", async () => {
+  const { impl } = fakeFetch({
+    "GET /repos/apache/magpie-site/issues/comments/3/reactions?content=rocket&per_page=100&page=1": [
+      { user: { login: "someone" } },
+    ],
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  assert.equal(await gh.hasReaction(3, "rocket", "github-actions[bot]"), false);
+  assert.equal(await gh.hasReaction(3, "rocket", "someone"), true);
+});

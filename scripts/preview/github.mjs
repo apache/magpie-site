@@ -106,6 +106,42 @@ export function createClient({ repo, token, fetchImpl = fetch, workflow = buildW
     createComment: (n, body) =>
       request(`/repos/${repo}/issues/${n}/comments`, { method: "POST", body: { body } }),
 
+    /** Create the label if the repository does not have it yet. */
+    async ensureLabel(name) {
+      try {
+        await request(`/repos/${repo}/labels/${encodeURIComponent(name)}`);
+      } catch (e) {
+        if (e.status !== 404) throw e;
+        await request(`/repos/${repo}/labels`, {
+          method: "POST",
+          body: { name, color: "0e8a16", description: "Publish a live staging preview of this pull request" },
+        });
+      }
+    },
+
+    addLabel: (n, name) =>
+      request(`/repos/${repo}/issues/${n}/labels`, { method: "POST", body: { labels: [name] } }),
+
+    /** The pull request's labeled / unlabeled events, oldest first. */
+    async listLabelEvents(n) {
+      const events = await paginate(`/repos/${repo}/issues/${n}/events`);
+      return events.filter((e) => e?.event === "labeled" || e?.event === "unlabeled");
+    },
+
+    /** Whether `login` has already left a `content` reaction on a comment. */
+    async hasReaction(commentId, content, login) {
+      const reactions = await paginate(
+        `/repos/${repo}/issues/comments/${commentId}/reactions?content=${content}`,
+      );
+      return reactions.some((r) => r?.user?.login === login);
+    },
+
+    addReaction: (commentId, content) =>
+      request(`/repos/${repo}/issues/comments/${commentId}/reactions`, {
+        method: "POST",
+        body: { content },
+      }),
+
     async listPreviewBranches() {
       const refs = await paginate(`/repos/${repo}/git/matching-refs/heads/preview/`);
       return refs.map((r) => r.ref.replace("refs/heads/", ""));

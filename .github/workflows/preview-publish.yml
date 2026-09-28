@@ -19,59 +19,71 @@
 # Privilege boundary — read this before changing any trigger.
 #
 # This workflow holds a GITHUB_TOKEN that can push branches to an ASF
-# repository and comment on pull requests, so it must never check out, build,
-# or execute code from a pull request, and never read anything from the PR's
-# tree. It only ever runs scripts from this repository's own default branch,
-# which consume an already-built artifact produced by the unprivileged
-# `pull_request` run in build.yml (and screened by validate.mjs before use).
+# repository, label pull requests and comment on them, so it must never check
+# out, build, or execute code from a pull request, and never read anything
+# from the PR's tree. It only ever runs scripts from this repository's own
+# default branch, which consume an already-built artifact produced by the
+# unprivileged `pull_request` run in build.yml (screened by validate.mjs).
 #
-# The optional pull_request_target trigger exists only to learn "a pull
-# request was pushed to" quickly. Under pull_request_target, actions/checkout
-# with no `ref` checks out the BASE branch, which is what is wanted: no job
-# here sets `ref`, and none may ever point it at github.event.pull_request.*.
-# The only values taken from the event are the PR number and head SHA, both
-# passed through env and validated as digits / 40-hex before use. The trigger
-# never arms a preview: --if-armed publishes only what a maintainer armed.
+# pull_request_target and issue_comment are used only as signals that
+# something changed. Under both, actions/checkout with no `ref` checks out the
+# default branch: no job here sets `ref`, and none may ever point it at
+# github.event.pull_request.*. The only value taken from the event into a step
+# is the PR number (validated as digits); the label name, action, comment body
+# and author association are read in `if:` expressions only, never in a shell.
+# Neither trigger arms anything by itself: the publisher re-derives arming from
+# the API — the `preview` label, added by someone with write access.
 #
-# Another site adopting this publisher can drop the pull_request_target
-# trigger and the await-build job; the schedule alone still publishes, only
-# later.
+# There is no schedule. Every publish run is a full reconcile of all open pull
+# requests and preview branches, so a run that concurrency drops is covered by
+# the next one. A run that fails part-way is retried by the next event on any
+# PR, or by a manual dispatch with no PR number.
 name: "Publish PR previews"
 "on":
-  schedule:
-    - cron: "*/5 * * * *"
-  pull_request_target: # zizmor: ignore[dangerous-triggers] -- base-branch code only; see header
+  pull_request_target: # zizmor: ignore[dangerous-triggers] -- default-branch code only; see header
     branches: [main]
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, labeled, unlabeled, closed]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       pr:
-        description: "Publish only this PR number (skips the armed check)"
+        description: "Arm and publish this PR number (blank: reconcile every PR)"
         required: false
         type: string
 
 permissions: {}
 
 jobs:
-  # pull_request_target only: wait for the unprivileged build of the pushed
-  # commit, so a sticky preview is republished minutes after its build rather
-  # than on the next scheduled run. Holds no write permission, and runs outside
-  # the publish concurrency group so a long wait never blocks scheduled runs.
+  # Wait for the unprivileged build of the PR's head commit, so an armed
+  # preview publishes minutes after its build goes green. Starts only for a PR
+  # carrying the preview label, or for a /show-preview command from someone
+  # GitHub lists as a member or collaborator (the publisher re-checks write
+  # access). Holds no write permission, and runs outside the publish
+  # concurrency group so a long wait never blocks other publishes.
   await-build:
-    if: github.event_name == 'pull_request_target'
+    if: >-
+      (github.event_name == 'pull_request_target' &&
+       contains(fromJSON('["opened","reopened","synchronize","labeled"]'), github.event.action) &&
+       contains(github.event.pull_request.labels.*.name, 'preview') &&
+       (github.event.action != 'labeled' || github.event.label.name == 'preview')) ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '/show-preview') &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-slim
     timeout-minutes: 55
     permissions:
-      contents: read # read the preview branch's head commit
+      pull-requests: read # read the PR's state and head SHA
       actions: read # read build.yml runs for the head SHA
     concurrency:
-      # A newer push to the same PR supersedes the wait for an older one.
-      group: preview-await-${{ github.event.pull_request.number }}
+      # A newer event on the same PR supersedes the wait for an older one.
+      group: preview-await-${{ github.event.pull_request.number || github.event.issue.number }}
       cancel-in-progress: true
     outputs:
       ready: ${{ steps.wait.outputs.ready }}
     steps:
-      - name: Checkout the base branch (never the pull request)
+      - name: Checkout the default branch (never the pull request)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -81,23 +93,31 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Wait for the build of the pushed commit
+      - name: Wait for the build of the head commit
         id: wait
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: node scripts/preview/await-build.mjs
 
   publish:
     needs: await-build
-    # await-build is skipped on schedule and dispatch; !cancelled() lets this
-    # job run anyway, and on pull_request_target it runs only once the build
-    # is green.
+    # Runs when:
+    #   - the awaited build is green (push / label / reopen of an armed PR);
+    #   - a maintainer's command was seen, green or not — arming adds the label
+    #     and, without a build, posts the waiting status;
+    #   - a PR opens (explainer), reopens, closes, or loses the preview label
+    #     (retire the preview);
+    #   - a manual dispatch.
     if: >-
-      !cancelled() &&
-      (github.event_name != 'pull_request_target' || needs.await-build.outputs.ready == 'true')
+      !cancelled() && (
+        needs.await-build.outputs.ready == 'true' ||
+        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'issue_comment' && needs.await-build.result == 'success') ||
+        (github.event_name == 'pull_request_target' &&
+         (contains(fromJSON('["opened","reopened","closed"]'), github.event.action) ||
+          (github.event.action == 'unlabeled' && github.event.label.name == 'preview'))))
     runs-on: ubuntu-slim
     timeout-minutes: 20
     permissions:
@@ -108,14 +128,14 @@ jobs:
       # endpoint is /issues/{n}/comments. issues: write covers issues only — with
       # it alone every comment 403s, which is exactly what happened on the first
       # scheduled run (actions/runs/35148520846).
-      pull-requests: write # list open PRs, read head SHAs, and post PR comments
-      issues: write # the same endpoints when the target is a real issue
+      pull-requests: write # list open PRs, post comments, add the preview label
+      issues: write # create the label, react to comments, and the same endpoints on issues
       actions: read # list and download build.yml's artifacts
     concurrency:
       group: preview-publish
       cancel-in-progress: false
     steps:
-      - name: Checkout the base branch (never the pull request)
+      - name: Checkout the default branch (never the pull request)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -130,11 +150,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_INPUT: ${{ inputs.pr }}
-          EVENT_PR: ${{ github.event.pull_request.number }}
         run: |
-          if [ -n "${EVENT_PR}" ]; then
-            node scripts/preview/publish.mjs --pr "${EVENT_PR}" --if-armed
-          elif [ -n "${PR_INPUT}" ]; then
+          if [ -n "${PR_INPUT}" ]; then
             node scripts/preview/publish.mjs --pr "${PR_INPUT}"
           else
             node scripts/preview/publish.mjs

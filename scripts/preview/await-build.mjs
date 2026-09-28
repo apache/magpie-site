@@ -1,39 +1,35 @@
 import { appendFile } from "node:fs/promises";
-import { previewBranch } from "./files.mjs";
 
-const TOMBSTONE_TAG = "[tombstone]";
 const SHA_RE = /^[0-9a-f]{40}$/;
 
 /**
- * Wait for the unprivileged build of a pull request's pushed commit, so its
- * preview can be republished as soon as the artifact exists rather than on the
- * next scheduled run.
+ * Wait for the unprivileged build of a pull request's current head commit, so
+ * its preview can be published as soon as the artifact exists.
  *
- * Only a pull request with a live preview is waited on. Arming is the
- * publisher's decision and it makes it again; this is only a cheap filter so
- * that every push to every unarmed pull request does not hold a runner for the
- * length of a build.
+ * The head SHA is read from the API, not from the triggering event: a newer
+ * push may have landed since, and it keeps the event's payload out of this
+ * step entirely. Whether the PR is armed is not decided here — the workflow
+ * only starts this for a labelled PR or a maintainer's command, and the
+ * publisher checks arming again with full rigour.
  *
  * Returns { ready, reason }. `ready` is true only when the newest build run for
- * `sha` completed successfully.
+ * the head commit completed successfully.
  */
 export async function awaitBuild({
   gh,
   pr,
-  sha,
   timeoutMs = 50 * 60 * 1000,
   intervalMs = 30 * 1000,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
   now = () => Date.now(),
 }) {
   if (!/^\d+$/.test(String(pr))) throw new TypeError(`bad PR number ${JSON.stringify(pr)}`);
+
+  const pull = await gh.getPull(pr);
+  if (pull?.state !== "open") return { ready: false, reason: `#${pr} is not open` };
+  const sha = pull?.head?.sha;
   // Interpolated into an API query string.
   if (!SHA_RE.test(String(sha))) throw new TypeError(`bad head SHA ${JSON.stringify(sha)}`);
-
-  const head = await gh.branchHeadMessage(previewBranch(pr));
-  if (!head || head.includes(TOMBSTONE_TAG)) {
-    return { ready: false, reason: `#${pr} has no live preview` };
-  }
 
   const deadline = now() + timeoutMs;
   for (;;) {
@@ -44,7 +40,7 @@ export async function awaitBuild({
         : { ready: false, reason: `build ${run.id} concluded ${run.conclusion}` };
     }
     if (now() >= deadline) {
-      return { ready: false, reason: "timed out waiting for the build; the scheduled run will pick it up" };
+      return { ready: false, reason: "timed out waiting for the build; the next push, label or dispatch will retry" };
     }
     await sleep(intervalMs);
   }
@@ -53,7 +49,7 @@ export async function awaitBuild({
 import { createClient } from "./github.mjs";
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { GITHUB_REPOSITORY: repo, GITHUB_TOKEN: token, PR, HEAD_SHA, GITHUB_OUTPUT } = process.env;
+  const { GITHUB_REPOSITORY: repo, GITHUB_TOKEN: token, PR, GITHUB_OUTPUT } = process.env;
   if (!repo || !token) {
     console.error("GITHUB_REPOSITORY and GITHUB_TOKEN are required");
     process.exit(1);
@@ -62,7 +58,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const { ready, reason } = await awaitBuild({
     gh: createClient({ repo, token }),
     pr: PR,
-    sha: HEAD_SHA,
   });
   console.log(`preview: ${ready ? "ready" : "not publishing"} — ${reason}`);
   if (GITHUB_OUTPUT) await appendFile(GITHUB_OUTPUT, `ready=${ready}\n`);

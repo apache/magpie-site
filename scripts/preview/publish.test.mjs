@@ -6,11 +6,13 @@ import { join } from "node:path";
 import { run, publishedShaFrom, isBotAuthored } from "./publish.mjs";
 
 const SHA = "c".repeat(40);
-const pull = (number, sha = SHA) => ({
+const pull = (number, sha = SHA, labels = []) => ({
   number,
   head: { sha },
   user: { type: "User", login: "contributor" },
+  labels: labels.map((name) => ({ name })),
 });
+const labeledBy = (login) => ({ event: "labeled", label: { name: "preview" }, actor: { login } });
 const botPull = (number, login = "dependabot[bot]", type = "Bot") => ({
   number,
   head: { sha: SHA },
@@ -26,7 +28,8 @@ async function artifactDir({ withSymlink = false } = {}) {
 
 const bot = (body, login = "github-actions[bot]") => ({ user: { type: "Bot", login }, body });
 const human = (body, login = "drive-by") => ({ user: { type: "User", login }, body });
-const armCmd = (login = "maintainer") => ({ user: { type: "User", login }, body: "/show-preview" });
+let nextId = 1;
+const armCmd = (login = "maintainer") => ({ id: nextId++, user: { type: "User", login }, body: "/show-preview" });
 
 function fakes({
   openPulls = [],
@@ -37,11 +40,15 @@ function fakes({
   throwFor = [],
   repoBranches = [],
   pullsForHead = {},
+  labelEvents = {},
+  acknowledged = [],
 } = {}) {
   const pushed = [];
   const deleted = [];
   const posted = [];
   const created = [];
+  const labelled = [];
+  const reacted = [];
 
   const gh = {
     listOpenPulls: async () => openPulls,
@@ -55,6 +62,15 @@ function fakes({
     },
     createComment: async (n, body) => {
       created.push({ n, body });
+    },
+    ensureLabel: async () => {},
+    addLabel: async (n, name) => {
+      labelled.push({ n, name });
+    },
+    listLabelEvents: async (n) => labelEvents[n] ?? [],
+    hasReaction: async (id) => acknowledged.includes(id) || reacted.includes(id),
+    addReaction: async (id) => {
+      reacted.push(id);
     },
     listPreviewBranches: async () => branches,
     listPullFiles: async () => [],
@@ -73,7 +89,7 @@ function fakes({
     },
   };
 
-  return { gh, git, pushed, deleted, posted, created };
+  return { gh, git, pushed, deleted, posted, created, labelled, reacted };
 }
 
 const go = (f, extra = {}) =>
@@ -173,44 +189,65 @@ test("does not announce when nothing was published", async () => {
   assert.equal(f.created.length, 0);
 });
 
-test("a push-triggered run publishes an armed PR", async () => {
+test("a maintainer's command adds the label and is acknowledged", async () => {
   const dir = await artifactDir();
+  const cmd = armCmd();
+  const f = fakes({ openPulls: [pull(5)], comments: { 5: [cmd] } });
+
+  await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.deepEqual(f.labelled, [{ n: 5, name: "preview" }]);
+  assert.deepEqual(f.reacted, [cmd.id]);
+  assert.equal(f.pushed.length, 1);
+});
+
+test("an acknowledged command does not re-add a removed label", async () => {
+  const cmd = armCmd();
   const f = fakes({
     openPulls: [pull(5)],
-    comments: { 5: [armCmd()] },
+    comments: { 5: [cmd] },
+    acknowledged: [cmd.id],
     branches: ["preview/pr5-staging"],
-    headMessages: { "preview/pr5-staging": "Publish preview for #5 (deadbee)" },
   });
 
-  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+  await go(f);
+
+  assert.deepEqual(f.labelled, [], "removing the label must disarm for good");
+  assert.ok(f.pushed.some((p) => /tombstone/.test(p.message)), "the preview must be retired");
+});
+
+test("a drive-by's command neither labels nor publishes", async () => {
+  const f = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd("drive-by")] } });
+  await go(f);
+
+  assert.deepEqual(f.labelled, []);
+  assert.deepEqual(f.reacted, []);
+  assert.equal(f.pushed.length, 0);
+});
+
+test("publishes a PR labelled by a maintainer", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5, SHA, ["preview"])],
+    labelEvents: { 5: [labeledBy("maintainer")] },
+  });
+
+  await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
 
   assert.equal(f.pushed.length, 1);
-  assert.equal(f.posted.filter((p) => p.marker === "magpie-preview-armed").length, 0,
-    "a push is not a maintainer's authorisation and must not leave an arming record");
+  assert.deepEqual(f.labelled, [], "the label is already there");
 });
 
-test("a push-triggered run never arms an unarmed PR", async () => {
-  const dir = await artifactDir();
-  const f = fakes({ openPulls: [pull(5)] });
-
-  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
-
-  assert.equal(f.pushed.length, 0);
-  assert.equal(f.created.length, 0);
-  assert.equal(f.posted.filter((p) => p.marker === "magpie-preview-armed").length, 0);
-});
-
-test("a push-triggered run does not force an unchanged preview", async () => {
-  const dir = await artifactDir();
+test("does not publish a PR labelled by someone without write access", async () => {
   const f = fakes({
-    openPulls: [pull(5)],
-    comments: { 5: [armCmd()] },
-    branches: ["preview/pr5-staging"],
-    headMessages: { "preview/pr5-staging": `Publish preview for #5 (${SHA.slice(0, 7)})` },
+    openPulls: [pull(5, SHA, ["preview"])],
+    labelEvents: { 5: [labeledBy("triager")] },
   });
+  let fetched = 0;
 
-  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+  await go(f, { fetchArtifact: async () => { fetched += 1; return null; } });
 
+  assert.equal(fetched, 0);
   assert.equal(f.pushed.length, 0);
 });
 
@@ -365,7 +402,7 @@ test("deletes a branch that already carries a tombstone", async () => {
   assert.deepEqual(f.deleted, ["preview/pr9-staging"]);
 });
 
-test("a manual dispatch leaves a durable arming record", async () => {
+test("a manual dispatch arms the PR with the label and says who", async () => {
   const dir = await artifactDir();
   const f = fakes({ openPulls: [pull(42)] });
 
@@ -375,23 +412,24 @@ test("a manual dispatch leaves a durable arming record", async () => {
     fetchArtifact: async () => ({ dir, meta: { pr: 42, headSha: SHA } }),
   });
 
-  const armed = f.posted.find((p) => p.marker === "magpie-preview-armed");
-  assert.ok(armed, "a dispatch must record arming so the next run does not reap it");
-  assert.match(armed.body, /maintainer/);
+  assert.deepEqual(f.labelled, [{ n: 42, name: "preview" }],
+    "a dispatch must arm durably so the next run does not reap it");
+  assert.ok(f.created.some((c) => c.n === 42 && /@maintainer/.test(c.body)));
+  assert.equal(f.pushed.length, 1);
 });
 
-test("a PR armed only by the dispatch record survives a later scheduled run", async () => {
+test("a PR the publisher labelled survives a later run", async () => {
   const dir = await artifactDir();
   const f = fakes({
-    openPulls: [pull(42)],
-    comments: { 42: [bot("armed\n\n<!-- magpie-preview-armed -->")] },
+    openPulls: [pull(42, SHA, ["preview"])],
+    labelEvents: { 42: [labeledBy("github-actions[bot]")] },
     branches: ["preview/pr42-staging"],
   });
 
   await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 42, headSha: SHA } }) });
 
   assert.equal(f.pushed.filter((p) => /tombstone/.test(p.message)).length, 0,
-    "a dispatched preview must not be reaped on the next scheduled run");
+    "a dispatched preview must not be reaped on the next run");
   assert.deepEqual(f.deleted, []);
 });
 
@@ -425,31 +463,23 @@ test("a branch whose head cannot be read is tombstoned, never deleted", async ()
   assert.deepEqual(f.deleted, [], "must not delete a branch it could not inspect");
 });
 
-test("an arming marker from a different bot login does not arm the PR", async () => {
-  // ARMED_MARKER is an authorisation signal, not just an announcement: gating
-  // on `user.type === "Bot"` alone lets any GitHub App installed on the repo
-  // plant the tag and self-arm a PR.
+test("a label added by a different bot does not arm the PR", async () => {
+  // Only the publisher's own login is trusted: any GitHub App installed on the
+  // repository can add labels.
   const f = fakes({
-    openPulls: [pull(5)],
-    comments: {
-      5: [{ user: { type: "Bot", login: "other-app[bot]" }, body: "armed\n\n<!-- magpie-preview-armed -->" }],
-    },
+    openPulls: [pull(5, SHA, ["preview"])],
+    labelEvents: { 5: [labeledBy("other-app[bot]")] },
   });
   let fetched = 0;
 
-  await go(f, {
-    fetchArtifact: async () => {
-      fetched += 1;
-      return null;
-    },
-  });
+  await go(f, { fetchArtifact: async () => { fetched += 1; return null; } });
 
-  assert.equal(fetched, 0, "an arming marker from another bot must not arm the PR");
+  assert.equal(fetched, 0);
   assert.equal(f.pushed.length, 0);
 });
 
 test("a run with a persistently failing operation reports failure via the exit code", async () => {
-  // The publisher runs unattended on a schedule; catching and logging every
+  // The publisher runs unattended; catching and logging every
   // error without ever failing the process lets a permanently broken
   // publisher report success forever.
   const f = fakes({ openPulls: [pull(5)], throwFor: [5] });

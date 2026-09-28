@@ -4,9 +4,16 @@ Every open pull request against `apache/magpie-site` can be published as a live
 site at `magpie-pr<N>.staged.apache.org`, so a reviewer can look at a change
 instead of imagining it from a diff.
 
-Previews are opt-in per PR: a maintainer comments `/show-preview`, and from then
-on the PR's preview tracks its head commit until the PR closes. A scheduled
+Previews are opt-in per PR: a maintainer adds the `preview` label — directly, or
+by commenting `/show-preview` — and from then on the PR's preview tracks its
+head commit until the PR closes or the label is removed. An event-driven
 workflow does the publishing; nothing privileged ever runs pull-request code.
+
+> **Revised 2026-09-28.** The original design armed PRs by comment and
+> published from a 15-minute schedule. Both changed: the `preview` label is now
+> the armed state, and the schedule is gone in favour of `pull_request_target`
+> and `issue_comment` triggers used purely as signals. The sections below are
+> updated in place; "Why polling rather than events" records the reasoning.
 
 A preview is also reviewable in place: a reviewer can point at any element on the
 rendered page and write a comment against it, and land that comment on the source
@@ -56,21 +63,20 @@ step is designed around it below.
 **`pull_request_target` is a trigger only, never a source.** Everything
 privileged runs the default branch's copy of the workflow and its scripts, and
 can never be influenced by a pull request's contents. The original design
-excluded `pull_request_target` outright; it was later admitted (2026-09-28) for
-one narrow purpose — learning quickly that an armed pull request was pushed to —
-under these rules:
+excluded `pull_request_target` outright; it was later admitted (2026-09-28),
+together with `issue_comment`, for one narrow purpose — learning that something
+relevant to a preview changed — under these rules:
 
 - no job sets `actions/checkout`'s `ref`, so it checks out the base branch; no
   step reads, builds or executes anything from the pull request's tree;
-- the only values taken from the event are the PR number and head SHA, passed
-  through `env` and validated as digits and 40-hex;
+- the only value taken from the event into a step is the PR number, passed
+  through `env` and validated as digits; the head SHA is re-read from the API.
+  The action, label name, comment body and author association are read in job
+  `if:` expressions only, as cheap filters, never in a shell;
 - the site content still arrives only through the unprivileged build's
-  artifact, screened exactly as on a scheduled run;
-- the trigger never arms a preview. It republishes only a PR a maintainer has
-  already armed (`--if-armed`), and never forces an unchanged one.
-
-The trigger is optional: a site that drops it keeps a working, slower publisher
-driven by the schedule.
+  artifact, screened exactly as it always was;
+- no trigger arms a preview by itself. Every run re-derives the armed state
+  from the API, as described under "Resolve the armed set".
 
 **`pr<N>.dev.magpie.apache.org` is not available.** asfyaml refuses to let a
 project name its own `$project.apache.org` space ("It has to be inferred to
@@ -110,35 +116,60 @@ No preview logic lives here. The build does not know whether a preview will be
 published, and a pull request cannot cause one by editing this file — the
 privileged side re-reads the workflow from the default branch.
 
-### `preview-publish.yml` — privileged, scheduled
+### `preview-publish.yml` — privileged, event-driven
 
-Triggered by `schedule` (every 5 minutes), by `workflow_dispatch` with an
-optional `pr` input naming a single PR number, and optionally by
-`pull_request_target` (see Constraints and "Why polling rather than events"). Permissions: `contents: write`
-(push and delete preview branches), `pull-requests: write` (comment),
-`actions: read` (download artifacts). Concurrency group `preview-publish` with
-`cancel-in-progress: false`, so two scheduled runs never race on the same
-branches.
+Triggered by `pull_request_target` (`opened`, `reopened`, `synchronize`,
+`labeled`, `unlabeled`, `closed`), by `issue_comment` (`created`), and by
+`workflow_dispatch` with an optional `pr` input naming a single PR number.
+
+Two jobs. `await-build` holds a read-only token and starts only for a PR
+carrying the `preview` label, or for a `/show-preview` comment from someone
+GitHub lists as an owner, member or collaborator. It waits — up to 50 minutes,
+in a per-PR concurrency group where a newer event cancels the older wait — for
+the unprivileged build of the PR's current head commit. `publish` then runs the
+publisher when that build is green, after a maintainer's command whatever the
+build state, when a PR opens, reopens or closes, when the `preview` label is
+removed, and on dispatch. Its permissions: `contents: write` (push and delete
+preview branches), `pull-requests: write` and `issues: write` (comment, label,
+react), `actions: read` (download artifacts). Concurrency group
+`preview-publish` with `cancel-in-progress: false`, so two runs never race on
+the same branches.
+
+Every publish run is a full reconcile of all open PRs and preview branches, not
+just the one whose event triggered it. That is what makes the event-driven
+design safe: GitHub keeps at most one pending run per concurrency group and
+drops the rest, and a dropped run's work is done by whichever run follows.
 
 One run does four things, in order:
 
 **1. Announce.** For each open PR with no explainer comment yet, post one. The
-comment states that a maintainer can publish a preview with `/show-preview`,
+comment states that a maintainer can publish a preview with the `preview` label
+or `/show-preview`,
 gives the URL the preview will take, and notes the few-minute propagation delay.
 It carries a stable HTML marker comment so the next run recognises it and does
 not post twice.
 
-**2. Resolve the armed set.** A PR is *armed* if any comment on it consists of
-`/show-preview` and its author has write access to the repository. Author
-permission is resolved through
-`GET /repos/{owner}/{repo}/collaborators/{username}/permission` rather than the
-comment's `author_association`, which is a weaker signal. The comment body must
-match `^/show-preview\s*$` anchored — not a substring search, so quoting the
-command while discussing it does not arm anything.
+**2. Resolve the armed set.** A PR is *armed* when it carries the `preview`
+label and whoever **last added** that label has write access to the
+repository, read from the PR's `labeled` events. The label alone is not enough:
+on an ASF repository, collaborators with the triage role can add labels without
+being committers. The publisher's own login (`github-actions[bot]`) is trusted,
+because it adds the label only on a maintainer's behalf; no other bot is.
+Permission is resolved through
+`GET /repos/{owner}/{repo}/collaborators/{username}/permission` rather than
+`author_association`, which is a weaker signal.
 
-A PR is *disarmed* by deleting or editing that comment; there is no `/hide-preview`.
-Since the armed set is recomputed from scratch on every run, removing the comment
-is enough, and the next reap tears the preview down.
+A `/show-preview` comment is a way of adding the label. Before resolving, the
+run looks for comments whose body matches `^/show-preview\s*$` anchored — not a
+substring search, so quoting the command while discussing it does not arm
+anything — from an author with write access, which the publisher has not yet
+acknowledged. For those it adds the label and then acknowledges each comment
+with a 🚀 reaction. The acknowledgement is what keeps the label the single
+source of truth: without it, a maintainer removing the label would see the old
+comment re-add it on the next run.
+
+A PR is *disarmed* by removing the label; the `unlabeled` event triggers a run,
+which tears the preview down.
 
 **3. Publish.** For each armed PR, first ask whether anything has changed.
 
@@ -147,7 +178,7 @@ A preview branch's head commit subject records what it was built from —
 published commit from the same read that detects tombstones. If it equals the
 PR's current head, the run does nothing for that PR: no artifact download, no
 push, no comment. Republishing regardless force-pushes an identical tree on
-every scheduled run, which costs a `commits@` mail and a rewritten status comment
+every run, which costs a `commits@` mail and a rewritten status comment
 for a preview nobody touched. A manual dispatch skips this check, because asking
 for a preview explicitly is a request to rebuild it.
 
@@ -191,11 +222,11 @@ untouched, teardown is a two-step **tombstone then delete**:
   and keeps serving the tombstone; what matters is that the pull request's code
   is no longer published.
 
-Reaping runs on every scheduled run, including runs dispatched for a single PR,
-so a closed PR's content is replaced within one cron interval. A run that
-tombstones a branch does not delete it in the same run — deletion waits for the
-following run, so a propagation delay can never strand live PR content behind a
-deleted branch.
+Reaping runs on every run, including runs dispatched for a single PR; closing
+a PR or removing its label triggers one, so its content is replaced within
+minutes. A run that tombstones a branch does not delete it in the same run —
+deletion waits for the next run, triggered by any later event on any PR, so a
+propagation delay can never strand live PR content behind a deleted branch.
 
 The same step also deletes the **head branches** that pull requests were opened
 from inside this repository, once every pull request from that branch has
@@ -210,15 +241,15 @@ deleted directly with no tombstone.
 
 `workflow_dispatch` with `pr: <N>` publishes that PR immediately, skipping the
 armed check — a maintainer dispatching the workflow by hand *is* the
-authorisation, since dispatch requires write access. This covers the cases the
-schedule handles badly: a preview wanted immediately, or a republish after a
-failed run, without waiting up to 15 minutes.
+authorisation, since dispatch requires write access. It covers a republish
+after a failed run, and a dispatch with no `pr` reconciles every PR, which is
+the retry path now that there is no schedule.
 
-A dispatch also **arms** the PR, by recording the dispatching user in the status
-comment's marker. Without this the next scheduled run would find the PR unarmed
-and immediately reap the preview a maintainer had just asked for. Arming through
-the marker keeps one rule — *armed means a maintainer said so, in a comment* —
-with `/show-preview` and manual dispatch as two ways of saying it.
+A dispatch also **arms** the PR by adding the `preview` label, and posts a
+comment naming the dispatching user. Without the label the next run would find
+the PR unarmed and immediately reap the preview a maintainer had just asked for.
+One rule holds — *armed means a maintainer put the label there* — with the
+label itself, `/show-preview` and manual dispatch as three ways of doing it.
 
 ## Reviewing in place
 
@@ -332,23 +363,24 @@ anyway to reap closed PRs. `workflow_dispatch` covers the impatient case.
 In practice the latency was worse than the cron suggested: GitHub delays
 scheduled runs well past their interval, and a pull-request build takes up to
 half an hour, so a push to an armed PR could take 40 minutes to reach its
-preview. Two changes (2026-09-28) cut that down without adding a second
-privileged entry point:
+preview, and the publish only edited the status comment, which notifies nobody.
 
-- the schedule runs every 5 minutes instead of 15;
-- `pull_request_target` on `opened`, `reopened` and `synchronize` starts an
-  `await-build` job — read-only token, its own per-PR concurrency group so a
-  newer push cancels the wait — that polls the build of the pushed SHA, but only
-  when the PR already has a live preview. When that build goes green, the same
-  `publish` job runs with `--pr N --if-armed`, in the shared `preview-publish`
-  concurrency group.
+So on 2026-09-28 the schedule was replaced by events. `pull_request_target` and
+`issue_comment` are admitted strictly as signals (see Constraints); the single
+privileged entry point survives as the one `publish` job, and the full-reconcile
+run keeps it simple to reason about — any event on any PR converges every
+preview. What the schedule used to do now happens on:
 
-Each successful publish also posts a new comment naming the commit and URL.
-The status comment is edited in place, and an edit notifies nobody, so without
-it a reviewer following the PR had no way to learn the preview had caught up.
+| Was done by the schedule | Now triggered by |
+|---|---|
+| Publish after a push to an armed PR | `synchronize`, once `await-build` sees the build go green |
+| Publish after arming | `labeled` or a `/show-preview` comment, after `await-build` |
+| Explainer comment | `opened` |
+| Retire a closed or disarmed PR's preview | `closed`, or `unlabeled` for the `preview` label |
+| Delete tombstoned and stale head branches | Any later run |
 
-The explainer still arrives on the next scheduled run rather than on PR open;
-the `pull_request_target` path deliberately does nothing but republish.
+Each successful publish also posts a new comment naming the commit and URL,
+besides editing the status comment, so everyone following the PR is notified.
 
 ## Failure handling
 
@@ -357,7 +389,8 @@ the `pull_request_target` path deliberately does nothing but republish.
 | No successful build for head SHA | Status comment says the preview is waiting on a green build; no branch is touched |
 | Artifact expired | Terminal until the PR is pushed to again — the publisher never rebuilds. Status comment asks for a rebuild; artifact retention is set long enough that this only reaches dormant PRs |
 | Artifact fails validation | Publish is skipped and the run logs why; the branch is left as it was |
-| Force-push to a preview branch fails | Run fails loudly; the next scheduled run retries |
+| Force-push to a preview branch fails | Run fails loudly; the next event on any PR, or a dispatch, retries |
+| Build still running when the PR is armed or pushed to | `await-build` waits for it, up to 50 minutes; past that, the next push, label or dispatch retries |
 | PR closed mid-run | Next run tombstones the preview; the run after deletes the branch |
 | Two runs overlap | Prevented by the concurrency group |
 | Nothing changed since the last publish | The run does nothing for that PR — no push, no comment, no `commits@` mail |
@@ -402,5 +435,5 @@ exceed a handful.
 
 **Arming is per-PR, not per-commit.** Once armed, later commits publish without
 further review — that is the sticky behaviour chosen deliberately, but it means
-arming a PR is a statement of trust in its author, not in a diff. If that ever
-proves too loose, the fix is a label as the armed flag so it can be removed.
+arming a PR is a statement of trust in its author, not in a diff. The label
+(2026-09-28) makes that trust visible on the PR and revocable by removing it.

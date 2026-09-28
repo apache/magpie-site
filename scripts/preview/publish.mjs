@@ -1,6 +1,12 @@
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { resolveArmed } from "./armed.mjs";
+import {
+  resolveArmed,
+  pendingArmingCommands,
+  previewLabel,
+  hasLabel,
+  PUBLISHER_LOGIN,
+} from "./armed.mjs";
 import { planActions } from "./plan.mjs";
 import { staleHeadBranches } from "./stale.mjs";
 import { validateMeta, findUnsafeEntries } from "./validate.mjs";
@@ -16,7 +22,9 @@ import {
 const MARKER = "magpie-preview-status";
 const PUBLISHED_MARKER = "magpie-preview-published";
 const HOWTO_MARKER = "magpie-preview-howto";
-const ARMED_MARKER = "magpie-preview-armed";
+// The publisher's acknowledgement on a /show-preview comment it has turned
+// into the label. See pendingArmingCommands.
+const ACK_REACTION = "rocket";
 const TOMBSTONE_TAG = "[tombstone]";
 
 /**
@@ -69,7 +77,7 @@ export async function run({
   fetchArtifact,
   only = null,
   dispatchedBy = null,
-  arm = true,
+  label = previewLabel(),
 }) {
   let failures = 0;
 
@@ -81,25 +89,62 @@ export async function run({
     throw new Error(`--pr ${only} is not an open pull request`);
   }
 
+  // One permission lookup per login per run, however many PRs it touches.
+  const access = new Map();
+  const hasWriteAccess = async (login) => {
+    if (!access.has(login)) access.set(login, await gh.hasWriteAccess(login));
+    return access.get(login);
+  };
+
+  let labelReady = false;
+  const arm = async (n) => {
+    if (!labelReady) {
+      await gh.ensureLabel(label);
+      labelReady = true;
+    }
+    await gh.addLabel(n, label);
+  };
+
   // Armed state is resolved for EVERY open PR, even when publishing just one:
   // scoping this to the dispatched PR would leave every other preview looking
   // disarmed, and the reap step would tombstone all of them.
+  //
+  // The label is the arming state. A maintainer's /show-preview comment and a
+  // manual dispatch are two ways of putting it there; removing it disarms.
   const armedByPr = new Map();
   for (const pull of openPulls) {
     try {
       const comments = await gh.listComments(pull.number);
-      const { armed } = await resolveArmed({
-        comments,
-        hasWriteAccess: gh.hasWriteAccess,
-      });
+      let labelled = hasLabel(pull, label);
+      let armedHere = false;
 
-      // A manual dispatch leaves a durable, bot-authored arming record. Without
-      // it a dispatched preview reads as unarmed on the next scheduled run and
-      // is tombstoned within one cron interval.
-      armedByPr.set(
-        pull.number,
-        armed || hasBotMarker(comments, ARMED_MARKER, { login: "github-actions[bot]" }),
-      );
+      const pending = await pendingArmingCommands({
+        comments,
+        hasWriteAccess,
+        isAcknowledged: (c) => gh.hasReaction(c.id, ACK_REACTION, PUBLISHER_LOGIN),
+      });
+      // A dispatch is itself the authorisation.
+      if (pending.length || only === pull.number) {
+        if (!labelled) {
+          await arm(pull.number);
+          labelled = true;
+          if (only === pull.number) {
+            await gh.createComment(pull.number, armedBody(dispatchedBy, label));
+          }
+        }
+        armedHere = true;
+        // Acknowledged only after the label is on, so a failure in between
+        // retries on the next run instead of losing the request.
+        for (const c of pending) await gh.addReaction(c.id, ACK_REACTION);
+      }
+
+      const armed = armedHere || (labelled && (await resolveArmed({
+        pull,
+        label,
+        labelEvents: await gh.listLabelEvents(pull.number),
+        hasWriteAccess,
+      })).armed);
+      armedByPr.set(pull.number, armed);
 
       // Announce to humans only. A dependency-bump bot opens many pull
       // requests and reads none of them, so the explainer is noise on its
@@ -107,7 +152,7 @@ export async function run({
       // way: a maintainer who wants a preview of a bot's PR can still ask for
       // one, and it will publish.
       if (!isBotAuthored(pull) && !hasBotMarker(comments, HOWTO_MARKER)) {
-        await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number));
+        await gh.upsertComment(pull.number, HOWTO_MARKER, howtoBody(pull.number, label));
       }
     } catch (err) {
       // One PR's transient failure must not abort every other publish and the
@@ -117,12 +162,6 @@ export async function run({
       failures += 1;
     }
   }
-
-  // A dispatch is itself the authorisation. A run triggered by a push to the
-  // pull request (arm: false) is not: anyone can push to their own PR, so it
-  // publishes only what a maintainer has already armed.
-  const dispatched = only !== null && arm;
-  if (dispatched) armedByPr.set(only, true);
 
   const previewBranches = await gh.listPreviewBranches();
 
@@ -160,7 +199,7 @@ export async function run({
 
   for (const pr of actions.publish) {
     try {
-      const published = await publishOne({
+      await publishOne({
         gh,
         git,
         repo,
@@ -168,11 +207,8 @@ export async function run({
         openPulls,
         pr,
         publishedSha: publishedByBranch.get(previewBranch(pr)) ?? null,
-        force: dispatched && only === pr,
+        force: only === pr,
       });
-      if (published && dispatched && only === pr) {
-        await gh.upsertComment(pr, ARMED_MARKER, armedBody(dispatchedBy));
-      }
     } catch (err) {
       console.error(`preview: publish failed for #${pr}: ${err.message}`);
       failures += 1;
@@ -271,7 +307,7 @@ async function publishOne({
   const headSha = pull.head.sha;
 
   // Nothing has changed since the last publish. Republishing anyway force-pushes
-  // an identical tree on every scheduled run — a commits@ mail and a rewritten
+  // an identical tree on every run — a commits@ mail and a rewritten
   // status comment for a preview nobody touched. A manual dispatch is an
   // explicit request, so it republishes regardless.
   if (!force && publishedSha && headSha.startsWith(publishedSha)) return false;
@@ -405,16 +441,16 @@ const retiredBody = (pr) =>
   `### Preview retired\n\nThe preview for this pull request is no longer published. ` +
   `${previewUrl(pr)} now serves a notice instead.`;
 
-const armedBody = (by) =>
+const armedBody = (by, label) =>
   `### Preview armed by manual dispatch\n\n` +
-  (by ? `@${by} published this preview by dispatching the workflow.` : `This preview was published by manual dispatch.`) +
-  ` It will keep tracking this PR's head commit until the PR closes.`;
+  (by ? `@${by} armed this preview by dispatching the workflow.` : `This preview was armed by manual dispatch.`) +
+  ` The \`${label}\` label now tracks this PR's head commit; remove the label to retire the preview.`;
 
-const howtoBody = (pr) =>
+const howtoBody = (pr, label) =>
   `### Preview this pull request\n\nA committer can publish a live preview of this PR by ` +
-  `commenting \`/show-preview\` on its own line. It will appear at ${previewUrl(pr)} ` +
-  `and then track this PR's head commit until it closes.\n\nStaging takes a few minutes ` +
-  `to pick up each push.`;
+  `adding the \`${label}\` label, or by commenting \`/show-preview\` on its own line, which ` +
+  `adds the label. It will appear at ${previewUrl(pr)} and then track this PR's head commit ` +
+  `until it closes or the label is removed.\n\nStaging takes a few minutes to pick up each push.`;
 
 import { createClient } from "./github.mjs";
 import { createGit } from "./git.mjs";
@@ -435,7 +471,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // digits is accepted, both forms are recognised, and repeating the flag is
   // an error rather than picking the first or last occurrence.
   const args = process.argv.slice(2);
-  const ifArmed = args.includes("--if-armed");
   const prValues = [];
   for (let i = 0; i < args.length; i += 1) {
     const arg = args[i];
@@ -462,10 +497,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     only = Number(raw);
   }
 
-  if (ifArmed && only === null) {
-    console.error("--if-armed requires --pr");
-    process.exit(1);
-  }
 
   const gh = createClient({ repo, token });
   await run({
@@ -474,9 +505,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     repo,
     fetchArtifact: createArtifactFetcher({ gh, repo, token }),
     only,
-    // --if-armed: triggered by a push to the pull request, not by a maintainer.
-    // Publish only when the PR is already armed; never arm or force it.
-    arm: !ifArmed,
     dispatchedBy: process.env.GITHUB_ACTOR ?? null,
   });
 }
