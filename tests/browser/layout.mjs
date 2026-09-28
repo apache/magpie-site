@@ -40,6 +40,12 @@ export function measureLayout() {
     for (const heading of section.querySelectorAll('h1,h2,.lifecycle-heading > h3')) {
       if (!visible(heading) || heading.closest('.workflow-card')) continue;
       const r = heading.getBoundingClientRect(), label = heading.textContent.trim().slice(0,80);
+      const readingIntro = heading.closest('.learning-intro');
+      if (readingIntro) {
+        const prose = readingIntro.querySelector('p').getBoundingClientRect();
+        if (Math.abs(r.left-prose.left) > tolerance || getComputedStyle(heading).textAlign !== 'left') errors.push('unaligned reading introduction');
+        continue;
+      }
       const offset = (r.left + r.right - sectionRect.left - sectionRect.right) / 2;
       if (Math.abs(offset) > tolerance) errors.push(`off-center section heading: ${label} (${offset.toFixed(2)}px)`);
       if (getComputedStyle(heading).textAlign !== 'center') errors.push('section heading text alignment: ' + label);
@@ -72,7 +78,7 @@ export function measureLayout() {
     const heading = scene.closest('.security-workbench')?.querySelector('.security-prompts > :not([aria-hidden=true])');
     const cards = [...scene.querySelectorAll('.story-comparison > .workflow-card')];
     if (!heading || !cards.length) continue;
-    const cardTop = Math.min(...cards.map(card => (card.querySelector('.card-badge') ?? card).getBoundingClientRect().top));
+    const cardTop = Math.min(...cards.map(card => card.getBoundingClientRect().top));
     const minimumGap = parseFloat(getComputedStyle(scene).getPropertyValue('--space-12'));
     if (cardTop - heading.getBoundingClientRect().bottom < minimumGap - tolerance) errors.push('crowded security title and cards');
   }
@@ -101,7 +107,7 @@ export function measureLayout() {
         const size = parseFloat(s.getPropertyValue('--flow-arrow-size'));
         if (!connector.matches('svg.lucide-arrow-right') || Math.abs(r.width-size) > tolerance || Math.abs(r.height-size) > tolerance) errors.push('inconsistent flow connector icon');
         const before = sideBySide ? r.left-a.right : r.top-a.bottom;
-        const nextTop = next.querySelector('.card-badge')?.getBoundingClientRect().top ?? b.top-parseFloat(s.getPropertyValue('--card-badge-size'))/2;
+        const nextTop = b.top;
         const after = sideBySide ? b.left-r.right : nextTop-r.bottom;
         if (Math.abs(before-clearance) > tolerance || Math.abs(after-clearance) > tolerance) errors.push('inconsistent flow connector clearance');
         const offset = sideBySide ? (r.top+r.bottom-a.top-a.bottom)/2 : (r.left+r.right-a.left-a.right)/2;
@@ -131,11 +137,13 @@ export function measureLayout() {
     for (const row of rows.values()) {
       const bottoms = row.map(el => el.getBoundingClientRect().bottom);
       if (!naturalCards && Math.max(...bottoms) - Math.min(...bottoms) > tolerance) errors.push('unequal card bottoms: ' + grid.className);
-      const headings = row.map(el => el.querySelector('.workflow-card-heading')).filter(el => el?.querySelector('.centered-label-text'));
+      const headings = row.map(el => el.querySelector('.workflow-card-heading')).filter(el => el?.querySelector('.workflow-card-title,.centered-label-text'));
       if (headings.length) {
         const contentHeight = Math.max(...headings.map(el => {
           const s = getComputedStyle(el);
-          return el.querySelector('.centered-label-text').getBoundingClientRect().height + parseFloat(s.paddingTop) + parseFloat(s.paddingBottom);
+          const textHeight = el.querySelector('.workflow-card-title,.centered-label-text').getBoundingClientRect().height;
+          const iconHeight = el.querySelector('.card-badge')?.getBoundingClientRect().height ?? 0;
+          return Math.max(textHeight,iconHeight) + parseFloat(s.paddingTop) + parseFloat(s.paddingBottom);
         }));
         if (headings.some(el => el.getBoundingClientRect().height > contentHeight + tolerance)) errors.push('empty space in card heading: ' + grid.className);
       }
@@ -179,6 +187,13 @@ export function measureLayout() {
       const a = label.getBoundingClientRect(), b = heading.getBoundingClientRect();
       if (Math.abs((a.left + a.right) / 2 - (b.left + b.right) / 2) > tolerance) errors.push('off-center card heading: ' + card.className);
     }
+    const title = card.querySelector('.workflow-card-title');
+    if (title && heading) {
+      const a = title.getBoundingClientRect(), b = heading.getBoundingClientRect();
+      const badge = heading.querySelector('.card-badge')?.getBoundingClientRect();
+      const start = badge ? badge.right + parseFloat(getComputedStyle(heading).columnGap) : b.left;
+      if (Math.abs(a.left-start) > tolerance || getComputedStyle(title).textAlign !== 'left') errors.push('unaligned card title');
+    }
     for (const list of card.querySelectorAll('.workflow-checklist')) {
       const a = list.getBoundingClientRect(), b = (heading ?? card).getBoundingClientRect();
       if (Math.abs((a.left+a.right-b.left-b.right)/2) > tolerance) errors.push('off-center card checklist: ' + card.className);
@@ -221,9 +236,17 @@ export function measureLayout() {
     const owner = badge.parentElement;
     if (!visible(owner)) continue;
     const a = badge.getBoundingClientRect(), b = owner.getBoundingClientRect();
-    const label = owner.querySelector('.centered-label-text');
-    if (Math.abs((a.left+a.right-b.left-b.right)/2) > tolerance || Math.abs((a.top+a.bottom)/2-b.top) > tolerance) errors.push('misplaced card badge: ' + owner.className);
-    if (label && a.bottom > label.getBoundingClientRect().top + tolerance) errors.push('card badge overlaps title: ' + owner.className);
+    const label = owner.querySelector('.workflow-card-title,.centered-label-text');
+    const inline = owner.matches('.workflow-card-heading');
+    const position = getComputedStyle(badge).position;
+    if (position === 'absolute' || position === 'fixed' || a.left < b.left-tolerance || a.right > b.right+tolerance || a.top < b.top-tolerance || a.bottom > b.bottom+tolerance) errors.push('misplaced card badge: ' + owner.className);
+    if (inline) {
+      if (Math.abs(a.left-b.left) > tolerance || Math.abs((a.top+a.bottom-b.top-b.bottom)/2) > tolerance) errors.push('misplaced card badge: ' + owner.className);
+    } else if (Math.abs((a.left+a.right-b.left-b.right)/2) > tolerance) errors.push('misplaced card badge: ' + owner.className);
+    if (label) {
+      const t = label.getBoundingClientRect();
+      if (Math.min(a.right,t.right)-Math.max(a.left,t.left) > tolerance && Math.min(a.bottom,t.bottom)-Math.max(a.top,t.top) > tolerance) errors.push('card badge overlaps title: ' + owner.className);
+    }
     for (let parent = owner; parent; parent = parent.parentElement) {
       const s = getComputedStyle(parent), r = parent.getBoundingClientRect();
       if ((/hidden|clip|auto|scroll/.test(s.overflowY) && (a.top < r.top-tolerance || a.bottom > r.bottom+tolerance)) || (/hidden|clip|auto|scroll/.test(s.overflowX) && (a.left < r.left-tolerance || a.right > r.right+tolerance))) errors.push('clipped card badge: ' + owner.className);

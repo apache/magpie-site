@@ -66,7 +66,7 @@ test('all carousel and tab states, keyboard, long copy and text zoom', async ({ 
         await tab.click(); await expect(tab).toHaveAttribute('aria-selected','true'); await checkLayout(page);
         const panel = page.locator('#'+await tab.getAttribute('aria-controls'));
         await checkColumns(panel,columns);
-        if (name === 'Software lifecycle phases') await expect(panel.locator('.workflow-card > .card-badge > svg')).toHaveCount(3);
+        if (name === 'Software lifecycle phases') await expect(panel.locator('.workflow-card .workflow-card-heading > .card-badge > svg')).toHaveCount(3);
       }
       await tabs.last().press('Home'); await expect(tabs.first()).toBeFocused();
       await tabs.first().press('ArrowRight'); await expect(tabs.nth(1)).toBeFocused();
@@ -76,7 +76,7 @@ test('all carousel and tab states, keyboard, long copy and text zoom', async ({ 
   await expect(page.locator('.reel-window')).toHaveAttribute('aria-live','polite');
   await page.setViewportSize({ width:1280, height:1000 });
   await page.evaluate(() => {
-    document.querySelector('.reel-slide:not([inert]) .centered-label-text').textContent = 'A very long maintenance task with unbreakable identifiers: VeryLongProjectAndMaintenanceWorkflowIdentifier';
+    document.querySelector('.reel-slide:not([inert]) .workflow-card-title').textContent = 'A very long maintenance task with unbreakable identifiers: VeryLongProjectAndMaintenanceWorkflowIdentifier';
     const list = document.querySelector('.reel-slide:not([inert]) .workflow-checklist');
     list.append(list.firstElementChild.cloneNode(true));
     document.documentElement.style.fontSize = '200%';
@@ -219,7 +219,7 @@ test('workflow connectors share one icon and breathing room between cards', asyn
   for (const width of [375,1000,1524]) {
     await page.setViewportSize({width,height:1000});
     await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Review',exact:true}).click();
-    for (const selector of ['.reel-slide:not([inert]) .reel-flow','.lifecycle-detail .lifecycle-flow','.learning-grid','.card-flow']) {
+    for (const selector of ['.reel-slide:not([inert]) .reel-flow','.lifecycle-detail .lifecycle-flow','.card-flow']) {
       for (const flow of await page.locator(selector).all()) {
         await expect(flow.locator('.flow-arrow.lucide-arrow-right')).toHaveCount(await flow.locator(':scope > .workflow-card').count()-1);
       }
@@ -254,12 +254,14 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   await expect(page.locator('.example-quote')).not.toContainText(/[“”]/);
   await expect(page.locator('.protection-layer .protection-layer .protection-layer .protection-layer .protected-workspace')).toBeVisible();
   await expect(page.locator('.learning-grid a')).toHaveCount(3);
-  expect(await page.locator('.learning-grid .workflow-card').evaluateAll(cards => cards.map(card => card.dataset.cardTone))).toEqual(['manual','prepared','result']);
+  await expect(page.locator('.learning-grid .learning-path')).toHaveCount(3);
+  await expect(page.locator('.learning-grid .surface-card,.learning-grid .flow-arrow')).toHaveCount(0);
+  await expect(page.locator('.learning-intro img')).toBeVisible();
   for (const flow of await page.locator('.reel-flow,.lifecycle-flow').all()) {
     expect(await flow.locator(':scope > .workflow-card').evaluateAll(cards => cards.map(card => card.dataset.cardTone))).toEqual(['manual','prepared','result']);
   }
   for (const card of await page.locator('.isolation-side').all()) await expect(card.locator('.workflow-card-body > :first-child')).toHaveClass('agent-diagram');
-  await expect(page.locator('.project-fit .workflow-card > .card-badge > svg')).toHaveCount(2);
+  await expect(page.locator('.project-fit .workflow-card .workflow-card-heading > .card-badge > svg')).toHaveCount(2);
   await expect(page.locator('.case-layout .security-walkthrough')).toHaveCount(1);
   const articleOrder = await page.locator('.case-layout').evaluate(el => [...el.children].map(child => child.className));
   expect(articleOrder).toEqual(['case-intro','case-evidence','case-quote','case-walkthrough']);
@@ -279,14 +281,9 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
     await page.setViewportSize({width,height:1000});
     await page.evaluate(theme => localStorage.setItem('magpie-theme',theme),theme); await page.reload();
     await page.evaluate(() => document.fonts.ready); await checkLayout(page);
-    const successColor = await page.locator('.learning-grid [data-card-tone=result]').evaluate(el => getComputedStyle(el).backgroundColor);
-    const storyBand = await page.locator('#airflow').evaluate(el => {
-      const probe = document.createElement('span');
-      probe.style.color = 'color-mix(in srgb,var(--result-bg) 18%,var(--paper))';
-      el.append(probe); const color = getComputedStyle(probe).color; probe.remove(); return color;
-    });
-    await expect(page.locator('#airflow')).toHaveCSS('background-color',storyBand);
-    await expect(page.locator('.isolation-protected')).toHaveCSS('background-color',successColor);
+    for (const section of ['#airflow','#how-it-works','#project-rules','#learning']) await expect(page.locator(section)).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+    await expect(page.locator('.redesign-home > section > .section-wave')).toHaveCount(1);
+    await expect(page.locator('.case-quote')).toHaveCSS('text-align','left');
     const successAccent = await page.locator('.layer-label svg').first().evaluate(el => getComputedStyle(el).color);
     await expect(page.locator('.time-line')).toHaveCSS('stroke',successAccent);
     await expect(page.locator('.saved-time-area')).toHaveCSS('fill',successAccent);

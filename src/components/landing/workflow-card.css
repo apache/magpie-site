@@ -1,9 +1,7 @@
 /* One card anatomy; parent subgrids align headings by content, including wrapping. */
 .workflow-card {
   position:relative;
-  /* Reserve the same top-badge space in every card so mixed rows align,
-     stacked cards do not collide and the carousel cannot crop their badges. */
-  margin-block:var(--card-badge-overhang) 0;
+  margin-block:0;
   margin-inline:auto; width:100%; max-width:var(--card-width);
   display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto;
   align-items:stretch; gap:var(--content-gap);
@@ -12,8 +10,9 @@
 .workflow-card[data-card-tone=manual] { background:var(--manual-bg); color:var(--manual-ink); }
 .workflow-card[data-card-tone=prepared] { background:var(--prepared-bg); color:var(--prepared-ink); }
 .workflow-card[data-card-tone=result] { background:var(--result-bg); color:var(--result-ink); }
-.workflow-card-heading { display:grid; grid-template-columns:minmax(0,1fr); align-items:center; margin:0; padding-top:var(--space-3); font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:center; }
-.workflow-card[data-card-tone=prepared] > :is(.workflow-card-heading,.card-badge) { color:var(--prepared-accent); }
+.workflow-card-heading { display:flex; align-items:center; gap:var(--space-3); margin:0; font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:left; }
+.workflow-card-title { min-width:0; text-wrap:pretty; }
+.workflow-card[data-card-tone=prepared] > .workflow-card-heading { color:var(--prepared-accent); }
 .workflow-card-body { min-width:0; }
 .workflow-card-body > :first-child { margin-top:0; }
 .workflow-card-body > :last-child { margin-bottom:0; }

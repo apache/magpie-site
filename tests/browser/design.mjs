@@ -136,7 +136,7 @@ export function measureDesign() {
       if (s.backgroundColor !== 'rgba(0, 0, 0, 0)' || s.backgroundImage !== 'none' || s.boxShadow !== 'none') errors.push('badge painted as a tile');
       const icon = surface.querySelector(':scope > svg');
       if (icon) {
-        const heading = surface.parentElement.querySelector('.workflow-card-heading');
+        const heading = surface.closest('.workflow-card-heading') ?? surface.parentElement.querySelector('.workflow-card-heading');
         if (heading && getComputedStyle(icon).color !== getComputedStyle(heading).color) errors.push('badge icon differs from its card palette');
         const fill = getComputedStyle(icon).fill;
         if (fill === 'none' || fill === 'rgba(0, 0, 0, 0)') errors.push('badge icon missing fill');

@@ -95,14 +95,16 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   verify both edges. Shared card gaps are 24px on phones and 32px on desktop;
   Headings use 32px between their title and lead; consecutive explanatory blocks
   use 64px (24px and 48px on phones). The stage rail, prompt and cards follow
-  that same rhythm. Security stage titles retain clearance before floating badges.
+  that same rhythm. Security stage titles retain clearance before the comparison cards.
   Heading/body spacing and checklist items use a separate 20px content gap.
   The card checker rejects heading/body gaps that depart from this token.
 - Every visible marketing section heading shares its section's centre axis,
   including headings inside narrower wrappers. Both the box and its text are
   checked. The original Airflow defect came from a more specific `margin`
   shorthand cancelling auto inline margins; shared heading rules now own both
-  axes. Article headings and card headings retain their separate semantics.
+  axes. The learning introduction deliberately aligns left with its prose,
+  including on phones; its illustration does not narrow the phone paragraph.
+  Article headings and card headings retain their separate semantics.
 - Homogeneous card rows (comparisons, learning paths and content catalogues)
   have equal bottom edges and aligned heading/body rows. Flow steps deliberately
   fit their own content and align on a common vertical centre; unlike cards in
@@ -110,8 +112,8 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   diagrams align at the top and also keep their natural heights. Their different
   diagram depths express different access boundaries. Learning links and tool
   metadata align within their respective rows. Card padding equals the
-  shared token on all four sides. Heading text centres in its heading box;
-  its row fits the tallest actual title plus badge clearance, without a fixed
+  shared token on all four sides. Workflow heading text aligns left beside
+  its icon; its row fits the taller of the title and icon, without a fixed
   minimum height. The gate rejects surplus heading space.
 - Workflow cards are capped at 26rem (and the available width); paired layouts
   share this measure instead of filling the entire section. Isolation diagrams and their prose share one 36ch content column. Prose in
@@ -124,12 +126,12 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   and off-centre prose columns, including a taller inactive stage.
   All card flows use the same 28px SVG arrow with one card-gap token of
   clearance on each side (32px desktop, 24px phone). The same rule applies
-  horizontally and between a stacked card and the next badge. Three-card
+  horizontally and between stacked card surfaces. Three-card
   flows stack below 1101px to preserve readable cards and these clearances;
   two-card flows stack below 801px. The checker rejects differing glyphs,
   sizes, positions and clearances, including deliberately broken fixtures.
-  The three learning cards use the same connectors and progress from manual
-  through prepared to result colours, including their icon palettes.
+  The learning guides are open reading columns with aligned headings and links,
+  rather than a second set of colored flow cards. They stack on phones.
   Manual cards use warm orange, Magpie's preparation uses blue, and ready
   results use green in both themes. The checker rejects a different surface
   or text palette, and every hero/lifecycle stage asserts this semantic order.
@@ -167,11 +169,11 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   must fail. Stacked phone lists use natural item heights; matching row heights
   apply only to side-by-side comparisons.
 - Shared label text remains centred with or without icons. Stacked label icons
-  share its axis and cannot overlap text. Card badges straddle the top edge
-  at its midpoint, cannot overlap titles and cannot be clipped by ancestors.
-  Every card reserves the same badge space, keeping mixed rows aligned. Chart
-  phase icons use the same `card-badge` primitive, size and placement rules;
-  missing, shifted, resized or clipped phase badges fail the gate too.
+  share its axis and cannot overlap text. Workflow icons sit in the heading
+  row, aligned beside their title and wholly inside their card. Chart phase
+  icons sit inside each phase header above its label. Both use the same
+  `card-badge` primitive and icon scale. Missing, displaced, overlapping,
+  resized or clipped icons fail the gate; floating absolute badges are rejected.
   The badge wrapper is transparent: the icon silhouette itself carries an
   opaque, softly tinted fill. Painted tile backgrounds/shadows and unfilled
   badge SVGs fail the checker. Small interface icons remain outline glyphs.
@@ -212,11 +214,11 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   distinct from the shafted arrows connecting diagram cards. Fixtures reject
   missing backgrounds, wrong icons and inconsistent anatomy. On desktop, controls
   flank the active card row at its vertical centre in all three sequences. The
-  shared layout accounts for the cards’ reserved badge space. Stacked layouts
+  shared layout measures the card surfaces directly. Stacked layouts
   put controls below the content; dots and documentation CTAs have their own row.
   Geometry checks and a deliberately displaced control cover this contract. Page styles cannot
   override these dimensions.
-- Workflow and documentation/content surface cards share 16px corners, the
+- Workflow and documentation/content surface cards share 14px corners, the
   responsive card-padding token, 20px titles and 16px body text. Cards use fills
   without border strokes, while badge wrappers remain transparent. Controls,
   table rules and diagram
@@ -224,7 +226,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   Documentation,
   installation, charts, demo and content-page titles use the same page-title
   scale. The homepage hero remains a deliberate display-title exception.
-- Cards, chart frames and tables share one two-layer surface-shadow token, with
+- Cards, chart frames and tables share one restrained surface-shadow token, with
   light/dark theme values. Plain list rows and nested protection boundaries stay
   flat so lists and diagrams do not accumulate shadows. The rendered checker rejects missing or locally
   divergent shadows in both themes; fixtures include cards, charts and tables.
@@ -289,7 +291,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   with readable clearance. Phones retain the external legend.
   The underlying measured case-study data remains separate and unchanged.
   The Airflow quotation, chart and security walkthrough form one article in
-  a quiet section wash. There is no enclosing card or stacked-paper decoration
+  the warm page background. There is no enclosing card or stacked-paper decoration
   around the long scroll sequence.
   A general collection heading introduces project stories. Each article has
   its own logo and a plain introductory sentence in the shared lead style, so the first example does not define
@@ -297,10 +299,12 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   before the security walkthrough. There is no repeated chart subtitle or
   competing story link beside the attribution; the chart caption links to
   the story and data.
-  Completed results and the protected agent workspace share the fresh green
-  success palette. The Airflow section uses an 18% wash of that palette over the
-  page surface, so the backdrop does not compete with the story and chart. The chart's with-Magpie curve and recovered-time
-  area use its success accent, including in dark mode. The symbol inside the
+  Completed results and the protected agent workspace share a quiet green
+  tint. The chart uses the neutral surface token, with green reserved for its
+  with-Magpie curve and recovered-time area, including in dark mode. Most
+  homepage sections inherit the page background; only the closing invitation
+  retains a blue band and wave. The story introduction and attributed quotation
+  align left within the chart width, keeping the collection heading distinct. The symbol inside the
   Magpie toolkit inherits its illustration colour through an SVG symbol using
   the original favicon geometry; it does not require a separate dark-mode filter.
 

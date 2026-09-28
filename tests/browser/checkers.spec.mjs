@@ -54,7 +54,7 @@ test('workflow surfaces fit their content instead of the tallest hidden slide', 
 });
 
 test('flow connectors share their icon, position and clearance at every width', async ({page}) => {
-  const card = connector => `<div class="surface-card workflow-card"><span class="card-badge" aria-hidden="true">◇</span><h3 class="workflow-card-heading">A step</h3><div class="workflow-card-body">Work</div>${connector ? '<svg class="lucide lucide-arrow-right flow-arrow" aria-hidden="true" viewBox="0 0 24 24"></svg>' : ''}</div>`;
+  const card = connector => `<div class="surface-card workflow-card"><h3 class="workflow-card-heading"><span class="card-badge" aria-hidden="true">◇</span><span class="workflow-card-title">A step</span></h3><div class="workflow-card-body">Work</div>${connector ? '<svg class="lucide lucide-arrow-right flow-arrow" aria-hidden="true" viewBox="0 0 24 24"></svg>' : ''}</div>`;
   await page.setContent(`<div class="lifecycle-flow">${card(true)}${card(true)}${card(false)}</div>`);
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   for (const width of [375,1000,1524]) {
@@ -251,7 +251,7 @@ test('design checker keeps badges filled within their silhouettes, without paint
 });
 
 test('cards and badges inherit their semantic palette in both themes', async ({page}) => {
-  const card = tone => `<div class="surface-card workflow-card" data-card-tone="${tone}"><span class="card-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /></svg></span><h3 class="workflow-card-heading">A ${tone} card</h3></div>`;
+  const card = tone => `<div class="surface-card workflow-card" data-card-tone="${tone}"><h3 class="workflow-card-heading"><span class="card-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /></svg></span><span class="workflow-card-title">A ${tone} card</span></h3></div>`;
   await page.setContent(`<main class="redesign-home">${['neutral','manual','prepared','result'].map(card).join('')}</main>`);
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/styles/feedback.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   for (const theme of ['light','dark']) {
@@ -297,16 +297,16 @@ test('interface icons share line weight across sizes and SVG coordinate systems'
 });
 
 test('layout checker rejects displaced, clipped and overlapping card badges', async ({page}) => {
-  await page.setContent('<style>*{box-sizing:border-box}.workflow-card{width:400px}</style><div class="surface-card workflow-card"><span class="card-badge" aria-hidden="true">◇</span><h2 class="workflow-card-heading"><span class="centered-label"><span class="centered-label-text">Card title</span></span></h2><div class="workflow-card-body">Content</div></div>');
+  await page.setContent('<style>*{box-sizing:border-box}.workflow-card{width:400px}</style><div class="surface-card workflow-card"><h2 class="workflow-card-heading"><span class="card-badge" aria-hidden="true">◇</span><span class="workflow-card-title">Card title</span></h2><div class="workflow-card-body">Content</div></div>');
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/components/landing/workflow-card.css','src/components/landing/centered-label.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   expect(await page.evaluate(measureLayout)).toEqual([]);
-  await page.locator('.card-badge').evaluate(el => el.style.left = '30%');
+  await page.locator('.card-badge').evaluate(el => el.style.transform = 'translateX(-80px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/misplaced card badge/);
-  await page.locator('.card-badge').evaluate(el => el.removeAttribute('style'));
   await page.locator('.workflow-card').evaluate(el => el.style.overflow = 'hidden');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/clipped card badge/);
   await page.locator('.workflow-card').evaluate(el => el.removeAttribute('style'));
-  await page.locator('.centered-label').evaluate(el => el.style.transform = 'translateY(-40px)');
+  await page.locator('.card-badge').evaluate(el => el.removeAttribute('style'));
+  await page.locator('.workflow-card-title').evaluate(el => el.style.transform = 'translateX(-60px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toMatch(/card badge overlaps title/);
 });
 
@@ -324,19 +324,21 @@ test('layout checker rejects divergent action link spacing and decoration', asyn
 });
 
 test('chart phase badges obey the shared placement rule and cannot disappear', async ({page}) => {
-  await page.setContent('<style>.chart-phases{width:400px;margin-top:40px}.chart-phases>div{position:relative;padding:40px 12px 12px}</style><div class="chart-phases"><div><span class="card-badge" aria-hidden="true">◇</span><span class="centered-label"><span class="centered-label-text">A phase</span></span></div></div>');
+  await page.setContent('<style>.chart-phases{width:400px;margin-top:40px}.chart-phases>div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px}</style><div class="chart-phases"><div><span class="card-badge" aria-hidden="true">◇</span><span class="centered-label"><span class="centered-label-text">A phase</span></span></div></div>');
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/components/landing/centered-label.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   expect(await page.evaluate(measureLayout)).toEqual([]);
   expect(await page.evaluate(measureDesign)).toEqual([]);
   const badge = page.locator('.card-badge');
-  await badge.evaluate(el => el.style.left = '20%');
+  await badge.evaluate(el => el.style.transform = 'translateY(-60px)');
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('misplaced card badge');
   await badge.evaluate(el => { el.removeAttribute('style'); el.style.width = '30px'; });
   expect((await page.evaluate(measureDesign)).join('\n')).toContain('badge size');
   await badge.evaluate(el => el.removeAttribute('style'));
+  await badge.evaluate(el => el.style.transform = 'translateY(-60px)');
   await page.locator('.chart-phases').evaluate(el => el.style.overflow = 'hidden');
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('clipped card badge');
   await page.locator('.chart-phases').evaluate(el => el.removeAttribute('style'));
+  await badge.evaluate(el => el.removeAttribute('style'));
   expect(await page.evaluate(measureLayout)).toEqual([]);
   await badge.evaluate(el => el.remove());
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('chart phase missing shared badge');
@@ -520,8 +522,8 @@ test('workflow blocks have room between the stage rail and its content', async (
   }
 });
 
-test('security title spacing includes the floating badge on phone and desktop', async ({page}) => {
-  await page.setContent('<div class="security-workbench"><div class="security-prompts"><h4>A security report is ready to close</h4></div><div class="security-scenes"><section class="security-scene"><div class="story-comparison"><div class="surface-card workflow-card"><span class="card-badge" aria-hidden="true">◇</span><h4 class="workflow-card-heading">Magpie</h4><div class="workflow-card-body">Review the prepared report</div></div></div></section></div></div>');
+test('security title spacing includes the card surfaces on phone and desktop', async ({page}) => {
+  await page.setContent('<div class="security-workbench"><div class="security-prompts"><h4>A security report is ready to close</h4></div><div class="security-scenes"><section class="security-scene"><div class="story-comparison"><div class="surface-card workflow-card"><h4 class="workflow-card-heading"><span class="card-badge" aria-hidden="true">◇</span><span class="workflow-card-title">Magpie</span></h4><div class="workflow-card-body">Review the prepared report</div></div></div></section></div></div>');
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   for (const width of [375,1524]) {
     await page.setViewportSize({width,height:1000});
@@ -530,5 +532,22 @@ test('security title spacing includes the floating badge on phone and desktop', 
     expect((await page.evaluate(measureLayout)).join('\n')).toContain('crowded security title and cards');
     await page.locator('.security-prompts').evaluate(el => el.removeAttribute('style'));
     expect(await page.evaluate(measureLayout)).toEqual([]);
+  }
+});
+
+
+test('reading introductions align their heading and prose on desktop and phones', async ({page}) => {
+  await page.setContent('<main class="redesign-home"><section class="container"><div class="learning-intro"><img alt="" width="120" height="120"><div class="lifecycle-heading"><h2>Learn with your agent</h2><p>Practical guides for everyday work, with enough room to read the explanation on a phone.</p></div></div></section></main>');
+  for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
+  for (const width of [375,1440]) {
+    await page.setViewportSize({width,height:1000});
+    expect(await page.evaluate(measureLayout)).toEqual([]);
+    await page.locator('h2').evaluate(el => el.style.transform = 'translateX(20px)');
+    expect((await page.evaluate(measureLayout)).join('\n')).toContain('unaligned reading introduction');
+    await page.locator('h2').evaluate(el => el.removeAttribute('style'));
+    if (width < 800) {
+      const sizes = await page.locator('.learning-intro').evaluate(el => ({intro:el.getBoundingClientRect().width,prose:el.querySelector('p').getBoundingClientRect().width}));
+      expect(Math.abs(sizes.intro-sizes.prose)).toBeLessThan(2);
+    }
   }
 });

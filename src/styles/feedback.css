@@ -6,13 +6,13 @@ html[data-theme=dark] {
   --action-bg:#175daf; --action-hover:#124b90;
   --action-soft-bg:#233c59; --action-soft-hover:#2e4c70;
   --tint-blue:#1c2c40; --tint-lavender:#242738;
-  --surface-shadow:0 2px 2px -1px #00000040,0 9px 10px -7px #00000080;
+  --surface-shadow:0 1px 2px #00000024;
 }
 html[data-theme=dark] .redesign-home {
-  --manual-bg:#352720; --manual-ink:#edb59d; --manual-border:#624638;
-  --prepared-bg:#1c2e47; --prepared-ink:#cee0fa;
+  --manual-bg:#292726; --manual-ink:#edb59d; --manual-border:#624e42;
+  --prepared-bg:#1c2937; --prepared-ink:#cee0fa;
   --prepared-border:#3b526f; --prepared-accent:#89b9ff;
-  --result-bg:#173f26; --result-ink:#cbf5d4; --result-border:#42985b; --result-accent:#86efac;
+  --result-bg:#232e29; --result-ink:#c5e5ce; --result-border:#4d795b; --result-accent:#86efac;
 }
 html[data-theme=dark] .theme-moon { display:none; }
 html[data-theme=dark] .theme-sun { display:block; }

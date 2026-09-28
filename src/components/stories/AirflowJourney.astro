@@ -74,9 +74,9 @@ const ticks = [
 <style>
 .airflow-chart-story{--incoming:#b4483d;--time:var(--result-accent);--without:#936000;--chart-rule:color-mix(in srgb,var(--ink) 18%,transparent);display:grid;gap:var(--heading-gap);margin:0 auto;max-width:900px;color:var(--ink)}
 :global(html[data-theme=dark]) .airflow-chart-story{--incoming:#f19b91;--without:#e5bd70}
-.chart-frame{margin-top:var(--card-badge-overhang);border-radius:var(--radius-card);background:color-mix(in srgb,var(--paper) 65%,var(--result-bg))}
+.chart-frame{border-radius:var(--radius-card);background:var(--surface)}
 .chart-phases{display:grid;align-items:stretch;min-height:78px;border-bottom:1px solid var(--chart-rule);color:var(--muted);font-size:var(--text-reading)}
-.chart-phases>div{position:relative;display:flex;align-items:center;padding:calc(var(--card-badge-overhang) + var(--space-3)) var(--space-3) var(--space-3);border-right:1px solid var(--chart-rule)}
+.chart-phases>div{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:var(--space-2);padding:var(--space-4) var(--space-3);border-right:1px solid var(--chart-rule)}
 .chart-phases>div:last-child{border-right:0;border-start-end-radius:var(--radius-card);background:color-mix(in srgb,var(--time) 6%,transparent)}
 .chart-boom .card-badge{color:var(--incoming)}
 .chart-adoption{color:var(--time);font-weight:500}

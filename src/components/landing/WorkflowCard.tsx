@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { ArrowRight, Check, type LucideIcon } from "lucide-react";
-import CenteredLabel from "./CenteredLabel";
 import "./workflow-card.css";
 
 type HeadingLevel = "h2" | "h3" | "h4" | "h5";
@@ -18,11 +17,12 @@ export type WorkflowCardProps = {
   headingLevel?: HeadingLevel;
 };
 
-function CardHeading({ title, level: Heading = "h3" }: {
-  title: ReactNode; level?: HeadingLevel;
+function CardHeading({ title, icon, level: Heading = "h3" }: {
+  title: ReactNode; icon?: ReactNode; level?: HeadingLevel;
 }) {
   return <Heading className="workflow-card-heading">
-    <CenteredLabel>{title}</CenteredLabel>
+    {icon && <span className="card-badge" aria-hidden="true">{icon}</span>}
+    <span className="workflow-card-title">{title}</span>
   </Heading>;
 }
 
@@ -33,8 +33,7 @@ export function Checklist({ items, icon: Icon = Check }: { items: string[]; icon
 export default function WorkflowCard({ title, icon, tone = "neutral", children, work, emphasis, connector, checklistIcon,
   className = "", as: Element = "div", headingLevel = "h3" }: WorkflowCardProps) {
   return <Element className={`surface-card workflow-card ${className}`} data-card-tone={tone}>
-    {icon && <span className="card-badge" aria-hidden="true">{icon}</span>}
-    <CardHeading title={title} level={headingLevel} />
+    <CardHeading title={title} icon={icon} level={headingLevel} />
     <div className="workflow-card-body">
       {work && <Checklist items={work} icon={checklistIcon} />}
       {children}

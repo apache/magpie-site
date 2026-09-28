@@ -22,7 +22,6 @@
   --flow-clearance:var(--card-gap);
   --flow-gap:calc(2 * var(--flow-clearance) + var(--flow-arrow-size));
   --card-badge-size:56px;
-  --card-badge-overhang:calc(var(--card-badge-size) / 2);
   --content-gap:20px;
   --heading-gap:32px;
   --block-gap:64px;
