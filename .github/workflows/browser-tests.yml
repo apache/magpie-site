@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   # Full route coverage (test:browser) in 16 shards, plus the dev-preview suite
-  # (test:dev) as one more matrix entry. ubuntu-slim has one CPU and stops a
+  # (test:dev) in 2 more ("dev 1/2", "dev 2/2"). ubuntu-slim has one CPU and stops a
   # job at 15 minutes, so each shard runs one worker and stays well inside
   # both: measured 1.5-5.4 minutes of tests per shard, 9.3 minutes per job at
   # most, including setup. Keep each shard's tests under 8 minutes; add shards
@@ -38,8 +38,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: ["1/16", "2/16", "3/16", "4/16", "5/16", "6/16", "7/16", "8/16", "9/16", "10/16", "11/16", "12/16", "13/16", "14/16", "15/16", "16/16", "dev"]
-    name: ${{ matrix.suite == 'dev' && 'dev' || format('shard {0}', matrix.suite) }}
+        suite: ["1/16", "2/16", "3/16", "4/16", "5/16", "6/16", "7/16", "8/16", "9/16", "10/16", "11/16", "12/16", "13/16", "14/16", "15/16", "16/16", "dev 1/2", "dev 2/2"]
+    name: ${{ startsWith(matrix.suite, 'dev') && matrix.suite || format('shard {0}', matrix.suite) }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -55,8 +55,8 @@ jobs:
         env:
           SUITE: ${{ matrix.suite }}
         run: |
-          if [ "${SUITE}" = dev ]; then
-            npm run test:dev
-          else
-            npm run test:browser -- --shard="${SUITE}" --workers=1
-          fi
+          case "${SUITE}" in
+            # One spec file imports the others, so shard by test, not by file.
+            "dev "*) npm run test:dev -- --shard="${SUITE#dev }" --fully-parallel ;;
+            *) npm run test:browser -- --shard="${SUITE}" --workers=1 ;;
+          esac
