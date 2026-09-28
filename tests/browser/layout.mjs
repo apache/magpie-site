@@ -65,7 +65,7 @@ export function measureLayout() {
   for (const rail of document.querySelectorAll('.workflow-stages')) {
     const next = rail.nextElementSibling;
     if (!visible(rail) || !next || !visible(next)) continue;
-    const minimum = width <= 800 ? 48 : 64;
+    const minimum = parseFloat(getComputedStyle(rail).getPropertyValue('--block-gap'));
     if (next.getBoundingClientRect().top - rail.getBoundingClientRect().bottom < minimum - tolerance) errors.push('crowded workflow blocks');
   }
   // Measure the visible badge edge, not only the card surface below it.
@@ -89,7 +89,7 @@ export function measureLayout() {
     const cards = [...scene.querySelectorAll('.story-comparison > .workflow-card')];
     if (!heading || !cards.length) continue;
     const cardTop = Math.min(...cards.map(card => card.getBoundingClientRect().top));
-    const minimumGap = parseFloat(getComputedStyle(scene).getPropertyValue('--space-12'));
+    const minimumGap = parseFloat(getComputedStyle(scene).getPropertyValue('--block-gap'));
     if (cardTop - heading.getBoundingClientRect().bottom < minimumGap - tolerance) errors.push('crowded security title and cards');
   }
   // These illustrations are decorative to assistive technology but their

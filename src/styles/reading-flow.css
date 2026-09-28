@@ -41,7 +41,7 @@
 .sequence-container { width:min(calc(var(--content-width) + 2 * 44px + 2 * var(--space-4)),calc(100% - 2 * var(--page-gutter))); }
 .sequence-body { display:grid; grid-template-columns:44px minmax(0,1fr) 44px; align-items:center; gap:var(--space-4); }
 .sequence-content { min-width:0; }
-.sequence-navigation-middle { min-width:0; display:flex; justify-content:center; margin-top:var(--space-8); }
+.sequence-navigation-middle { min-width:0; display:flex; justify-content:center; margin-top:var(--heading-gap); }
 .example-navigation { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; }
 .example-navigation button { display:grid; place-items:center; min-height:44px; color:var(--blue); border:0; background:transparent; padding:10px; border-radius:var(--radius-control); }
 .example-navigation button:hover { background:var(--surface); }
@@ -70,8 +70,9 @@
 .case-quote blockquote { margin:0; font-size:var(--text-lead); line-height:var(--leading-body); text-wrap:balance; }
 .case-quote .quote-person { text-align:left; }
 .workflow-sequence { position:relative; overflow-anchor:none; }
-.workflow-sequence[data-scroll-driven=true] > div { position:sticky; top:var(--scene-top,104px); }
-.software-workbench > .sequence-navigation { margin-top:var(--block-gap); }
+.workflow-sequence[data-scroll-layout=full] > div, .workflow-sequence[data-scroll-layout=content] .workflow-sequence-content { position:sticky; top:var(--scene-top,104px); }
+.workflow-sequence[data-scroll-layout=content] > div { display:contents; }
+.software-workbench .sequence-navigation { margin-top:var(--block-gap); }
 .workflow-stages { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:0; margin:0; }
 .workflow-stages button { position:relative; border:0; border-radius:var(--radius-control); background:none; display:flex; flex-direction:column; align-items:center; gap:12px; min-height:64px; padding:5px 0; color:var(--muted); font-size:var(--text-reading); }
 .workflow-stages button:hover { color:var(--blue); }
@@ -184,4 +185,10 @@
 @media(hover:hover) {
   .section-heading > a > svg { opacity:0; transition:opacity var(--motion-fast); }
   .section-heading > a:is(:hover,:focus-visible) > svg { opacity:1; }
+}
+
+/* A short desktop keeps the same reading sizes and connected silhouettes, with
+   tighter shared spacing. The intro may scroll away; the stages still fit. */
+@media(min-width:1101px) and (max-height:1100px) {
+  .workflow-sequence { --block-gap:var(--space-6); --heading-gap:var(--space-6); --content-gap:var(--space-3); --sequence-puzzle-padding:var(--space-8); --sequence-puzzle-cross-radius:16px; --sequence-puzzle-cross-neck:8px; }
 }

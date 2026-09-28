@@ -267,16 +267,21 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
 - Software skill families and the detailed security example use two independent
   scrolling walkthroughs. Both share `WorkflowStages`: numbered 32px markers,
   selected/completed states, connector lines and keyboard navigation. Each panel
-  pins below the header only when it fits the viewport; scrolling reveals every
-  stage in either direction. The section title and introduction belong inside
-  the pinned panel, so their context remains visible through every stage.
-  Browser checks reject a title that disappears above the viewport.
-  The slide container must not add vertical layout padding that disables
-  progression in a previously fitting viewport. At 1524 × 1180 with normal
-  motion, both walkthroughs must advance through all six stages by wheel
-  scrolling and reverse cleanly, with their heading still visible.
-  Short, narrow and reduced-motion viewports use
-  ordinary page flow with the same stage tabs and round arrow controls.
+  pins below the header when it fits the viewport; scrolling reveals every
+  stage in either direction. A tall desktop pins the title and introduction
+  with the stages. On shorter desktop windows, the introduction scrolls away
+  before the stage controls and content pin. Shared compact spacing keeps body
+  text at its normal reading size, with full puzzle silhouettes and shadows.
+  The introduction's height must never disable a stage area that fits.
+  At 1524 × 1180, 1440 × 900, 1280 × 800 and 1366 × 768 with normal motion, both
+  walkthroughs must advance through all six stages by real wheel scrolling and
+  reverse cleanly. Tabs, complete active card content and next-step controls
+  remain visible below the header; the tall layout also retains the heading.
+  Resizing between these layouts must preserve working scroll and keyboard
+  controls. Narrow, reduced-motion and genuinely too-short viewports (where
+  the stage content itself cannot fit) use ordinary page flow with the same
+  stage tabs and round arrow controls. Never treat a typical laptop window as
+  this fallback merely because the full introduction cannot remain pinned.
   The security walkthrough belongs inside the Airflow case-study article,
   following its result chart on the same sheet. The broader skill families follow
   in their own section. Every family retains its full problem/work/result
@@ -323,9 +328,11 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   loop, hover/focus pause and resume, keyboard and touch selection, and live
   reduced-motion changes. Both walkthroughs exercise all stage tabs, keyboard
   wrapping/Home/End, round previous/next buttons and disabled endpoints.
-  Actual wheel scrolling must reveal every stage and reverse cleanly. Narrow,
-  short and reduced-motion viewports retain usable controls in ordinary page
-  flow. Hover/focus/disabled controls are
+  Actual wheel scrolling must reveal every stage and reverse cleanly in tall
+  and laptop windows, in both development and production builds. Deployment
+  verification repeats the laptop interaction against the published preview.
+  Narrow, reduced-motion and windows too short for the stage content retain
+  usable controls in ordinary page flow. Hover/focus/disabled controls are
   also exercised across homepage, installation, documentation, charts and demo.
 - Broken browser fixtures prove overflow, asymmetric margins, clipped labels,
   inconsistent padding, row misalignment, shifted headings/wrappers, unbalanced

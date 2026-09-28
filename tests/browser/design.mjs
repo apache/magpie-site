@@ -15,7 +15,7 @@ export function measureDesign() {
   const controlRadius = token('--radius-control'), roundRadius = token('--radius-round'), cardRadius = token('--radius-card');
   const badgeSize = token('--card-badge-size'), iconStroke = token('--icon-stroke');
   const displayIconHeight = badgeSize - token('--space-3');
-  const puzzlePadding = token(innerWidth<=1100?'--space-10':'--space-12');
+  const puzzlePadding = token(innerWidth<=1100?'--space-10':'--space-12'), compactPuzzlePadding = token('--space-8');
   const padding = token('--card-padding'), gap = token('--space-2'), title = token('--title-card','fontSize');
   const pageTitle = token('--title-page','fontSize'), leadSize = token('--text-lead','fontSize');
   const sectionPadding = token('--section-padding');
@@ -70,7 +70,8 @@ export function measureDesign() {
   for (const card of document.querySelectorAll('.surface-card,.workflow-card')) {
     if (!visible(card)) continue;
     equal(card,'borderTopLeftRadius',cardRadius,'card shape');
-    const cardPadding=card.parentElement.matches('.puzzle-flow') ? puzzlePadding : padding;
+    const compactSequence=innerWidth>1100 && innerHeight<=1100 && card.closest('.workflow-sequence');
+    const cardPadding=card.parentElement.matches('.puzzle-flow') ? compactSequence ? compactPuzzlePadding : puzzlePadding : padding;
     for (const edge of ['Top','Right','Bottom','Left']) equal(card,'padding'+edge,cardPadding,'card padding');
     for (const heading of card.querySelectorAll('.workflow-card-heading,h2,h3')) if (visible(heading)) {
       equal(heading,'fontSize',title,'card typography');

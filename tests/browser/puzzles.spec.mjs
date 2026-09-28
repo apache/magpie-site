@@ -24,6 +24,14 @@ test('process puzzles mate only through Magpie on desktop and phones',async({pag
   }
 });
 
+test('compact sequence cards keep shared padding and readable text',async({page})=>{
+  await page.setViewportSize({width:1280,height:800}); await page.goto('/');
+  expect(await page.evaluate(measureDesign)).toEqual([]);
+  const card=page.locator('.software-lifecycle [aria-hidden=false] .workflow-card').first();
+  await card.evaluate(el=>el.style.padding='48px');
+  expect((await page.evaluate(measureDesign)).some(error=>error.startsWith('card padding:'))).toBe(true);
+});
+
 test('puzzle checker rejects mismatched joins and matching outside pieces',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await page.goto('/');
   const flow=page.locator('.reel-slide:not([inert]) .puzzle-flow');

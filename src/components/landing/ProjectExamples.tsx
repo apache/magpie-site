@@ -31,18 +31,20 @@ function LifecycleExample({index, active, introduced}: {index:number; active:boo
 
 export function SoftwareLifecycle() {
   const puzzleIntroduced = useRef(false);
-  const {active, scrollDriven, sceneRef, panelRef, select} = useWorkflowSequence(lifecycle.length, "lifecycle-tab-");
-  return <div className="workflow-sequence software-lifecycle" ref={sceneRef} data-scroll-driven={scrollDriven}>
+  const {active, scrollDriven, scrollLayout, sceneRef, panelRef, contentRef, select} = useWorkflowSequence(lifecycle.length, "lifecycle-tab-");
+  return <div className="workflow-sequence software-lifecycle" ref={sceneRef} data-scroll-driven={scrollDriven} data-scroll-layout={scrollLayout}>
     <div className="software-workbench" ref={panelRef}>
       <div className="lifecycle-heading"><SectionHeading id="choose-work-title" target="how-it-works" level="h2">Skills for the work you do every day</SectionHeading><p>Magpie has dozens of skills for fixing bugs, reviewing code, preparing releases, and more. Pick the ones your project needs.</p></div>
-      <WorkflowStages phases={lifecycle} active={active} label="Software lifecycle phases" tabPrefix="lifecycle-tab-" panelPrefix="lifecycle-detail-" select={select} />
-      <SequenceNavigation previousLabel="Previous skill family" nextLabel={active < lifecycle.length - 1 ? `Next skill family: ${lifecycle[active + 1].label}` : "Next skill family"} onPrevious={() => select(active - 1)} onNext={() => select(active + 1)} previousDisabled={active === 0} nextDisabled={active === lifecycle.length - 1} content={
-      <SequenceSlides className="software-scenes" active={active}>{lifecycle.map((phase,index) => <section className="lifecycle-scene" key={phase.label} id={`lifecycle-detail-${index}`} role="tabpanel" aria-labelledby={`lifecycle-tab-${index}`} aria-hidden={active !== index} inert={active !== index} tabIndex={0}>
-        <LifecycleExample index={index} active={active === index} introduced={puzzleIntroduced} />
-      </section>)}</SequenceSlides>
-      }>
-        <a className="button button-soft" href={lifecycle[active].link} target="_blank" rel="noreferrer"><span>Explore {lifecycle[active].label.toLowerCase()} workflows</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a>
-      </SequenceNavigation>
+      <div className="workflow-sequence-content" ref={contentRef}>
+        <WorkflowStages phases={lifecycle} active={active} label="Software lifecycle phases" tabPrefix="lifecycle-tab-" panelPrefix="lifecycle-detail-" select={select} />
+        <SequenceNavigation previousLabel="Previous skill family" nextLabel={active < lifecycle.length - 1 ? `Next skill family: ${lifecycle[active + 1].label}` : "Next skill family"} onPrevious={() => select(active - 1)} onNext={() => select(active + 1)} previousDisabled={active === 0} nextDisabled={active === lifecycle.length - 1} content={
+        <SequenceSlides className="software-scenes" active={active}>{lifecycle.map((phase,index) => <section className="lifecycle-scene" key={phase.label} id={`lifecycle-detail-${index}`} role="tabpanel" aria-labelledby={`lifecycle-tab-${index}`} aria-hidden={active !== index} inert={active !== index} tabIndex={0}>
+          <LifecycleExample index={index} active={active === index} introduced={puzzleIntroduced} />
+        </section>)}</SequenceSlides>
+        }>
+          <a className="button button-soft" href={lifecycle[active].link} target="_blank" rel="noreferrer"><span>Explore {lifecycle[active].label.toLowerCase()} workflows</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a>
+        </SequenceNavigation>
+      </div>
     </div>
   </div>;
 }

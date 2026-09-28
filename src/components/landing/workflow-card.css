@@ -34,16 +34,16 @@
    Only the painted surface is masked; content and focus rings stay intact. */
 .puzzle-flow {
   --puzzle-radius:24px;
-  --puzzle-cross-radius:24px;
+  --puzzle-cross-radius:var(--sequence-puzzle-cross-radius,24px);
   --puzzle-gap:0px;
   --puzzle-neck:12px;
-  --puzzle-cross-neck:12px;
+  --puzzle-cross-neck:var(--sequence-puzzle-cross-neck,12px);
   --puzzle-bleed:calc(var(--puzzle-cross-radius) + var(--puzzle-cross-neck));
   --puzzle-travel:40px;
   --piece-shine-angle:110deg;
   --piece-shine-size:300% 100%;
   --piece-shine-from:100% 0;
-  --card-padding:var(--space-12);
+  --card-padding:var(--sequence-puzzle-padding,var(--space-12));
   --puzzle-shadow:drop-shadow(0 5px 5px var(--shadow-contact)) drop-shadow(0 18px 15px var(--shadow-ambient));
   --flow-gap:var(--puzzle-gap);
   filter:var(--puzzle-shadow);

@@ -2,6 +2,44 @@ import { test, expect } from './fixtures.mjs';
 import { measureLayout } from './layout.mjs';
 
 export function criticalProgressionTests() {
+  for(const viewport of [{width:1524,height:1180},{width:1440,height:900},{width:1280,height:800},{width:1366,height:768}]) test(`both walkthroughs retain wheel progression at ${viewport.width} × ${viewport.height}`,async({page})=>{
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.goto('/');
+    await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
+    await page.evaluate(()=>document.fonts.ready);
+    for(const name of ['security','software']) {
+      const scene=page.locator(`.${name}-workbench`).locator('..'), tabs=scene.getByRole('tab');
+      await expect(scene).toHaveAttribute('data-scroll-driven','true');
+      // Enter from ordinary page scrolling before touching any stage control.
+      await page.mouse.move(viewport.width-10,viewport.height/2);
+      await page.mouse.wheel(0,await scene.evaluate((el,height)=>el.getBoundingClientRect().top-height/3,viewport.height));
+      await expect(tabs.first()).toHaveAttribute('aria-selected','true');
+      await page.mouse.wheel(0,600);
+      await expect(tabs.first()).toHaveAttribute('aria-selected','false');
+      await tabs.first().click(); const start=await page.evaluate(()=>scrollY);
+      await tabs.last().click(); const end=await page.evaluate(()=>scrollY);
+      const step=(end-start)/5;
+      expect(step).toBeGreaterThan(0);
+      await tabs.first().click();
+      await page.mouse.move(viewport.width-10,viewport.height/2);
+      for(const index of [1,2,3,4,5,4,3,2,1,0]) {
+        await page.mouse.wheel(0,index>Number((await scene.getByRole('tab',{selected:true}).getAttribute('id')).split('-').at(-1))?step:-step);
+        await expect(tabs.nth(index)).toHaveAttribute('aria-selected','true');
+        await expect(scene.getByRole('tablist')).toBeInViewport({ratio:1});
+        await expect(scene.locator('[role=tabpanel]:not([inert])')).toBeInViewport({ratio:1});
+        if(viewport.height===1180) await expect(scene.locator('.lifecycle-heading')).toBeInViewport({ratio:1});
+      }
+      expect(await scene.locator('.sequence-window').evaluate(el=>el.scrollLeft)).toBe(0);
+      await tabs.first().focus();
+      await page.keyboard.press('End');
+      await expect(tabs.last()).toHaveAttribute('aria-selected','true');
+      await expect(scene.getByRole('tablist')).toBeInViewport({ratio:1});
+      await expect.poll(()=>page.evaluate(measureLayout)).toEqual([]);
+      await page.screenshot({path:`.builds/visual/progression-${name}-${viewport.width}-${viewport.height}.png`});
+    }
+  });
+
   test('critical progression: content changes animate subtly and respect reduced motion', async ({page}) => {
     await page.setViewportSize({width:1440,height:1000});
     await page.emulateMedia({reducedMotion:'no-preference'});
@@ -25,8 +63,8 @@ export function criticalProgressionTests() {
   test('critical progression: arrows follow the visible sequence without clicking it first', async ({page}) => {
     const widgets = [
       ['.workflow-reel','.reel-dot','aria-pressed'],
-      ['.security-workbench','[role=tab]','aria-selected'],
-      ['.software-workbench','[role=tab]','aria-selected'],
+      ['.security-workbench .workflow-sequence-content','[role=tab]','aria-selected'],
+      ['.software-workbench .workflow-sequence-content','[role=tab]','aria-selected'],
     ];
     for (const mode of [{width:1524,height:1495,motion:'no-preference'},{width:1524,height:700,motion:'no-preference'},{width:375,height:900,motion:'reduce'}]) {
       await page.setViewportSize({width:mode.width,height:mode.height});
@@ -185,7 +223,7 @@ export function criticalProgressionTests() {
         await expect(scene.locator('[role=tabpanel]:not([inert])')).toHaveCount(1);
         await expect(scene.locator('[role=tabpanel]:not([inert])')).toHaveAttribute('id',await tabs.nth(index).getAttribute('aria-controls'));
         await expect(scene.locator('[role=tabpanel]:not([inert])')).toBeVisible();
-        if (await scene.getAttribute('data-scroll-driven') === 'true') {
+        if (await scene.getAttribute('data-scroll-layout') === 'full') {
           const title = scene.locator('.lifecycle-heading > :is(h2,h3)');
           await expect(title).toBeInViewport({ratio:1});
           expect(await title.evaluate(el => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(80);
@@ -231,7 +269,7 @@ export function criticalProgressionTests() {
       await page.mouse.move(1500,800);
       for (let i=1;i<count;i++) { await page.mouse.wheel(0,step); await selected(i); }
       for (let i=count-2;i>=0;i--) { await page.mouse.wheel(0,-step); await selected(i); }
-      for (const mode of [{width:320,height:900,motion:'no-preference'},{width:1524,height:700,motion:'no-preference'},{width:1524,height:1495,motion:'reduce'}]) {
+      for (const mode of [{width:320,height:900,motion:'no-preference'},{width:1524,height:500,motion:'no-preference'},{width:1524,height:1495,motion:'reduce'}]) {
         await page.setViewportSize({width:mode.width,height:mode.height});
         await page.emulateMedia({reducedMotion:mode.motion});
         await expect(scene).toHaveAttribute('data-scroll-driven','false');

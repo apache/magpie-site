@@ -14,37 +14,50 @@ function workflowKeyIndex(event: KeyboardEvent, index: number, count: number) {
 }
 
 // Each independent walkthrough explains itself through scrolling when it fits
-// below the header. Short and reduced-motion viewports retain ordinary flow.
+// below the header. Let the introduction scroll away when only the stage fits;
+// never discard progression merely because its introduction makes it taller.
 export function useWorkflowSequence(count: number, tabPrefix: string) {
   const [active, setActive] = useState(0);
-  const [scrollDriven, setScrollDriven] = useState(false);
+  const [scrollLayout, setScrollLayout] = useState<"full" | "content" | "flow">("flow");
+  const scrollDriven = scrollLayout !== "flow";
   const sceneRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const introHeightRef = useRef(0);
   const stepRef = useRef(220);
   const pinTopRef = useRef(104);
 
   useEffect(() => {
-    const scene = sceneRef.current, panel = panelRef.current;
-    if (!scene || !panel) return;
+    const scene = sceneRef.current, panel = panelRef.current, content = contentRef.current;
+    const intro = panel?.firstElementChild as HTMLElement | null;
+    if (!scene || !panel || !content || !intro) return;
     const media = matchMedia("(min-width: 901px) and (prefers-reduced-motion: no-preference)");
     let frame = 0, driven = false;
     const update = () => {
       if (!driven) return;
-      const distance = pinTopRef.current - scene.getBoundingClientRect().top;
+      const distance = pinTopRef.current - scene.getBoundingClientRect().top - introHeightRef.current;
       setActive(Math.max(0, Math.min(count - 1, Math.round(distance / stepRef.current))));
     };
     const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); };
     const measure = () => {
-      driven = media.matches && panel.offsetHeight + 124 <= innerHeight;
-      setScrollDriven(driven);
-      pinTopRef.current = Math.max(104, (innerHeight - panel.offsetHeight + 80) / 2);
+      const introHeight = intro.offsetHeight + parseFloat(getComputedStyle(intro).marginBottom);
+      const fullHeight = introHeight + content.offsetHeight;
+      const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 80;
+      const available = innerHeight - headerHeight - 32;
+      const layout = !media.matches ? "flow" : fullHeight <= available ? "full" : content.offsetHeight <= available ? "content" : "flow";
+      driven = layout !== "flow";
+      setScrollLayout(layout);
+      introHeightRef.current = layout === "content" ? introHeight : 0;
+      const pinnedHeight = layout === "content" ? content.offsetHeight : fullHeight;
+      pinTopRef.current = Math.max(headerHeight + 16, (innerHeight - pinnedHeight + headerHeight) / 2);
       scene.style.setProperty("--scene-top", `${pinTopRef.current}px`);
       stepRef.current = Math.min(260, Math.max(180, innerHeight * .22));
-      scene.style.height = driven ? `${panel.offsetHeight + stepRef.current * (count - .5)}px` : "auto";
+      scene.style.height = driven ? `${fullHeight + stepRef.current * (count - .5)}px` : "auto";
       update();
     };
     const observer = new ResizeObserver(measure);
-    observer.observe(panel);
+    observer.observe(intro);
+    observer.observe(content);
     media.addEventListener("change", measure);
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", schedule, {passive:true});
@@ -63,10 +76,10 @@ export function useWorkflowSequence(count: number, tabPrefix: string) {
   }, [active, tabPrefix]);
   const select = (index: number) => {
     setActive(index);
-    if (scrollDriven && sceneRef.current) scrollTo({top:sceneRef.current.getBoundingClientRect().top + scrollY - pinTopRef.current + index * stepRef.current, behavior:"instant"});
+    if (scrollDriven && sceneRef.current) scrollTo({top:sceneRef.current.getBoundingClientRect().top + scrollY + introHeightRef.current - pinTopRef.current + index * stepRef.current, behavior:"instant"});
   };
-  useWorkflowKeyboard(panelRef, active, count, select, '[role="tab"]');
-  return {active, scrollDriven, sceneRef, panelRef, select};
+  useWorkflowKeyboard(contentRef, active, count, select, '[role="tab"]');
+  return {active, scrollDriven, scrollLayout, sceneRef, panelRef, contentRef, select};
 }
 
 // Scrolling does not move DOM focus. Let the sequence in view take over from
