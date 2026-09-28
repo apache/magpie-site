@@ -292,7 +292,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   a quiet section wash. There is no enclosing card or stacked-paper decoration
   around the long scroll sequence.
   A general collection heading introduces project stories. Each article has
-  its own logo and subordinate outcome title in the shared heading style, so the first example does not define
+  its own logo and a plain introductory sentence in the shared lead style, so the first example does not define
   the whole section. The quotation and its attribution follow the chart,
   before the security walkthrough. There is no repeated chart subtitle or
   competing story link beside the attribution; the chart caption links to

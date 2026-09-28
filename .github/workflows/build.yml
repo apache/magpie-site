@@ -25,6 +25,10 @@ jobs:
   lint:
     runs-on: ubuntu-slim
     timeout-minutes: 10
+    env:
+      # Oxc raw transfer reserves a 6 GiB buffer and fails on this small runner.
+      # Use the normal parser with the same checks: https://knip.dev/reference/known-issues#raw-transfer-memory-errors
+      KNIP_DISABLE_RAW_TRANSFER: "1"
     permissions:
       contents: read
     steps:

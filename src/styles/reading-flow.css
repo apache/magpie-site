@@ -19,8 +19,8 @@
 .redesign-home :is(.lifecycle-heading,.setup-explanation) { max-width:850px; margin:0 auto var(--block-gap); text-align:center; }
 /* Shared section titles own both axes; a spacing shorthand must not cancel
    centering when a title uses a narrower reading measure. */
-.redesign-home :is(.lifecycle-heading :is(h2,h3),.setup-explanation h2,.case-heading,.case-intro h3) { font-size:var(--title-section); line-height:var(--leading-heading); letter-spacing:-.04em; margin-block:0 var(--heading-gap); margin-inline:auto; text-wrap:balance; }
-.redesign-home :is(.lifecycle-heading p,.setup-explanation p) { font-size:var(--text-lead); color:var(--muted); line-height:1.6; margin:0; }
+.redesign-home :is(.lifecycle-heading :is(h2,h3),.setup-explanation h2,.case-heading) { font-size:var(--title-section); line-height:var(--leading-heading); letter-spacing:-.04em; margin-block:0 var(--heading-gap); margin-inline:auto; text-wrap:balance; }
+.redesign-home :is(.lifecycle-heading p,.setup-explanation p,.case-intro p) { font-size:var(--text-lead); color:var(--muted); line-height:1.6; margin:0; }
 .hero-copy { max-width:1000px; margin-inline:auto; text-align:center; }
 #hero-title { font-size:clamp(2.25rem,5vw,4rem); font-weight:480; line-height:1.12; letter-spacing:-.06em; margin:0; }
 #hero-question { display:grid; text-wrap:balance; color:var(--blue); }
@@ -70,7 +70,7 @@
 .case-walkthrough { padding-top:var(--block-gap); border-top:1px solid var(--line); }
 .case-evidence { width:100%; max-width:916px; margin-inline:auto; }
 .case-layout { --title-section:var(--title-detail); font-size:var(--text-reading); display:grid; gap:var(--block-gap); }
-.case-intro { --heading-gap:0px; display:grid; justify-items:center; gap:var(--space-8); max-width:900px; margin-inline:auto; }
+.case-intro { display:grid; justify-items:center; gap:var(--heading-gap); max-width:900px; margin-inline:auto; text-align:center; text-wrap:balance; }
 .case-quote { display:grid; gap:var(--heading-gap); width:100%; max-width:900px; margin-inline:auto; text-align:center; }
 .case-attribution { display:flex; align-items:center; justify-content:center; gap:var(--heading-gap); flex-wrap:wrap; }
 .airflow-brand { width:120px; height:auto; }
