@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import { HIDDEN_DOCS } from "../../lib/site";
+import { HIDDEN_DOCS, SOURCE_REPO } from "../../lib/site";
 
 export async function getStaticPaths() {
   // HIDDEN_DOCS lives in src/lib/site.ts so llms.txt hides the same pages.
@@ -28,8 +28,15 @@ const title =
   entry.data.title ??
   firstH1(entry.body) ??
   entry.id.split("/").pop()?.replace(/\.md$/, "").replace(/-/g, " ");
+// Docs markdown is synced from apache/magpie/docs, so edits go to that repo.
+// filePath keeps the original name and case (README.md); entry.id is
+// lowercased by the glob loader and loses its extension.
+const docRelPath = entry.filePath
+  ? entry.filePath.replace(/^.*\/content\/docs\//, "")
+  : `${entry.id.replace(/\.md$/, "")}.md`;
+const editUrl = `${SOURCE_REPO}/edit/main/docs/${docRelPath}`;
 ---
 
-<DocsLayout title={title} currentSlug={entry.id.replace(/\.md$/, "")} headings={headings}>
+<DocsLayout title={title} currentSlug={entry.id.replace(/\.md$/, "")} headings={headings} editUrl={editUrl}>
   <Content />
 </DocsLayout>

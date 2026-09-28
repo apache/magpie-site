@@ -11,12 +11,17 @@ interface Props {
   /** Site-root-relative path to the social-share (Open Graph) image.
    *  Defaults to the branded 1200×630 card. */
   image?: string;
+  /** GitHub edit link for this page's source, shown as "Suggest a change".
+   *  The review overlay, where it runs, hides this button and offers the
+   *  same link from its own menu. */
+  editUrl?: string;
 }
 
 const {
   title = "Apache Magpie | Give maintainers time back",
   description = "AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands.",
   image = "/og-image.png",
+  editUrl,
 } = Astro.props;
 
 // Absolute URLs for social-share (Open Graph / Twitter) tags. Scrapers require
@@ -89,6 +94,15 @@ const ogImage = new URL(
   </head>
   <body>
     <slot />
+    {editUrl && (
+      <a href={editUrl} target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+        </svg>
+        <span class="suggest-change-label">Suggest a change</span>
+      </a>
+    )}
     <script>
       import { trackScrollLocation } from '../lib/scroll-location';
       trackScrollLocation();
@@ -102,3 +116,29 @@ const ogImage = new URL(
 
   </body>
 </html>
+
+<style>
+  .suggest-change {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: var(--radius-round);
+    background: var(--action-bg);
+    color: var(--action-ink);
+    font-size: var(--text-small);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    box-shadow: var(--surface-shadow);
+  }
+  .suggest-change:hover { background: var(--action-hover); }
+  @media (max-width: 640px) {
+    .suggest-change { right: 1rem; bottom: 1rem; padding: 0.625rem; }
+    .suggest-change-label { display: none; }
+  }
+</style>

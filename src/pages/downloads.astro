@@ -1,5 +1,6 @@
 ---
 import ContentLayout from "../layouts/ContentLayout.astro";
+import { siteEditUrl } from "../lib/site";
 
 
 // ── Release configuration ────────────────────────────────────────────────
@@ -54,7 +55,7 @@ const prettyDate = release.date
     })
   : null;
 ---
-<ContentLayout title="Downloads" description="Signed source releases of Apache Magpie, distributed through the Apache mirror network.">
+<ContentLayout editUrl={siteEditUrl("src/pages/downloads.astro")} title="Downloads" description="Signed source releases of Apache Magpie, distributed through the Apache mirror network.">
   <section id="install"><h2>Install Magpie</h2><p>The marketplace is the usual starting point. Use the signed source archive when you need an offline installation or a verified ASF release.</p><div class="link-row"><a href="/start">Install in your agent </a><a href="/docs/quick-start/other-install-methods">Other installation methods </a></div></section>
 
   <section id="release" class="surface-card release-card"><h2>Apache Magpie {release.version}<small>{prettyDate}</small></h2><a class="button" href={dl.mirror} target="_blank" rel="noreferrer">Download source ZIP</a><div class="link-row"><a href={dl.asc} target="_blank" rel="noreferrer">PGP signature</a><a href={dl.sha512} target="_blank" rel="noreferrer">SHA-512 checksum</a><a href={dl.keys} target="_blank" rel="noreferrer">Signing keys</a></div></section>

@@ -1,8 +1,9 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
 import data from '../data/tools.json';
+import { siteEditUrl } from '../lib/site';
 ---
-<ContentLayout title="How Magpie fits together" description="Skills describe the work. Tools connect that work to your agent, services, and project conventions.">
+<ContentLayout editUrl={siteEditUrl('src/pages/architecture.astro')} title="How Magpie fits together" description="Skills describe the work. Tools connect that work to your agent, services, and project conventions.">
   <div class="arch-flow" aria-label="Skills request capabilities implemented by tools"><div class="surface-card"><h3>Skills</h3><p>The workflow: what to check, prepare, and bring back for approval.</p></div><div class="surface-card"><h3>Capabilities</h3><p>The interface a skill needs, such as reading an issue or drafting mail.</p></div><div class="surface-card"><h3>Tools</h3><p>The implementation for your tracker, model, or other service.</p></div></div>
   <section id="vendor-neutrality"><h2>Choose your tools without rewriting the workflow</h2><p>Skills ask for a capability rather than a named vendor. Adapters implement the interface for each backend, so your project can change its tools while keeping the workflow.</p><div class="link-row"><a href="/docs/vendor-neutrality">Vendor neutrality </a><a href="/tools">Browse tools </a></div></section>
   <section id="organizations"><h2>Keep your project’s conventions</h2><p>Organization profiles supply shared governance vocabulary and tool defaults. Apache and independent projects have starting profiles; other foundations and teams can provide their own.</p><div class="link-row"><a href="/docs/extending">Extend Magpie </a><a href="https://github.com/apache/magpie/tree/main/organizations" target="_blank" rel="noreferrer">Organization profiles </a></div></section>

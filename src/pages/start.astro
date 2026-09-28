@@ -4,6 +4,7 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import StartGuide from '../components/landing/StartGuide';
 import type { InstallOption } from '../components/landing/StartGuide';
 import '../styles/start.css';
+import { siteEditUrl } from '../lib/site';
 
 // Keep executable examples tied to the synced framework instructions.
 const install = await getEntry('docs', 'setup/marketplace-install');
@@ -21,7 +22,7 @@ const agents: InstallOption[] = [
   { id: 'copilot', name: 'VS Code / GitHub Copilot', where: 'In VS Code’s agent plugin installation flow, add this repository.', commands: commandFor('VS Code / GitHub Copilot'), detail: 'VS Code loads Magpie as an agent plugin package. You can also add apache/magpie as a marketplace and select individual workflow families.', verify: 'Then open your project and continue with the setup request below.', guide: '/docs/setup/marketplace-install#vs-code--github-copilot' },
 ];
 ---
-<ContentLayout title="Start using Magpie in your own agent" description="Install it for yourself, prepare your workspace, and try one workflow. Your team does not need to adopt Magpie for you to begin.">
+<ContentLayout editUrl={siteEditUrl('src/pages/start.astro')} title="Start using Magpie in your own agent" description="Install it for yourself, prepare your workspace, and try one workflow. Your team does not need to adopt Magpie for you to begin.">
   <StartGuide agents={agents} client:load />
   <p>Want to explore first? <a href="/demo">Try a simulated maintainer session</a>.</p>
   <noscript><p>The Claude Code instructions are shown above. <a href="/docs/setup/marketplace-install">Find installation instructions for another agent</a>.</p></noscript>

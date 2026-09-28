@@ -25,6 +25,8 @@ export const SITE_DESCRIPTION =
   "AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance.";
 export const SOURCE_REPO = "https://github.com/apache/magpie";
 export const SITE_REPO = "https://github.com/apache/magpie-site";
+/** GitHub's editor for a file of this site, for the "Suggest a change" link. */
+export const siteEditUrl = (path: string) => `${SITE_REPO}/edit/main/${path}`;
 export const DEV_LIST = "dev@magpie.apache.org";
 
 /**

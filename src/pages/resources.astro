@@ -1,5 +1,6 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import { siteEditUrl } from '../lib/site';
 const resources = [
   ['Get started', 'Install Magpie in your own workspace.', '/start'],
   ['Working with agents', 'A practical introduction for maintainers.', '/docs/education/readme'],
@@ -11,4 +12,4 @@ const resources = [
   ['Agentic modes', 'Understand the maturity of each way of working.', '/docs/modes'],
 ];
 ---
-<ContentLayout title="Learn and extend" description="Practical guides for using Magpie and making it your own."><div class="resource-list">{resources.map(([title,description,href])=><a href={href}><span><strong>{title}</strong><small>{description}</small></span></a>)}</div></ContentLayout>
+<ContentLayout editUrl={siteEditUrl('src/pages/resources.astro')} title="Learn and extend" description="Practical guides for using Magpie and making it your own."><div class="resource-list">{resources.map(([title,description,href])=><a href={href}><span><strong>{title}</strong><small>{description}</small></span></a>)}</div></ContentLayout>

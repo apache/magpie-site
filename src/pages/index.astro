@@ -10,8 +10,9 @@ import HeroWorkflows from "../components/landing/HeroWorkflows";
 import BrandName from "../components/landing/BrandName";
 import SectionHeading from "../components/landing/SectionHeading";
 import MoreWays from "../components/landing/MoreWays.astro";
+import { siteEditUrl } from "../lib/site";
 ---
-<BaseLayout title="Apache Magpie | Software maintenance, automated" description="Ready-to-use agent workflows for code reviews, bug fixes, security, releases, repository upkeep, and contributor onboarding.">
+<BaseLayout editUrl={siteEditUrl("src/pages/index.astro")} title="Apache Magpie | Software maintenance, automated" description="Ready-to-use agent workflows for code reviews, bug fixes, security, releases, repository upkeep, and contributor onboarding.">
   <SiteHeader homepage />
   <main id="main-content" tabindex="-1" class="redesign-home">
     <section id="overview" class="hero hero-overview container sequence-container" aria-labelledby="hero-title">

@@ -2,6 +2,7 @@
 import { CardHeading } from "../../components/landing/WorkflowCard";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { ShieldCheck, GitPullRequest, Bug, PackageCheck, ArrowRight } from "lucide-react";
+import { siteEditUrl } from "../../lib/site";
 const workflows = [
   { title: "Security reports", description: "Assess, coordinate, fix, and disclose.", href: "/docs/security/readme", icon: ShieldCheck },
   { title: "Pull requests", description: "Triage the queue and prepare reviews.", href: "/docs/pr-management/readme", icon: GitPullRequest },
@@ -10,7 +11,7 @@ const workflows = [
 ];
 const more = [["Repository health", "/docs/repo-health/readme"], ["Mentoring", "/docs/mentoring/readme"], ["Contributor growth", "/docs/contributor-growth/readme"], ["Pairing", "/docs/pairing/readme"], ["Tools & adapters", "/tools"], ["Extending Magpie", "/docs/extending"]];
 ---
-<DocsLayout title="Introduction" currentSlug="" headings={[{depth: 2, slug: "workflows", text: "Choose a workflow"}, {depth: 2, slug: "understand", text: "Understand the foundations"}]}>
+<DocsLayout editUrl={siteEditUrl("src/pages/docs/index.astro")} title="Introduction" currentSlug="" headings={[{depth: 2, slug: "workflows", text: "Choose a workflow"}, {depth: 2, slug: "understand", text: "Understand the foundations"}]}>
   <h1>Documentation</h1>
   <p class="docs-lead">Magpie is a collection of AI agent skills for open-source maintainers. Use it to prepare reviews, triage reports, and move work forward with your judgment at every step.</p>
   <a href="/start" class="button button-soft">Install Magpie</a>

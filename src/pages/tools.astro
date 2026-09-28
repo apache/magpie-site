@@ -2,10 +2,11 @@
 import { toolSummaries } from '../lib/tool-summaries';
 import ContentLayout from '../layouts/ContentLayout.astro';
 import { buildToolsView } from '../lib/tools-view';
+import { siteEditUrl } from "../lib/site";
 const plainDescription = (text: string) => text.replace(/`([^`]+)`/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1');
 const { tools, contractList, substrateList, vendorChips, orgChips, stateBadge } = buildToolsView();
 ---
-<ContentLayout title="Tools" description="Find the adapters and utilities that connect Magpie to the services you use." wide>
+<ContentLayout editUrl={siteEditUrl("src/pages/tools.astro")} title="Tools" description="Find the adapters and utilities that connect Magpie to the services you use." wide>
   <div class="tool-filters" role="search" aria-label="Filter tools">
     <input class="field-control" type="search" id="tool-query" aria-label="Search tools" placeholder="Search tools…" />
     <select class="field-control" id="tool-capability" aria-label="Filter by capability"><option value="">All capabilities</option><optgroup label="Contracts">{contractList.map(c=><option value={`contract:${c.key}`}>{c.key}</option>)}</optgroup><optgroup label="Low-level capabilities">{substrateList.map(c=><option value={`substrate:${c.key}`}>{c.key}</option>)}</optgroup></select>
