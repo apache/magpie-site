@@ -8,39 +8,48 @@
   "scripts": {
     "test": "node --test \"scripts/**/*.test.mjs\"",
     "sync-docs": "bash scripts/sync-docs.sh",
-    "sync-community": "node scripts/sync-community.mjs",
     "prebuild": "npm run sync-docs",
     "dev": "bash scripts/dev.sh",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "astro": "ASTRO_TELEMETRY_DISABLED=1 astro"
+    "astro": "ASTRO_TELEMETRY_DISABLED=1 astro",
+    "build:local": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "check:types": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check:unused": "knip --no-progress",
+    "check:styles": "node scripts/quality/check-styles.mjs",
+    "check:built": "node scripts/quality/check-built.mjs",
+    "hooks:verify": "node scripts/quality/verify-hooks.mjs",
+    "check:fast": "npm run check:unused && npm run check:styles && npm run check:types && npm test",
+    "test:browser": "node scripts/quality/browser.mjs",
+    "test:dev": "ASTRO_TELEMETRY_DISABLED=1 playwright test --config playwright.dev.config.mjs",
+    "check": "npm run check:fast && npm run test:browser && npm run test:dev"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
-    "@fontsource/inter": "^5.3.0",
-    "@fontsource/jost": "^5.3.0",
-    "astro": "^7.3.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "motion": "^13.4.0",
-    "radix-ui": "^1.6.7",
-    "shadcn": "^4.21.0",
-    "tailwind-merge": "^3.7.0",
-    "tw-animate-css": "^1.4.0"
+    "astro": "^7.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-satteri": "0.4.1",
     "@astrojs/react": "^6.0.6",
-    "@astrojs/sitemap": "^3.7.4",
+    "@axe-core/playwright": "^4.13.0",
     "@babel/core": "^8.0.6",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "cheerio": "^1.2.0",
+    "html-validate": "^11.16.0",
+    "knip": "^6.38.0",
     "lucide-react": "^1.47.0",
+    "postcss": "^8.5.28",
+    "postcss-selector-parser": "^7.1.6",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "satteri": "0.10.5",
     "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "@astrojs/sitemap": "^3.7.4"
   }
 }

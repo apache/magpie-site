@@ -108,21 +108,6 @@ node "$(dirname "$0")/rewrite-doc-links.mjs" "$DEST" "${SITE_BASE:-/}"
 count=$(find "$DEST" -name '*.md' | wc -l)
 echo "✓ Synced $count markdown files into $DEST"
 
-COUNTS_OUT="$(dirname "$0")/../src/data/skill-counts.json"
-echo "→ Generating skill-family counts → $COUNTS_OUT"
-mkdir -p "$(dirname "$COUNTS_OUT")"
-if [ -d "$TMP/skills" ]; then
-  node "$(dirname "$0")/gen-skill-counts.mjs" "$TMP/skills" "$COUNTS_OUT"
-else
-  echo "⚠ no skills/ in framework checkout; leaving existing $COUNTS_OUT untouched"
-fi
-
-# Guard: every family now in skill-counts.json has a card on the landing page.
-# Runs right after the counts regenerate, so a newly-added upstream family
-# (a new `family:` value) fails the sync unless its landing card is added too.
-echo "→ Checking every skill family has a landing-page card"
-python3 "$(dirname "$0")/check-landing-families.py"
-
 TOOLS_OUT="$(dirname "$0")/../src/data/tools.json"
 echo "→ Generating Tools & Capabilities summary → $TOOLS_OUT"
 if [ -d "$TMP/tools" ]; then
@@ -131,10 +116,5 @@ else
   echo "⚠ no tools/ in framework checkout; leaving existing $TOOLS_OUT untouched"
 fi
 
-# Now that the education chapters are synced in, verify every one of them is
-# linked from the landing page (and the landing links no page that vanished).
-# This runs here — not as a standalone prek hook — because the docs are pulled
-# from apache/magpie and gitignored, so this is the one place they are
-# guaranteed present (locally on `npm run sync-docs`, and in CI's build job).
-echo "→ Checking every education chapter is linked on the landing page"
-python3 "$(dirname "$0")/check-landing-education.py"
+# Public route reachability and links are checked against the entire build by
+# npm run check:built, including generated education and skill-family pages.

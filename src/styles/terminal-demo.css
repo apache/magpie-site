@@ -1,0 +1,33 @@
+/* The simulated terminal is deliberately dark in either site theme. */
+.t-demo-page { background:var(--paper); color:var(--ink); }
+.t-demo-main { padding-block:var(--page-padding); }
+.t-demo-intro { display:flex; align-items:end; justify-content:space-between; gap:var(--space-8); margin-bottom:var(--space-8); }
+.t-demo-intro span { font-size:.75rem; letter-spacing:.1em; }
+.t-demo-intro h1 { margin-top:var(--space-4); }
+.t-demo-intro p { max-width:360px; line-height:1.65; color:var(--muted); }
+.t-window { --paper:var(--code-bg); --blue:var(--code-ink); --line:var(--code-line); --surface:#243447; background:var(--code-bg); color:var(--code-ink); border:1px solid var(--code-line); border-radius:var(--radius-card); overflow:hidden; }
+.t-bar { display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:space-between; border-bottom:1px solid #334053; padding:16px; font:12px ui-monospace,monospace; color:#9facbe; }
+.t-prompt { color:#c6d9ff; }
+.t-muted { color:#a5b2c6; }
+.t-result { color:#e5eaf4; }
+.t-gate { color:#ffdb9c; }
+.t-transcript { height:min(46vh,460px); min-height:260px; overflow-y:auto; padding:var(--card-padding); font:14px/1.7 ui-monospace,monospace; }
+.t-transcript pre { white-space:pre-wrap; overflow-wrap:anywhere; margin:0 0 22px; font:inherit; }
+.t-suggestions { padding:12px 16px; border-top:1px solid #334053; display:flex; gap:8px; flex-wrap:wrap; }
+.t-prompt-form { display:flex; align-items:center; gap:12px; padding:16px; border-top:1px solid #334053; }
+.t-prompt-form label { color:#87aaff; font-size:22px; }
+.t-prompt-form input { flex:1; min-width:0; background:transparent; color:#fff; border:0; font:14px ui-monospace,monospace; padding:10px 3px; }
+.t-prompt-form input::placeholder { color:#9facbe; }
+.t-demo-disclaimer { font-size:.875rem; color:var(--muted); margin-top:18px; }
+.t-window :focus-visible { outline-color:#87aaff; outline-offset:-2px; }
+.t-codex-startup { border:1px solid #596473; border-radius:var(--radius-control); padding:16px; width:fit-content; max-width:100%; margin-bottom:26px; color:#e5eaf4; font:13px/1.7 ui-monospace,monospace; overflow-wrap:anywhere; }
+.t-codex-startup strong { display:block; margin-bottom:15px; font-size:15px; font-weight:600; }
+.t-codex-startup strong > span { color:#fff; }
+.t-codex-startup div > span { display:inline-block; color:#9facbe; margin-right:8px; }
+.t-codex-startup small { color:#9facbe; font-size:11px; margin-left:8px; font-weight:400; }
+.t-codex-startup div small { color:#a8caff; }
+@media(max-width:700px) {
+  .t-demo-intro { flex-direction:column; align-items:flex-start; gap:16px; }
+  .t-transcript { font-size:12px; }
+  .t-prompt-form { padding:12px; gap:8px; }
+}

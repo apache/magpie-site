@@ -1,0 +1,25 @@
+.centered-label {
+  --label-icon-size:56px;
+  --label-icon-gap:12px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  align-items:center;
+  width:100%;
+  min-width:0;
+  text-align:center;
+}
+.centered-label[data-icon=true] {
+  grid-template-columns:var(--label-icon-size) minmax(0,1fr) var(--label-icon-size);
+  column-gap:var(--label-icon-gap);
+}
+.centered-label-icon {
+  display:grid;
+  place-items:center;
+  justify-self:end;
+  width:var(--label-icon-size);
+  height:var(--label-icon-size);
+}
+.centered-label .centered-label-icon > svg { display:block;width:100%;height:100%; }
+.centered-label-text { min-width:0;text-align:center;text-wrap:balance; }
+.centered-label[data-icon=true][data-stacked=true] { grid-template-columns:minmax(0,1fr);justify-items:center;gap:6px; }
+.centered-label[data-stacked=true] > .centered-label-icon { justify-self:center; }

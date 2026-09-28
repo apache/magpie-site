@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "entry": [
+    "scripts/check-astro-spaces.mjs",
+    "scripts/gen-tools.mjs",
+    "scripts/rewrite-doc-links.mjs",
+    "scripts/sync-tool-docs.mjs",
+    "scripts/gen-skill-tokens.mjs"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx,astro,css}",
+    "scripts/**/*.{mjs,js}",
+    "tests/**/*.mjs",
+    "*.{mjs,ts}"
+  ],
+  "ignoreExportsUsedInFile": true
+}

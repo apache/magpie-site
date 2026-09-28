@@ -1,0 +1,40 @@
+---
+import { ArrowRight, BookOpen, MessagesSquare, Wrench } from "lucide-react";
+import SectionWave from "./SectionWave.astro";
+import SetupUtilities from "./SetupUtilities.astro";
+import { ProjectRules } from "./ProjectExamples";
+import WorkflowCard from "./WorkflowCard";
+---
+<SetupUtilities />
+<section class="project-fit section-band band-lavender" aria-labelledby="project-fit-title">
+  <SectionWave reverse />
+  <SectionWave bottom />
+  <div class="container">
+    <div class="lifecycle-heading"><h2 id="project-fit-title">Make Magpie work your way</h2></div>
+    <ProjectRules />
+  </div>
+</section>
+<section class="learn-skills container" aria-labelledby="learn-skills-title">
+  <div class="lifecycle-heading">
+    <h2 id="learn-skills-title">Get more out of your agent</h2>
+    <p>Magpie is a place to start learning, too. Explore practical guides for using agents in everyday work, one new skill at a time.</p>
+  </div>
+  <div class="learning-grid">
+    <WorkflowCard title="Start with the basics" tone="manual" connector>
+      <BookOpen slot="icon" size={40} aria-hidden="true" />
+      <p><strong><q>Where do I even start?</q></strong> Start with how agents use models, tools and context to work through a task.</p>
+      <a class="text-link" href="/docs/education/what-agents-are" target="_blank" rel="noreferrer">Meet your agent</a>
+    </WorkflowCard>
+    <WorkflowCard title="Work better together" tone="prepared" connector>
+      <MessagesSquare slot="icon" size={40} aria-hidden="true" />
+      <p><strong><q>I’m getting the hang of this!</q></strong> Give clearer instructions, steer the work and know when to step in.</p>
+      <a class="text-link" href="/docs/education/working-with-agents" target="_blank" rel="noreferrer">Build good habits</a>
+    </WorkflowCard>
+    <WorkflowCard title="Make a skill of your own" tone="result">
+      <Wrench slot="icon" size={40} aria-hidden="true" />
+      <p><strong><q>I could turn this into a skill!</q></strong> Turn a familiar task into a skill your agent can use again.</p>
+      <a class="text-link" href="/docs/education/your-first-skill" target="_blank" rel="noreferrer">Try your first skill</a>
+    </WorkflowCard>
+  </div>
+  <div class="section-followup"><a class="button button-soft" href="/docs/education/readme" target="_blank" rel="noreferrer"><span>Explore the learning guides</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div>
+</section>

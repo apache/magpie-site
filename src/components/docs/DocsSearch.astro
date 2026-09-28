@@ -1,0 +1,74 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+<dialog class="search-dialog" aria-labelledby="search-title" data-index={`${base}/search-index.json`}>
+  <div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off" /><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div>
+  <div class="search-results" id="search-results"></div>
+  <p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p>
+  <div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div>
+</dialog>
+<script>
+  interface SearchEntry { title: string; path: string; section: string; text: string }
+  const dialog = document.querySelector<HTMLDialogElement>('.search-dialog')!;
+  const input = dialog.querySelector<HTMLInputElement>('input')!;
+  const results = dialog.querySelector<HTMLDivElement>('.search-results')!;
+  const status = dialog.querySelector<HTMLParagraphElement>('.search-status')!;
+  const trigger = document.querySelector<HTMLButtonElement>('[data-search-open]')!;
+  let entries: SearchEntry[] | undefined;
+  let selected = -1;
+  let matches: SearchEntry[] = [];
+  let loadFailed = false;
+  const defaults = ['/start', '/docs/security/readme', '/docs/pr-management/readme', '/docs/setup/privacy-llm', '/docs/education/readme'];
+  const render = () => {
+    if (!entries) return;
+    const query = input.value.trim().toLowerCase();
+    const terms = query.split(/\s+/).filter(Boolean);
+    matches = query ? entries.map(entry => {
+      const title = entry.title.toLowerCase();
+      const haystack = `${title} ${entry.section} ${entry.text}`.toLowerCase();
+      const score = terms.every(term => haystack.includes(term)) ? terms.reduce((score, term) => score + (title.includes(term) ? 15 : 1), 0) + (title.includes(query) ? 30 : 0) : 0;
+      return { entry, score };
+    }).filter(item => item.score > 0).sort((a, b) => b.score - a.score).slice(0, 12).map(item => item.entry) : defaults.map(slug => entries!.find(entry => entry.path.endsWith(slug))).filter((entry): entry is SearchEntry => Boolean(entry));
+    results.replaceChildren(); selected = -1;
+    for (const entry of matches) {
+      const link = document.createElement('a'); link.href = entry.path;
+      const title = document.createElement('strong'); title.textContent = entry.title;
+      const section = document.createElement('span'); section.textContent = entry.section;
+      link.append(title, section); results.append(link);
+    }
+    status.textContent = query ? (matches.length ? `${matches.length} results. Use arrow keys to choose a page.` : 'No pages found. Try “security”, “setup”, or “release”.') : 'A few useful places to start.';
+  };
+  const openSearch = async () => {
+    dialog.showModal(); input.focus();
+    if (!entries) {
+      status.textContent = 'Loading the documentation index…';
+      try {
+        const response = await fetch(dialog.dataset.index!);
+        if (!response.ok) throw new Error('Index unavailable');
+        entries = await response.json(); loadFailed = false;
+      } catch { loadFailed = true; status.textContent = 'Search is temporarily unavailable. You can still browse the sidebar.'; }
+    }
+    if (!loadFailed) render();
+  };
+  trigger.addEventListener('click', openSearch);
+  dialog.querySelector('[data-search-close]')!.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
+  input.addEventListener('input', render);
+  dialog.addEventListener('keydown', event => {
+    if (event.key === 'Tab') {
+      const targets = [...dialog.querySelectorAll<HTMLElement>('input,button,a[href]')].filter(element => !element.hasAttribute('disabled'));
+      const first = targets[0], last = targets.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && matches.length) {
+      event.preventDefault(); selected = (selected + (event.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length;
+      const links = [...results.querySelectorAll('a')]; links.forEach((link, index) => link.classList.toggle('selected', index === selected)); links[selected].focus();
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); dialog.open ? dialog.close() : openSearch(); }
+  });
+  dialog.addEventListener('close', () => trigger.focus());
+  trigger.querySelector('kbd')!.textContent = navigator.platform.includes('Mac') ? '⌘ K' : 'Ctrl K';
+</script>

@@ -1,0 +1,33 @@
+/* Shared spacing contract. Components consume semantic tokens instead of
+   accumulating page-specific padding overrides. */
+:root {
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-10:40px;
+  --space-12:48px;
+  --space-16:64px;
+  --space-20:80px;
+  --page-gutter:40px;
+  --page-padding:80px;
+  --card-padding:32px;
+  --card-width:26rem;
+  --card-measure:36ch;
+  --card-gap:32px;
+  --flow-arrow-size:28px;
+  --flow-clearance:var(--card-gap);
+  --flow-gap:calc(2 * var(--flow-clearance) + var(--flow-arrow-size));
+  --card-badge-size:56px;
+  --card-badge-overhang:calc(var(--card-badge-size) / 2);
+  --content-gap:20px;
+  --heading-gap:32px;
+  --block-gap:64px;
+  --section-padding:clamp(64px,8vw,112px);
+}
+@media(max-width:800px) {
+  :root { --page-gutter:20px;--page-padding:48px;--card-padding:20px;--card-gap:24px;--heading-gap:24px;--block-gap:48px; }
+}

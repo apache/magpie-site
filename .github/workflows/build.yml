@@ -36,11 +36,6 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Run prek (zizmor + security/hygiene hooks)
-        run: |
-          uv tool install prek
-          prek run --all-files --color always
-
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -55,8 +50,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run unit tests
-        run: npm test
+      - name: Sync docs for the static gate
+        run: npm run sync-docs
+
+      - name: Run prek (zizmor + security/hygiene hooks)
+        run: |
+          uv tool install prek
+          prek run --all-files --color always
 
   # The Jekyll source-annotation plugin for PR previews. This site is Astro, so
   # nothing else here builds Jekyll; the test builds a fixture site with the
@@ -99,8 +99,26 @@ jobs:
       - name: Test the Jekyll adapter
         run: bundle exec ruby scripts/preview/adapters/jekyll/test/magpie_src_test.rb
 
-  build:
+  browser:
     needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run sync-docs
+      - run: npm run test:browser
+      - run: npm run test:dev
+
+  build:
+    needs: [lint, browser]
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:

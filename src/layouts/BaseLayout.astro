@@ -1,22 +1,21 @@
 ---
 import "../styles/global.css";
+import "../styles/spacing.css";
+import "../styles/redesign.css";
+import "../styles/reading-flow.css";
+import "../styles/feedback.css";
 
 interface Props {
   title?: string;
   description?: string;
-  /** GitHub edit URL of the source this page is generated from. When set,
-   *  a floating "Suggest a change" button links to it (opens GitHub's
-   *  editor, which forks + proposes a PR for non-collaborators). */
-  editUrl?: string;
   /** Site-root-relative path to the social-share (Open Graph) image.
    *  Defaults to the branded 1200×630 card. */
   image?: string;
 }
 
 const {
-  title = "Apache Magpie — Give maintainers time back",
-  description = "AI-powered assistant for open-source maintainers. Triage, mentor, draft, pair, and auto-merge under Apache Software Foundation governance.",
-  editUrl,
+  title = "Apache Magpie | Give maintainers time back",
+  description = "AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands.",
   image = "/og-image.png",
 } = Astro.props;
 
@@ -35,14 +34,16 @@ const ogImage = new URL(
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
     {/* ICO fallback for clients that don't use the SVG icon (Safari, some
         link/tab unfurlers), which otherwise request /favicon.ico implicitly. */}
     <link rel="icon" type="image/x-icon" sizes="any" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.ico`} />
-    {/* Inter, Jost and Geist are self-hosted via Fontsource (src/styles/global.css);
-        no external font CDN is loaded (apache/magpie-site#11). */}
+    {/* Geist is self-hosted; no external font CDN is loaded. */}
     <title>{title}</title>
     {/* Social-share preview (Open Graph + Twitter Card): show the branded Magpie
         card, not the framework default, when links are unfurled on social media. */}
@@ -65,6 +66,7 @@ const ogImage = new URL(
         team recommends placing this immediately before </head>. is:inline keeps
         it verbatim so Astro does not bundle/transform it. */}
     <script is:inline>
+      if (location.hostname === "magpie.apache.org") {
       var _paq = (window._paq = window._paq || []);
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       _paq.push(["setDoNotTrack", true]);
@@ -82,60 +84,19 @@ const ogImage = new URL(
         g.src = u + "matomo.js";
         s.parentNode.insertBefore(g, s);
       })();
+      }
     </script>
   </head>
   <body>
     <slot />
-    {editUrl && (
-      <a
-        href={editUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="suggest-change"
-        aria-label="Suggest a change to this page on GitHub"
-      >
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 20h9" />
-          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-        </svg>
-        <span class="suggest-change-label">Suggest a change</span>
-      </a>
-    )}
+    <script>
+      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const sync = () => { const dark = document.documentElement.dataset.theme === 'dark'; button?.setAttribute('aria-pressed', String(dark)); button?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} mode`); };
+      button?.addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('magpie-theme', document.documentElement.dataset.theme); } catch {} sync(); });
+      sync();
+
+    </script>
+
+
   </body>
 </html>
-
-<style>
-  .suggest-change {
-    position: fixed;
-    bottom: 1.25rem;
-    right: 1.25rem;
-    z-index: 50;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 9999px;
-    background: var(--color-brand-600, #004aad);
-    color: #fff;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-decoration: none;
-    box-shadow: 0 8px 24px rgba(0, 38, 84, 0.28);
-    transition: background-color 0.15s ease, transform 0.15s ease;
-  }
-  .suggest-change:hover {
-    background: var(--color-brand-700, #003a87);
-    transform: translateY(-1px);
-  }
-  @media (max-width: 640px) {
-    .suggest-change {
-      bottom: 1rem;
-      right: 1rem;
-      padding: 0.625rem;
-    }
-    .suggest-change-label {
-      display: none;
-    }
-  }
-</style>

@@ -17,21 +17,47 @@
     "source-control": "Branch / commit / diff / push (VCS).",
     "change-request": "Proposed-change review + merge gate (pull request / merge request / Gerrit change).",
     "mail-archive": "Mailing-list / forum archive reads.",
+    "chat": "Project chat reads — public channels only (Slack, Discord). Read-only; never posts.",
     "mail-source": "Inbound-mail ingestion (mbox / IMAP / …).",
     "mail-create": "Outbound mail composition. Always produces an editable draft; sending is a separate human-approved step on that draft (draft mode = default and the only mode implemented today; send mode declared but unimplemented — no autonomous send).",
     "cve-authority": "CVE allocation / record management / publication.",
     "report-relay": "Inbound security-report relay detection.",
     "scan-format": "Security-scanner report parsing.",
-    "project-metadata": "Governance rosters / people / releases."
+    "project-metadata": "Governance rosters / people / releases.",
+    "security-cross-ref": "Vulnerability database / cross-reference alias lookup (OSV.dev / NVD)."
   },
   "substrates": {
     "analytics": "Read-only metrics / dashboards / renderers.",
     "sandbox": "Agent isolation, egress control, settings audit.",
     "action-guard": "Deterministic pre-tool-use command guards.",
     "privacy": "PII redaction / approved-LLM gating.",
-    "framework-dev": "Build / validate / eval the framework itself."
+    "framework-dev": "Build / validate / eval the framework itself.",
+    "release": "Release-artefact helpers an adopter's release process runs: reproducible-archive build, lint and comparison.",
+    "setup": "Adopter-side setup state an agent resolves at runtime rather than at development time: lock parsing, floor comparison, reconciliation fingerprints.",
+    "review": "A second model's read of a change before it is published: other models' CLIs run read-only, findings merged."
   },
   "tools": [
+    {
+      "name": "adversarial-review",
+      "title": "adversarial-review",
+      "description": "Runs other models' CLIs — Codex, Copilot, Gemini, Claude — read-only over a change, and prints their merged findings as one JSON report. Magpie skills run it before they open a PR; pr-management-code-review runs it over someone else's…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "review"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "experimental",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/adversarial-review"
+    },
     {
       "name": "agent-guard",
       "title": "agent-guard",
@@ -56,7 +82,7 @@
     {
       "name": "agent-isolation",
       "title": "agent-isolation",
-      "description": "This directory ships the moving pieces the framework's docs/setup/secure-agent-setup.md document references. It is not a Python project (unlike the sibling tools under tools/cve-tool-vulnogram/ and tools/gmail/oauth-draft/) — these are…",
+      "description": "One exception to that tag: sandbox-status-line.sh is Claude Code only. Every other script here is harness-agnostic.",
       "labels": [
         {
           "kind": "substrate",
@@ -166,6 +192,93 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/change-request"
     },
     {
+      "name": "chat",
+      "title": "chat",
+      "description": "This file defines the adapter contract for project chat — the public channels of a project's Slack workspace, Discord server, or similar. The contributor-growth skills read it to see how a contributor helps others in chat: questions…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "chat"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "interface",
+      "vendor": "agnostic",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/chat"
+    },
+    {
+      "name": "chat-slack",
+      "title": "chat-slack",
+      "description": "The Slack adapter for the tools/chat/ contract: reads public channels of the project's Slack workspace through the Slack MCP, to see how a contributor helps others in chat. It is read-only — see Operations for the only tools it calls.",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "chat"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "Slack",
+      "harness": null,
+      "organization": null,
+      "mcp": {
+        "server": "Slack (claude.ai)",
+        "prefix": "mcp__claude_ai_Slack__*"
+      },
+      "hasCode": false,
+      "maturity": null,
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/chat-slack"
+    },
+    {
+      "name": "container-gateway",
+      "title": "container-gateway",
+      "description": "A per-project policy proxy in front of the container daemon socket. Sandboxed shell commands talk to it through CONTAINER_HOST / DOCKER_HOST; it forwards the Docker-compatible API to podman or docker after labelling every resource with…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "sandbox"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "stable",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/container-gateway"
+    },
+    {
+      "name": "contributor-metrics",
+      "title": "contributor-metrics",
+      "description": "Counts a contributor's activity on <upstream> over a window — PRs opened and merged, reviews, substantive reviews, issues filed, issues triaged, threads commented — splits it by area label, and applies the automated-work weights and…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "analytics"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": "implementation",
+      "vendor": "GitHub",
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "experimental",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/contributor-metrics"
+    },
+    {
       "name": "cve-org",
       "title": "cve-org",
       "description": "CVE.org publication client. Submits CVE records via the CVE.org REST API; consumed by security-cve-allocate once a CVE has been allocated via the ASF Vulnogram path. See tool.md for the protocol detail and cve.org field mapping.",
@@ -266,7 +379,7 @@
       "organization": null,
       "mcp": null,
       "hasCode": false,
-      "maturity": "experimental",
+      "maturity": "stable",
       "state": "adapter",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/dev"
     },
@@ -410,6 +523,35 @@
       "maturity": "experimental",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/github-rollup"
+    },
+    {
+      "name": "gitlab",
+      "title": "GitLab bridge",
+      "description": "Read-only client for the GitLab REST API v4.",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "tracker"
+        },
+        {
+          "kind": "contract",
+          "name": "source-control"
+        },
+        {
+          "kind": "contract",
+          "name": "change-request"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "GitLab",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": null,
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/gitlab"
     },
     {
       "name": "gmail",
@@ -574,6 +716,27 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/maildir"
     },
     {
+      "name": "osv",
+      "title": "osv",
+      "description": "OSV.dev vulnerability cross-reference client. Queries the OSV.dev REST API v1 for vulnerability records, aliases (CVE ↔ GHSA ↔ OSV IDs), affected package versions, and vulnerabilities associated with a public upstream commit.…",
+      "labels": [
+        {
+          "kind": "contract",
+          "name": "security-cross-ref"
+        }
+      ],
+      "kind": "contract",
+      "vendorKind": "implementation",
+      "vendor": "OSV.dev",
+      "harness": null,
+      "organization": null,
+      "mcp": null,
+      "hasCode": false,
+      "maturity": "stable",
+      "state": "adapter",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/osv"
+    },
+    {
       "name": "permission-audit",
       "title": "permission-audit",
       "description": "Audit + atomically edit Claude Code's permissions.allow[] entries in <repo>/.claude/settings.json and <repo>/.claude/settings.local.json.",
@@ -728,6 +891,27 @@
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/probe-templates"
     },
     {
+      "name": "reproducible-archive",
+      "title": "reproducible-archive",
+      "description": "Builds, lints and compares reproducible source archives. The archive is always derived from git archive <ref>, so only tracked files at the tag are packed and the repository's .gitattributes export-ignore rules decide what stays out. On…",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "release"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "experimental",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/reproducible-archive"
+    },
+    {
       "name": "sandbox-lint",
       "title": "sandbox-lint",
       "description": "Lints .claude/settings.json against the shipped baseline at tools/sandbox-lint/expected.json, and against the security invariants documented in docs/security/threat-model.md (mitigation M.29). The threat-model document lands in a…",
@@ -789,6 +973,27 @@
       "maturity": "experimental",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/security-tracker-stats-dashboard"
+    },
+    {
+      "name": "setup-preflight",
+      "title": "setup-preflight",
+      "description": "Resolve a project's Magpie setup state, and one skill's fingerprint, into a machine-readable verdict.",
+      "labels": [
+        {
+          "kind": "substrate",
+          "name": "setup"
+        }
+      ],
+      "kind": "substrate",
+      "vendorKind": null,
+      "vendor": null,
+      "harness": "agnostic",
+      "organization": null,
+      "mcp": null,
+      "hasCode": true,
+      "maturity": "stable",
+      "state": "implemented",
+      "docUrl": "https://github.com/apache/magpie/tree/main/tools/setup-preflight"
     },
     {
       "name": "skill-and-tool-validator",
@@ -856,7 +1061,7 @@
     {
       "name": "skill-token-count",
       "title": "skill-token-count",
-      "description": "Measures full local skill files with pinned tiktoken and checks the generated table in mode economics. Implements the deterministic measurement check discussed in issue 327.",
+      "description": "Measures full local skill files with pinned tiktoken and stamps each count into that skill's own frontmatter as measured_tokens:. The per-skill table in mode economics is rendered from those stamps by the website build (or locally with…",
       "labels": [
         {
           "kind": "substrate",
@@ -1083,16 +1288,16 @@
       "organization": null,
       "mcp": null,
       "hasCode": true,
-      "maturity": null,
+      "maturity": "stable",
       "state": "implemented",
       "docUrl": "https://github.com/apache/magpie/tree/main/tools/vetted-ops"
     }
   ],
-  "toolsTotal": 47,
-  "implementedTotal": 26,
-  "contractsTotal": 23,
-  "substratesTotal": 24,
-  "mcpTotal": 4,
+  "toolsTotal": 56,
+  "implementedTotal": 32,
+  "contractsTotal": 27,
+  "substratesTotal": 29,
+  "mcpTotal": 5,
   "organizations": [
     {
       "id": "ASF",
@@ -1133,19 +1338,20 @@
     "minVendors": 2,
     "overall": {
       "green": 10,
-      "total": 10,
-      "percent": 100
+      "total": 12,
+      "percent": 83
     },
     "contracts": [
       {
         "contract": "contract:tracker",
         "class": "vendor-backed",
         "green": true,
-        "basis": "4 backend vendors: Atlassian, Fossil, GitHub, SourceHut",
+        "basis": "5 backend vendors: Atlassian, Fossil, GitHub, GitLab, SourceHut",
         "vendors": [
           "Atlassian",
           "Fossil",
           "GitHub",
+          "GitLab",
           "SourceHut"
         ],
         "interfaces": [],
@@ -1175,6 +1381,10 @@
             "vendor": "GitHub"
           },
           {
+            "tool": "gitlab",
+            "vendor": "GitLab"
+          },
+          {
             "tool": "sourcehut",
             "vendor": "SourceHut"
           }
@@ -1184,11 +1394,12 @@
         "contract": "contract:source-control",
         "class": "vendor-backed",
         "green": true,
-        "basis": "5 backend vendors: Fossil, Git, GitHub, SourceHut, Subversion",
+        "basis": "6 backend vendors: Fossil, Git, GitHub, GitLab, SourceHut, Subversion",
         "vendors": [
           "Fossil",
           "Git",
           "GitHub",
+          "GitLab",
           "SourceHut",
           "Subversion"
         ],
@@ -1207,6 +1418,10 @@
             "vendor": "GitHub"
           },
           {
+            "tool": "gitlab",
+            "vendor": "GitLab"
+          },
+          {
             "tool": "sourcehut",
             "vendor": "SourceHut"
           },
@@ -1220,10 +1435,11 @@
         "contract": "contract:change-request",
         "class": "vendor-backed",
         "green": true,
-        "basis": "3 backend vendors: Atlassian, GitHub, email",
+        "basis": "4 backend vendors: Atlassian, GitHub, GitLab, email",
         "vendors": [
           "Atlassian",
           "GitHub",
+          "GitLab",
           "email"
         ],
         "interfaces": [
@@ -1245,6 +1461,10 @@
           {
             "tool": "github",
             "vendor": "GitHub"
+          },
+          {
+            "tool": "gitlab",
+            "vendor": "GitLab"
           }
         ]
       },
@@ -1273,6 +1493,24 @@
           {
             "tool": "sourcehut",
             "vendor": "SourceHut"
+          }
+        ]
+      },
+      {
+        "contract": "contract:chat",
+        "class": "vendor-backed",
+        "green": false,
+        "basis": "only 1 backend vendor (Slack); needs 1 more",
+        "vendors": [
+          "Slack"
+        ],
+        "interfaces": [
+          "chat"
+        ],
+        "implementations": [
+          {
+            "tool": "chat-slack",
+            "vendor": "Slack"
           }
         ]
       },
@@ -1385,13 +1623,37 @@
             "vendor": "ASF"
           }
         ]
+      },
+      {
+        "contract": "contract:security-cross-ref",
+        "class": "vendor-backed",
+        "green": false,
+        "basis": "only 1 backend vendor (OSV.dev); needs 1 more",
+        "vendors": [
+          "OSV.dev"
+        ],
+        "interfaces": [],
+        "implementations": [
+          {
+            "tool": "osv",
+            "vendor": "OSV.dev"
+          }
+        ]
       }
     ],
     "harness": {
-      "neutral": 24,
-      "total": 24,
+      "neutral": 29,
+      "total": 29,
       "percent": 100,
       "tools": [
+        {
+          "tool": "adversarial-review",
+          "substrates": [
+            "substrate:review"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
         {
           "tool": "agent-guard",
           "substrates": [
@@ -1409,6 +1671,22 @@
           "tool": "agent-isolation",
           "substrates": [
             "substrate:sandbox"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "container-gateway",
+          "substrates": [
+            "substrate:sandbox"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "contributor-metrics",
+          "substrates": [
+            "substrate:analytics"
           ],
           "harnesses": [],
           "verdict": "agnostic"
@@ -1486,6 +1764,14 @@
           "verdict": "agnostic"
         },
         {
+          "tool": "reproducible-archive",
+          "substrates": [
+            "substrate:release"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
           "tool": "sandbox-lint",
           "substrates": [
             "substrate:sandbox"
@@ -1504,6 +1790,14 @@
           "tool": "security-tracker-stats-dashboard",
           "substrates": [
             "substrate:analytics"
+          ],
+          "harnesses": [],
+          "verdict": "agnostic"
+        },
+        {
+          "tool": "setup-preflight",
+          "substrates": [
+            "substrate:setup"
           ],
           "harnesses": [],
           "verdict": "agnostic"
@@ -1609,6 +1903,34 @@
         }
       ],
       "matrix": {
+        "agnostic": [
+          "adversarial-review",
+          "agent-isolation",
+          "container-gateway",
+          "contributor-metrics",
+          "dashboard-generator",
+          "dev",
+          "egress-gateway",
+          "permission-audit",
+          "pilot-report-validator",
+          "pr-management-stats",
+          "preflight-audit",
+          "privacy-llm",
+          "probe-templates",
+          "reproducible-archive",
+          "security-tracker-stats-dashboard",
+          "setup-preflight",
+          "skill-and-tool-validator",
+          "skill-evals",
+          "skill-reconciler-diff",
+          "skill-token-count",
+          "spec-inventory",
+          "spec-status-index",
+          "spec-validator",
+          "symlink-lint",
+          "vendor-neutrality-score",
+          "vetted-ops"
+        ],
         "Claude Code": [
           "agent-guard",
           "sandbox-lint",
@@ -1629,29 +1951,6 @@
           "sandbox-lint",
           "spec-loop"
         ],
-        "agnostic": [
-          "agent-isolation",
-          "dashboard-generator",
-          "dev",
-          "egress-gateway",
-          "permission-audit",
-          "pilot-report-validator",
-          "pr-management-stats",
-          "preflight-audit",
-          "privacy-llm",
-          "probe-templates",
-          "security-tracker-stats-dashboard",
-          "skill-and-tool-validator",
-          "skill-evals",
-          "skill-reconciler-diff",
-          "skill-token-count",
-          "spec-inventory",
-          "spec-status-index",
-          "spec-validator",
-          "symlink-lint",
-          "vendor-neutrality-score",
-          "vetted-ops"
-        ],
         "Codex": [
           "sandbox-lint",
           "spec-loop"
@@ -1670,7 +1969,7 @@
         },
         {
           "class": "*.apache.org-hosted endpoints",
-          "examples": "A future ASF-hosted inference endpoint at e.g. `inference.apache.org`; an in-tracker endpoint at `<project>.apache.org/llm/`"
+          "examples": "An ASF-hosted inference endpoint at e.g. `inference.apache.org`; an in-tracker endpoint at `<project>.apache.org/llm/`. **Not** `llm.apache.org` — see carve-outs"
         },
         {
           "class": "Local-only inference",
@@ -1684,16 +1983,16 @@
       "optIn": "adopter-declared in <project-config>/privacy-llm.md (no fixed list)"
     },
     "skills": {
-      "total": 75,
-      "neutral": 75,
+      "total": 77,
+      "neutral": 77,
       "byVerdict": {
-        "capability-pure": 14,
-        "portable": 61,
+        "capability-pure": 19,
+        "portable": 58,
         "vendor-coupled": 0
       },
       "byOrg": {
         "agnostic": 61,
-        "ASF": 14
+        "ASF": 16
       },
       "coupled": [],
       "list": [
@@ -1734,6 +2033,26 @@
           "coupled": []
         },
         {
+          "skill": "contributor-calibrate",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:mail-archive",
+            "contract:project-metadata"
+          ],
+          "coupled": []
+        },
+        {
+          "skill": "contributor-candidate-screen",
+          "verdict": "portable",
+          "organization": "ASF",
+          "contractsUsed": [
+            "contract:project-metadata",
+            "contract:tracker"
+          ],
+          "coupled": []
+        },
+        {
           "skill": "contributor-nomination",
           "verdict": "portable",
           "organization": "ASF",
@@ -1754,11 +2073,9 @@
         },
         {
           "skill": "contributor-to-committer",
-          "verdict": "portable",
+          "verdict": "capability-pure",
           "organization": "ASF",
-          "contractsUsed": [
-            "contract:tracker"
-          ],
+          "contractsUsed": [],
           "coupled": []
         },
         {
@@ -1826,8 +2143,7 @@
           "organization": "agnostic",
           "contractsUsed": [
             "contract:change-request",
-            "contract:source-control",
-            "contract:tracker"
+            "contract:source-control"
           ],
           "coupled": []
         },
@@ -1847,11 +2163,9 @@
         },
         {
           "skill": "issue-reproducer",
-          "verdict": "portable",
+          "verdict": "capability-pure",
           "organization": "agnostic",
-          "contractsUsed": [
-            "contract:tracker"
-          ],
+          "contractsUsed": [],
           "coupled": []
         },
         {
@@ -1969,21 +2283,16 @@
         },
         {
           "skill": "pr-management-stats",
-          "verdict": "portable",
+          "verdict": "capability-pure",
           "organization": "agnostic",
-          "contractsUsed": [
-            "contract:change-request"
-          ],
+          "contractsUsed": [],
           "coupled": []
         },
         {
           "skill": "pr-management-triage",
-          "verdict": "portable",
+          "verdict": "capability-pure",
           "organization": "agnostic",
-          "contractsUsed": [
-            "contract:change-request",
-            "contract:tracker"
-          ],
+          "contractsUsed": [],
           "coupled": []
         },
         {
@@ -2204,7 +2513,6 @@
           "contractsUsed": [
             "contract:cve-authority",
             "contract:mail-archive",
-            "contract:mail-create",
             "contract:tracker"
           ],
           "coupled": []
@@ -2215,7 +2523,6 @@
           "organization": "agnostic",
           "contractsUsed": [
             "contract:cve-authority",
-            "contract:mail-archive",
             "contract:mail-create",
             "contract:tracker"
           ],
@@ -2226,8 +2533,6 @@
           "verdict": "portable",
           "organization": "agnostic",
           "contractsUsed": [
-            "contract:change-request",
-            "contract:mail-archive",
             "contract:tracker"
           ],
           "coupled": []
@@ -2284,18 +2589,18 @@
         },
         {
           "skill": "setup-isolated-setup-install",
+          "verdict": "capability-pure",
+          "organization": "agnostic",
+          "contractsUsed": [],
+          "coupled": []
+        },
+        {
+          "skill": "setup-isolated-setup-update",
           "verdict": "portable",
           "organization": "agnostic",
           "contractsUsed": [
             "contract:source-control"
           ],
-          "coupled": []
-        },
-        {
-          "skill": "setup-isolated-setup-update",
-          "verdict": "capability-pure",
-          "organization": "agnostic",
-          "contractsUsed": [],
           "coupled": []
         },
         {
@@ -2372,23 +2677,21 @@
         },
         {
           "skill": "write-skill",
-          "verdict": "portable",
+          "verdict": "capability-pure",
           "organization": "agnostic",
-          "contractsUsed": [
-            "contract:tracker"
-          ],
+          "contractsUsed": [],
           "coupled": []
         }
       ]
     }
   },
   "skills": {
-    "total": 75,
-    "apacheLicensed": 75,
+    "total": 77,
+    "apacheLicensed": 77,
     "allApache": true,
     "license": "Apache-2.0",
     "byOrg": {
-      "ASF": 14
+      "ASF": 16
     }
   }
 }

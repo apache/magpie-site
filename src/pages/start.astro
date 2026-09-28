@@ -1,0 +1,28 @@
+---
+import { getEntry } from 'astro:content';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import StartGuide from '../components/landing/StartGuide';
+import type { InstallOption } from '../components/landing/StartGuide';
+import '../styles/start.css';
+
+// Keep executable examples tied to the synced framework instructions.
+const install = await getEntry('docs', 'setup/marketplace-install');
+const commandFor = (heading: string) => {
+  const section = install?.body?.split(`## ${heading}\n`)[1]?.split('\n## ')[0];
+  const command = section?.match(/```(?:bash|text)\n([\s\S]*?)```/)?.[1].trim();
+  if (!command) throw new Error(`Missing upstream installation commands for ${heading}`);
+  return command;
+};
+const agents: InstallOption[] = [
+  { id: 'claude', name: 'Claude Code', where: 'Run these commands inside Claude Code to add the marketplace, the setup tools, and PR review workflows.', commands: commandFor('Claude Code'), detail: 'In /plugin, open Marketplaces → apache-magpie and enable auto-update to keep your plugins current.', verify: 'Check the Installed tab in /plugin to confirm they are available.', guide: '/docs/setup/marketplace-install#claude-code' },
+  { id: 'codex', name: 'Codex CLI', where: 'With the Codex CLI installed, run these commands in your terminal.', commands: commandFor('OpenAI Codex CLI'), detail: 'This installs the setup, guard, and utility plugins. You can ask Magpie to add the workflows you need next.', verify: 'Run codex plugin list to check the installation.', guide: '/docs/setup/marketplace-install#openai-codex-cli' },
+  { id: 'gemini', name: 'Gemini CLI', where: 'With Gemini CLI installed, run this command in your terminal.', commands: commandFor('Google Gemini CLI'), detail: 'Magpie is installed as an extension with automatic updates enabled.', verify: 'Run gemini extensions list to check the installation.', guide: '/docs/setup/marketplace-install#google-gemini-cli' },
+  { id: 'cursor', name: 'Cursor', where: 'Open Customize → Plugins/Skills in Cursor and add Magpie from this repository.', commands: 'https://github.com/apache/magpie', detail: 'Cursor reads the plugin package from the repository. Follow the install prompts in your editor.', verify: 'Then open your project and continue with the setup request below.', guide: '/docs/setup/marketplace-install#cursor' },
+  { id: 'copilot', name: 'VS Code / GitHub Copilot', where: 'In VS Code’s agent plugin installation flow, add this repository.', commands: commandFor('VS Code / GitHub Copilot'), detail: 'VS Code loads Magpie as an agent plugin package. You can also add apache/magpie as a marketplace and select individual workflow families.', verify: 'Then open your project and continue with the setup request below.', guide: '/docs/setup/marketplace-install#vs-code--github-copilot' },
+];
+---
+<ContentLayout title="Start using Magpie in your own agent" description="Install it for yourself, prepare your workspace, and try one workflow. Your team does not need to adopt Magpie for you to begin.">
+  <StartGuide agents={agents} client:load />
+  <p>Want to explore first? <a href="/demo">Try a simulated maintainer session</a>.</p>
+  <noscript><p>The Claude Code instructions are shown above. <a href="/docs/setup/marketplace-install">Find installation instructions for another agent</a>.</p></noscript>
+</ContentLayout>

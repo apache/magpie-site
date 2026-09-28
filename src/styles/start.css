@@ -1,0 +1,14 @@
+.start-guide { max-width: 850px; }
+.agent-choice { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; margin-bottom: var(--space-8); }
+.agent-choice label { font-size: var(--text-body); font-weight: 550; }
+.install-code, .start-request { display:grid; gap:var(--space-4); padding:var(--card-padding); margin-block:var(--space-6); }
+.install-code { background:var(--code-bg); border-radius:var(--radius-control); --paper:var(--code-bg); --blue:var(--code-ink); --line:var(--code-line); --surface:#243447; }
+.content-page .install-code pre { margin:0; padding:0; }
+.copy-command { justify-self:end; }
+.start-request p { margin:0; color:var(--ink); }
+.content-page .install-verify { font-size: 16px; }
+.start-reference { display: flex; flex-wrap: wrap; gap: 18px 30px; border-top: 1px solid var(--line); padding-top: 30px; font-size: 16px; }
+@media(max-width:600px) {
+ .agent-choice label { flex-basis: 100%; }
+ .agent-choice select { width: 100%; }
+}

@@ -1,0 +1,27 @@
+.airflow-charts { margin-block: 30px; }
+.chart-controls { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 25px; }
+.chart-period { display:flex; gap:var(--space-1); background:var(--surface); border-radius:var(--radius-control); padding:var(--space-1); }
+.chart-period button[aria-pressed="true"] { --button-bg:var(--paper); --button-ink:var(--ink); --button-border:var(--line); }
+.chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+.chart-legend>span:first-child { margin-right: auto; }
+.chart-legend span { display: flex; align-items: center; gap: 7px; }
+.chart-legend i { width: 7px; height: 7px; display: inline-block; border-radius: 2px; }
+.chart-scroll { overflow-x: auto; }
+.airflow-chart { width: 100%; min-width: 590px; overflow: visible; }
+.chart-gridline { stroke: var(--line); stroke-width: .8; }
+.chart-label { fill: var(--muted); font-family: 'Geist Variable',sans-serif; font-size: 14px; }
+.adoption-line { stroke: #91a083; stroke-dasharray: 4 4; }
+.chart-crosshair { stroke: #829098; stroke-width: 1; stroke-dasharray: 3 3; }
+.chart-readout { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 15px; min-height: 44px; padding: 10px 0; color: var(--muted); font-size: 14px; }
+.chart-readout strong { color: var(--ink); font-weight: 550; }
+.chart-readout b { font-weight: 500; }
+.chart-note { font-size: 14px !important; color: var(--muted); line-height: 1.7; margin: 8px 0 20px; }
+.chart-data { border-top: 1px solid var(--line); padding-top: 17px; }
+.chart-data summary { font-size: 14px; color: var(--muted); cursor: pointer; }
+.chart-table-scroll { overflow-x: auto; margin-top: 20px; }
+.chart-data table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.chart-data td,.chart-data th { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.chart-data th { font-weight: 550; }
+@media(max-width:600px) { .chart-controls { flex-direction:column; align-items:flex-start; }.chart-controls select { width:100%; } }
+
+.airflow-chart:focus-visible { outline-offset: -2px; }

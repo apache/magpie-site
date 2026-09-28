@@ -38,6 +38,7 @@ repos:
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: check-added-large-files
+        args: [--maxkb=1024] # Mascot reference PNGs are below 1 MiB.
       - id: check-case-conflict
       - id: check-executables-have-shebangs
       - id: check-json
@@ -64,16 +65,17 @@ repos:
         language: system
         files: \.(astro|tsx|jsx)$
         pass_filenames: true
-      # Refresh the committer/PMC roster + GitHub avatars served by the landing
-      # page (src/data/community.json + public/community-avatars/). Manual stage
-      # only: it calls the GitHub API and writes binary avatars, so it is run on
-      # demand rather than on every commit:
-      #   prek run sync-community --hook-stage manual --all-files
-      # Needs a GitHub token with read:org (GH_TOKEN / GITHUB_TOKEN env or
-      # `gh auth login`); a run without a token is a graceful no-op.
-      - id: sync-community
-        name: Sync community roster + GitHub avatars
-        entry: node scripts/sync-community.mjs
+      - id: site-static
+        name: Check unused code, CSS, types and checker regression fixtures
+        entry: npm run check:fast
         language: system
         pass_filenames: false
-        stages: [manual]
+        always_run: true
+        stages: [pre-commit]
+      - id: site-browser
+        name: Check fresh build, every public route, layout and interactions
+        entry: npm run check
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

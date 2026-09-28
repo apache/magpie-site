@@ -1,0 +1,16 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { SiteHeader } from '../components/landing/SiteHeader';
+import { SiteFooter } from '../components/landing/SiteFooter';
+import '../styles/content-pages.css';
+interface Props { title: string; description: string; wide?: boolean }
+const { title, description, wide = false } = Astro.props;
+---
+<BaseLayout title={`${title} | Apache Magpie`} description={description}>
+  <SiteHeader currentPath={Astro.url.pathname} />
+  <main id="main-content" tabindex="-1" class:list={['content-page', 'container', { wide }]}>
+    <header class="content-page-heading"><h1>{title}</h1><p>{description}</p></header>
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

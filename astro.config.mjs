@@ -3,11 +3,21 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { satteri } from '@astrojs/markdown-satteri';
+import callouts from './scripts/markdown-callouts.mjs';
+import projectFiles from './scripts/markdown-project-files.mjs';
+import { markdownSemantics, taskLabels } from './scripts/markdown-semantics.mjs';
+import islandStyle from './scripts/quality/hoist-island-style.mjs';
+import publishDocAssets from './scripts/quality/prune-doc-assets.mjs';
 
 // Production is served directly at the apex https://magpie.apache.org/ (root path).
 // Override SITE_URL / SITE_BASE if you ever need to preview under a subpath.
 const site = process.env.SITE_URL ?? 'https://magpie.apache.org';
 const base = process.env.SITE_BASE ?? '/';
+// Astro/Vite's default dependency cache is shared by dev and build. A build
+// can invalidate modules still used by an open dev page, freezing React islands.
+// Quality runs also get their own cache so parallel processes cannot overwrite it.
+const cache = process.env.MAGPIE_CACHE_DIR ?? `node_modules/.cache/magpie-${process.env.NODE_ENV === 'production' ? 'build' : 'dev'}`;
 
 // Internal `.md` links in the synced docs are rewritten to site routes by
 // scripts/rewrite-doc-links.mjs (run from scripts/sync-docs.sh at build time).
@@ -35,9 +45,17 @@ export default defineConfig({
   site,
   base,
   redirects,
+  cacheDir: `${cache}/astro`,
+  markdown: {
+    shikiConfig: { theme:'github-dark-high-contrast' },
+    processor: satteri({ mdastPlugins: [markdownSemantics], hastPlugins: [callouts, projectFiles, taskLabels] }),
+  },
   // Markdown twins of docs pages (/docs/<page>.md) are alternates of the HTML
   // page, not pages, so they stay out of the sitemap.
   integrations: [
+    sitemap({ filter: (page) => !page.endsWith('.md') }),
+    islandStyle(),
+    publishDocAssets(),
     react(
       process.env.MAGPIE_PREVIEW_ANNOTATE === "1"
         ? {
@@ -51,9 +69,10 @@ export default defineConfig({
           }
         : {},
     ),
-    sitemap({ filter: (page) => !page.endsWith('.md') }),
   ],
   vite: {
+    cacheDir: `${cache}/vite`,
+    server: { strictPort:true, watch:{ignored:['**/.builds/**']} },
     plugins: [tailwindcss()],
   },
 });

@@ -8,9 +8,9 @@ Landing page and documentation hub for [Apache Magpie](https://github.com/apache
 
 | Layer | Tool |
 |---|---|
-| Framework | [Astro 6](https://astro.build) (static output) |
+| Framework | [Astro 7](https://astro.build) (static output) |
 | UI | React 19 + [Tailwind CSS 4](https://tailwindcss.com) |
-| Animations | [Magic UI](https://magicui.design) (Particles, BorderBeam, BlurFade, TextAnimate, ShimmerButton) via `motion` |
+| Interaction | React state, native controls and CSS transitions; reduced-motion support |
 | Icons | [lucide-react](https://lucide.dev) + inline SVG for brand marks |
 | Docs | Astro content collections, markdown synced from [apache/magpie/docs](https://github.com/apache/magpie/tree/main/docs) |
 
@@ -37,6 +37,24 @@ The `prebuild` hook runs `sync-docs` automatically, so `npm run build` always pu
 | `npm run build` | Static build to `dist/` (runs sync-docs first) |
 | `npm run preview` | Serve the built site locally |
 | `npm run astro` | Astro CLI passthrough |
+| `npm run check:fast` | Knip, authored CSS audit, type checking, unit and negative checker tests |
+| `npm run test:browser` | Force-build, HTML/link/asset/route audit, responsive/a11y/interaction tests |
+| `npm run check` | Complete blocking gate |
+| `npm run hooks:verify` | Prove Git dispatches both installed hooks and rejects a failing probe |
+
+Install local hooks with prek 0.3.6 or newer:
+
+```bash
+prek install --overwrite --git-dir "$(git rev-parse --git-common-dir)" --hook-type pre-commit --hook-type pre-push
+npm run hooks:verify
+```
+
+Pre-commit runs hygiene and the fast gate; pre-push runs the complete gate.
+A global `core.hooksPath` must forward to this repository's hooks. The verification
+command exercises the effective path in a temporary repository and fails when
+dispatch is missing; it never stages, stashes, commits or pushes this project.
+See [the consistency contract](docs/designs/2026-09-26-ui-quality-contract.md)
+for exact assertions, fixtures and boundaries.
 
 ### Environment variables (optional)
 
@@ -53,25 +71,23 @@ website/
 │   └── sync-docs.sh             # sparse-clone docs/ + images/ from source repo
 ├── src/
 │   ├── components/
-│   │   ├── Badge/               # Subframe-derived primitives (owned)
-│   │   ├── Button/
-│   │   ├── IconButton/
 │   │   ├── landing/             # LP + SiteHeader/SiteFooter
-│   │   └── ui/                  # Magic UI / shadcn primitives
+│   │   ├── docs/                # tree + search dialog
+│   │   └── stories/             # illustrative trend + interactive data charts
 │   ├── content/
 │   │   └── docs/                # synced markdown (gitignored)
 │   ├── content.config.ts        # docs collection schema
 │   ├── layouts/
 │   │   ├── BaseLayout.astro
 │   │   └── DocsLayout.astro
-│   ├── lib/utils.ts             # cn() helper
+│   ├── lib/utils.ts             # deployment base-path helper
 │   ├── pages/
 │   │   ├── index.astro          # /
 │   │   └── docs/
 │   │       ├── index.astro      # /docs
 │   │       └── [...slug].astro  # /docs/<any>
-│   ├── styles/global.css
-│   └── theme.css                # design tokens (brand, neutral, text sizes)
+│   └── styles/                  # spacing, shared chrome, page layouts, dark tokens
+├── tests/browser/               # discovered routes, interactions, broken fixtures
 ├── public/                       # static assets (logos, favicons, /docs-assets)
 └── astro.config.mjs
 ```
@@ -94,13 +110,10 @@ Image references inside markdown (`../../images/foo.png`) are rewritten to `/doc
 
 ## CI
 
-GitHub Actions workflow `.github/workflows/build.yml` runs on every push and PR to `main`:
-
-1. Install dependencies
-2. Sync docs from the source repo
-3. `astro check` (warn-only)
-4. `astro build`
-5. On `main`: copy `.asf.yaml` into `dist/` and force-push the build to the `publish` branch
+The existing Build and Deploy workflow runs the hygiene and static gates, then
+fresh-build browser checks and the development preview tests. Production builds
+and publication depend on those checks. PR source-annotation previews and their
+Astro/Jekyll adapter tests remain part of the upstream workflow.
 
 ## Deployment
 

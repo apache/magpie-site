@@ -26,7 +26,7 @@ import { SITE_NAME, SITE_URL, allDocs, docMarkdown } from "../lib/site";
 export const GET: APIRoute = async () => {
   const docs = await allDocs();
   const body = [
-    `# ${SITE_NAME} — full documentation`,
+    `# ${SITE_NAME}: full documentation`,
     "",
     `Index: ${SITE_URL}/llms.txt`,
     "",

@@ -1,0 +1,14 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+const resources = [
+  ['Get started', 'Install Magpie in your own workspace.', '/start'],
+  ['Working with agents', 'A practical introduction for maintainers.', '/docs/education/readme'],
+  ['Choose a workflow', 'Find the skills that fit your project.', '/docs/quick-start/families'],
+  ['Adopt Magpie as a team', 'Agree the conventions your project shares.', '/docs/setup/team-adoption'],
+  ['Write a skill', 'Build and test your own maintainer workflow.', '/docs/education/your-first-skill'],
+  ['Training materials', 'Lessons and a hands-on lab for your team.', '/docs/education/training/readme'],
+  ['Extend Magpie', 'Add a tool, workflow, or organization.', '/docs/extending'],
+  ['Agentic modes', 'Understand the maturity of each way of working.', '/docs/modes'],
+];
+---
+<ContentLayout title="Learn and extend" description="Practical guides for using Magpie and making it your own."><div class="resource-list">{resources.map(([title,description,href])=><a href={href}><span><strong>{title}</strong><small>{description}</small></span></a>)}</div></ContentLayout>

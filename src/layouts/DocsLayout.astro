@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import DocsSearch from "../components/docs/DocsSearch.astro";
+import "../styles/docs-redesign.css";
 import { getCollection } from "astro:content";
 import { SiteHeader } from "../components/landing/SiteHeader";
 import { SiteFooter } from "../components/landing/SiteFooter";
@@ -15,15 +17,9 @@ interface Props {
    *  Upstream keeps a doctoc block for GitHub; the sync strips it, so this is
    *  the page's only table of contents. */
   headings?: { depth: number; slug: string; text: string }[];
-  /** Section key this page is the landing page of, when no leaf slug matches
-   *  it (the /docs page is the Concepts section's landing page). Opens that
-   *  branch in the sidebar. */
-  currentSection?: string;
-  /** GitHub edit URL for this page's source (forwarded to BaseLayout). */
-  editUrl?: string;
 }
 
-const { title, currentSlug, currentSection, editUrl, headings } = Astro.props;
+const { title, currentSlug, headings } = Astro.props;
 // The first heading is the page title; h4+ is too fine-grained to navigate by.
 // Depth is not fixed at h2: several pages section themselves with repeated H1s
 // rather than H2s, so filtering on h2/h3 alone left them with no page nav.
@@ -36,13 +32,8 @@ const tocBase = Math.min(...toc.map((h) => h.depth), 6);
 
 const HIDDEN_NAV_DOCS = new Set([
   ...HIDDEN_DOCS,
-  // docs/quick-start/README.md — an index of the pages the sidebar already
-  // lists, and quick-start.md is the section's overview. It earns its keep on
-  // GitHub, where browsing the folder shows it; both keep their routes.
-  "quick-start/readme",
 ]);
 // Quick-start entry pinned to the top of the docs sidebar.
-const QUICK_START = { slug: "quick-start", label: "Quick Start" };
 
 // Curated nav grouping — mirrors the landing's skill families. "_root" holds
 // the top-level getting-started docs. Unlisted groups fall to the end.
@@ -145,7 +136,7 @@ const h1Fit = (entry: { body?: string }): string | null => {
   const h1 = firstH1(entry.body);
   return h1 && h1.length <= SIDEBAR_LABEL_MAX ? h1 : null;
 };
-// "Lesson 01: What agents are" → "01 · What agents are". The section is
+// "Lesson 01: What agents are"  "01 · What agents are". The section is
 // already called Training, so repeating "Lesson" on every row spends sidebar
 // width saying nothing. Mirrors shortRfc.
 const LESSON_RE = /^Lesson\s+(\d+):\s*(.+)$/;
@@ -323,7 +314,7 @@ for (const g of sortedGroups) {
 // the renderer).
 type BuildNode = TreeNode & { _seg?: string; _order?: number; children?: BuildNode[] };
 
-// tool name → "contract" | "substrate", used to split the Tools section.
+// tool name  "contract" | "substrate", used to split the Tools section.
 const TOOL_KIND = new Map<string, string>(
   ((toolsData as { tools?: { name: string; kind: string }[] }).tools ?? []).map(
     (t) => [t.name, t.kind],
@@ -395,17 +386,17 @@ const bucketTools = (toolDirs: BuildNode[]): BuildNode[] => {
   ].filter((n): n is BuildNode => n !== null);
 };
 
-// Section (top-level group) key → its built node, ready to slot under a
+// Section (top-level group) key  its built node, ready to slot under a
 // super-category.
 const sectionNodes = new Map<string, BuildNode>();
 for (const g of sortedGroups) {
   const built = buildSection(g);
   let children = built.roots;
   if (g.name === "tools") children = bucketTools(children);
-  // Concepts' overview is the /docs landing page, not a synced markdown file.
-  const href = g.name === "_root" ? "/docs" : built.href;
+  // Concepts is a group; Introduction already links to the docs landing page.
+  const href = g.name === "_root" ? undefined : built.href;
   const isCurrent =
-    g.name === "_root" ? currentSection === "_root" : href === currentSlug;
+    g.name === "_root" ? false : href === currentSlug;
   sectionNodes.set(g.name, { label: g.label, children, href, isCurrent });
 }
 
@@ -468,57 +459,68 @@ for (const cat of navTree) finalize(cat);
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
-<BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"} editUrl={editUrl}>
-  <SiteHeader />
-  <div class="flex w-full">
-    <aside class="w-72 flex-none border-r border-neutral-200 bg-neutral-50 sticky top-0 h-screen flex flex-col mobile:hidden">
-      {/* Pinned header: stays put while the nav below scrolls. */}
-      <div class="flex-none border-b border-neutral-200 px-5 pt-6 pb-4">
-        <a href={`${base}/`} class="block text-caption font-caption text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a>
-        <div class="mt-1 text-heading-3 font-heading-3 text-default-font">Documentation</div>
-      </div>
-      <div id="docs-nav-scroll" class="relative flex-1 overflow-y-auto px-4 py-5">
-        <a
-          href={`${base}/docs/${QUICK_START.slug}`}
-          aria-current={currentSlug === QUICK_START.slug ? "page" : undefined}
-          class={`block mb-5 px-3 py-2 rounded-md text-body-bold font-body-bold ${currentSlug === QUICK_START.slug ? "bg-brand-600 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"}`}
-        >
-          ⚡ {QUICK_START.label}
-        </a>
-        <nav>
-          <DocsNavTree nodes={navTree} base={base} level={0} />
-        </nav>
+<BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"}>
+  <SiteHeader search />
+  <DocsSearch />
+  <div class="docs-shell">
+    <aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation">
+      <div id="docs-nav-scroll">
+        <a href={`${base}/start`} class="docs-overview-link">Install Magpie</a>
+        <a href={`${base}/docs`} class:list={["docs-overview-link", { active: !currentSlug }]} aria-current={!currentSlug ? 'page' : undefined}>Introduction</a>
+        <nav aria-label="Documentation sections"><DocsNavTree nodes={navTree} base={base} level={0} /></nav>
       </div>
     </aside>
-    <main class="min-w-0 flex-1 px-12 py-12 mobile:px-4 mobile:py-8">
-      <article class="prose prose-neutral max-w-3xl mx-auto">
-        <slot />
-      </article>
+    <main id="main-content" tabindex="-1" class="docs-main">
+      <div class="docs-breadcrumb"><a href={`${base}/docs`}>Docs</a><span>/</span><span>{currentSlug ? currentSlug.split('/')[0].replaceAll('-', ' ') : 'Introduction'}</span>{currentSlug && <button class="button button-secondary button-small copy-page" data-markdown={`${base}/docs/${currentSlug}.md`}>Copy page</button>}</div>
+      <article class="prose docs-prose"><slot /></article>
     </main>
-    {toc.length > 0 && (
-      <aside class="hidden xl:block w-60 flex-none border-l border-solid border-neutral-200 bg-default-background sticky top-0 h-screen overflow-y-auto px-5 py-12">
-        <div class="mb-3 text-caption font-caption uppercase tracking-wider text-subtext-color">
-          On this page
-        </div>
-        <nav>
-          <ul class="flex flex-col gap-1.5">
-            {toc.map((h) => (
-              <li>
-                <a
-                  href={`#${h.slug}`}
-                  class="block text-caption font-caption text-subtext-color hover:text-brand-700"
-                  style={`padding-left: ${(h.depth - tocBase) * 0.75}rem`}
-                >
-                  {h.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-    )}
+    <aside class="docs-toc" aria-label="On this page">
+      {toc.length > 0 ? <><span class="eyebrow">On this page</span><nav><ul>{toc.map(h => <li><a href={`#${h.slug}`} style={`padding-left: ${(h.depth - tocBase) * 0.75}rem`}>{h.text}</a></li>)}</ul></nav></> : <><span class="eyebrow">Get started</span><a href={`${base}/start`}>Install Magpie </a><a href={`${base}/docs/quick-start/families`}>Choose a workflow </a><a href={`${base}/docs/education/readme`}>Learn about agents </a></>}
+
+    </aside>
   </div>
   <SiteFooter />
+  <script>
+    const toggle = document.querySelector<HTMLButtonElement>('.docs-menu-toggle')!;
+    const sidebar = document.querySelector<HTMLElement>('.docs-sidebar')!;
+    const background = [...document.querySelectorAll<HTMLElement>('.docs-main, .docs-toc, .site-footer')];
+    const closeSidebar = () => {
+      sidebar.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('docs-navigation-open');
+      background.forEach(element => { element.inert = false; });
+    };
+    toggle.addEventListener('click', () => {
+      if (sidebar.classList.contains('is-open')) { closeSidebar(); return; }
+      sidebar.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('docs-navigation-open');
+      background.forEach(element => { element.inert = true; });
+      sidebar.querySelector<HTMLElement>('a')?.focus();
+    });
+    document.querySelector('[data-search-open]')?.addEventListener('click', closeSidebar);
+    matchMedia('(min-width: 801px)').addEventListener('change', event => { if (event.matches) closeSidebar(); });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Tab' || !sidebar.classList.contains('is-open')) return;
+      const items = [toggle, ...sidebar.querySelectorAll<HTMLElement>('a, summary, button')].filter(element => element.getClientRects().length > 0);
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && sidebar.classList.contains('is-open')) { closeSidebar(); toggle.focus(); } });
+    sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeSidebar));
+    document.querySelector<HTMLButtonElement>('.copy-page')?.addEventListener('click', async event => {
+      const button = event.currentTarget as HTMLButtonElement;
+      try { const response = await fetch(button.dataset.markdown!); if (!response.ok) throw new Error('Unavailable'); await navigator.clipboard.writeText(await response.text()); button.textContent = 'Copied ✓'; }
+      catch { button.textContent = 'Could not copy'; }
+      setTimeout(() => { button.textContent = 'Copy page ⧉'; }, 2200);
+    });
+    const tocLinks = [...document.querySelectorAll<HTMLAnchorElement>('.docs-toc nav a')];
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        tocLinks.forEach(link => { const active = decodeURIComponent(link.hash.slice(1)) === entry.target.id; link.classList.toggle('active', active); if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); });
+      }
+    }, { rootMargin: '-140px 0px -60% 0px' });
+    tocLinks.forEach(link => { const heading = document.getElementById(decodeURIComponent(link.hash.slice(1))); if (heading) observer.observe(heading); });
+  </script>
 
   {/* On a long sidebar the active page can be scrolled out of view after a
       full-page navigation. Bring it back into the sidebar's scroll viewport
@@ -562,23 +564,3 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     })();
   </script>
 </BaseLayout>
-
-<style is:global>
-  .prose h1 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--color-default-font); }
-  .prose h2 { font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--color-default-font); }
-  .prose h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-default-font); }
-  .prose p { margin: 0.75rem 0; color: var(--color-default-font); line-height: 1.7; }
-  .prose a { color: var(--color-brand-600); text-decoration: none; }
-  .prose a:hover { color: var(--color-brand-700); text-decoration: underline; }
-  .prose ul, .prose ol { margin: 0.75rem 0; padding-left: 1.5rem; color: var(--color-default-font); }
-  .prose li { margin: 0.25rem 0; }
-  .prose code { background: var(--color-neutral-100); padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875em; }
-  .prose pre { background: var(--color-neutral-900); color: var(--color-neutral-50); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; }
-  .prose pre code { background: transparent; padding: 0; color: inherit; }
-  .prose blockquote { border-left: 4px solid var(--color-brand-200); padding-left: 1rem; margin: 1rem 0; color: var(--color-subtext-color); font-style: italic; }
-  .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-  .prose th, .prose td { border: 1px solid var(--color-neutral-200); padding: 0.5rem 0.75rem; text-align: left; }
-  .prose th { background: var(--color-neutral-50); font-weight: 600; }
-  .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
-  .prose hr { border: none; border-top: 1px solid var(--color-neutral-200); margin: 2rem 0; }
-</style>

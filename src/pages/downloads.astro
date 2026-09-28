@@ -1,9 +1,6 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { SiteHeader } from "../components/landing/SiteHeader";
-import { SiteFooter } from "../components/landing/SiteFooter";
+import ContentLayout from "../layouts/ContentLayout.astro";
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 // ── Release configuration ────────────────────────────────────────────────
 // This page is the ASF-compliant download page (issue #46), wired to the
@@ -39,14 +36,14 @@ const dl = {
 };
 const VERIFY = "https://www.apache.org/info/verification.html";
 
-const verifySteps = `# 1. Import the project's release-signing keys (once)
+const verifySteps = `# Import the project's release-signing keys (once)
 curl -fsSLO ${DIST}/KEYS
 gpg --import KEYS
 
-# 2. Verify the detached PGP signature
+# Verify the detached PGP signature
 gpg --verify ${artifact}.asc ${artifact}
 
-# 3. (optional) Verify the SHA-512 checksum — not needed if the signature checks out
+# Optional: Verify the SHA-512 checksum: not needed if the signature checks out
 sha512sum -c ${artifact}.sha512`;
 
 const prettyDate = release.date
@@ -57,134 +54,11 @@ const prettyDate = release.date
     })
   : null;
 ---
+<ContentLayout title="Downloads" description="Signed source releases of Apache Magpie, distributed through the Apache mirror network.">
+  <section><h2>Install Magpie</h2><p>The marketplace is the usual starting point. Use the signed source archive when you need an offline installation or a verified ASF release.</p><div class="link-row"><a href="/start">Install in your agent </a><a href="/docs/quick-start/other-install-methods">Other installation methods </a></div></section>
 
-<BaseLayout
-  title="Downloads — Apache Magpie"
-  description={`Download Apache Magpie ${release.version}, the latest official Apache source release. Distributed through the ASF mirror system with detached PGP signatures and SHA-512 checksums; verify every download against the canonical downloads.apache.org.`}
-  editUrl="https://github.com/apache/magpie-site/edit/main/src/pages/downloads.astro"
->
-  <SiteHeader />
+  <section class="surface-card release-card"><h2>Apache Magpie {release.version}<small>{prettyDate}</small></h2><a class="button" href={dl.mirror} target="_blank" rel="noreferrer">Download source ZIP</a><div class="link-row"><a href={dl.asc} target="_blank" rel="noreferrer">PGP signature</a><a href={dl.sha512} target="_blank" rel="noreferrer">SHA-512 checksum</a><a href={dl.keys} target="_blank" rel="noreferrer">Signing keys</a></div></section>
+  <section id="verify"><h2>Verify your download</h2><p>Download the signature and signing keys above, then verify the source archive before using it.</p><pre tabindex="0" aria-label="Download verification commands"><code>{verifySteps}</code></pre><div class="link-row"><a href={VERIFY} target="_blank" rel="noreferrer">Apache verification guide </a></div></section>
 
-  <main class="flex w-full flex-col items-center">
-    <!-- Header band -->
-    <div class="w-full bg-default-background px-8 pt-16 pb-10 mobile:px-4 mobile:pt-10">
-      <header class="mx-auto flex w-full max-w-[860px] flex-col gap-4">
-        <a href={`${base}/`} class="text-body font-body text-brand-600 hover:text-brand-700">← Back to Apache Magpie™</a>
-        <div class="flex items-center gap-2 self-start rounded-full border border-solid border-brand-200 bg-brand-50 px-4 py-1.5">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-600" aria-hidden="true">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          <span class="text-caption font-caption text-brand-600">Downloads</span>
-        </div>
-        <h1 class="font-['Inter'] text-[38px] font-[700] leading-[44px] text-default-font -tracking-[0.035em] mobile:text-[28px]">
-          Downloads
-        </h1>
-        <p class="text-body font-body text-subtext-color max-w-[760px]">
-          The official Apache Magpie™ release is a signed <strong>source release</strong>,
-          distributed through the Apache mirror system. Download it below and{" "}
-          <a class="text-brand-600 hover:text-brand-700 underline" href="#verify">verify it</a>{" "}
-          before use.
-        </p>
-      </header>
-    </div>
-
-    <!-- Body -->
-    <div class="w-full px-8 pb-20 mobile:px-4">
-      <div class="mx-auto flex w-full max-w-[860px] flex-col gap-6">
-
-        <!-- Latest release (ASF-compliant) -->
-        <section id="latest" class="flex flex-col gap-4 rounded-2xl border border-solid border-brand-200 bg-brand-50 px-6 py-6 scroll-mt-20">
-          <div class="flex flex-wrap items-center gap-3">
-            <h2 class="text-heading-2 font-heading-2 text-default-font">Latest release</h2>
-            <span class="inline-flex items-center gap-1.5 rounded-full border border-solid border-brand-300 bg-default-background px-3 py-0.5 text-caption font-caption text-brand-700">
-              Apache Magpie {release.version}
-            </span>
-            {prettyDate && (
-              <span class="text-caption font-caption text-subtext-color">released {prettyDate}</span>
-            )}
-          </div>
-          <p class="text-body font-body text-subtext-color">
-            The signed <strong>source release</strong> is the official Apache artifact. The
-            download is served from a mirror; the signature, checksum and KEYS come from the
-            canonical{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href="https://downloads.apache.org/" target="_blank" rel="noreferrer"><code class="font-mono">downloads.apache.org</code></a>{" "}
-            and must be used to verify what you downloaded.
-          </p>
-
-          <!-- Primary download -->
-          <a
-            href={dl.mirror}
-            class="inline-flex w-fit items-center gap-2 rounded-lg bg-brand-600 px-5 py-3 text-body-bold font-body-bold text-white shadow-sm transition-colors hover:bg-brand-700"
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-            Download {artifact}
-          </a>
-          <p class="text-caption font-caption text-subtext-color">
-            Downloaded via a nearby Apache mirror (you may be shown a mirror-selection page).
-          </p>
-
-          <!-- Verification artifacts -->
-          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
-            <span class="text-caption font-caption text-subtext-color">Verify with:</span>
-            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.asc} target="_blank" rel="noreferrer">PGP signature (.asc)</a>
-            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.sha512} target="_blank" rel="noreferrer">SHA-512 checksum</a>
-            <a class="inline-flex items-center gap-1.5 text-caption font-caption text-brand-600 hover:text-brand-700 underline" href={dl.keys} target="_blank" rel="noreferrer">KEYS</a>
-          </div>
-        </section>
-
-        <!-- Verify your download -->
-        <section id="verify" class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm scroll-mt-20">
-          <h2 class="text-heading-2 font-heading-2 text-default-font">Verify your download</h2>
-          <p class="text-body font-body text-subtext-color">
-            Always verify the source release using the detached <strong>PGP signature</strong>:
-            it confirms the artifact was released by an Apache Magpie committer. If the
-            signature verifies, checking the SHA-512 checksum is not necessary. See the ASF's{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={VERIFY} target="_blank" rel="noreferrer">verification guide</a>{" "}
-            for the full procedure.
-          </p>
-          <pre class="overflow-x-auto rounded-lg border border-solid border-neutral-200 bg-neutral-50 px-4 py-3 text-caption font-mono text-default-font"><code>{verifySteps}</code></pre>
-        </section>
-
-        <!-- How to install -->
-        <section class="flex flex-col gap-3 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-          <h2 class="text-heading-2 font-heading-2 text-default-font">How to install</h2>
-          <p class="text-body font-body text-subtext-color">
-            <strong>Most people install Magpie from the Apache Magpie Marketplace</strong> — two
-            commands, and nothing is committed to your repository. That is the main install: the{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start`}>quick start</a>{" "}
-            walks it, and{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/setup/marketplace`}>the Marketplace reference</a>{" "}
-            covers every supported agent, per-family plugins, pinning, and updates.
-          </p>
-          <p class="text-body font-body text-subtext-color">
-            <strong>Use the signed source release above</strong> when you want to install from
-            released sources rather than from the Marketplace — an offline or air-gapped
-            install, or a policy that requires a verified ASF artifact. See{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start/other-install-methods#released-zip-from-asf-distribution-offline`}>Released zip from ASF distribution (offline)</a>.
-          </p>
-          <p class="text-body font-body text-subtext-color">
-            The remaining methods — a pinned snapshot from a git tag or the{" "}
-            <code class="font-mono">main</code> branch, and self-adoption for a clone of the
-            framework itself — are in{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={`${base}/docs/quick-start/other-install-methods`}>Other installation methods</a>.
-          </p>
-        </section>
-
-        <!-- Older releases -->
-        <section class="flex flex-col gap-2 rounded-2xl border border-solid border-neutral-200 bg-default-background px-6 py-6 shadow-sm">
-          <h2 class="text-heading-2 font-heading-2 text-default-font">Older releases</h2>
-          <p class="text-body font-body text-subtext-color">
-            Only the latest release is supported and mirrored. Previous releases are kept in the{" "}
-            <a class="text-brand-600 hover:text-brand-700 underline" href={dl.archive} target="_blank" rel="noreferrer">Apache archive</a>{" "}
-            for reference.
-          </p>
-        </section>
-
-      </div>
-    </div>
-  </main>
-
-  <SiteFooter />
-</BaseLayout>
+  <section><h2>Previous releases</h2><p>Older source releases remain available in the Apache archive.</p><div class="link-row"><a href={dl.archive} target="_blank" rel="noreferrer">Browse the archive </a></div></section>
+</ContentLayout>

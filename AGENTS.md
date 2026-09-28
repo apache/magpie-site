@@ -38,8 +38,9 @@ Key locations:
 
 - `src/pages/` — Astro routes (`index.astro`, `docs/**`).
 - `src/layouts/` — `BaseLayout.astro`, `DocsLayout.astro`.
-- `src/components/landing/` — the landing page (`ImmersiveGradientHero.tsx`)
-  and the shared docs chrome (`SiteHeader.tsx`, `SiteFooter.tsx`).
+- `src/components/landing/` — interactive homepage sections (`HeroWorkflows`,
+  `WorkflowExplorer`, `ProjectExamples`) and shared primitives/chrome
+  (`WorkflowCard`, `CenteredLabel`, `SiteHeader`, `SiteFooter`).
 - `src/content/docs/` — **generated**; synced from `apache/magpie`. Do not
   hand-edit; changes are overwritten on the next build.
 - `scripts/` — build-time sync and link-rewrite helpers.
@@ -64,7 +65,7 @@ continue with the original task.
   whitespace-collapse) are only caught after the push. If you have a global
   `core.hooksPath`, git ignores this repo's `.git/hooks/` and plain
   `prek install` refuses — install with
-  `prek install --force --git-dir "$(git rev-parse --git-common-dir)"`, and
+  `prek install --overwrite --git-dir "$(git rev-parse --git-common-dir)" --hook-type pre-commit --hook-type pre-push`, and
   check that the global hook chains through to the repo-local one.
 - `npm run dev` — local dev server. **Always start the dev server this way.**
   It runs `scripts/dev.sh`, which sets `ASTRO_TELEMETRY_DISABLED=1` before
@@ -82,30 +83,60 @@ continue with the original task.
 
 ## Site conventions
 
-### Duplicated header/footer markup — keep in sync
+### Prefer shared rules and maintain the checks
 
-The site renders its chrome from **two separate copies** of similar markup.
-There is no single shared component, so changes can silently drift.
+- Manage attention deliberately: treat new comments as additions to the current
+  work queue, not instructions to immediately abandon the step in progress.
+  Finish and verify the current coherent task, then address queued feedback in
+  order. Switch immediately only when the user explicitly reprioritizes, stops
+  the work, or reports an issue that blocks the current task. Keep the original
+  objective and outstanding requests across turns and context compaction.
+- Reuse and improve existing components, layout primitives and tokens before
+  introducing new abstractions. Reduce custom workarounds, duplicated markup,
+  selector overrides and one-off spacing. Fix the underlying cause at the
+  shared owner; do not patch a single instance with offsets or clipping.
+  Delete redundant code when its removal makes the current change simpler.
+  Do not force unrelated cleanup or abstractions solely to reduce line counts;
+  retain justified differences and preserve working behaviour and useful content.
+- Elements serving the same purpose must share their anatomy and interaction
+  styles. Keep deliberate differences explicit and justified. Text centering
+  inside a box is not enough: verify the box against its owning section too.
+- Maintain the quality checks alongside every change. Reproduce reported
+  regressions with failing checks, add invalid fixtures for new checker rules,
+  and keep all existing assertions meaningful. Never weaken assertions or add
+  broad exceptions merely to get a passing run.
+- Hero slide progression, the security walkthrough and the software lifecycle
+  sequence are critical user flows. Check every stage through actual controls
+  and scrolling, autoplay/pause where applicable, keyboard access, resizing,
+  and normal/reduced motion. SSR content alone does not prove hydration works.
+- Run `npm run check:fast` and the relevant browser tests during development;
+  run `npm run check` before declaring UI work complete. Browser tests must own
+  a fresh build and server. Inspect screenshots including surrounding headings
+  and containers, not only the inner widget. Investigate dev-only failures in
+  the actual preview as well as checking the production build.
+- Keep pre-commit, pre-push and CI gates active. When changing hook wiring or
+  setting up a checkout, run `npm run hooks:verify`, including with a global
+  `core.hooksPath`. Report actual test results and remaining limitations.
 
-- **Footer.** The landing page (`/`) inlines its `<footer>` at the bottom of
-  `src/components/landing/ImmersiveGradientHero.tsx`; the docs pages
-  (`/docs/**`) use `src/components/landing/SiteFooter.tsx` via `DocsLayout.astro`.
-  These two footers are intended to be **identical** — change one, mirror the
-  change in the other. Verify by building and diffing the `<footer>` block of
-  `dist/index.html` against `dist/docs/index/index.html`.
-- **Header.** The landing page inlines its nav near the top of
-  `ImmersiveGradientHero.tsx`; the docs pages use
-  `src/components/landing/SiteHeader.tsx`. These intentionally **differ** — the
-  docs header is deliberately slimmed (logo + "Star on GitHub" / "Get Started",
-  no nav-link menu). Keep shared elements (logo, button styling) consistent,
-  but the reduced docs nav is by design.
+The measurable contracts and tool boundaries are documented in
+[`docs/designs/2026-09-26-ui-quality-contract.md`](docs/designs/2026-09-26-ui-quality-contract.md).
+
+### Shared header and footer
+
+All page families use `SiteHeader` and `SiteFooter`; update these shared
+components rather than adding page-local copies. The documentation header has
+search and a mobile navigation tree, while the marketing header has its main
+navigation. This difference is intentional; branding and controls stay shared.
 
 ### External links
 
-Links that leave the site (or open the docs from the landing hero) use
-`target="_blank" rel="noreferrer"` and carry the up-right arrow icon
-(`ArrowUpRight`) as the visual new-tab cue. Match that convention for new
-outbound links.
+Links that leave the site (or open docs from the landing page) retain
+`target="_blank" rel="noreferrer"`. Do not add external-link arrow decorations.
+Buttons and navigation links have no decorative arrows. Only an intentional
+next-step CTA may have one trailing right arrow (`ArrowRight`, `cta-arrow`).
+Diagram connectors and disclosure indicators express structure, not decoration.
+Use the shared button variants, field controls, surface cards, typography tokens
+and workflow-stage component; update their cross-page style checks with changes.
 
 ### Whitespace around inline elements in `.astro` / JSX
 
@@ -140,9 +171,8 @@ issue #10.)
 - Re-read the diff — every change should be intentional.
 - `npx astro build` cleanly (no type or build errors).
 - Check internal/external links you touched still resolve.
-- If you changed the header or footer, confirm the landing and docs copies are
-  still in their intended state (footer identical; header intentionally
-  slimmed).
+- Run `npm run check` and review its results. If you changed shared chrome,
+  inspect both marketing and documentation layouts and their mobile states.
 
 ## apache-magpie framework
 

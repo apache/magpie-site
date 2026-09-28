@@ -34,6 +34,7 @@ export const DEV_LIST = "dev@magpie.apache.org";
  */
 export const STATIC_ROUTES: { path: string; title: string; description: string }[] = [
   { path: "/", title: "Home", description: "What Magpie is, the five agentic modes, and the ten skill families." },
+  { path: "/start/", title: "Get started", description: "Choose an agent, install Magpie, and try a workflow on your project." },
   { path: "/docs/", title: "Documentation", description: "Setup, skill families, education stream, principles and RFCs." },
   { path: "/architecture/", title: "Architecture", description: "Organizations, tools and capability contracts behind vendor neutrality." },
   { path: "/tools/", title: "Tools", description: "The adapters that fulfil each capability, and which vendors each supports." },
@@ -66,12 +67,12 @@ export function docMarkdownPath(entry: DocEntry): string {
 }
 
 /** Path of the synced file relative to apache/magpie/docs, original case preserved. */
-export function docRelPath(entry: DocEntry): string {
+function docRelPath(entry: DocEntry): string {
   return entry.filePath ? entry.filePath.replace(/^.*\/content\/docs\//, "") : `${docSlug(entry)}.md`;
 }
 
 /** Upstream file the page was synced from, so agents can read or edit the source. */
-export function docSourceUrl(entry: DocEntry): string {
+function docSourceUrl(entry: DocEntry): string {
   return `${SOURCE_REPO}/blob/main/docs/${docRelPath(entry)}`;
 }
 

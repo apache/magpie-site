@@ -1,0 +1,51 @@
+// An illustrative journey through the documented Magpie security procedures.
+export const securityStory = [
+  {
+    without: ["You find the report in your emails", "You copy logs and screenshots", "You piece together the discussion"],
+    label: "Report", kind: "report", prompt: "A security report arrives in your project",
+    frustration: "Where was that detail again?", relief: "Finally, it’s all in one place!",
+    title: "You can start investigating without reconstructing the conversation.",
+    work: ["You open one organized report", "You review the collected evidence", "You read the discussion in one place"],
+    handoff: "You approve starting the investigation.",
+  },
+  {
+    without: ["You read the project’s security rules", "You search for similar past reports", "You work out whether a fix is needed"],
+    label: "Triage", kind: "triage", prompt: "You need to know whether the report is valid",
+    frustration: "Do I have to start from scratch again?", relief: "I’ve got something concrete to go on.",
+    title: "You can assess the recommendation against the evidence.",
+    work: ["You review checks against those rules", "You review matching past reports", "You review the suggested next step"],
+    handoff: "Your security team confirms the decision.",
+  },
+  {
+    without: ["You reproduce the bug", "You write the patch and test", "You run the checks"],
+    label: "Fix & test", kind: "fix", prompt: "The vulnerability is confirmed, so it’s time to fix it",
+    frustration: "Why does this always take so long?", relief: "I can test the proposed fix.",
+    title: "You receive a proposed patch, a regression test, and the check results.",
+    work: ["You review how to reproduce the bug", "You review the patch and test", "You review the check results"],
+    handoff: "A maintainer reviews and merges the fix.",
+  },
+  {
+    without: ["You find the fix in the release", "You look up the published version", "You copy release links into the report"],
+    label: "Release", kind: "release", prompt: "The patch is merged, but users still need a release",
+    frustration: "I thought we’d already fixed this!", relief: "I don’t have to chase those links.",
+    title: "The fix is in a published release",
+    work: ["You review the release checks", "You review the recorded version", "You review the collected release links"],
+    handoff: "The release manager confirms it is ready to disclose.",
+  },
+  {
+    without: ["You write the advisory and CVE", "You list affected versions and fixes", "You add the reporter’s credit"],
+    label: "Disclose", kind: "advisory", prompt: "Now users need to know how to protect themselves",
+    frustration: "What if I forget something important?", relief: "I’ve got a draft to work with!",
+    title: "You receive a draft advisory with affected versions and update instructions.",
+    work: ["You review the drafted advisory and CVE", "You review the versions and update steps", "You review the reporter’s credit"],
+    handoff: "Your security team approves and publishes the announcement.",
+  },
+  {
+    without: ["You check the public advisory", "You gather the links to close the report", "You write down what you learned"],
+    label: "Close", kind: "closed", prompt: "The fix is public, and the report can be closed",
+    frustration: "Can I finally close this?", relief: "I can finally move on!",
+    title: "The release, advisory, and investigation remain linked for future reference.",
+    work: ["You review the advisory check", "You review the report prepared for closure", "You review the saved lessons"],
+    handoff: "You confirm the report can be closed.",
+  },
+];

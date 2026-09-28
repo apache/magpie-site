@@ -1,0 +1,29 @@
+/* One card anatomy; parent subgrids align headings by content, including wrapping. */
+.workflow-card {
+  position:relative;
+  /* Reserve the same top-badge space in every card so mixed rows align,
+     stacked cards do not collide and the carousel cannot crop their badges. */
+  margin-block:var(--card-badge-overhang) 0;
+  margin-inline:auto; width:100%; max-width:var(--card-width);
+  display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto;
+  align-items:stretch; gap:var(--content-gap);
+  text-align:left; overflow-wrap:anywhere;
+}
+.workflow-card[data-card-tone=manual] { background:var(--manual-bg); color:var(--manual-ink); }
+.workflow-card[data-card-tone=prepared] { background:var(--prepared-bg); color:var(--prepared-ink); }
+.workflow-card[data-card-tone=result] { background:var(--result-bg); color:var(--result-ink); }
+.workflow-card-heading { display:grid; grid-template-columns:minmax(0,1fr); align-items:center; margin:0; padding-top:var(--space-3); font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:center; }
+.workflow-card[data-card-tone=prepared] > :is(.workflow-card-heading,.card-badge) { color:var(--prepared-accent); }
+.workflow-card-body { min-width:0; }
+.workflow-card-body > :first-child { margin-top:0; }
+.workflow-card-body > :last-child { margin-bottom:0; }
+.workflow-card p { max-width:var(--card-measure); margin-inline:auto; text-wrap:pretty; }
+.workflow-card:has(> .workflow-card-emphasis) { grid-template-rows:auto auto auto; }
+.workflow-card > .workflow-card-emphasis { margin-block:calc(var(--heading-gap) - var(--content-gap)) 0; width:100%; font-size:var(--text-reading); line-height:var(--leading-body); text-align:center; text-wrap:balance; }
+/* One reading column keeps markers in place as a sequence changes its copy. */
+.workflow-checklist { display:grid; gap:var(--content-gap); width:var(--card-measure); max-width:100%; margin:0 auto; padding:0; list-style:none; }
+.workflow-checklist > li { display:grid; grid-template-columns:22px minmax(0,1fr); align-items:start; gap:12px; font-size:var(--text-reading); line-height:var(--leading-body); }
+/* The SVG keeps its aspect ratio, centred within the first text line. */
+.workflow-checklist > li > svg { width:22px; height:1lh; color:inherit; }
+.workflow-checklist > li > span { min-width:0; text-wrap:pretty; }
+.magpie-toolkit { display:block; width:56px; height:49px; flex:none; }

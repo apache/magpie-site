@@ -1,0 +1,9 @@
+---
+interface Props { bottom?: boolean; reverse?: boolean }
+const { bottom = false, reverse = false } = Astro.props;
+---
+<svg class:list={["section-wave", { "wave-bottom": bottom, "wave-reverse": reverse }]} viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path class="wave-ribbon" d="M0 40C230 92 370 -8 650 19S1120 92 1440 26V100H0Z" />
+  <path class="wave-fill" d="M0 62C230 110 370 -2 650 31S1120 110 1440 48V100H0Z" />
+  <path class="wave-contour" d="M0 44C230 81 370 2 650 20S1120 86 1440 31" />
+</svg>
