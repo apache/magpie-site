@@ -17,7 +17,7 @@ export type WorkflowCardProps = {
   headingLevel?: HeadingLevel;
 };
 
-function CardHeading({ title, icon, level: Heading = "h3" }: {
+export function CardHeading({ title, icon, level: Heading = "h3" }: {
   title: ReactNode; icon?: ReactNode; level?: HeadingLevel;
 }) {
   return <Heading className="workflow-card-heading">

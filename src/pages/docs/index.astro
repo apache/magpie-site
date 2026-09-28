@@ -1,6 +1,7 @@
 ---
+import { CardHeading } from "../../components/landing/WorkflowCard";
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import { ShieldCheck, GitPullRequest, Inbox, PackageCheck, BookOpen, Terminal } from "lucide-react";
+import { ShieldCheck, GitPullRequest, Inbox, PackageCheck } from "lucide-react";
 const workflows = [
   { title: "Security reports", description: "Assess, coordinate, fix, and disclose.", href: "/docs/security/readme", icon: ShieldCheck },
   { title: "Pull requests", description: "Triage the queue and prepare reviews.", href: "/docs/pr-management/readme", icon: GitPullRequest },
@@ -12,12 +13,16 @@ const more = [["Repository health", "/docs/repo-health/readme"], ["Mentoring", "
 <DocsLayout title="Introduction" currentSlug="" headings={[{depth: 2, slug: "workflows", text: "Choose a workflow"}, {depth: 2, slug: "understand", text: "Understand the foundations"}]}>
   <h1>Documentation</h1>
   <p class="docs-lead">Magpie is a collection of AI agent skills for open-source maintainers. Use it to prepare reviews, triage reports, and move work forward with your judgment at every step.</p>
-  <a href="/start" class="surface-card docs-start-card"><div><h2>Get up and running</h2><p>Install Magpie, choose a workflow, and try it on your project.</p><span class="text-link">Install Magpie</span></div><Terminal size={32} aria-hidden="true" /></a>
+  <a href="/start" class="button button-soft">Install Magpie</a>
+  <section class="docs-overview-section" aria-labelledby="workflows">
   <h2 id="workflows">What would you like help with?</h2>
-  <div class="docs-card-grid">{workflows.map(item => <a href={item.href} class="surface-card docs-card"><item.icon size={24} aria-hidden="true" /><h3>{item.title}</h3><p>{item.description}</p></a>)}</div>
+  <div class="docs-card-grid">{workflows.map(item => <a href={item.href} class="surface-card workflow-card docs-card"><CardHeading title={item.title}><item.icon slot="icon" aria-hidden="true" /></CardHeading><div class="workflow-card-body"><p>{item.description}</p></div></a>)}</div>
   <div class="docs-more-links">{more.map(([title,href]) => <a href={href}>{title}</a>)}</div>
+  </section>
+  <section class="docs-overview-section" aria-labelledby="understand">
   <h2 id="understand">Understand the foundations</h2>
   <p>Before handing work to an agent, get to know the boundaries.</p>
   <div class="docs-reference-list"><a href="/docs/principles"><span><strong>The maintainer stays in control</strong><small>How Magpie approaches approval and responsibility.</small></span></a><a href="/docs/setup/secure-agent-setup"><span><strong>Set up a safe workspace</strong><small>Isolation, permissions, and the action guard.</small></span></a><a href="/docs/setup/privacy-llm"><span><strong>Decide where your data can go</strong><small>Approved models and privacy-aware routing.</small></span></a><a href="/architecture"><span><strong>See how it fits together</strong><small>Skills, capabilities, tools, and your project.</small></span></a></div>
-  <div class="surface-card docs-learning-note"><BookOpen size={24} aria-hidden="true" /><div><strong>New to working with agents?</strong><p>The education guides start with the basics. <a href="/docs/education/readme">Begin here</a></p></div></div>
+  </section>
+  <section class="docs-overview-section"><h2>New to working with agents?</h2><p>The education guides start with the basics. <a href="/docs/education/readme">Begin here</a></p></section>
 </DocsLayout>

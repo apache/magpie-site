@@ -561,3 +561,15 @@ test('isolation comparison flags unequal card heights', async ({page}) => {
   await page.locator('.workflow-card').last().evaluate(el => {el.style.transform = 'scaleY(.7)'; el.style.transformOrigin = 'top';});
   expect((await page.evaluate(measureLayout)).join('\n')).toContain('unequal card bottoms: isolation-sides');
 });
+
+test('documentation detects independent shell and breadcrumb widths', async ({page}) => {
+  await page.setContent('<header class="header-inner"></header><div class="container docs-shell"><aside class="docs-sidebar"></aside><main class="docs-main"><div class="docs-breadcrumb">Documentation</div><article class="docs-prose"><h1>Guide</h1><p>Reading content.</p></article></main><aside class="docs-toc"></aside></div>');
+  for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/docs-redesign.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
+  await page.setViewportSize({width:1920,height:900});
+  expect(await page.evaluate(measureLayout)).toEqual([]);
+  await page.locator('.docs-shell').evaluate(el => el.style.width = '1600px');
+  expect((await page.evaluate(measureLayout)).join('\n')).toContain('documentation shell differs from shared header width');
+  await page.locator('.docs-shell').evaluate(el => el.removeAttribute('style'));
+  await page.locator('.docs-breadcrumb').evaluate(el => el.style.width = 'calc(100% - 80px)');
+  expect((await page.evaluate(measureLayout)).join('\n')).toContain('documentation breadcrumb differs from reading column');
+});

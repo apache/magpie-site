@@ -36,7 +36,7 @@ a, button, summary { -webkit-tap-highlight-color:transparent; transition:color v
 :focus-visible { outline:2px solid var(--blue); outline-offset:4px; }
 ::selection { background:#cddff9; color:#152f51; }
 [hidden] { display:none !important; }
-.container { width:min(var(--content-width),calc(100% - 2 * var(--page-gutter))); margin-inline:auto; }
+.container { max-width:none; width:min(var(--content-width),calc(100% - 2 * var(--page-gutter))); margin-inline:auto; }
 .site-header { position:sticky; top:0; z-index:40; background:var(--paper); }
 .header-inner { width:min(var(--content-width),calc(100% - 2 * var(--page-gutter))); min-height:var(--header-height); margin:auto; display:flex; align-items:center; gap:var(--space-6); }
 .brand-lockup { display:inline-flex; align-items:center; text-decoration:none; flex-shrink:0; }

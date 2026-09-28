@@ -32,6 +32,16 @@ export function measureLayout() {
     const gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--page-gutter'));
     if (r.left + tolerance < gutter) errors.push('page gutter too small: ' + el.className);
   }
+  const docsShell = document.querySelector('.docs-shell'), header = document.querySelector('.header-inner');
+  if (docsShell && header) {
+    const a = docsShell.getBoundingClientRect(), b = header.getBoundingClientRect();
+    if (Math.abs(a.left-b.left) > tolerance || Math.abs(a.right-b.right) > tolerance) errors.push('documentation shell differs from shared header width');
+    const breadcrumb = docsShell.querySelector('.docs-breadcrumb'), article = docsShell.querySelector('.docs-prose');
+    if (breadcrumb && article) {
+      const c = breadcrumb.getBoundingClientRect(), d = article.getBoundingClientRect();
+      if (Math.abs(c.left-d.left) > tolerance || Math.abs(c.right-d.right) > tolerance) errors.push('documentation breadcrumb differs from reading column');
+    }
+  }
   // Marketing section titles share the section's axis, even when their text
   // measure or an intermediate wrapper is narrower. Card titles have their own
   // local centering contract below; documentation headings remain left-aligned.

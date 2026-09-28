@@ -83,7 +83,9 @@ kept while that section is active. Returning to the page top clears the fragment
 Browser checks cover desktop/phone widths, keyboard navigation and documentation.
 The homepage also exposes native section links in its headings and a compact
 contents menu. The menu closes on selection, outside clicks and Escape, restoring
-appropriate keyboard focus. Common hairline separators mark section boundaries.
+appropriate keyboard focus. Permalink icons appear beside the centered text without reserving heading width,
+on hover or keyboard focus; touch users retain a visible affordance. Common
+hairline separators mark section boundaries.
 The hero chooses its first example after hydration and advances from that state;
 repeatable tests cover different starting examples, wraparound and manual pause.
 
@@ -94,6 +96,12 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   regions remain scrollable. The moving carousel rail is measured through its
   active slide and descendants, not its intentionally translated wrapper.
 - Shared page containers have symmetric margins and at least the gutter token.
+  Their width is owned by the shared content token, without extra framework
+  breakpoint caps. Documentation uses that same container as the header and
+  footer; its breadcrumb and article share one reading column, capped at 740px.
+  Both edges are checked, with invalid fixtures for independent shell and
+  breadcrumb widths. Documentation entry cards reuse the workflow-card heading,
+  badge and body anatomy; longer articles retain their own prose hierarchy.
 - Homepage sections retain at least the shared responsive section-padding
   token on both vertical edges (64–112px). Local
   compression fails the checker; deliberately broken phone/desktop fixtures
