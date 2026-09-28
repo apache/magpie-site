@@ -38,7 +38,8 @@ github:
   #   asf-allowlist-check - path-filtered to .github/**, so it is absent on any
   #                         pull request that does not touch a workflow.
   #   deploy              - gated to refs/heads/main; never runs on a PR.
-  #   publish             - schedule / workflow_dispatch only (PR previews).
+  #   publish, await-build - PR previews: schedule / workflow_dispatch, and
+  #                         pull_request_target only once a PR is armed.
   protected_branches:
     main:
       required_status_checks:

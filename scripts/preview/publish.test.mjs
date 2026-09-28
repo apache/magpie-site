@@ -41,6 +41,7 @@ function fakes({
   const pushed = [];
   const deleted = [];
   const posted = [];
+  const created = [];
 
   const gh = {
     listOpenPulls: async () => openPulls,
@@ -51,6 +52,9 @@ function fakes({
     hasWriteAccess: async (login) => login === "maintainer",
     upsertComment: async (n, marker, body) => {
       posted.push({ n, marker, body });
+    },
+    createComment: async (n, body) => {
+      created.push({ n, body });
     },
     listPreviewBranches: async () => branches,
     listPullFiles: async () => [],
@@ -69,7 +73,7 @@ function fakes({
     },
   };
 
-  return { gh, git, pushed, deleted, posted };
+  return { gh, git, pushed, deleted, posted, created };
 }
 
 const go = (f, extra = {}) =>
@@ -149,6 +153,65 @@ test("publishes an armed open PR", async () => {
   assert.match(f.pushed[0].files[".asf.yaml"], /profile: pr5/);
   assert.match(f.pushed[0].files["robots.txt"], /Disallow: \//);
   assert.ok(f.posted.some((p) => p.marker === "magpie-preview-status" && /published/i.test(p.body)));
+});
+
+test("announces each publish with a new comment, not only an edit", async () => {
+  const dir = await artifactDir();
+  const f = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd()] } });
+
+  await go(f, { fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.created.length, 1);
+  assert.equal(f.created[0].n, 5);
+  assert.match(f.created[0].body, new RegExp(SHA.slice(0, 7)));
+  assert.match(f.created[0].body, /magpie-pr5\.staged\.apache\.org/);
+});
+
+test("does not announce when nothing was published", async () => {
+  const f = fakes({ openPulls: [pull(5)], comments: { 5: [armCmd()] }, hasBuild: false });
+  await go(f);
+  assert.equal(f.created.length, 0);
+});
+
+test("a push-triggered run publishes an armed PR", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5)],
+    comments: { 5: [armCmd()] },
+    branches: ["preview/pr5-staging"],
+    headMessages: { "preview/pr5-staging": "Publish preview for #5 (deadbee)" },
+  });
+
+  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.pushed.length, 1);
+  assert.equal(f.posted.filter((p) => p.marker === "magpie-preview-armed").length, 0,
+    "a push is not a maintainer's authorisation and must not leave an arming record");
+});
+
+test("a push-triggered run never arms an unarmed PR", async () => {
+  const dir = await artifactDir();
+  const f = fakes({ openPulls: [pull(5)] });
+
+  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.pushed.length, 0);
+  assert.equal(f.created.length, 0);
+  assert.equal(f.posted.filter((p) => p.marker === "magpie-preview-armed").length, 0);
+});
+
+test("a push-triggered run does not force an unchanged preview", async () => {
+  const dir = await artifactDir();
+  const f = fakes({
+    openPulls: [pull(5)],
+    comments: { 5: [armCmd()] },
+    branches: ["preview/pr5-staging"],
+    headMessages: { "preview/pr5-staging": `Publish preview for #5 (${SHA.slice(0, 7)})` },
+  });
+
+  await go(f, { only: 5, arm: false, fetchArtifact: async () => ({ dir, meta: { pr: 5, headSha: SHA } }) });
+
+  assert.equal(f.pushed.length, 0);
 });
 
 test("publishedShaFrom reads the published commit, and nothing else", () => {

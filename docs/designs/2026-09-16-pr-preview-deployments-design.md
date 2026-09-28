@@ -53,11 +53,24 @@ step is designed around it below.
 
 ## Constraints
 
-**`pull_request_target` is forbidden.** Not discouraged — excluded. The design
-may not use it under any circumstance, including for the convenience of posting
-a comment on PR open. Everything privileged happens in workflows triggered by
-`schedule` or `workflow_dispatch`, which always run the default branch's copy of
-themselves and can never be influenced by a pull request's contents.
+**`pull_request_target` is a trigger only, never a source.** Everything
+privileged runs the default branch's copy of the workflow and its scripts, and
+can never be influenced by a pull request's contents. The original design
+excluded `pull_request_target` outright; it was later admitted (2026-09-28) for
+one narrow purpose — learning quickly that an armed pull request was pushed to —
+under these rules:
+
+- no job sets `actions/checkout`'s `ref`, so it checks out the base branch; no
+  step reads, builds or executes anything from the pull request's tree;
+- the only values taken from the event are the PR number and head SHA, passed
+  through `env` and validated as digits and 40-hex;
+- the site content still arrives only through the unprivileged build's
+  artifact, screened exactly as on a scheduled run;
+- the trigger never arms a preview. It republishes only a PR a maintainer has
+  already armed (`--if-armed`), and never forces an unchanged one.
+
+The trigger is optional: a site that drops it keeps a working, slower publisher
+driven by the schedule.
 
 **`pr<N>.dev.magpie.apache.org` is not available.** asfyaml refuses to let a
 project name its own `$project.apache.org` space ("It has to be inferred to
@@ -99,8 +112,9 @@ privileged side re-reads the workflow from the default branch.
 
 ### `preview-publish.yml` — privileged, scheduled
 
-Triggered by `schedule` (every 15 minutes) and by `workflow_dispatch` with an
-optional `pr` input naming a single PR number. Permissions: `contents: write`
+Triggered by `schedule` (every 5 minutes), by `workflow_dispatch` with an
+optional `pr` input naming a single PR number, and optionally by
+`pull_request_target` (see Constraints and "Why polling rather than events"). Permissions: `contents: write`
 (push and delete preview branches), `pull-requests: write` (comment),
 `actions: read` (download artifacts). Concurrency group `preview-publish` with
 `cancel-in-progress: false`, so two scheduled runs never race on the same
@@ -132,8 +146,8 @@ A preview branch's head commit subject records what it was built from —
 `Publish preview for #180 (14fdc13)` — so the publisher already knows the
 published commit from the same read that detects tombstones. If it equals the
 PR's current head, the run does nothing for that PR: no artifact download, no
-push, no comment. Republishing regardless force-pushes an identical tree every
-fifteen minutes, which costs a `commits@` mail and a rewritten status comment
+push, no comment. Republishing regardless force-pushes an identical tree on
+every scheduled run, which costs a `commits@` mail and a rewritten status comment
 for a preview nobody touched. A manual dispatch skips this check, because asking
 for a preview explicitly is a request to rebuild it.
 
@@ -313,13 +327,28 @@ current anchor shape, against a real PR on this repository.
 would publish the moment a build finishes. Both were considered and dropped in
 favour of one scheduled workflow, because a single privileged entry point is
 easier to reason about than three, and because the scheduled run must exist
-anyway to reap closed PRs. The cost is latency: up to 15 minutes from comment to
-preview, and up to 15 minutes from close to teardown. `workflow_dispatch` covers
-the impatient case.
+anyway to reap closed PRs. `workflow_dispatch` covers the impatient case.
 
-The same reasoning removes the instant announce comment. Posting on PR open
-would need `pull_request_target`, which is excluded, so the explainer arrives on
-the next scheduled run instead.
+In practice the latency was worse than the cron suggested: GitHub delays
+scheduled runs well past their interval, and a pull-request build takes up to
+half an hour, so a push to an armed PR could take 40 minutes to reach its
+preview. Two changes (2026-09-28) cut that down without adding a second
+privileged entry point:
+
+- the schedule runs every 5 minutes instead of 15;
+- `pull_request_target` on `opened`, `reopened` and `synchronize` starts an
+  `await-build` job — read-only token, its own per-PR concurrency group so a
+  newer push cancels the wait — that polls the build of the pushed SHA, but only
+  when the PR already has a live preview. When that build goes green, the same
+  `publish` job runs with `--pr N --if-armed`, in the shared `preview-publish`
+  concurrency group.
+
+Each successful publish also posts a new comment naming the commit and URL.
+The status comment is edited in place, and an edit notifies nobody, so without
+it a reviewer following the PR had no way to learn the preview had caught up.
+
+The explainer still arrives on the next scheduled run rather than on PR open;
+the `pull_request_target` path deliberately does nothing but republish.
 
 ## Failure handling
 

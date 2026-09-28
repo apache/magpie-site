@@ -14,6 +14,7 @@ import {
 } from "./files.mjs";
 
 const MARKER = "magpie-preview-status";
+const PUBLISHED_MARKER = "magpie-preview-published";
 const HOWTO_MARKER = "magpie-preview-howto";
 const ARMED_MARKER = "magpie-preview-armed";
 const TOMBSTONE_TAG = "[tombstone]";
@@ -68,6 +69,7 @@ export async function run({
   fetchArtifact,
   only = null,
   dispatchedBy = null,
+  arm = true,
 }) {
   let failures = 0;
 
@@ -116,8 +118,11 @@ export async function run({
     }
   }
 
-  // A dispatch is itself the authorisation.
-  if (only !== null) armedByPr.set(only, true);
+  // A dispatch is itself the authorisation. A run triggered by a push to the
+  // pull request (arm: false) is not: anyone can push to their own PR, so it
+  // publishes only what a maintainer has already armed.
+  const dispatched = only !== null && arm;
+  if (dispatched) armedByPr.set(only, true);
 
   const previewBranches = await gh.listPreviewBranches();
 
@@ -163,9 +168,9 @@ export async function run({
         openPulls,
         pr,
         publishedSha: publishedByBranch.get(previewBranch(pr)) ?? null,
-        force: only === pr,
+        force: dispatched && only === pr,
       });
-      if (published && only === pr) {
+      if (published && dispatched && only === pr) {
         await gh.upsertComment(pr, ARMED_MARKER, armedBody(dispatchedBy));
       }
     } catch (err) {
@@ -266,7 +271,7 @@ async function publishOne({
   const headSha = pull.head.sha;
 
   // Nothing has changed since the last publish. Republishing anyway force-pushes
-  // an identical tree every fifteen minutes — a commits@ mail and a rewritten
+  // an identical tree on every scheduled run — a commits@ mail and a rewritten
   // status comment for a preview nobody touched. A manual dispatch is an
   // explicit request, so it republishes regardless.
   if (!force && publishedSha && headSha.startsWith(publishedSha)) return false;
@@ -340,6 +345,10 @@ async function publishOne({
   );
 
   await gh.upsertComment(pr, MARKER, publishedBody(pr, headSha));
+  // The status comment above is edited in place, and an edit notifies nobody.
+  // Each publish is also announced as a new comment, so everyone following the
+  // pull request learns that the preview now shows the latest push.
+  await gh.createComment(pr, `${announceBody(pr, headSha)}\n\n<!-- ${PUBLISHED_MARKER} -->`);
   return true;
 }
 
@@ -380,6 +389,10 @@ async function findHtmlFiles(root) {
 const publishedBody = (pr, sha) =>
   `### Preview published\n\n${previewUrl(pr)}\n\nBuilt from \`${sha.slice(0, 7)}\`. ` +
   `Staging takes a few minutes to pick up a new push.`;
+
+const announceBody = (pr, sha) =>
+  `Preview updated to \`${sha.slice(0, 7)}\`: ${previewUrl(pr)}\n\n` +
+  `Staging usually serves it within a few minutes.`;
 
 const waitingBody = (sha) =>
   `### Preview waiting on a build\n\nNo successful build for \`${sha.slice(0, 7)}\` yet. ` +
@@ -422,6 +435,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // digits is accepted, both forms are recognised, and repeating the flag is
   // an error rather than picking the first or last occurrence.
   const args = process.argv.slice(2);
+  const ifArmed = args.includes("--if-armed");
   const prValues = [];
   for (let i = 0; i < args.length; i += 1) {
     const arg = args[i];
@@ -448,6 +462,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     only = Number(raw);
   }
 
+  if (ifArmed && only === null) {
+    console.error("--if-armed requires --pr");
+    process.exit(1);
+  }
+
   const gh = createClient({ repo, token });
   await run({
     gh,
@@ -455,6 +474,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     repo,
     fetchArtifact: createArtifactFetcher({ gh, repo, token }),
     only,
+    // --if-armed: triggered by a push to the pull request, not by a maintainer.
+    // Publish only when the PR is already armed; never arm or force it.
+    arm: !ifArmed,
     dispatchedBy: process.env.GITHUB_ACTOR ?? null,
   });
 }

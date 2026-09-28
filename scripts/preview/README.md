@@ -40,6 +40,19 @@ The attribute is for preview builds only. Build production without the
 adapter and fail the build if `data-magpie-src` appears in it — see the
 assertion step in `.github/workflows/build.yml`.
 
+## Triggers
+
+`preview-publish.yml` runs on a 5-minute schedule and on manual dispatch. It
+also runs on `pull_request_target`, to republish an armed preview as soon as
+the build of a new push goes green: `await-build.mjs` waits for that build and
+`publish.mjs --pr N --if-armed` publishes it. That path checks out only the
+base branch, reads only the PR number and head SHA from the event, and never
+arms a preview. The trigger is optional — drop it and the `await-build` job,
+and the schedule still publishes, only later.
+
+Every publish posts a new comment on the pull request with the commit and URL,
+besides updating the sticky status comment, because an edit notifies nobody.
+
 ## Settings for another site
 
 Both default to this site's values.

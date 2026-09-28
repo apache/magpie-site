@@ -163,3 +163,25 @@ test("latestSuccessfulBuild queries the configured workflow", async () => {
   assert.deepEqual(await gh.latestSuccessfulBuild("abc"), { id: 7 });
   assert.equal(calls.length, 1);
 });
+
+test("createComment posts a new comment", async () => {
+  const { impl, calls } = fakeFetch({
+    "POST /repos/apache/magpie-site/issues/7/comments": { id: 1 },
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl });
+  await gh.createComment(7, "hello");
+
+  assert.equal(calls.length, 1);
+  assert.deepEqual(JSON.parse(calls[0].body), { body: "hello" });
+});
+
+test("latestBuild returns the newest run for a commit in any state", async () => {
+  const sha = "b".repeat(40);
+  const { impl } = fakeFetch({
+    [`GET /repos/apache/magpie-site/actions/workflows/build.yml/runs?head_sha=${sha}&per_page=1`]: {
+      workflow_runs: [{ id: 9, status: "in_progress" }],
+    },
+  });
+  const gh = createClient({ repo: "apache/magpie-site", token: "t", fetchImpl: impl, workflow: "build.yml" });
+  assert.deepEqual(await gh.latestBuild(sha), { id: 9, status: "in_progress" });
+});

@@ -99,6 +99,13 @@ export function createClient({ repo, token, fetchImpl = fetch, workflow = buildW
       });
     },
 
+    /**
+     * A new comment, never an edit. For events people should be notified of —
+     * an edit to an existing comment notifies nobody.
+     */
+    createComment: (n, body) =>
+      request(`/repos/${repo}/issues/${n}/comments`, { method: "POST", body: { body } }),
+
     async listPreviewBranches() {
       const refs = await paginate(`/repos/${repo}/git/matching-refs/heads/preview/`);
       return refs.map((r) => r.ref.replace("refs/heads/", ""));
@@ -119,6 +126,14 @@ export function createClient({ repo, token, fetchImpl = fetch, workflow = buildW
     async latestSuccessfulBuild(headSha) {
       const runs = await request(
         `/repos/${repo}/actions/workflows/${workflow}/runs?head_sha=${headSha}&status=success&per_page=1`,
+      );
+      return runs.workflow_runs?.[0] ?? null;
+    },
+
+    /** The newest build run for this commit in any state, or null. */
+    async latestBuild(headSha) {
+      const runs = await request(
+        `/repos/${repo}/actions/workflows/${workflow}/runs?head_sha=${headSha}&per_page=1`,
       );
       return runs.workflow_runs?.[0] ?? null;
     },
