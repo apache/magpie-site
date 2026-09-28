@@ -98,6 +98,9 @@ test('phone examples stay still and disclosures retain ordinary keyboard access'
 test('phone bounds detect oversized introductions and open disclosure overflow',async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
+  // The checks below write styles onto island markup. Before hydration React
+  // would find them and report a mismatch; the dev server hydrates late.
+  await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
   expect(await page.evaluate(measureMobileHero)).toEqual([]);
   await page.locator('#overview').evaluate(el=>el.style.minHeight='1800px');
   expect(await page.evaluate(measureMobileHero)).toContain('oversized phone hero');
