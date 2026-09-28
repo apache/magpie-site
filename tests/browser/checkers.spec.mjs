@@ -379,13 +379,17 @@ test('card checklists keep a stable bounded column, stay centered and wrap long 
 });
 
 test('chart captions keep the note at the left edge and the data link at the right', async ({page}) => {
-  await page.setContent('<figure class="airflow-chart-story"><p class="chart-note" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><span>Illustrative trends</span><a href="#data">View data →</a></p></figure>');
+  await page.setContent('<figure class="airflow-chart-story"><div style="height:100px">Chart</div><figcaption class="chart-note" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:var(--heading-gap)"><span>Illustrative trends</span><a href="#data">View data →</a></figcaption></figure>');
+  await page.addStyleTag({content:readFileSync('src/styles/spacing.css','utf8')});
   for (const width of [320,1524]) {
     await page.setViewportSize({width,height:900});
     expect(await page.evaluate(measureLayout)).toEqual([]);
     await page.locator('.chart-note').evaluate(el => el.style.justifyContent = 'center');
     expect((await page.evaluate(measureLayout)).join('\n')).toContain('chart caption is not aligned to its edges');
     await page.locator('.chart-note').evaluate(el => el.style.justifyContent = 'space-between');
+    await page.locator('.chart-note').evaluate(el => el.style.marginTop = '0');
+    expect((await page.evaluate(measureLayout)).join('\n')).toContain('crowded chart caption');
+    await page.locator('.chart-note').evaluate(el => el.style.marginTop = 'var(--heading-gap)');
   }
 });
 

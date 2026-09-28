@@ -14,7 +14,7 @@ import MoreWays from "../components/landing/MoreWays.astro";
 <BaseLayout title="Apache Magpie | Software maintenance, automated" description="Ready-to-use agent workflows for code reviews, bug fixes, security, releases, repository upkeep, and contributor onboarding.">
   <SiteHeader />
   <main id="main-content" tabindex="-1" class="redesign-home">
-    <section class="hero hero-overview container sequence-container" aria-labelledby="hero-title">
+    <section id="overview" class="hero hero-overview container sequence-container" aria-labelledby="hero-title">
       <div id="workflow-examples" class="hero-workflows">
       <div class="integration-art" aria-label="Magpie connects your agent to ready-made software maintenance workflows">
         <div class="agent-shell">
@@ -35,15 +35,17 @@ import MoreWays from "../components/landing/MoreWays.astro";
     <section id="airflow" class="airflow-section" aria-labelledby="case-studies-title">
       <SectionWave reverse /><SectionWave bottom />
       <div class="container sequence-container">
-      <h2 class="case-heading" id="case-studies-title">Magpie in practice</h2>
+      <h2 class="case-heading" id="case-studies-title">Success stories</h2>
       <article class="case-layout" aria-labelledby="airflow-story-title">
-        <header class="case-intro"><h3 id="airflow-story-title">Magpie helped Airflow keep up with security reports</h3></header>
+        <header class="case-intro">
+          <img class="airflow-brand" src="/vendor-logos/airflow.svg" alt="Apache Airflow" width="155" height="60" loading="lazy" />
+          <h3 id="airflow-story-title">Magpie helped Airflow keep up with security reports</h3>
+        </header>
         <div class="case-evidence"><AirflowJourney /></div>
         <div class="case-quote">
           <blockquote>“Using <BrandName /> helped us to do things that matter”</blockquote>
           <div class="case-attribution">
-            <img class="airflow-brand" src="/vendor-logos/airflow.svg" alt="Apache Airflow" width="155" height="60" loading="lazy" />
-            <div class="quote-person"><div><strong>Jarek Potiuk</strong><span>Apache Airflow® PMC member</span></div></div>
+            <div class="quote-person"><img src="/community-avatars/potiuk.png" width="52" height="52" alt="" loading="lazy" /><div><strong>Jarek Potiuk</strong><span>Apache Airflow® PMC member</span></div></div>
           </div>
         </div>
         <div class="case-walkthrough"><WorkflowExplorer client:load /></div>
@@ -56,7 +58,7 @@ import MoreWays from "../components/landing/MoreWays.astro";
       </div>
     </section>
     <MoreWays />
-    <section class="section-band band-blue"><SectionWave /><div class="docs-invitation container" data-reveal><img class="invitation-bird" src="/illustrations/magpie/magpie-looking-back.png" width="220" height="220" alt="" loading="lazy" /><div><h2>Ready to change how you maintain software?</h2></div><a class="button" href="/start" target="_blank" rel="noreferrer"><span>Get started now</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div></section>
+    <section id="get-started" class="section-band band-blue"><SectionWave /><div class="docs-invitation container" data-reveal><img class="invitation-bird" src="/illustrations/magpie/magpie-looking-back.png" width="220" height="220" alt="" loading="lazy" /><div><h2>Ready to change how you maintain software?</h2></div><a class="button" href="/start" target="_blank" rel="noreferrer"><span>Get started now</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div></section>
   </main>
   <SiteFooter />
 </BaseLayout>

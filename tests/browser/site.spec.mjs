@@ -264,9 +264,13 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   const articleOrder = await page.locator('.case-layout').evaluate(el => [...el.children].map(child => child.className));
   expect(articleOrder).toEqual(['case-intro','case-evidence','case-quote','case-walkthrough']);
   await expect(page.locator('#airflow > .container > h2')).toHaveCount(1);
-  await expect(page.locator('#airflow')).toHaveAccessibleName('Magpie in practice');
+  await expect(page.locator('#airflow')).toHaveAccessibleName('Success stories');
   await expect(page.locator('.case-intro h3')).toHaveText('Magpie helped Airflow keep up with security reports');
   await expect(page.locator('.case-quote :is(h2,h3,a)')).toHaveCount(0);
+  const portrait = page.locator('.case-quote .quote-person img');
+  await portrait.scrollIntoViewIfNeeded();
+  await expect(portrait).toBeVisible();
+  await expect.poll(() => portrait.evaluate(img => img.naturalWidth)).toBeGreaterThan(0);
   const dataLink = page.locator('.airflow-chart-story .chart-note a');
   await expect(dataLink).toHaveAttribute('href','/stories/airflow');
   await expect(dataLink.locator('.cta-arrow')).toHaveCount(1);
@@ -292,6 +296,11 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
       await expect(mark).toHaveCSS('stroke','none');
     }
     await expect(page.locator('.case-layout')).toHaveAccessibleName('Magpie helped Airflow keep up with security reports');
+    const storyHeadingStyle = await page.locator('.security-walkthrough .lifecycle-heading h3').evaluate(el => {
+      const style = getComputedStyle(el);
+      return Object.fromEntries(['font-family','font-size','font-weight','line-height','letter-spacing'].map(property => [property,style.getPropertyValue(property)]));
+    });
+    for (const [property,value] of Object.entries(storyHeadingStyle)) await expect(page.locator('.case-intro h3')).toHaveCSS(property,value);
     for (const [name,selector] of [['hero','.hero'],['airflow','#airflow'],['story','.story-comparison'],['isolation','.isolation-comparison'],['project','.project-fit'],['learning','.learn-skills']]) {
       // Hide only fixed chrome while capturing a tall section: otherwise the
       // header is composited across its middle. Geometry checks run unmodified.

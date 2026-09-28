@@ -197,6 +197,10 @@ export function measureLayout() {
     if (!visible(caption)) continue;
     const bounds = caption.getBoundingClientRect(), label = caption.firstElementChild.getBoundingClientRect(), link = caption.lastElementChild.getBoundingClientRect();
     if (Math.abs(label.left-bounds.left) > tolerance || Math.abs(bounds.right-link.right) > tolerance) errors.push('chart caption is not aligned to its edges');
+    let previous = caption.previousElementSibling;
+    while (previous && !visible(previous)) previous = previous.previousElementSibling;
+    const gap = parseFloat(getComputedStyle(caption).getPropertyValue('--heading-gap'));
+    if (previous && bounds.top - previous.getBoundingClientRect().bottom < gap - tolerance) errors.push('crowded chart caption');
   }
   for (const followup of document.querySelectorAll('.section-followup')) {
     if (!visible(followup)) continue;

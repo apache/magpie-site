@@ -75,6 +75,13 @@ skip destination, ID references, local URLs/assets and fragments. A breadth-firs
 walk from `/` must reach every non-redirect public page except the conventional
 404. Disconnected cycles fail even if their pages link to each other.
 
+Passive reading updates the URL to the current section or documentation heading
+using history replacement. Query parameters, history state, focus and selected
+workflow content remain intact. Explicit links and Back/Forward retain their
+destination until the reader scrolls again; precise links within a section are
+kept while that section is active. Returning to the page top clears the fragment.
+Browser checks cover desktop/phone widths, keyboard navigation and documentation.
+
 Browser rules use a 2 CSS-pixel rounding tolerance:
 
 - No document overflow or visible elements outside the viewport. Text ranges
@@ -177,8 +184,10 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   Lifecycle source and result cards also use this primitive, with symbols for
   their specific problem and outcome in every stage.
 - The chart caption places its note at the left edge and its data CTA at the
-  right edge of the chart. Rendered geometry is checked in production and dev;
-  a deliberately centred caption fails the same checker.
+  right edge of the chart. The shared heading gap separates it from the chart
+  (or the phone legend). The figure owns these gaps so caption margins cannot
+  collapse them. Rendered geometry is checked in production and dev;
+  deliberately centred or crowded captions fail the same checker.
 - Interface icons share one 1.5px stroke token, rounded caps/joins and
   non-scaling strokes, including Magpie's custom SVG and documentation tree
   chevrons. Checks cover actual rendered icons on every route and reject local
@@ -283,7 +292,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   a quiet section wash. There is no enclosing card or stacked-paper decoration
   around the long scroll sequence.
   A general collection heading introduces project stories. Each article has
-  its own subordinate outcome title, so the first example does not define
+  its own logo and subordinate outcome title in the shared heading style, so the first example does not define
   the whole section. The quotation and its attribution follow the chart,
   before the security walkthrough. There is no repeated chart subtitle or
   competing story link beside the attribution; the chart caption links to

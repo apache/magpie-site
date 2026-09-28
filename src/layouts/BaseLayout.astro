@@ -90,6 +90,8 @@ const ogImage = new URL(
   <body>
     <slot />
     <script>
+      import { trackScrollLocation } from '../lib/scroll-location';
+      trackScrollLocation();
       const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
       const sync = () => { const dark = document.documentElement.dataset.theme === 'dark'; button?.setAttribute('aria-pressed', String(dark)); button?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} mode`); };
       button?.addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('magpie-theme', document.documentElement.dataset.theme); } catch {} sync(); });
