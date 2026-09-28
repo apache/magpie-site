@@ -11,7 +11,8 @@
   --weight-heading:600; --leading-body:1.7; --leading-heading:1.25;
   --icon-stroke:1.5px;
   --motion-fast:180ms; --motion-content:280ms; --motion-ease:cubic-bezier(.22,.7,.3,1);
-  --surface-shadow:0 2px 4px #1727230a,0 10px 28px #1727230a;
+  --shadow-contact:#17272324; --shadow-ambient:#17272326;
+  --surface-shadow:0 5px 8px var(--shadow-contact),0 20px 36px var(--shadow-ambient);
   --surface-light:linear-gradient(145deg,#ffffff50,transparent 65%);
   --action-bg:#004aad; --action-hover:#003b8b; --action-ink:white;
   --action-soft-bg:#d3e3f9; --action-soft-hover:#c2d8f4;

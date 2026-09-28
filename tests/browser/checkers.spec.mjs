@@ -27,48 +27,17 @@ test('isolation diagrams share the prose column at every width', async ({page}) 
   }
 });
 
-test('workflow surfaces fit their content instead of the tallest hidden slide', async ({page}) => {
-  const card = text => `<div class="surface-card workflow-card"><h3 class="workflow-card-heading"><span class="centered-label"><span class="centered-label-text">A workflow</span></span></h3><div class="workflow-card-body"><p>${text}</p></div></div>`;
-  await page.setContent(`<div style="display:grid"><div style="grid-area:1/1"><div class="lifecycle-flow">${card('One short explanation.')}${card('A longer explanation. '.repeat(8))}${card('A useful result.')}</div></div><div style="grid-area:1/1" aria-hidden="true" inert><div style="height:900px">A taller inactive stage</div></div></div>`);
-  for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/components/landing/workflow-card.css','src/components/landing/centered-label.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
-  // A short card must not inherit unused body height from its neighbour or
-  // from the stable outer viewport. This is independent of exact copy/height.
-  const measure = () => page.locator('.workflow-card').first().evaluate(card => {
-    const body = card.querySelector('.workflow-card-body');
-    return body.getBoundingClientRect().height - body.firstElementChild.getBoundingClientRect().height;
-  });
-  expect(await measure()).toBeLessThanOrEqual(2);
-  expect(await page.evaluate(measureLayout)).toEqual([]);
-  await page.locator('.workflow-card-body').first().evaluate(el => el.style.minHeight = '400px');
-  expect((await page.evaluate(measureLayout)).join('\n')).toContain('card body stretched beyond content');
-  await page.locator('.workflow-card-body').first().evaluate(el => el.removeAttribute('style'));
-  await page.locator('.lifecycle-flow').evaluate(el => el.style.alignItems = 'stretch');
-  expect((await page.evaluate(measureLayout)).join('\n')).toContain('card body stretched beyond content');
-  await page.locator('.lifecycle-flow').evaluate(el => el.removeAttribute('style'));
-  await page.locator('.workflow-card').first().evaluate(el => el.style.alignSelf = 'start');
-  expect((await page.evaluate(measureLayout)).join('\n')).toContain('unaligned flow card centers');
-  await page.locator('.workflow-card').first().evaluate(el => el.removeAttribute('style'));
-  await page.setViewportSize({width:320,height:900});
-  expect(await measure()).toBeLessThanOrEqual(2);
-  expect(await page.evaluate(measureLayout)).toEqual([]);
-});
-
-test('flow connectors share their icon, position and clearance at every width', async ({page}) => {
-  const card = connector => `<div class="surface-card workflow-card"><h3 class="workflow-card-heading"><span class="card-badge" aria-hidden="true">◇</span><span class="workflow-card-title">A step</span></h3><div class="workflow-card-body">Work</div>${connector ? '<svg class="lucide lucide-arrow-right flow-arrow" aria-hidden="true" viewBox="0 0 24 24"></svg>' : ''}</div>`;
-  await page.setContent(`<div class="lifecycle-flow">${card(true)}${card(true)}${card(false)}</div>`);
+test('puzzle rows fit visible content instead of the tallest hidden slide', async ({page}) => {
+  const card = text => `<div class="surface-card workflow-card"><h3 class="workflow-card-heading"><span class="workflow-card-title">A workflow</span></h3><div class="workflow-card-body"><p>${text}</p></div><p class="workflow-card-emphasis">A reaction</p></div>`;
+  await page.setContent(`<div style="display:grid"><div style="grid-area:1/1;align-self:center"><div class="lifecycle-flow puzzle-flow">${card('One short explanation.')}${card('A longer explanation. '.repeat(8))}${card('A useful result.')}</div></div><div style="grid-area:1/1" aria-hidden="true" inert><div style="height:900px">A taller inactive stage</div></div></div>`);
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
-  for (const width of [375,1000,1524]) {
-    await page.setViewportSize({width,height:900});
+  for (const width of [320,1440]) {
+    await page.setViewportSize({width,height:1000});
     expect(await page.evaluate(measureLayout)).toEqual([]);
-    const arrow = page.locator('.flow-arrow').first();
-    await arrow.evaluate(el => el.style.width = '20px');
-    expect((await page.evaluate(measureLayout)).join('\n')).toContain('inconsistent flow connector icon');
-    await arrow.evaluate(el => { el.removeAttribute('style'); el.style.translate = '12px 12px'; });
-    expect((await page.evaluate(measureLayout)).join('\n')).toContain('inconsistent flow connector clearance');
-    await arrow.evaluate(el => el.removeAttribute('style'));
-    await page.locator('.lifecycle-flow').evaluate(el => el.style.gap = '32px');
-    expect((await page.evaluate(measureLayout)).join('\n')).toContain('inconsistent flow connector clearance');
-    await page.locator('.lifecycle-flow').evaluate(el => el.removeAttribute('style'));
+    await page.locator('.workflow-card-body').first().evaluate(el=>el.style.minHeight='900px');
+    expect((await page.evaluate(measureLayout)).join('\n')).toContain('process body exceeds its content row');
+    await page.locator('.workflow-card-body').first().evaluate(el=>el.removeAttribute('style'));
+    expect(await page.evaluate(measureLayout)).toEqual([]);
   }
 });
 

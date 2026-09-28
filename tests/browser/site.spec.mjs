@@ -2,6 +2,7 @@ import { test, expect } from './fixtures.mjs';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { measureLayout } from './layout.mjs';
+import { measurePuzzles } from './puzzles.mjs';
 import { measureDesign } from './design.mjs';
 import { mkdir } from 'node:fs/promises';
 
@@ -16,6 +17,7 @@ const checkLayout = async page => {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await expect.poll(() => page.evaluate(measureLayout), { message:'Layout must settle without overflow or misaligned shared components' }).toEqual([]);
   expect(await page.evaluate(measureDesign),'Shared visual rules must hold on every page and state').toEqual([]);
+  expect(await page.evaluate(measurePuzzles),'Process pieces must mate through Magpie').toEqual([]);
 };
 for (const { route } of manifest.pages) test('responsive and accessible ' + route, async ({ page }) => {
   const failures = [];

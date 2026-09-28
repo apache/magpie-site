@@ -15,6 +15,7 @@ export function measureDesign() {
   const controlRadius = token('--radius-control'), roundRadius = token('--radius-round'), cardRadius = token('--radius-card');
   const badgeSize = token('--card-badge-size'), iconStroke = token('--icon-stroke');
   const displayIconHeight = badgeSize - token('--space-3');
+  const puzzlePadding = token('--space-10');
   const padding = token('--card-padding'), gap = token('--space-2'), title = token('--title-card','fontSize');
   const pageTitle = token('--title-page','fontSize'), leadSize = token('--text-lead','fontSize');
   const sectionPadding = token('--section-padding');
@@ -69,7 +70,8 @@ export function measureDesign() {
   for (const card of document.querySelectorAll('.surface-card,.workflow-card')) {
     if (!visible(card)) continue;
     equal(card,'borderTopLeftRadius',cardRadius,'card shape');
-    for (const edge of ['Top','Right','Bottom','Left']) equal(card,'padding'+edge,padding,'card padding');
+    const cardPadding=card.parentElement.matches('.puzzle-flow') && innerWidth<=1100 ? puzzlePadding : padding;
+    for (const edge of ['Top','Right','Bottom','Left']) equal(card,'padding'+edge,cardPadding,'card padding');
     for (const heading of card.querySelectorAll('.workflow-card-heading,h2,h3')) if (visible(heading)) {
       equal(heading,'fontSize',title,'card typography');
       equal(heading,'lineHeight',title*1.25,'card typography');
@@ -86,7 +88,8 @@ export function measureDesign() {
       probe.style.backgroundColor = s.getPropertyValue(`--${tone}-bg`);
       probe.style.color = s.getPropertyValue(`--${tone}-ink`);
       const palette = getComputedStyle(probe);
-      if (s.backgroundColor !== palette.backgroundColor || s.color !== palette.color) errors.push('card differs from its semantic palette');
+      const fill=card.parentElement.matches('.puzzle-flow') ? getComputedStyle(card,'::before').backgroundColor : s.backgroundColor;
+      if (fill !== palette.backgroundColor || s.color !== palette.color) errors.push('card differs from its semantic palette');
       for (const note of card.querySelectorAll(':scope > .workflow-card-emphasis')) {
         if (getComputedStyle(note).color !== s.color) errors.push('card emphasis differs from its semantic palette');
       }
@@ -108,7 +111,13 @@ export function measureDesign() {
     }
   }
   for (const surface of document.querySelectorAll('.surface-card,.chart-frame,.reference-table,.docs-prose table,.chart-table-scroll')) {
-    if (visible(surface) && (surfaceShadow === 'none' || getComputedStyle(surface).boxShadow !== surfaceShadow)) errors.push('inconsistent surface shadow');
+    if (!visible(surface)) continue;
+    const s=getComputedStyle(surface);
+    if (surface.parentElement.matches('.puzzle-flow')) {
+      probe.style.filter=s.getPropertyValue('--puzzle-shadow'); document.body.append(probe);
+      if (s.boxShadow!=='none' || s.filter==='none' || s.filter!==getComputedStyle(probe).filter) errors.push('inconsistent puzzle shadow');
+      probe.remove();
+    } else if (surfaceShadow==='none' || s.boxShadow!==surfaceShadow) errors.push('inconsistent surface shadow');
   }
   for (const card of document.querySelectorAll('.surface-card,.tool-entry,.case-quote')) {
     if (!visible(card)) continue;

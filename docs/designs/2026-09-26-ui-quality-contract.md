@@ -126,24 +126,26 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   card heights. Nested boundaries keep their labels beside their icons; the
   open-access diagram states the risks directly. Mobile cards fit their content. Learning links and tool
   metadata align within their respective rows. Card padding equals the
-  shared token on all four sides. Workflow heading text aligns left beside
-  its icon; its row fits the taller of the title and icon, without a fixed
-  minimum height. The gate rejects surplus heading space.
+  shared token on all four sides. Workflow headings center the icon above the title; the row fits their combined
+  content, without a fixed minimum height. The gate rejects surplus heading space.
 - Workflow cards are capped at 26rem (and the available width); paired layouts
   share this measure instead of filling the entire section. Isolation diagrams use the same 36ch content column. Prose in
   every workflow card is capped at that same measure and centred as a column. Text remains left-aligned unless
   its role explicitly calls for centred copy. Shared card padding is 32px on
   desktop and 20px on phones. These tokens scale with reading needs rather than
   setting fixed heights. Hidden carousel/sequence stages may reserve a stable
-  outer viewport, but must not inflate visible card bodies. Broken fixtures
-  reject excessive body height, displaced flow centres, overwide cards/prose
-  and off-centre prose columns, including a taller inactive stage.
-  All card flows use the same 28px SVG arrow with one card-gap token of
-  clearance on each side (32px desktop, 24px phone). The same rule applies
-  horizontally and between stacked card surfaces. Three-card
-  flows stack below 1101px to preserve readable cards and these clearances;
-  two-card flows stack below 801px. The checker rejects differing glyphs,
-  sizes, positions and clearances, including deliberately broken fixtures.
+  outer viewport, but must not inflate visible card bodies. Process puzzles
+  share content-sized heading, body and reaction rows within the visible stage.
+  The largest visible content determines the row height, not an inactive stage.
+  Broken fixtures reject inflated rows, overwide prose and misaligned content.
+  Hero examples, lifecycle phases and project rules use one puzzle-flow owner.
+  Matching pieces share a narrow seam; the middle Magpie piece joins two distinct
+  connector positions, so the outside pieces cannot mate directly. All process
+  flows stack below 1101px and use 40px padding to clear the top/bottom notches.
+  The painted surface owns the mask; readable content and focus stay unmasked.
+  Join geometry is tested on both axes, with invalid mismatched joins and a pair
+  of incorrectly matching outside pieces. Comparisons and independent cards
+  retain their ordinary surfaces.
   The learning guides use lavender surfaces with centered shared headings and aligned links,
   rather than a second set of colored flow cards. They stack on phones.
   Manual cards use warm orange, Magpie's preparation uses blue, and ready
@@ -156,7 +158,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   deliberately introducing a third size must fail. Code viewers, charts and
   full documentation articles are separate content structures.
   The two-card summaries and project-rule example share `card-flow`, including
-  content-sized heading rows and responsive connectors. Supporting notes and
+  content-sized heading rows and responsive puzzle joins. Supporting notes and
   actions belong beneath the pair, so they do not inflate the opposite card.
   Brief human reactions use an optional shared emphasis row in bold, centered
   reading text with quotation marks and balanced wrapping. Their separation from
@@ -241,7 +243,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   Documentation,
   installation, charts, demo and content-page titles use the same page-title
   scale. The homepage hero remains a deliberate display-title exception.
-- Cards, chart frames and tables share one restrained surface-shadow token, with
+- Cards, chart frames and tables share one visible surface-shadow token, with
   light/dark theme values. Plain list rows and nested protection boundaries stay
   flat so lists and diagrams do not accumulate shadows. The rendered checker rejects missing or locally
   divergent shadows in both themes; fixtures include cards, charts and tables.
@@ -370,3 +372,6 @@ The Hawaii question is humorous uncertainty, separate from the concrete risks.
 Card headings and icons inherit their surface’s semantic ink, including on hover.
 In side-by-side isolation diagrams, the protection layers fill the same body row
 as the risk illustration; on phones each diagram retains its natural height.
+
+Puzzle shadows follow the masked silhouette rather than a rectangular card.
+Their contact and ambient colors share the surface shadow tokens in both themes.

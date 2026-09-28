@@ -18,9 +18,9 @@ const lifecycle = [
 function LifecycleExample({index}: {index:number}) {
   const phase = lifecycle[index];
   return <div className="lifecycle-detail">
-      <div className="lifecycle-flow">
-        <WorkflowCard className="lifecycle-incoming" title={phase.input} icon={<phase.inputIcon />} tone="manual" emphasis={phase.frustration} connector><p>{phase.inputs.join(" ")}</p></WorkflowCard>
-        <MagpieCard className="lifecycle-work" work={phase.work} connector />
+      <div className="lifecycle-flow puzzle-flow">
+        <WorkflowCard className="lifecycle-incoming" title={phase.input} icon={<phase.inputIcon />} tone="manual" emphasis={phase.frustration}><p>{phase.inputs.join(" ")}</p></WorkflowCard>
+        <MagpieCard className="lifecycle-work" work={phase.work} emphasis="I’ve got a workflow for this." />
         <WorkflowCard className="lifecycle-ready" title={phase.outcome} icon={<phase.outputIcon />} tone="result" work={phase.outputs} emphasis={phase.relief} />
       </div>
     </div>;
@@ -44,8 +44,8 @@ export function SoftwareLifecycle() {
 }
 
 export function ProjectRules() {
-  return <><div className="card-flow">
-    <MagpieCard work={["Checks the changes and CI results", "Reviews the code for problems", "Drafts actionable feedback"]} emphasis="I don’t have to start from scratch!" connector />
+  return <><div className="card-flow puzzle-flow">
+    <MagpieCard work={["Checks the changes and CI results", "Reviews the code for problems", "Drafts actionable feedback"]} emphasis="I don’t have to start from scratch!" />
     <WorkflowCard title="Your team’s rules" icon={<SlidersHorizontal />} emphasis="I don’t have to repeat myself.">
       <blockquote className="example-quote">Use our review checklist. Ask the owning team for a review. Include a changelog entry.</blockquote>
     </WorkflowCard>

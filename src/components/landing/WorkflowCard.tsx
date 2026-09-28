@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowRight, Check, type LucideIcon } from "lucide-react";
+import { Check, type LucideIcon } from "lucide-react";
 import "./workflow-card.css";
 
 type HeadingLevel = "h2" | "h3" | "h4" | "h5";
@@ -10,7 +10,6 @@ export type WorkflowCardProps = {
   children?: ReactNode;
   work?: string[];
   emphasis?: string;
-  connector?: boolean;
   checklistIcon?: LucideIcon;
   className?: string;
   as?: "div" | "li";
@@ -30,7 +29,7 @@ export function Checklist({ items, icon: Icon = Check }: { items: string[]; icon
   return <ul className="workflow-checklist">{items.map(item => <li key={item}><Icon size={22} aria-hidden="true" /><span>{item}</span></li>)}</ul>;
 }
 
-export default function WorkflowCard({ title, icon, tone = "neutral", children, work, emphasis, connector, checklistIcon,
+export default function WorkflowCard({ title, icon, tone = "neutral", children, work, emphasis, checklistIcon,
   className = "", as: Element = "div", headingLevel = "h3" }: WorkflowCardProps) {
   return <Element className={`surface-card workflow-card ${className}`} data-card-tone={tone}>
     <CardHeading title={title} icon={icon} level={headingLevel} />
@@ -39,6 +38,5 @@ export default function WorkflowCard({ title, icon, tone = "neutral", children, 
       {children}
     </div>
     {emphasis && <p className="workflow-card-emphasis"><strong><q>{emphasis}</q></strong></p>}
-    {connector && <ArrowRight className="flow-arrow" aria-hidden="true" />}
   </Element>;
 }

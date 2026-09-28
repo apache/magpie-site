@@ -79,9 +79,9 @@ export default function HeroWorkflows() {
     <div className="reel-window" aria-live={advancing ? "off" : "polite"}>
       <div className="reel-track" style={{ transform: `translateX(-${selected * 100}%)` }}>
         {examples.map((item, i) => <div className="reel-slide" key={item.scene} aria-hidden={i !== selected} inert={i !== selected} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${examples.length}: ${item.input}`}>
-          <ol className="reel-flow">
-            <WorkflowCard as="li" className="reel-source" headingLevel="h2" title={item.input} tone="manual" emphasis={item.frustration} connector><WorkflowIllustration scene={item.scene} /></WorkflowCard>
-            <MagpieCard as="li" headingLevel="h2" className="reel-process" work={item.work} connector />
+          <ol className="reel-flow puzzle-flow">
+            <WorkflowCard as="li" className="reel-source" headingLevel="h2" title={item.input} tone="manual" emphasis={item.frustration}><WorkflowIllustration scene={item.scene} /></WorkflowCard>
+            <MagpieCard as="li" headingLevel="h2" className="reel-process" work={item.work} emphasis="I’ve got a workflow for this." />
             <WorkflowCard as="li" className="reel-delivery" headingLevel="h2" title={item.outcome} tone="result" emphasis={item.relief}><WorkflowIllustration scene={item.scene} result /></WorkflowCard>
           </ol>
         </div>)}

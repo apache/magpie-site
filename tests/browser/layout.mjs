@@ -104,38 +104,19 @@ export function measureLayout() {
   for (const grid of document.querySelectorAll('.reel-flow,.lifecycle-flow,.story-comparison,.isolation-sides,.learning-grid,.card-flow,.tool-list,.docs-card-grid,.brand-grid,.arch-flow')) {
     if (!visible(grid)) continue;
     const children = [...grid.children].filter(el => visible(el) && el.tagName.toLowerCase() !== 'svg');
-    // Flow steps and diagrams have different amounts/kinds of content. Their
-    // surfaces fit that content; only homogeneous comparisons share row heights.
-    const naturalCards = grid.matches('.reel-flow,.lifecycle-flow');
+    // Visible process pieces share content-sized rows so their edges mate.
+    // An inactive stage must never inflate those rows.
+    const processCards = grid.matches('.puzzle-flow');
     const sideBySide = getComputedStyle(grid).gridTemplateColumns.split(' ').length > 1;
-    if (grid.matches('.reel-flow,.lifecycle-flow,.learning-grid,.card-flow')) {
-      for (let i=0;i<children.length-1;i++) {
-        const card = children[i], next = children[i+1], connector = card.querySelector(':scope > .flow-arrow');
-        if (!connector) continue;
-        const a = card.getBoundingClientRect(), b = next.getBoundingClientRect(), r = connector.getBoundingClientRect();
-        const s = getComputedStyle(grid), clearance = parseFloat(s.getPropertyValue('--card-gap'));
-        const size = parseFloat(s.getPropertyValue('--flow-arrow-size'));
-        if (!connector.matches('svg.lucide-arrow-right') || Math.abs(r.width-size) > tolerance || Math.abs(r.height-size) > tolerance) errors.push('inconsistent flow connector icon');
-        const before = sideBySide ? r.left-a.right : r.top-a.bottom;
-        const nextTop = b.top;
-        const after = sideBySide ? b.left-r.right : nextTop-r.bottom;
-        if (Math.abs(before-clearance) > tolerance || Math.abs(after-clearance) > tolerance) errors.push('inconsistent flow connector clearance');
-        const offset = sideBySide ? (r.top+r.bottom-a.top-a.bottom)/2 : (r.left+r.right-a.left-a.right)/2;
-        if (Math.abs(offset) > tolerance) errors.push('off-center flow connector');
-      }
-    }
-    if (naturalCards) {
-      if (sideBySide && grid.matches('.reel-flow,.lifecycle-flow')) {
-        const centers = children.map(el => { const r = el.getBoundingClientRect(); return (r.top+r.bottom)/2; });
-        if (Math.max(...centers)-Math.min(...centers) > tolerance) errors.push('unaligned flow card centers: ' + grid.className);
-      }
-      for (const card of children) {
-        const body = card.querySelector('.workflow-card-body');
-        if (!body || !body.children.length) continue;
-        const rects = [...body.children].filter(visible).map(el => el.getBoundingClientRect());
-        if (!rects.length) continue;
-        const contentHeight = Math.max(...rects.map(r => r.bottom))-Math.min(...rects.map(r => r.top));
-        if (body.getBoundingClientRect().height > contentHeight + tolerance) errors.push('card body stretched beyond content: ' + grid.className);
+    if (processCards) {
+      const bodies=children.map(card=>card.querySelector('.workflow-card-body')).filter(Boolean);
+      const contentHeights=bodies.map(body=>{
+        const rects=[...body.children].filter(visible).map(el=>el.getBoundingClientRect());
+        return rects.length ? Math.max(...rects.map(r=>r.bottom))-Math.min(...rects.map(r=>r.top)) : body.getBoundingClientRect().height;
+      });
+      for (const [i,body] of bodies.entries()) {
+        const natural=sideBySide?Math.max(...contentHeights):contentHeights[i];
+        if (body.getBoundingClientRect().height>natural+tolerance) errors.push('process body exceeds its content row');
       }
     }
     const rows = new Map();
@@ -146,7 +127,7 @@ export function measureLayout() {
     }
     for (const row of rows.values()) {
       const bottoms = row.map(el => el.getBoundingClientRect().bottom);
-      if (!naturalCards && Math.max(...bottoms) - Math.min(...bottoms) > tolerance) errors.push('unequal card bottoms: ' + grid.className);
+      if (Math.max(...bottoms) - Math.min(...bottoms) > tolerance) errors.push('unequal card bottoms: ' + grid.className);
       const headings = row.map(el => el.querySelector('.workflow-card-heading')).filter(el => el?.querySelector('.workflow-card-title,.centered-label-text'));
       if (headings.length) {
         const contentHeight = Math.max(...headings.map(el => {
@@ -170,7 +151,6 @@ export function measureLayout() {
         if (lists.some(list => list.getBoundingClientRect().height > Math.max(...naturalHeights) + tolerance)) errors.push('comparison lists stretched beyond content');
       }
       for (const selector of ['.workflow-card-heading', '.workflow-card-body', '.workflow-card-emphasis', '.tool-meta', '.diagram-agent', '.learning-grid a']) {
-        if (naturalCards) continue;
         const targets = row.map(el => el.querySelector(selector)).filter(Boolean);
         if (targets.length < 2) continue;
         const positions = targets.map(el => el.getBoundingClientRect().top);
