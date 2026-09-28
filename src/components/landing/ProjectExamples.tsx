@@ -1,8 +1,10 @@
 import SectionHeading from "./SectionHeading";
+import { useRef, type RefObject } from "react";
 import MagpieCard from "./MagpieCard";
 import WorkflowCard from "./WorkflowCard";
 import WorkflowStages from "./WorkflowStages";
 import SequenceNavigation from "./SequenceNavigation";
+import PuzzleFlow from "./PuzzleFlow";
 import { useWorkflowSequence } from "./useWorkflowSequence";
 import { ArrowRight, Boxes, Bug, ClipboardCheck, Compass, FileCheck2, GitPullRequest, Inbox, MessageSquareText, Package, PackageCheck, SlidersHorizontal, UserRound, Wrench } from "lucide-react";
 
@@ -15,18 +17,19 @@ const lifecycle = [
   { label: "Grow", inputIcon: UserRound, outputIcon: Compass, input: "Someone wants to contribute", frustration: "Getting started shouldn’t be this hard!", inputs: ["They need a suitable first issue.", "They want to understand the code."], work: ["Finds a suitable first issue", "Explains the relevant code", "Shows how to test the change"], outcome: "They know how to get started", relief: "The first step feels doable.", outputs: ["The first task matches their experience.", "The relevant code is explained.", "Test instructions accompany the task."], link: "/docs/mentoring/readme" },
 ];
 
-function LifecycleExample({index}: {index:number}) {
+function LifecycleExample({index, active, introduced}: {index:number; active:boolean; introduced:RefObject<boolean>}) {
   const phase = lifecycle[index];
   return <div className="lifecycle-detail">
-      <div className="lifecycle-flow puzzle-flow">
+      <PuzzleFlow className="lifecycle-flow" active={active} introduced={introduced}>
         <WorkflowCard className="lifecycle-incoming" title={phase.input} icon={<phase.inputIcon />} tone="manual" emphasis={phase.frustration}><p>{phase.inputs.join(" ")}</p></WorkflowCard>
         <MagpieCard className="lifecycle-work" work={phase.work} emphasis="I’ve got a workflow for this." />
         <WorkflowCard className="lifecycle-ready" title={phase.outcome} icon={<phase.outputIcon />} tone="result" work={phase.outputs} emphasis={phase.relief} />
-      </div>
+      </PuzzleFlow>
     </div>;
 }
 
 export function SoftwareLifecycle() {
+  const puzzleIntroduced = useRef(false);
   const {active, scrollDriven, sceneRef, panelRef, select} = useWorkflowSequence(lifecycle.length, "lifecycle-tab-");
   return <div className="workflow-sequence software-lifecycle" ref={sceneRef} data-scroll-driven={scrollDriven}>
     <div className="software-workbench" ref={panelRef}>
@@ -34,7 +37,7 @@ export function SoftwareLifecycle() {
       <WorkflowStages phases={lifecycle} active={active} label="Software lifecycle phases" tabPrefix="lifecycle-tab-" panelPrefix="lifecycle-detail-" select={select} />
       <SequenceNavigation previousLabel="Previous skill family" nextLabel={active < lifecycle.length - 1 ? `Next skill family: ${lifecycle[active + 1].label}` : "Next skill family"} onPrevious={() => select(active - 1)} onNext={() => select(active + 1)} previousDisabled={active === 0} nextDisabled={active === lifecycle.length - 1} content={
       <div className="software-scenes">{lifecycle.map((phase,index) => <section className="lifecycle-scene" key={phase.label} id={`lifecycle-detail-${index}`} role="tabpanel" aria-labelledby={`lifecycle-tab-${index}`} aria-hidden={active !== index} inert={active !== index} tabIndex={0}>
-        <LifecycleExample index={index} />
+        <LifecycleExample index={index} active={active === index} introduced={puzzleIntroduced} />
       </section>)}</div>
       }>
         <a className="button button-soft" href={lifecycle[active].link} target="_blank" rel="noreferrer"><span>Explore {lifecycle[active].label.toLowerCase()} workflows</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a>
@@ -44,11 +47,11 @@ export function SoftwareLifecycle() {
 }
 
 export function ProjectRules() {
-  return <><div className="card-flow puzzle-flow">
+  return <><PuzzleFlow className="card-flow">
     <MagpieCard work={["Checks the changes and CI results", "Reviews the code for problems", "Drafts actionable feedback"]} emphasis="I don’t have to start from scratch!" />
     <WorkflowCard title="Your team’s rules" icon={<SlidersHorizontal />} emphasis="I don’t have to repeat myself.">
       <blockquote className="example-quote">Use our review checklist. Ask the owning team for a review. Include a changelog entry.</blockquote>
     </WorkflowCard>
-  </div>
+  </PuzzleFlow>
   <div className="section-followup"><a className="button button-soft" href="/docs/setup/agentic-overrides" target="_blank" rel="noreferrer"><span>See how project rules work</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div></>;
 }

@@ -31,49 +31,98 @@
    mate with one another. Magpie adapts the first connection to the second.
    Only the painted surface is masked; content and focus rings stay intact. */
 .puzzle-flow {
-  --puzzle-radius:20px;
+  --puzzle-radius:24px;
+  --puzzle-cross-radius:24px;
   --puzzle-gap:4px;
-  --puzzle-neck:8px;
+  --puzzle-neck:12px;
+  --puzzle-cross-neck:12px;
+  --puzzle-bleed:calc(var(--puzzle-cross-radius) + var(--puzzle-cross-neck));
+  --puzzle-travel:40px;
+  --piece-shine-angle:110deg;
+  --piece-shine-size:300% 100%;
+  --piece-shine-from:100% 0;
+  --card-padding:var(--space-12);
   --puzzle-shadow:drop-shadow(0 5px 5px var(--shadow-contact)) drop-shadow(0 18px 15px var(--shadow-ambient));
   --flow-gap:var(--puzzle-gap);
   align-items:stretch;
   grid-template-rows:auto auto auto;
   row-gap:var(--content-gap);
+  padding:var(--puzzle-bleed) var(--puzzle-travel);
 }
 .puzzle-flow > .workflow-card {
-  --puzzle-in:36%; --puzzle-out:36%;
+  --puzzle-in:.36; --puzzle-out:.36;
   --piece-extension:calc(2 * var(--puzzle-radius));
-  --piece-socket:radial-gradient(circle at var(--puzzle-neck) var(--puzzle-in),#000 calc(var(--puzzle-radius) + 2px),transparent calc(var(--puzzle-radius) + 2.5px));
-  --piece-tab:radial-gradient(circle at calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)) var(--puzzle-out),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
+  --piece-cross-extension:calc(2 * var(--puzzle-cross-radius));
+  --piece-cross-tab:calc(var(--piece-cross-extension) - var(--puzzle-cross-neck));
+  --piece-cross-socket:calc(100% - var(--piece-cross-extension) - var(--puzzle-cross-neck));
+  --piece-in-position:calc(var(--piece-cross-extension) + (100% - 2 * var(--piece-cross-extension)) * var(--puzzle-in));
+  --piece-out-position:calc(var(--piece-cross-extension) + (100% - 2 * var(--piece-cross-extension)) * var(--puzzle-out));
+  --piece-socket:radial-gradient(circle at var(--puzzle-neck) var(--piece-in-position),transparent calc(var(--puzzle-radius) + 2px),#000 calc(var(--puzzle-radius) + 2.5px));
+  --piece-tab:radial-gradient(circle at calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)) var(--piece-out-position),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
+  --piece-cross-hole:radial-gradient(circle at calc((100% - var(--piece-extension)) / 2) var(--piece-cross-socket),transparent calc(var(--puzzle-cross-radius) + 2px),#000 calc(var(--puzzle-cross-radius) + 2.5px));
+  --piece-cross-cap:radial-gradient(circle at calc((100% - var(--piece-extension)) / 2) var(--piece-cross-tab),#000 calc(var(--puzzle-cross-radius) - .5px),transparent var(--puzzle-cross-radius));
+  --piece-direction:0;
+  --piece-start-x:calc(var(--piece-direction) * var(--puzzle-travel));
+  --piece-start-y:0px;
+  --piece-light-delay:650ms;
   isolation:isolate;
   grid-row:1 / span 3; grid-template-rows:subgrid;
   background:none; box-shadow:none; filter:var(--puzzle-shadow);
 }
-.puzzle-flow > .workflow-card:first-child { --piece-socket:linear-gradient(transparent,transparent); }
-.puzzle-flow > .workflow-card:nth-child(2) { --puzzle-out:64%; }
-.puzzle-flow > .workflow-card:nth-child(3) { --puzzle-in:64%; }
-.puzzle-flow > .workflow-card:last-child { --piece-extension:0px; --piece-tab:linear-gradient(transparent,transparent); }
+.puzzle-flow > .workflow-card:first-child { --piece-socket:linear-gradient(#000,#000); --piece-direction:-1; }
+.puzzle-flow > .workflow-card:nth-child(2) {
+  --puzzle-out:.64;
+  --piece-light-delay:1150ms;
+  --piece-cross-tab:calc(100% - var(--piece-cross-extension) + var(--puzzle-cross-neck));
+  --piece-cross-socket:calc(var(--piece-cross-extension) + var(--puzzle-cross-neck));
+}
+.puzzle-flow > .workflow-card:nth-child(3) { --puzzle-in:.64; --piece-light-delay:1650ms; }
+.puzzle-flow > .workflow-card:last-child { --piece-extension:0px; --piece-tab:linear-gradient(transparent,transparent); --piece-direction:1; }
 .puzzle-flow > .workflow-card::before {
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:0 calc(-1 * var(--piece-extension)) 0 0;
+  inset:calc(-1 * var(--piece-cross-extension)) calc(-1 * var(--piece-extension)) calc(-1 * var(--piece-cross-extension)) 0;
   border-radius:inherit;
   background:var(--surface-light),var(--card-fill,var(--surface));
-  mask-image:var(--piece-socket),linear-gradient(#000,#000),var(--piece-tab);
-  mask-size:100% 100%,calc(100% - var(--piece-extension)) 100%,100% 100%;
+  mask-image:var(--piece-socket),var(--piece-cross-hole),linear-gradient(#000,#000),var(--piece-tab),var(--piece-cross-cap);
+  mask-size:100% 100%,100% 100%,calc(100% - var(--piece-extension)) calc(100% - 2 * var(--piece-cross-extension)),100% 100%,100% 100%;
+  mask-position:0 0,0 0,left center,0 0,0 0;
   mask-repeat:no-repeat;
-  mask-composite:exclude,add;
+  mask-composite:intersect,intersect,add,add;
 }
 .puzzle-flow .workflow-card-heading { justify-content:center; }
 .puzzle-flow .workflow-card-body { display:grid; grid-template-columns:minmax(0,1fr); align-content:center; }
+.puzzle-flow > .workflow-card::before {
+  background-image:linear-gradient(var(--piece-shine-angle),transparent 46%,#ffffff70 50%,transparent 54%),var(--surface-light);
+  background-size:var(--piece-shine-size),100% 100%;
+  background-position:var(--piece-shine-from),0 0;
+  background-repeat:no-repeat;
+}
+@media(prefers-reduced-motion:no-preference) {
+  .puzzle-flow[data-puzzle-ready] > .workflow-card { animation:puzzle-fit 650ms cubic-bezier(.2,.8,.2,1) both; }
+  .puzzle-flow[data-puzzle-shine] > .workflow-card::before { animation:puzzle-shine 1000ms var(--piece-light-delay) linear both; }
+}
+@keyframes puzzle-fit {
+  0%,20% { transform:translate(var(--piece-start-x),var(--piece-start-y)); }
+  100% { transform:translate(0,0); }
+}
+@keyframes puzzle-shine {
+  from { background-position:var(--piece-shine-from),0 0; }
+  to { background-position:0% 0,0 0; }
+}
 @media(max-width:1100px) {
-  .puzzle-flow { --card-padding:var(--space-10); grid-template-columns:minmax(0,1fr); grid-template-rows:none; gap:var(--puzzle-gap); }
+  .puzzle-flow { --card-padding:var(--space-10); --puzzle-radius:20px; --puzzle-neck:10px; --puzzle-cross-radius:14px; --puzzle-cross-neck:7px; --piece-shine-angle:20deg; --piece-shine-size:100% 300%; --piece-shine-from:0 100%; grid-template-columns:minmax(0,1fr); grid-template-rows:none; gap:var(--puzzle-gap); padding:var(--puzzle-travel) var(--puzzle-bleed); }
   .puzzle-flow > .workflow-card {
     grid-row:auto; grid-template-rows:auto auto auto;
-    --piece-socket:radial-gradient(circle at var(--puzzle-in) var(--puzzle-neck),#000 calc(var(--puzzle-radius) + 2px),transparent calc(var(--puzzle-radius) + 2.5px));
-    --piece-tab:radial-gradient(circle at var(--puzzle-out) calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
+    --piece-start-x:0px;
+    --piece-start-y:calc(var(--piece-direction) * var(--puzzle-travel));
+    --piece-socket:radial-gradient(circle at var(--piece-in-position) var(--puzzle-neck),transparent calc(var(--puzzle-radius) + 2px),#000 calc(var(--puzzle-radius) + 2.5px));
+    --piece-tab:radial-gradient(circle at var(--piece-out-position) calc(100% - var(--piece-extension) + var(--puzzle-gap) + var(--puzzle-neck)),#000 calc(var(--puzzle-radius) - .5px),transparent var(--puzzle-radius));
+    --piece-cross-hole:radial-gradient(circle at var(--piece-cross-socket) calc((100% - var(--piece-extension)) / 2),transparent calc(var(--puzzle-cross-radius) + 2px),#000 calc(var(--puzzle-cross-radius) + 2.5px));
+    --piece-cross-cap:radial-gradient(circle at var(--piece-cross-tab) calc((100% - var(--piece-extension)) / 2),#000 calc(var(--puzzle-cross-radius) - .5px),transparent var(--puzzle-cross-radius));
   }
   .puzzle-flow > .workflow-card::before {
-    inset:0 0 calc(-1 * var(--piece-extension));
-    mask-size:100% 100%,100% calc(100% - var(--piece-extension)),100% 100%;
+    inset:0 calc(-1 * var(--piece-cross-extension)) calc(-1 * var(--piece-extension));
+    mask-size:100% 100%,100% 100%,calc(100% - 2 * var(--piece-cross-extension)) calc(100% - var(--piece-extension)),100% 100%,100% 100%;
+    mask-position:0 0,0 0,center top,0 0,0 0;
   }
 }

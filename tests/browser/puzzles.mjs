@@ -5,7 +5,7 @@ export function measurePuzzles() {
     const cards=[...flow.children], horizontal=getComputedStyle(flow).gridTemplateColumns.split(' ').length>1;
     const bounds=cards.map(card => card.getBoundingClientRect());
     const point=(i,key) => {
-      const s=getComputedStyle(cards[i]),r=bounds[i],fraction=parseFloat(s.getPropertyValue(key))/100;
+      const s=getComputedStyle(cards[i]),r=bounds[i],fraction=parseFloat(s.getPropertyValue(key));
       return horizontal ? r.top+r.height*fraction : r.left+r.width*fraction;
     };
     const radius=parseFloat(getComputedStyle(flow).getPropertyValue('--puzzle-radius'));
@@ -20,7 +20,7 @@ export function measurePuzzles() {
     if (cards.length===3 && Math.abs(point(0,'--puzzle-out')-point(2,'--puzzle-in')) < radius*2) errors.push('outside pieces fit without Magpie');
     for (const card of cards) {
       const s=getComputedStyle(card),paint=getComputedStyle(card,'::before');
-      if (paint.maskImage==='none' || paint.maskComposite.split(', ').slice(0,2).join(', ')!=='exclude, add') errors.push('missing puzzle silhouette');
+      if ((paint.maskImage.match(/radial-gradient/g)||[]).length<3 || !paint.maskComposite.startsWith('intersect, intersect')) errors.push('missing multi-sided puzzle silhouette');
       if (s.filter==='none' || s.boxShadow!=='none') errors.push('puzzle shadow does not follow silhouette');
     }
   }

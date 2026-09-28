@@ -101,6 +101,12 @@ export function measureLayout() {
     const centerY = el => { const r = el.getBoundingClientRect(); return (r.top+r.bottom)/2; };
     if (icons.some(icon => Math.abs(centerY(icon)-centerY(connector)) > tolerance)) errors.push('diagram connector is not aligned with icons');
   }
+  for (const workspace of document.querySelectorAll('.protected-workspace')) {
+    if (!visible(workspace)) continue;
+    const box=workspace.getBoundingClientRect(), children=[...workspace.children].map(el=>el.getBoundingClientRect());
+    if (children.some(r=>Math.abs((r.left+r.right-box.left-box.right)/2)>tolerance) || getComputedStyle(workspace).textAlign!=='center') errors.push('workspace contents are not centered');
+    if (children.length && Math.abs((Math.min(...children.map(r=>r.top))+Math.max(...children.map(r=>r.bottom))-box.top-box.bottom)/2)>tolerance) errors.push('workspace contents are not vertically centered');
+  }
   for (const grid of document.querySelectorAll('.reel-flow,.lifecycle-flow,.story-comparison,.isolation-sides,.learning-grid,.card-flow,.tool-list,.docs-card-grid,.brand-grid,.arch-flow')) {
     if (!visible(grid)) continue;
     const children = [...grid.children].filter(el => visible(el) && el.tagName.toLowerCase() !== 'svg');

@@ -119,9 +119,9 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   including on phones; its illustration does not narrow the phone paragraph.
   Article headings and card headings retain their separate semantics.
 - Homogeneous card rows (comparisons, learning paths and content catalogues)
-  have equal bottom edges and aligned heading/body rows. Flow steps deliberately
-  fit their own content and align on a common vertical centre; unlike cards in
-  a catalogue, they do not borrow empty height from neighbouring steps. Isolation
+  have equal bottom edges and aligned heading/body rows. Process pieces share
+  content-sized rows within the visible stage, so their edges mate without
+  borrowing height from hidden stages. Isolation
   comparisons share heading, diagram and reaction rows on desktop, with equal
   card heights. Nested boundaries keep their labels beside their icons; the
   open-access diagram states the risks directly. Mobile cards fit their content. Learning links and tool
@@ -141,11 +141,18 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   Hero examples, lifecycle phases and project rules use one puzzle-flow owner.
   Matching pieces share a narrow seam; the middle Magpie piece joins two distinct
   connector positions, so the outside pieces cannot mate directly. All process
-  flows stack below 1101px and use 40px padding to clear the top/bottom notches.
+  flows stack below 1101px. Puzzle padding is 48px on desktop and 40px when
+  stacked, keeping copy clear of every notch. Alternating tabs and sockets on
+  the exposed sides make each piece recognizable beyond the internal joins.
   The painted surface owns the mask; readable content and focus stay unmasked.
   Join geometry is tested on both axes, with invalid mismatched joins and a pair
   of incorrectly matching outside pieces. Comparisons and independent cards
-  retain their ordinary surfaces.
+  retain their ordinary surfaces. On first entry and stage selection, process
+  pieces briefly assemble from separated positions. A slower light sweep passes
+  through the connection only on the first introduction of each sequence, not
+  on every slide change. There is no electric outline pulse. The sweep follows
+  the vertical flow on phones. Reduced motion shows the assembled shape immediately;
+  neither effect loops or changes document layout.
   The learning guides use lavender surfaces with centered shared headings and aligned links,
   rather than a second set of colored flow cards. They stack on phones.
   Manual cards use warm orange, Magpie's preparation uses blue, and ready
@@ -358,7 +365,7 @@ an accessibility rule or hand-editing generated Markdown.
 Copyable commands and requests share a surface, padding and copy control. Text
 and control start on the same row on desktop; phones stack the control below
 full-width text. These functional blocks use reading-size prose and small
-monospace/control text. Card links highlight their destination title on hover,
+monospace/control text. Card links highlight their surface on hover,
 never underline whole descriptions, and preserve a visible keyboard focus ring. Linked documentation cards use one
 trailing right arrow as an entry cue. Semantic fills use the shared warm, blue
 and green palettes, with a shared light gradient and elevation in both themes;
@@ -372,6 +379,8 @@ The Hawaii question is humorous uncertainty, separate from the concrete risks.
 Card headings and icons inherit their surface’s semantic ink, including on hover.
 In side-by-side isolation diagrams, the protection layers fill the same body row
 as the risk illustration; on phones each diagram retains its natural height.
+The workspace icon and its two-line label share the center of their inner field,
+both horizontally and vertically.
 
 Puzzle shadows follow the masked silhouette rather than a rectangular card.
 Their contact and ambient colors share the surface shadow tokens in both themes.

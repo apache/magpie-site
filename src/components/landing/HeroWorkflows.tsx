@@ -4,6 +4,7 @@ import WorkflowCard from "./WorkflowCard";
 import WorkflowIllustration, { type WorkflowScene } from "./WorkflowIllustration";
 import { useWorkflowKeyboard } from "./useWorkflowSequence";
 import SequenceNavigation from "./SequenceNavigation";
+import PuzzleFlow from "./PuzzleFlow";
 
 const examples = [
   { scene: "security" as WorkflowScene, question: "triaging security reports?", input: "A security report arrives", frustration: "There goes the work I had planned!", work: ["Investigates the report", "Writes and tests the fix", "Coordinates release & CVE"], outcome: "A released fix and a published CVE", relief: "I can stop chasing this report." },
@@ -25,6 +26,7 @@ export default function HeroWorkflows() {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  const puzzleIntroduced = useRef(false);
   useEffect(() => {
     // Choose once after hydration: SSR stays stable, while repeat visits show
     // different examples. Manual selection and autoplay share the same state.
@@ -79,11 +81,11 @@ export default function HeroWorkflows() {
     <div className="reel-window" aria-live={advancing ? "off" : "polite"}>
       <div className="reel-track" style={{ transform: `translateX(-${selected * 100}%)` }}>
         {examples.map((item, i) => <div className="reel-slide" key={item.scene} aria-hidden={i !== selected} inert={i !== selected} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${examples.length}: ${item.input}`}>
-          <ol className="reel-flow puzzle-flow">
+          <PuzzleFlow as="ol" className="reel-flow" active={i === selected} introduced={puzzleIntroduced}>
             <WorkflowCard as="li" className="reel-source" headingLevel="h2" title={item.input} tone="manual" emphasis={item.frustration}><WorkflowIllustration scene={item.scene} /></WorkflowCard>
             <MagpieCard as="li" headingLevel="h2" className="reel-process" work={item.work} emphasis="I’ve got a workflow for this." />
             <WorkflowCard as="li" className="reel-delivery" headingLevel="h2" title={item.outcome} tone="result" emphasis={item.relief}><WorkflowIllustration scene={item.scene} result /></WorkflowCard>
-          </ol>
+          </PuzzleFlow>
         </div>)}
       </div>
     </div>
