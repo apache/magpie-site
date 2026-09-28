@@ -5,6 +5,8 @@ import { randomUUID } from 'node:crypto';
 export default defineConfig({
   testDir:'tests/dev', workers:1, timeout:120000, expect:{timeout:15000}, retries:0,
   outputDir:'.builds/dev-results', reporter:'list',
+  // Runs once the dev server is up: see the file for why.
+  globalSetup:'./tests/dev/warm-up.mjs',
   use:{baseURL:'http://127.0.0.1:4399', browserName:'chromium', trace:'retain-on-failure'},
   webServer:{
     command:'npm run dev -- --ignore-lock --port 4399 --host 127.0.0.1',
