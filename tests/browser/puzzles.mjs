@@ -2,7 +2,9 @@ export function measurePuzzles() {
   const errors=[];
   for (const flow of document.querySelectorAll('.puzzle-flow')) {
     if (flow.closest('[inert],[aria-hidden=true]')) continue;
-    const cards=[...flow.children], horizontal=getComputedStyle(flow).gridTemplateColumns.split(' ').length>1;
+    const flowStyle=getComputedStyle(flow);
+    const cards=[...flow.children], horizontal=flowStyle.gridTemplateColumns.split(' ').length>1;
+    if (flowStyle.filter==='none' || flowStyle.boxShadow!=='none') errors.push('puzzle group has no silhouette shadow');
     const bounds=cards.map(card => card.getBoundingClientRect());
     const point=(i,key) => {
       const s=getComputedStyle(cards[i]),r=bounds[i],fraction=parseFloat(s.getPropertyValue(key));
@@ -21,7 +23,7 @@ export function measurePuzzles() {
     for (const card of cards) {
       const s=getComputedStyle(card),paint=getComputedStyle(card,'::before');
       if ((paint.maskImage.match(/radial-gradient/g)||[]).length<3 || !paint.maskComposite.startsWith('intersect, intersect')) errors.push('missing multi-sided puzzle silhouette');
-      if (s.filter==='none' || s.boxShadow!=='none') errors.push('puzzle shadow does not follow silhouette');
+      if (s.filter!=='none' || s.boxShadow!=='none') errors.push('puzzle pieces cast shadows on one another');
     }
   }
   return errors;

@@ -115,7 +115,7 @@ export function measureDesign() {
     const s=getComputedStyle(surface);
     if (surface.parentElement.matches('.puzzle-flow')) {
       probe.style.filter=s.getPropertyValue('--puzzle-shadow'); document.body.append(probe);
-      if (s.boxShadow!=='none' || s.filter==='none' || s.filter!==getComputedStyle(probe).filter) errors.push('inconsistent puzzle shadow');
+      if (s.boxShadow!=='none' || s.filter!=='none' || getComputedStyle(surface.parentElement).filter!==getComputedStyle(probe).filter) errors.push('inconsistent puzzle shadow');
       probe.remove();
     } else if (surfaceShadow==='none' || s.boxShadow!==surfaceShadow) errors.push('inconsistent surface shadow');
   }

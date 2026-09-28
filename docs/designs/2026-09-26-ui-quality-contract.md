@@ -148,7 +148,8 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   the exposed sides make each piece recognizable beyond the internal joins.
   Mask bounds fit the exposed silhouette so invisible extensions cannot cause
   horizontal overflow on narrow screens. The painted surface owns the mask;
-  readable content and focus stay unmasked.
+  readable content and focus stay unmasked. The combined silhouette owns one
+  exterior shadow; individual pieces never cast shadows on their neighbors.
   Join geometry is tested on both axes, with invalid mismatched joins and a pair
   of incorrectly matching outside pieces. Comparisons and independent cards
   retain their ordinary surfaces. On first entry and stage selection, process

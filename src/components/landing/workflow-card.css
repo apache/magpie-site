@@ -44,6 +44,7 @@
   --card-padding:var(--space-12);
   --puzzle-shadow:drop-shadow(0 5px 5px var(--shadow-contact)) drop-shadow(0 18px 15px var(--shadow-ambient));
   --flow-gap:var(--puzzle-gap);
+  filter:var(--puzzle-shadow);
   align-items:stretch;
   grid-template-rows:auto auto auto;
   row-gap:var(--content-gap);
@@ -67,7 +68,7 @@
   --piece-light-delay:650ms;
   isolation:isolate;
   grid-row:1 / span 3; grid-template-rows:subgrid;
-  background:none; box-shadow:none; filter:var(--puzzle-shadow);
+  background:none; box-shadow:none;
 }
 .puzzle-flow > .workflow-card:first-child { --piece-socket:linear-gradient(#000,#000); --piece-direction:-1; }
 .puzzle-flow > .workflow-card:nth-child(2) {

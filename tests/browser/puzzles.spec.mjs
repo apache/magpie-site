@@ -34,6 +34,18 @@ test('puzzle checker rejects mismatched joins and matching outside pieces',async
   expect(await page.evaluate(measurePuzzles)).toContain('outside pieces fit without Magpie');
 });
 
+test('joined pieces share one external shadow',async({page})=>{
+  await page.goto('/');
+  expect(await page.evaluate(measurePuzzles)).toEqual([]);
+  const flow=page.locator('.reel-slide:not([inert]) .puzzle-flow');
+  await flow.locator('.workflow-card').first().evaluate(el=>el.style.filter='drop-shadow(0 5px 5px #0008)');
+  expect(await page.evaluate(measurePuzzles)).toContain('puzzle pieces cast shadows on one another');
+  expect(await page.evaluate(measureDesign)).toContain('inconsistent puzzle shadow');
+  await flow.locator('.workflow-card').first().evaluate(el=>el.style.removeProperty('filter'));
+  await flow.evaluate(el=>el.style.filter='none');
+  expect(await page.evaluate(measurePuzzles)).toContain('puzzle group has no silhouette shadow');
+});
+
 test('plain outside edges and displaced workspace contents fail the visual contract',async({page})=>{
   await page.goto('/');
   const flow=page.locator('.reel-slide:not([inert]) .puzzle-flow');
@@ -59,7 +71,7 @@ for (const width of [375,1440]) test(`pieces assemble once and pass light throug
     const animations=el.getAnimations({subtree:true}).filter(a=>a.animationName?.startsWith('puzzle-'));
     animations.forEach(a=>{a.pause();a.currentTime=time;});
     const cards=[...el.children], boxes=cards.map(card=>card.getBoundingClientRect()), horizontal=getComputedStyle(el).gridTemplateColumns.split(' ').length>1;
-    return {count:animations.length,gaps:boxes.slice(1).map((b,i)=>horizontal?b.left-boxes[i].right:b.top-boxes[i].bottom),filters:cards.map(c=>getComputedStyle(c).filter),light:cards.map(c=>getComputedStyle(c,'::before').backgroundPosition),iterations:animations.map(a=>a.effect.getTiming().iterations)};
+    return {count:animations.length,gaps:boxes.slice(1).map((b,i)=>horizontal?b.left-boxes[i].right:b.top-boxes[i].bottom),filters:[getComputedStyle(el).filter,...cards.map(c=>getComputedStyle(c).filter)],light:cards.map(c=>getComputedStyle(c,'::before').backgroundPosition),iterations:animations.map(a=>a.effect.getTiming().iterations)};
   },time);
   const apart=await sample(100);
   expect(apart.count).toBe(6); expect(apart.gaps.every(g=>g>=40)).toBe(true);
