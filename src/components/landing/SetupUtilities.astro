@@ -27,6 +27,7 @@ import SectionHeading from "./SectionHeading";
       <div class="agent-diagram">
         <div class="diagram-agent"><Bot size={40} aria-hidden="true" /><span>Your agent</span></div>
         <div class="protected-access" aria-hidden="true"></div>
+        <svg class="protection-route" aria-hidden="true"><polyline /><path /></svg>
         <div class="protection-layer">
           <span class="layer-label"><KeyRound aria-hidden="true" /><span>Environment credentials removed</span></span>
           <div class="protection-layer">
@@ -45,3 +46,31 @@ import SectionHeading from "./SectionHeading";
   </div>
   <div class="section-followup"><a class="button button-soft" href="/docs/setup/secure-agent-setup" target="_blank" rel="noreferrer"><span>Set up agent isolation</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div>
 </section>
+
+<script>
+  const diagram = document.querySelector<HTMLElement>('.isolation-protected .agent-diagram');
+  if (diagram) {
+    const route = diagram.querySelector<SVGSVGElement>('.protection-route')!;
+    const updateRoute = () => {
+      const origin = diagram.getBoundingClientRect();
+      const agent = diagram.querySelector('.diagram-agent')!.getBoundingClientRect();
+      const workspace = diagram.querySelector('.protected-workspace')!.getBoundingClientRect();
+      const labels = [...diagram.querySelectorAll('.layer-label')].map(el => el.getBoundingClientRect());
+      const x = (value: number) => value - origin.left;
+      const y = (value: number) => value - origin.top;
+      const startX = x((agent.left + agent.right) / 2);
+      const turnY = y(agent.bottom + 26);
+      const points = [[startX, y(agent.bottom + 12)], [startX, turnY], [x(labels[0].right - 8), turnY]];
+      for (const [index, label] of labels.entries()) {
+        points.push([x(label.right - 8), y(label.bottom + 4)]);
+        if (labels[index + 1]) points.push([x(labels[index + 1].right - 8), y(label.bottom + 4)]);
+      }
+      const endX = x((workspace.left + workspace.right) / 2), endY = y(workspace.top + 12);
+      points.push([endX, y(workspace.top - 4)], [endX, endY]);
+      route.querySelector('polyline')!.setAttribute('points', points.map(point => point.join(',')).join(' '));
+      route.querySelector('path')!.setAttribute('d', `M ${endX - 4} ${endY - 4} l 4 4 l 4 -4`);
+    };
+    new ResizeObserver(updateRoute).observe(diagram);
+    updateRoute();
+  }
+</script>

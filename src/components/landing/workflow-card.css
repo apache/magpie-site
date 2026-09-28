@@ -13,6 +13,8 @@
 .workflow-card[data-card-tone=risk] { --card-fill:var(--risk-bg); background:var(--surface-light),var(--card-fill); color:var(--risk-ink); }
 .workflow-card-heading { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); margin:0; font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:center; }
 .workflow-card-title { min-width:0; text-wrap:pretty; }
+.workflow-card-title:has(> .card-link-arrow) { display:inline-flex; align-items:center; gap:var(--space-2); }
+.card-link-arrow { width:1em; height:1em; flex:none; color:inherit; }
 .workflow-card-body { min-width:0; }
 .workflow-card-body > :first-child { margin-top:0; }
 .workflow-card-body > :last-child { margin-bottom:0; }
@@ -93,7 +95,7 @@
 .puzzle-flow .workflow-card-heading { justify-content:center; }
 .puzzle-flow .workflow-card-body { display:grid; grid-template-columns:minmax(0,1fr); align-content:center; }
 .puzzle-flow > .workflow-card::before {
-  background-image:linear-gradient(var(--piece-shine-angle),transparent 46%,#ffffff70 50%,transparent 54%),var(--surface-light);
+  background-image:linear-gradient(var(--piece-shine-angle),transparent 46%,#ffffff20 50%,transparent 54%),var(--surface-light);
   background-size:var(--piece-shine-size),100% 100%;
   background-position:var(--piece-shine-from),0 0;
   background-repeat:no-repeat;

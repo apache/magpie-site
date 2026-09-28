@@ -5,7 +5,8 @@ import {measureLayout} from './layout.mjs';
 test('whole-card links highlight the destination without underlining descriptions', async ({page}) => {
   await page.goto('/docs');
   const card=page.locator('.docs-card').first(), title=card.locator('.workflow-card-title');
-  await expect(page.locator('.docs-card > .card-link-arrow')).toHaveCount(4);
+  await expect(page.locator('.docs-card .workflow-card-title > .card-link-arrow')).toHaveCount(4);
+  expect(await page.evaluate(measureLayout)).toEqual([]);
   const titleColor=await title.evaluate(el => getComputedStyle(el).color);
   await card.hover();
   await expect(card).toHaveCSS('text-decoration-line','none');
@@ -14,6 +15,10 @@ test('whole-card links highlight the destination without underlining description
   await page.mouse.move(0,0); await card.focus();
   await expect(card).toHaveCSS('outline-style','solid');
   await expect(card).toHaveCSS('outline-width','2px');
+  const arrow=card.locator('.card-link-arrow');
+  await arrow.evaluate(el=>el.closest('a').append(el));
+  expect(await page.evaluate(measureLayout)).toContain('card entry arrow is detached from its title');
+  await arrow.evaluate(el=>el.closest('a').querySelector('.workflow-card-title').append(el));
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/docs\/security\/readme\/?$/);
 });

@@ -60,7 +60,6 @@ a, button, summary { -webkit-tap-highlight-color:transparent; transition:color v
 .surface-card { padding:var(--card-padding); border-radius:var(--radius-card); background:var(--surface-light),var(--surface); color:var(--surface-ink); min-width:0; font-size:var(--text-reading); }
 .surface-card,.chart-frame,.reference-table,.docs-prose table,.chart-table-scroll { box-shadow:var(--surface-shadow); }
 .surface-card :is(h2,h3) { font-size:var(--title-card); line-height:var(--leading-heading); font-weight:var(--weight-heading); letter-spacing:-.02em; }
-.card-link-arrow { width:20px; height:20px; justify-self:end; color:var(--blue); }
 a.surface-card { text-decoration:none; }
 a.surface-card:hover { outline:1px solid currentColor; outline-offset:0; text-decoration:none; }
 .surface-card p { font-size:var(--text-reading); line-height:var(--leading-body); }

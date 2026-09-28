@@ -68,7 +68,11 @@ export function criticalProgressionTests() {
       expect(await field.evaluate(el => el.selectionStart)).toBe(1);
       await expect(lifecycle).toHaveAttribute('id',selected);
       await field.evaluate(el => el.remove());
-      await page.locator('.theme-toggle').focus(); await page.keyboard.press('ArrowRight');
+      // Focus must not introduce an unrelated scroll-driven stage change.
+      const scrollBeforeFocus=await page.evaluate(()=>scrollY);
+      await page.locator('.theme-toggle').evaluate(el=>el.focus({preventScroll:true}));
+      expect(await page.evaluate(()=>scrollY)).toBe(scrollBeforeFocus);
+      await page.keyboard.press('ArrowRight');
       await expect(lifecycle).toHaveAttribute('id',selected);
     }
   });

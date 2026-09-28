@@ -126,7 +126,9 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   borrowing height from hidden stages. Isolation
   comparisons share heading, diagram and reaction rows on desktop, with equal
   card heights. Nested boundaries keep their labels beside their icons; the
-  open-access diagram states the risks directly. Mobile cards fit their content. Learning links and tool
+  open-access diagram states the risks directly. A routed access arrow passes
+  through each protection boundary into the allowed workspace, with a clear
+  lane beside labels. Its geometry follows responsive text wrapping. Mobile cards fit their content. Learning links and tool
   metadata align within their respective rows. Card padding equals the
   shared token on all four sides. Workflow headings center the icon above the title; the row fits their combined
   content, without a fixed minimum height. The gate rejects surplus heading space.
@@ -198,6 +200,9 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   apply only to side-by-side comparisons.
 - Shared label text remains centred with or without icons. Stacked label icons
   share its axis and cannot overlap text. Workflow icons sit centered above their title and wholly inside their card.
+  Card entry arrows sit beside the destination title, sharing its line and colour,
+  instead of occupying an empty footer row. Keyboard focus and whole-card
+  activation stay intact; descriptions never become underlined on hover.
   Both title and icon keep the card’s center axis; identical story labels share
   one icon definition across charts and walkthroughs. Chart phase
   icons sit inside each phase header above its label. Both use the same

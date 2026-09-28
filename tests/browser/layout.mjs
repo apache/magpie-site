@@ -164,6 +164,14 @@ export function measureLayout() {
       }
     }
   }
+  for (const arrow of document.querySelectorAll('.card-link-arrow')) {
+    if (!visible(arrow.parentElement)) continue;
+    const title=arrow.closest('.workflow-card-title');
+    if (!title) { errors.push('card entry arrow is detached from its title'); continue; }
+    const text=document.createRange(); text.selectNodeContents(title); text.setEndBefore(arrow);
+    const a=arrow.getBoundingClientRect(), b=text.getBoundingClientRect();
+    if (Math.abs((a.top+a.bottom-b.top-b.bottom)/2)>tolerance || a.left-b.right<4 || a.left-b.right>12) errors.push('card entry arrow is detached from its title');
+  }
   for (const card of document.querySelectorAll('.workflow-card')) {
     if (!visible(card)) continue;
     const style = getComputedStyle(card), padding = parseFloat(style.getPropertyValue('--card-padding'));

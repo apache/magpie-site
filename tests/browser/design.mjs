@@ -191,7 +191,7 @@ export function measureDesign() {
     if (!visible(control)) continue;
     if (control.querySelector('.lucide-arrow-up-right,.lucide-arrow-left') || /[↗↵]/.test(control.textContent)) errors.push('decorative control arrow: ' + control.textContent.trim());
     for (const arrow of control.querySelectorAll('.lucide-arrow-right,.cta-arrow')) {
-      if (arrow.matches('.lucide-arrow-right.card-link-arrow') && control.matches('a.surface-card.card-link') && arrow === control.lastElementChild && control.querySelectorAll('.card-link-arrow').length === 1) continue;
+      if (arrow.matches('.lucide-arrow-right.card-link-arrow') && control.matches('a.surface-card.card-link') && arrow.parentElement?.matches('.workflow-card-title') && control.querySelectorAll('.card-link-arrow').length === 1) continue;
       if (!arrow.matches('.lucide-arrow-right.cta-arrow') || !control.matches('a:is(.button,.text-link)') || arrow !== control.lastElementChild || control.querySelectorAll('.cta-arrow').length !== 1) errors.push('invalid CTA arrow: ' + control.textContent.trim());
     }
   }

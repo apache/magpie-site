@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Check, type LucideIcon } from "lucide-react";
+import { ArrowRight, Check, type LucideIcon } from "lucide-react";
 import "./workflow-card.css";
 
 type HeadingLevel = "h2" | "h3" | "h4" | "h5";
@@ -16,12 +16,12 @@ export type WorkflowCardProps = {
   headingLevel?: HeadingLevel;
 };
 
-export function CardHeading({ title, icon, level: Heading = "h3" }: {
-  title: ReactNode; icon?: ReactNode; level?: HeadingLevel;
+export function CardHeading({ title, icon, linkArrow = false, level: Heading = "h3" }: {
+  title: ReactNode; icon?: ReactNode; linkArrow?: boolean; level?: HeadingLevel;
 }) {
   return <Heading className="workflow-card-heading">
     {icon && <span className="card-badge" aria-hidden="true">{icon}</span>}
-    <span className="workflow-card-title">{title}</span>
+    <span className="workflow-card-title">{title}{linkArrow && <ArrowRight className="card-link-arrow" aria-hidden="true" />}</span>
   </Heading>;
 }
 
