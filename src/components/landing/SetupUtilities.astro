@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ShieldCheck, Bot, FolderCode, LockKeyhole, KeyRound, UserRound, FolderX, Globe, TriangleAlert } from "lucide-react";
+import { ArrowRight, ShieldCheck, Bot, FolderCode, LockKeyhole, KeyRound, UserRound, FolderX, Globe, TriangleAlert, TreePalm } from "lucide-react";
 import MagpieCard from "./MagpieCard";
 import WorkflowCard from "./WorkflowCard";
 import SectionHeading from "./SectionHeading";
@@ -10,7 +10,7 @@ import SectionHeading from "./SectionHeading";
     <p>Magpie installs and verifies layered protection so you can work on untrusted software locally, without a separate VM on macOS or Linux.</p>
   </div>
   <div class="isolation-sides">
-    <WorkflowCard className="isolation-side isolation-open" tone="manual" title="In YOLO mode" emphasis="What if my agent deletes all my files?">
+    <WorkflowCard className="isolation-side isolation-open" tone="risk" title="In YOLO mode" emphasis="What if my agent deletes all my files?">
       <TriangleAlert slot="icon" size={48} aria-hidden="true" />
       <div class="agent-diagram">
         <div class="diagram-agent"><Bot size={40} aria-hidden="true" /><span>Your agent</span></div>
@@ -20,6 +20,7 @@ import SectionHeading from "./SectionHeading";
           <li><KeyRound aria-hidden="true" /><span><strong>Credentials</strong>Can be read or exposed</span></li>
           <li><Globe aria-hidden="true" /><span><strong>Network</strong>Data can leave your machine</span></li>
         </ul>
+        <div class="yolo-wildcard"><TreePalm aria-hidden="true" /><span>A loan for Hawaii next?</span><span class="yolo-question" aria-hidden="true">??</span></div>
       </div>
     </WorkflowCard>
     <MagpieCard className="isolation-side isolation-protected" tone="result" emphasis="I decide what my agent can access.">

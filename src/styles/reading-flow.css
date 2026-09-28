@@ -4,7 +4,7 @@
   --prepared-bg:#c9dfff; --prepared-ink:#16385d;
   --prepared-border:#8ab5ee; --prepared-accent:#004aad;
   --result-bg:#b8e8c4; --result-ink:#205133; --result-border:#73b58c; --result-accent:#126b35;
-  --risk-ink:#a52a26;
+  --risk-bg:#ffd0ca; --risk-ink:#942b25; --risk-border:#d88179;
   position:relative; isolation:isolate;
 }
 .redesign-home > section {
@@ -89,17 +89,26 @@
 .diagram-agent { display:flex; align-items:center; justify-content:center; gap:var(--space-3); font-size:var(--text-reading); }
 .open-access { height:32px; width:0; margin:18px auto 16px; border-left:2px solid var(--risk-ink); position:relative; }
 .open-access::after { content:''; position:absolute; bottom:0; left:-5px; width:8px; height:8px; border-right:2px solid var(--risk-ink); border-bottom:2px solid var(--risk-ink); transform:rotate(45deg); }
-.exposed-resources { display:grid; gap:var(--space-4); margin:0; padding:0; list-style:none; }
-.exposed-resources > li { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3); border:1px solid color-mix(in srgb,var(--risk-ink) 35%,transparent); border-radius:var(--radius-control); color:var(--risk-ink); font-size:var(--text-reading); line-height:1.5; }
+.exposed-resources { display:grid; gap:var(--space-6); margin:0; padding:var(--space-3); list-style:none; }
+.exposed-resources > li { width:92%; background:color-mix(in srgb,var(--paper) 35%,var(--risk-bg)); display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3); border:1px solid color-mix(in srgb,var(--risk-ink) 35%,transparent); border-radius:var(--radius-control); color:var(--risk-ink); font-size:var(--text-reading); line-height:1.5; }
+/* A scattered diagram contrasts with the bounded workspace. The reading
+   order stays intact, and rotations have space inside the diagram column. */
+.exposed-resources > li:nth-child(1) { rotate:-3deg; }
+.exposed-resources > li:nth-child(2) { rotate:3deg; justify-self:end; }
+.exposed-resources > li:nth-child(3) { rotate:-2deg; justify-self:center; }
+.yolo-wildcard { display:flex; align-items:center; gap:var(--space-3); margin:var(--space-6) var(--space-3) 0; padding:var(--space-3); border:1px dashed var(--risk-border); border-radius:var(--radius-control); rotate:2deg; color:var(--risk-ink); font-size:var(--text-reading); line-height:1.5; }
+.yolo-wildcard > svg { width:32px; height:32px; flex:none; }
+.yolo-question { flex:none; white-space:nowrap; margin-left:auto; font-size:var(--title-page); font-weight:600; line-height:1; rotate:-12deg; }
 .exposed-resources svg { flex:none; width:24px; height:24px; }
 .exposed-resources strong, .protected-workspace strong { display:block; font-weight:600; }
 .protected-workspace > svg { flex:none; }
 .protected-access { height:32px; width:0; margin:18px auto 0; border-left:2px solid var(--result-border); }
-.protection-layer { padding:8px; border:1px solid var(--result-border); border-radius:var(--radius-control); background:color-mix(in srgb,var(--paper) 55%,transparent); }
+.isolation-protected .agent-diagram { display:flex; flex-direction:column; }
+.protection-layer { display:flex; flex-direction:column; flex:1; padding:8px; border:1px solid var(--result-border); border-radius:var(--radius-control); background:color-mix(in srgb,var(--paper) 55%,transparent); }
 .layer-label { display:flex; align-items:flex-start; gap:var(--space-2); margin:0 4px 8px; font-size:var(--text-reading); line-height:1.5; text-align:left; }
 .layer-label > svg { flex:none; width:20px; height:1lh; }
 .layer-label svg { color:var(--result-accent); }
-.protected-workspace { display:flex; align-items:center; gap:var(--space-3); text-align:left; padding:16px 8px; border:1px solid var(--result-border); border-radius:var(--radius-control); background:var(--result-bg); color:var(--result-ink); font-size:var(--text-reading); line-height:1.4; }
+.protected-workspace { flex:1; display:flex; align-items:center; gap:var(--space-3); text-align:left; padding:16px 8px; border:1px solid var(--result-border); border-radius:var(--radius-control); background:var(--result-bg); color:var(--result-ink); font-size:var(--text-reading); line-height:1.4; }
 .section-followup { display:flex; flex-direction:column; align-items:center; gap:var(--space-4); margin-top:var(--space-8); }
 .section-followup > a { flex-shrink:0; }
 .card-flow { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:calc(2 * var(--card-width) + var(--flow-gap)); margin-inline:auto; }
@@ -108,7 +117,7 @@
 .redesign-home .learning-intro .lifecycle-heading { margin:0; text-align:left; }
 .redesign-home .learning-intro h2 { text-align:left; }
 .learning-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--card-gap); }
-.learning-path { display:grid; grid-template-rows:subgrid; grid-row:span 3; gap:var(--content-gap); background:var(--surface-light),var(--tint-lavender); }
+.learning-path { --surface-ink:var(--learning-ink); display:grid; grid-template-rows:subgrid; grid-row:span 3; gap:var(--content-gap); background:var(--surface-light),var(--tint-lavender); }
 .learning-path p { margin:0; font-size:var(--text-reading); line-height:var(--leading-body); color:var(--muted); }
 .learning-path a { align-self:end; }
 @media(max-width:800px) {

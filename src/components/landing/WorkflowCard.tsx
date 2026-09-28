@@ -6,7 +6,7 @@ type HeadingLevel = "h2" | "h3" | "h4" | "h5";
 export type WorkflowCardProps = {
   title: ReactNode;
   icon?: ReactNode;
-  tone?: "manual" | "prepared" | "result" | "neutral";
+  tone?: "manual" | "prepared" | "result" | "risk" | "neutral";
   children?: ReactNode;
   work?: string[];
   emphasis?: string;

@@ -1,7 +1,7 @@
 /* Theme differences are expressed through the same tokens as the light UI. */
 html[data-theme=dark] {
   color-scheme:dark;
-  --paper:#121c25; --surface:#20354e; --ink:#e4edf1; --muted:#b1c1c9;
+  --paper:#121c25; --surface:#20354e; --surface-ink:#cee0fa; --learning-ink:#e0d4ff; --ink:#e4edf1; --muted:#b1c1c9;
   --line:#3b4a57; --blue:#89b9ff; --citrus:#293e30; --warning:#e3bd7b;
   --action-bg:#175daf; --action-hover:#124b90;
   --action-soft-bg:#233c59; --action-soft-hover:#2e4c70;
@@ -10,7 +10,7 @@ html[data-theme=dark] {
   --surface-light:linear-gradient(145deg,#ffffff0d,transparent 65%);
 }
 html[data-theme=dark] .redesign-home {
-  --risk-ink:#f6a396;
+  --risk-bg:#572b32; --risk-ink:#ffb6ac; --risk-border:#b36d73;
   --manual-bg:#4a2d25; --manual-ink:#ffcab1; --manual-border:#624e42;
   --prepared-bg:#203f65; --prepared-ink:#cee0fa;
   --prepared-border:#3b526f; --prepared-accent:#89b9ff;

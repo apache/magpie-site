@@ -6,10 +6,11 @@ test('whole-card links highlight the destination without underlining description
   await page.goto('/docs');
   const card=page.locator('.docs-card').first(), title=card.locator('.workflow-card-title');
   await expect(page.locator('.docs-card > .card-link-arrow')).toHaveCount(4);
+  const titleColor=await title.evaluate(el => getComputedStyle(el).color);
   await card.hover();
   await expect(card).toHaveCSS('text-decoration-line','none');
   await expect(card.locator('p')).toHaveCSS('text-decoration-line','none');
-  expect(await title.evaluate(el => getComputedStyle(el).color)).not.toBe(await card.locator('p').evaluate(el => getComputedStyle(el).color));
+  await expect(title).toHaveCSS('color',titleColor);
   await page.mouse.move(0,0); await card.focus();
   await expect(card).toHaveCSS('outline-style','solid');
   await expect(card).toHaveCSS('outline-width','2px');

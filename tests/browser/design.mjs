@@ -73,13 +73,14 @@ export function measureDesign() {
     for (const heading of card.querySelectorAll('.workflow-card-heading,h2,h3')) if (visible(heading)) {
       equal(heading,'fontSize',title,'card typography');
       equal(heading,'lineHeight',title*1.25,'card typography');
+      if (getComputedStyle(heading).color !== getComputedStyle(card).color) errors.push('card heading differs from its semantic palette');
     }
     for (const paragraph of card.querySelectorAll('p')) if (visible(paragraph)) equal(paragraph,'fontSize',reading,'card body typography');
   }
   for (const card of document.querySelectorAll('.workflow-card')) {
     if (!visible(card)) continue;
     const tone = card.dataset.cardTone;
-    if (['manual','prepared','result'].includes(tone)) {
+    if (['manual','prepared','result','risk'].includes(tone)) {
       const s = getComputedStyle(card);
       document.body.append(probe);
       probe.style.backgroundColor = s.getPropertyValue(`--${tone}-bg`);

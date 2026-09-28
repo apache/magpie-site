@@ -255,7 +255,9 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   await expect(page.locator('.protection-layer .protection-layer .protection-layer .protection-layer .protected-workspace')).toBeVisible();
   await expect(page.locator('.learning-grid a')).toHaveCount(3);
   await expect(page.locator('.learning-grid .learning-path')).toHaveCount(3);
-  await expect(page.locator('.learning-grid .surface-card,.learning-grid .flow-arrow')).toHaveCount(0);
+  await expect(page.locator('.learning-grid .surface-card')).toHaveCount(3);
+  await expect(page.locator('.learning-grid .workflow-card-heading > .card-badge')).toHaveCount(3);
+  await expect(page.locator('.learning-grid .flow-arrow')).toHaveCount(0);
   await expect(page.locator('.learning-intro img')).toBeVisible();
   for (const flow of await page.locator('.reel-flow,.lifecycle-flow').all()) {
     expect(await flow.locator(':scope > .workflow-card').evaluateAll(cards => cards.map(card => card.dataset.cardTone))).toEqual(['manual','prepared','result']);

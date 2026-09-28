@@ -144,7 +144,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   flows stack below 1101px to preserve readable cards and these clearances;
   two-card flows stack below 801px. The checker rejects differing glyphs,
   sizes, positions and clearances, including deliberately broken fixtures.
-  The learning guides are open reading columns with aligned headings and links,
+  The learning guides use lavender surfaces with centered shared headings and aligned links,
   rather than a second set of colored flow cards. They stack on phones.
   Manual cards use warm orange, Magpie's preparation uses blue, and ready
   results use green in both themes. The checker rejects a different surface
@@ -361,3 +361,12 @@ never underline whole descriptions, and preserve a visible keyboard focus ring. 
 trailing right arrow as an entry cue. Semantic fills use the shared warm, blue
 and green palettes, with a shared light gradient and elevation in both themes;
 learning uses the same card heading anatomy on lavender surfaces.
+
+The YOLO illustration uses the risk palette and deliberately scattered tiles,
+contrasted with the ordered protection layers. Its three risk descriptions keep
+a readable top-to-bottom order without overlaps or overflow, including on phones.
+The Hawaii question is humorous uncertainty, separate from the concrete risks.
+
+Card headings and icons inherit their surface’s semantic ink, including on hover.
+In side-by-side isolation diagrams, the protection layers fill the same body row
+as the risk illustration; on phones each diagram retains its natural height.

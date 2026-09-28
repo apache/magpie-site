@@ -57,8 +57,18 @@ test('isolation comparison aligns cards and keeps compact labels legible', async
     await expect(page.locator('.isolation-side .workflow-card-body > p')).toHaveCount(0);
     await expect(page.locator('.exposed-resources > li')).toHaveCount(3);
     await expect(page.locator('.layer-label')).toHaveCount(4);
+    await expect(page.locator('.yolo-wildcard')).toContainText('A loan for Hawaii next?');
+    const tiles=await page.locator('.exposed-resources > li').evaluateAll(nodes => nodes.map(el => el.getBoundingClientRect().toJSON()));
+    for (let i=1;i<tiles.length;i++) expect(tiles[i].top).toBeGreaterThan(tiles[i-1].bottom);
+    const diagram=await page.locator('.isolation-open .agent-diagram').boundingBox();
+    for (const tile of tiles) { expect(tile.x).toBeGreaterThanOrEqual(diagram.x); expect(tile.x+tile.width).toBeLessThanOrEqual(diagram.x+diagram.width); }
     const cards = await page.locator('.isolation-side').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
-    if (width > 800) expect(Math.abs(cards[0]-cards[1])).toBeLessThan(1);
+    if (width > 800) {
+      expect(Math.abs(cards[0]-cards[1])).toBeLessThan(1);
+      const layers=await page.locator('.isolation-protected .agent-diagram > .protection-layer').boundingBox();
+      const open=await page.locator('.isolation-open .agent-diagram').boundingBox();
+      expect(Math.abs(layers.y+layers.height-open.y-open.height)).toBeLessThan(1);
+    }
     for (const label of await page.locator('.layer-label').all()) {
       expect(await label.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
     }

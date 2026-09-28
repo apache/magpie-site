@@ -10,9 +10,9 @@
 .workflow-card[data-card-tone=manual] { background:var(--surface-light),var(--manual-bg); color:var(--manual-ink); }
 .workflow-card[data-card-tone=prepared] { background:var(--surface-light),var(--prepared-bg); color:var(--prepared-ink); }
 .workflow-card[data-card-tone=result] { background:var(--surface-light),var(--result-bg); color:var(--result-ink); }
+.workflow-card[data-card-tone=risk] { background:var(--surface-light),var(--risk-bg); color:var(--risk-ink); }
 .workflow-card-heading { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); margin:0; font-size:var(--title-card); font-weight:var(--weight-heading); line-height:var(--leading-heading); letter-spacing:-.02em; text-align:center; }
 .workflow-card-title { min-width:0; text-wrap:pretty; }
-.workflow-card[data-card-tone=prepared] > .workflow-card-heading { color:var(--prepared-accent); }
 .workflow-card-body { min-width:0; }
 .workflow-card-body > :first-child { margin-top:0; }
 .workflow-card-body > :last-child { margin-bottom:0; }

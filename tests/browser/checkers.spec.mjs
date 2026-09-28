@@ -252,15 +252,19 @@ test('design checker keeps badges filled within their silhouettes, without paint
 
 test('cards and badges inherit their semantic palette in both themes', async ({page}) => {
   const card = tone => `<div class="surface-card workflow-card" data-card-tone="${tone}"><h3 class="workflow-card-heading"><span class="card-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /></svg></span><span class="workflow-card-title">A ${tone} card</span></h3></div>`;
-  await page.setContent(`<main class="redesign-home">${['neutral','manual','prepared','result'].map(card).join('')}</main>`);
+  await page.setContent(`<main class="redesign-home">${['neutral','manual','prepared','result','risk'].map(card).join('')}</main>`);
   for (const file of ['src/styles/spacing.css','src/styles/redesign.css','src/styles/reading-flow.css','src/styles/feedback.css','src/components/landing/workflow-card.css']) await page.addStyleTag({content:readFileSync(file,'utf8')});
   for (const theme of ['light','dark']) {
     await page.evaluate(theme => document.documentElement.dataset.theme = theme,theme);
     expect(await page.evaluate(measureDesign)).toEqual([]);
     const icon = page.locator('[data-card-tone=neutral] .card-badge svg');
-    await icon.evaluate(el => el.style.color = 'var(--blue)');
+    await icon.evaluate(el => el.style.color = '#ff00ff');
     expect((await page.evaluate(measureDesign)).join('\n')).toContain('badge icon differs from its card palette');
     await icon.evaluate(el => el.removeAttribute('style'));
+    const heading = page.locator('[data-card-tone=risk] .workflow-card-heading');
+    await heading.evaluate(el => el.style.color = '#ff00ff');
+    expect((await page.evaluate(measureDesign)).join('\n')).toContain('card heading differs from its semantic palette');
+    await heading.evaluate(el => el.removeAttribute('style'));
     const result = page.locator('[data-card-tone=result]');
     await result.evaluate(el => el.style.backgroundColor = 'var(--manual-bg)');
     expect((await page.evaluate(measureDesign)).join('\n')).toContain('card differs from its semantic palette');
