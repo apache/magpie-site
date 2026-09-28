@@ -4,6 +4,7 @@ import WorkflowCard from "./WorkflowCard";
 import WorkflowIllustration, { type WorkflowScene } from "./WorkflowIllustration";
 import { useWorkflowKeyboard } from "./useWorkflowSequence";
 import SequenceNavigation from "./SequenceNavigation";
+import SequenceSlides from "./SequenceSlides";
 import PuzzleFlow from "./PuzzleFlow";
 
 const examples = [
@@ -78,8 +79,7 @@ export default function HeroWorkflows() {
   </div>
   <div ref={root} className="workflow-reel" role="region" aria-roledescription="carousel" aria-label="Nine ways maintainers use Magpie" tabIndex={0}>
     <SequenceNavigation previousLabel="Previous use case" nextLabel="Next use case" onPrevious={() => select((selected - 1 + examples.length) % examples.length)} onNext={() => select((selected + 1) % examples.length)} content={
-    <div className="reel-window" aria-live={advancing ? "off" : "polite"}>
-      <div className="reel-track" style={{ transform: `translateX(-${selected * 100}%)` }}>
+    <SequenceSlides className="reel-window" active={selected} live={advancing ? "off" : "polite"}>
         {examples.map((item, i) => <div className="reel-slide" key={item.scene} aria-hidden={i !== selected} inert={i !== selected} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${examples.length}: ${item.input}`}>
           <PuzzleFlow as="ol" className="reel-flow" active={i === selected} introduced={puzzleIntroduced}>
             <WorkflowCard as="li" className="reel-source" headingLevel="h2" title={item.input} tone="manual" emphasis={item.frustration}><WorkflowIllustration scene={item.scene} /></WorkflowCard>
@@ -87,8 +87,7 @@ export default function HeroWorkflows() {
             <WorkflowCard as="li" className="reel-delivery" headingLevel="h2" title={item.outcome} tone="result" emphasis={item.relief}><WorkflowIllustration scene={item.scene} result /></WorkflowCard>
           </PuzzleFlow>
         </div>)}
-      </div>
-    </div>
+    </SequenceSlides>
     }>
     <div className="example-navigation" aria-label="Choose a use case">
       {examples.map((item, i) => <button className="reel-dot" key={item.scene} type="button" aria-label={`${i + 1}: ${item.input}`} aria-pressed={selected === i} title={item.input} onClick={() => select(i)}><span /></button>)}

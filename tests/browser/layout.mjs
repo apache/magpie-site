@@ -11,7 +11,7 @@ export function measureLayout() {
     for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) if (/auto|scroll/.test(getComputedStyle(parent).overflowX)) scrolling = true;
     // The carousel rail intentionally moves inside its clipped viewport. Its
     // active slide and every descendant still undergo the full bounds check.
-    const carouselRail = el.matches('.reel-window > .reel-track') && getComputedStyle(el.parentElement).overflowX === 'hidden';
+    const carouselRail = el.matches('.sequence-window > .sequence-track') && ['hidden','clip'].includes(getComputedStyle(el.parentElement).overflowX);
     if (!scrolling && !carouselRail && (rect.right > width + tolerance || rect.left < -tolerance)) errors.push('outside viewport: ' + el.tagName + '.' + el.className);
     if (el.matches('h1,h2,h3,h4,h5,button,p') && !/auto|scroll/.test(style.overflowX)) {
       // scrollWidth includes decorative connectors outside tab buttons. Measure

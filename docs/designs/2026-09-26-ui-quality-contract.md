@@ -291,11 +291,15 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   controls keep their keys.
   Keyboard
   selection stops hero autoplay just like clicking a dot.
-  Titles and progressive panels share a 280ms fade with a 6px settling motion;
+  The hero and both walkthroughs share a 400ms horizontal slide with a stable
+  content envelope. Panels remain assembled when switching stages: puzzle
+  assembly and its faint sheen run only on the first introduction to a sequence.
+  Titles retain a 280ms fade with a 6px settling motion;
   control colours and markers use 180ms transitions. Inactive content remains
   inert and hidden from assistive technology throughout the transition.
   Reduced motion disables these transitions. Production and dev tests inspect
-  running opacity transitions after real selections and verify their absence
+  horizontal panel movement and title fades after real selections, without
+  vertical jumps or repeated puzzle assembly, and verify their absence
   with reduced motion enabled.
 - Every discovered HTML route runs at 320, 375, 600, 800, 801, 1150, 1151, 1440,
   1524 and 1920 px. Axe WCAG 2 A/AA and 2.1 AA runs in light/dark at 375 and 1280 px.

@@ -88,7 +88,7 @@ for (const width of [375,1440]) test(`pieces assemble once and pass light throug
   await flow.screenshot({path:`.builds/visual/puzzle-assembled-${width}.png`});
   await page.locator('.reel-dot').nth(1).click();
   await expect(flow).not.toHaveAttribute('data-puzzle-shine');
-  expect(await flow.evaluate(el=>el.getAnimations({subtree:true}).filter(a=>a.animationName==='puzzle-shine').length)).toBe(0);
+  expect(await flow.evaluate(el=>el.getAnimations({subtree:true}).filter(a=>a.animationName?.startsWith('puzzle-')).length)).toBe(0);
   await page.locator('.reel-dot').first().click();
   await expect(flow).not.toHaveAttribute('data-puzzle-shine');
   await page.emulateMedia({reducedMotion:'reduce'});

@@ -9,8 +9,7 @@ export function criticalProgressionTests() {
     await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
     for (const [controls,active] of [
       ['.reel-dot','#hero-question > [aria-hidden=false]'],
-      ['.software-workbench [role=tab]','.lifecycle-scene[aria-hidden=false]'],
-      ['.security-workbench [role=tab]','.security-scene[aria-hidden=false]'],
+      ['.security-workbench [role=tab]','.security-prompts > [aria-hidden=false]'],
     ]) {
       await page.locator(controls).first().click();
       await page.locator(controls).nth(1).click();

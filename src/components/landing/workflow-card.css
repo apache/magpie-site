@@ -101,7 +101,7 @@
   background-repeat:no-repeat;
 }
 @media(prefers-reduced-motion:no-preference) {
-  .puzzle-flow[data-puzzle-ready] > .workflow-card { animation:puzzle-fit 650ms cubic-bezier(.2,.8,.2,1) both; }
+  .puzzle-flow[data-puzzle-shine] > .workflow-card { animation:puzzle-fit 650ms cubic-bezier(.2,.8,.2,1) both; }
   .puzzle-flow[data-puzzle-shine] > .workflow-card::before { animation:puzzle-shine 1000ms var(--piece-light-delay) linear both; }
 }
 @keyframes puzzle-fit {

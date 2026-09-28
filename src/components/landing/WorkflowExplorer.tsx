@@ -5,6 +5,7 @@ import { securityStory } from "./security-story";
 import MagpieCard, { ManualCard } from "./MagpieCard";
 import WorkflowStages from "./WorkflowStages";
 import SequenceNavigation from "./SequenceNavigation";
+import SequenceSlides from "./SequenceSlides";
 
 export default function WorkflowExplorer() {
   const {active:stage, scrollDriven, sceneRef, panelRef, select} = useWorkflowSequence(securityStory.length, "security-tab-");
@@ -14,12 +15,12 @@ export default function WorkflowExplorer() {
       <WorkflowStages phases={securityStory} active={stage} label="Security lifecycle phases" tabPrefix="security-tab-" panelPrefix="security-stage-" select={select} />
       <div className="security-prompts">{securityStory.map((phase, i) => <h4 key={phase.label} id={`security-prompt-${i}`} aria-hidden={stage !== i}>{phase.prompt}</h4>)}</div>
       <SequenceNavigation previousLabel="Previous security stage" nextLabel={stage < securityStory.length - 1 ? `Next security stage: ${securityStory[stage + 1].label}` : "Next security stage"} onPrevious={() => select(stage - 1)} onNext={() => select(stage + 1)} previousDisabled={stage === 0} nextDisabled={stage === securityStory.length - 1} content={
-      <div className="security-scenes">{securityStory.map((phase, i) => <section className="security-scene" id={`security-stage-${i}`} key={phase.label} role="tabpanel" aria-labelledby={`security-tab-${i} security-prompt-${i}`} aria-hidden={stage !== i} inert={stage !== i} tabIndex={0}>
+      <SequenceSlides className="security-scenes" active={stage}>{securityStory.map((phase, i) => <section className="security-scene" id={`security-stage-${i}`} key={phase.label} role="tabpanel" aria-labelledby={`security-tab-${i} security-prompt-${i}`} aria-hidden={stage !== i} inert={stage !== i} tabIndex={0}>
         <div className="story-comparison">
           <ManualCard className="story-manual" headingLevel="h5" work={phase.without} checklistIcon={Minus} emphasis={phase.frustration} />
           <MagpieCard className="story-assisted" headingLevel="h5" work={phase.work} emphasis={phase.relief} />
         </div>
-      </section>)}</div>
+      </section>)}</SequenceSlides>
       } />
     </div>
   </div>;

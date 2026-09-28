@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
-/** Assemble when first seen, then again only when the reader selects a stage. */
+/** Introduce each sequence once; subsequent panels stay assembled as they slide. */
 export default function PuzzleFlow({as: Element = "div", className, active = true, introduced, children}: {
   as?: "div" | "ol"; className: string; active?: boolean; introduced?: RefObject<boolean>; children: ReactNode;
 }) {
