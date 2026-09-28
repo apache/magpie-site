@@ -96,7 +96,7 @@ export function measureLayout() {
     const children = [...grid.children].filter(el => visible(el) && el.tagName.toLowerCase() !== 'svg');
     // Flow steps and diagrams have different amounts/kinds of content. Their
     // surfaces fit that content; only homogeneous comparisons share row heights.
-    const naturalCards = grid.matches('.reel-flow,.lifecycle-flow,.isolation-sides');
+    const naturalCards = grid.matches('.reel-flow,.lifecycle-flow');
     const sideBySide = getComputedStyle(grid).gridTemplateColumns.split(' ').length > 1;
     if (grid.matches('.reel-flow,.lifecycle-flow,.learning-grid,.card-flow')) {
       for (let i=0;i<children.length-1;i++) {

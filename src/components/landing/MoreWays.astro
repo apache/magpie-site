@@ -1,4 +1,5 @@
 ---
+import SectionHeading from "./SectionHeading";
 import { ArrowRight, BookOpen, MessagesSquare, Wrench } from "lucide-react";
 import SetupUtilities from "./SetupUtilities.astro";
 import { ProjectRules } from "./ProjectExamples";
@@ -6,7 +7,7 @@ import { ProjectRules } from "./ProjectExamples";
 <SetupUtilities />
 <section id="project-rules" class="project-fit" aria-labelledby="project-fit-title">
   <div class="container">
-    <div class="lifecycle-heading"><h2 id="project-fit-title">Make Magpie work your way</h2></div>
+    <div class="lifecycle-heading"><SectionHeading id="project-fit-title" target="project-rules" level="h2">Make Magpie work your way</SectionHeading></div>
     <ProjectRules />
   </div>
 </section>
@@ -14,7 +15,7 @@ import { ProjectRules } from "./ProjectExamples";
   <div class="learning-intro">
     <img src="/illustrations/magpie/magpie-standing.png" width="120" height="120" alt="" loading="lazy" />
     <div class="lifecycle-heading">
-      <h2 id="learn-skills-title">Get more out of your agent</h2>
+      <SectionHeading id="learn-skills-title" target="learning" level="h2">Get more out of your agent</SectionHeading>
       <p>Magpie is a place to start learning, too. Explore practical guides for using agents in everyday work, one new skill at a time.</p>
     </div>
   </div>

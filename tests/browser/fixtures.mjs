@@ -2,6 +2,11 @@ import { test as base, expect } from '@playwright/test';
 
 export { expect };
 export const test = base.extend({
+  heroRandom: [0, {option:true}],
+  heroStart: [async ({page, heroRandom}, use) => {
+    await page.addInitScript(value => { Math.random = () => value; }, heroRandom);
+    await use();
+  }, {auto:true}],
   runtimeHealth:[async ({page}, use) => {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));

@@ -1,12 +1,12 @@
 ---
-import { ArrowRight, ShieldCheck, Bot, FolderCode, LockKeyhole, KeyRound, UserRound, Folder, Globe, TriangleAlert } from "lucide-react";
+import { ArrowRight, ShieldCheck, Bot, FolderCode, LockKeyhole, KeyRound, UserRound, FolderX, Globe, TriangleAlert } from "lucide-react";
 import MagpieCard from "./MagpieCard";
 import WorkflowCard from "./WorkflowCard";
-import CenteredLabel from "./CenteredLabel";
+import SectionHeading from "./SectionHeading";
 ---
 <section id="agent-isolation" class="setup-utilities container isolation-comparison" aria-labelledby="setup-utilities-title">
   <div class="setup-explanation">
-    <h2 id="setup-utilities-title">Give your agent a workspace, not your whole machine</h2>
+    <SectionHeading id="setup-utilities-title" target="agent-isolation">Give your agent a workspace, not your whole machine</SectionHeading>
     <p>Magpie installs and verifies layered protection so you can work on untrusted software locally, without a separate VM on macOS or Linux.</p>
   </div>
   <div class="isolation-sides">
@@ -14,38 +14,32 @@ import CenteredLabel from "./CenteredLabel";
       <TriangleAlert slot="icon" size={48} aria-hidden="true" />
       <div class="agent-diagram">
         <div class="diagram-agent"><Bot size={40} aria-hidden="true" /><span>Your agent</span></div>
-        <div class="open-access" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="exposed-resources">
-          <div><Folder size={30} aria-hidden="true" /><span>Personal files</span></div>
-          <div><KeyRound size={30} aria-hidden="true" /><span>Credentials</span></div>
-          <div><Globe size={30} aria-hidden="true" /><span>Network</span></div>
-        </div>
+        <div class="open-access" aria-hidden="true"></div>
+        <ul class="exposed-resources" aria-label="Risks when protections are disabled">
+          <li><FolderX aria-hidden="true" /><span><strong>Personal files</strong>Can be changed or deleted</span></li>
+          <li><KeyRound aria-hidden="true" /><span><strong>Credentials</strong>Can be read or exposed</span></li>
+          <li><Globe aria-hidden="true" /><span><strong>Network</strong>Data can leave your machine</span></li>
+        </ul>
       </div>
-      <p>With protections disabled, your agent can access the same files, credentials and network as your session. One bad command or malicious instruction can reach beyond the project.</p>
     </WorkflowCard>
     <MagpieCard className="isolation-side isolation-protected" tone="result" emphasis="I decide what my agent can access.">
       <div class="agent-diagram">
         <div class="diagram-agent"><Bot size={40} aria-hidden="true" /><span>Your agent</span></div>
         <div class="protected-access" aria-hidden="true"></div>
         <div class="protection-layer">
-          <span class="layer-label"><CenteredLabel stacked><KeyRound slot="icon" size={20} aria-hidden="true" />Credentials removed from the environment</CenteredLabel></span>
+          <span class="layer-label"><KeyRound aria-hidden="true" /><span>Environment credentials removed</span></span>
           <div class="protection-layer">
-            <span class="layer-label"><CenteredLabel stacked><ShieldCheck slot="icon" size={20} aria-hidden="true" />File and network access sandboxed</CenteredLabel></span>
+            <span class="layer-label"><ShieldCheck aria-hidden="true" /><span>File and network access sandboxed</span></span>
             <div class="protection-layer">
-              <span class="layer-label"><CenteredLabel stacked><LockKeyhole slot="icon" size={20} aria-hidden="true" />Agent tools restricted</CenteredLabel></span>
+              <span class="layer-label"><LockKeyhole aria-hidden="true" /><span>Agent tools restricted</span></span>
               <div class="protection-layer">
-                <span class="layer-label"><CenteredLabel stacked><UserRound slot="icon" size={20} aria-hidden="true" />Approval required for external writes</CenteredLabel></span>
-                <div class="protected-workspace">
-                  <FolderCode size={32} aria-hidden="true" />
-                  <span>Your allowed workspace</span>
-                  <span>Project files</span>
-                </div>
+                <span class="layer-label"><UserRound aria-hidden="true" /><span>Approval required for external writes</span></span>
+                <div class="protected-workspace"><FolderCode size={32} aria-hidden="true" /><span><strong>Your allowed workspace</strong>Project files</span></div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <p>Magpie limits what your agent can access and requires approval for external writes, reducing the damage a bad instruction can cause.</p>
     </MagpieCard>
   </div>
   <div class="section-followup"><a class="button button-soft" href="/docs/setup/secure-agent-setup" target="_blank" rel="noreferrer"><span>Set up agent isolation</span><ArrowRight className="cta-arrow" aria-hidden="true" /></a></div>

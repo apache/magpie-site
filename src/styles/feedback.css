@@ -9,6 +9,7 @@ html[data-theme=dark] {
   --surface-shadow:0 1px 2px #00000024;
 }
 html[data-theme=dark] .redesign-home {
+  --risk-ink:#f6a396;
   --manual-bg:#292726; --manual-ink:#edb59d; --manual-border:#624e42;
   --prepared-bg:#1c2937; --prepared-ink:#cee0fa;
   --prepared-border:#3b526f; --prepared-accent:#89b9ff;

@@ -26,6 +26,9 @@ export default function HeroWorkflows() {
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    // Choose once after hydration: SSR stays stable, while repeat visits show
+    // different examples. Manual selection and autoplay share the same state.
+    setSelected(Math.floor(Math.random() * examples.length));
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     setMotionAllowed(!media.matches);
     const change = () => setMotionAllowed(!media.matches);

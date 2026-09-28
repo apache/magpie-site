@@ -272,6 +272,7 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   const portrait = page.locator('.case-quote .quote-person img');
   await portrait.scrollIntoViewIfNeeded();
   await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveCSS('filter','none');
   await expect.poll(() => portrait.evaluate(img => img.naturalWidth)).toBeGreaterThan(0);
   const dataLink = page.locator('.airflow-chart-story .chart-note a');
   await expect(dataLink).toHaveAttribute('href','/stories/airflow');
@@ -282,7 +283,13 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
     await page.evaluate(theme => localStorage.setItem('magpie-theme',theme),theme); await page.reload();
     await page.evaluate(() => document.fonts.ready); await checkLayout(page);
     for (const section of ['#airflow','#how-it-works','#project-rules','#learning']) await expect(page.locator(section)).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
-    await expect(page.locator('.redesign-home > section > .section-wave')).toHaveCount(1);
+    const separators = await page.locator('.redesign-home > section + section').evaluateAll(nodes => nodes.map(node => {
+      const style = getComputedStyle(node,'::before');
+      return [style.borderTopWidth,style.borderTopStyle,style.borderTopColor,style.width];
+    }));
+    expect(separators.length).toBeGreaterThan(4);
+    expect(new Set(separators.map(style => JSON.stringify(style))).size).toBe(1);
+    expect(separators[0].slice(0,2)).toEqual(['1px','solid']);
     await expect(page.locator('.case-quote')).toHaveCSS('text-align','left');
     const successAccent = await page.locator('.layer-label svg').first().evaluate(el => getComputedStyle(el).color);
     await expect(page.locator('.time-line')).toHaveCSS('stroke',successAccent);

@@ -81,6 +81,11 @@ workflow content remain intact. Explicit links and Back/Forward retain their
 destination until the reader scrolls again; precise links within a section are
 kept while that section is active. Returning to the page top clears the fragment.
 Browser checks cover desktop/phone widths, keyboard navigation and documentation.
+The homepage also exposes native section links in its headings and a compact
+contents menu. The menu closes on selection, outside clicks and Escape, restoring
+appropriate keyboard focus. Common hairline separators mark section boundaries.
+The hero chooses its first example after hydration and advances from that state;
+repeatable tests cover different starting examples, wraparound and manual pause.
 
 Browser rules use a 2 CSS-pixel rounding tolerance:
 
@@ -90,7 +95,7 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   active slide and descendants, not its intentionally translated wrapper.
 - Shared page containers have symmetric margins and at least the gutter token.
 - Homepage sections retain at least the shared responsive section-padding
-  token on both vertical edges (64–112px, plus any wave clearance). Local
+  token on both vertical edges (64–112px). Local
   compression fails the checker; deliberately broken phone/desktop fixtures
   verify both edges. Shared card gaps are 24px on phones and 32px on desktop;
   Headings use 32px between their title and lead; consecutive explanatory blocks
@@ -109,14 +114,15 @@ Browser rules use a 2 CSS-pixel rounding tolerance:
   have equal bottom edges and aligned heading/body rows. Flow steps deliberately
   fit their own content and align on a common vertical centre; unlike cards in
   a catalogue, they do not borrow empty height from neighbouring steps. Isolation
-  diagrams align at the top and also keep their natural heights. Their different
-  diagram depths express different access boundaries. Learning links and tool
+  comparisons share heading, diagram and reaction rows on desktop, with equal
+  card heights. Nested boundaries keep their labels beside their icons; the
+  open-access diagram states the risks directly. Mobile cards fit their content. Learning links and tool
   metadata align within their respective rows. Card padding equals the
   shared token on all four sides. Workflow heading text aligns left beside
   its icon; its row fits the taller of the title and icon, without a fixed
   minimum height. The gate rejects surplus heading space.
 - Workflow cards are capped at 26rem (and the available width); paired layouts
-  share this measure instead of filling the entire section. Isolation diagrams and their prose share one 36ch content column. Prose in
+  share this measure instead of filling the entire section. Isolation diagrams use the same 36ch content column. Prose in
   every workflow card is capped at that same measure and centred as a column. Text remains left-aligned unless
   its role explicitly calls for centred copy. Shared card padding is 32px on
   desktop and 20px on phones. These tokens scale with reading needs rather than

@@ -81,7 +81,7 @@ a, button, summary { -webkit-tap-highlight-color:transparent; transition:color v
 .footer-bottom p { margin:0; }
 .footer-bottom a { color:inherit; display:inline-flex; gap:4px; align-items:center; }
 .quote-person { display:flex; align-items:center; gap:12px; }
-.quote-person img { border-radius:50%; filter:grayscale(1); flex-shrink:0; }
+.quote-person img { border-radius:50%; flex-shrink:0; }
 .quote-person strong { font-size:var(--text-reading); font-weight:550; }
 .quote-person span { display:block; color:var(--muted); font-size:var(--text-reading); line-height:1.5; margin-top:4px; }
 .not-found { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,300px); align-items:center; gap:var(--space-8); padding-block:var(--page-padding); min-height:65vh; }
@@ -112,4 +112,28 @@ body.docs-navigation-open { overflow:hidden; }
 @media(prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }
   *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}
+
+/* A compact contents disclosure fits the existing header on desktop and phone. */
+.home-navigation { position:relative; }
+.home-navigation summary { display:flex; align-items:center; gap:var(--space-2); min-height:44px; color:var(--ink); font-size:var(--text-reading); list-style:none; }
+.home-navigation summary::-webkit-details-marker { display:none; }
+.home-navigation summary:hover { color:var(--blue); }
+.home-navigation nav { position:absolute; top:calc(100% + var(--space-2)); right:0; width:260px; max-width:calc(100vw - 2 * var(--page-gutter)); max-height:calc(100dvh - var(--header-height) - var(--space-8)); overflow:auto; padding:var(--space-2); border:1px solid var(--line); border-radius:var(--radius-control); background:var(--paper); box-shadow:var(--surface-shadow); }
+.home-navigation nav a { display:flex; align-items:center; min-height:44px; padding:var(--space-2) var(--space-3); border-radius:var(--radius-control); color:var(--ink); font-size:var(--text-reading); text-decoration:none; }
+.home-navigation nav a:is(:hover,:focus-visible) { background:var(--surface); color:var(--blue); }
+.home-navigation :is(.home-docs-link,.home-start-link) { display:none; }
+@media(max-width:800px) {
+  .site-navigation .home-header-docs { display:none; }
+  .home-navigation summary { font-size:var(--text-small); }
+  .home-navigation summary svg { display:none; }
+  .home-navigation .home-docs-link { display:flex; border-top:1px solid var(--line); }
+  .home-navigation nav { position:fixed; top:var(--header-height); right:var(--page-gutter); }
+}
+
+@media(max-width:600px) {
+  .header-inner:has(.home-navigation) { flex-wrap:nowrap; padding-block:0; }
+  .site-navigation:has(.home-navigation) { flex-wrap:nowrap; margin-left:auto; margin-right:0; }
+  .site-navigation .home-header-start { display:none; }
+  .home-navigation .home-start-link { display:flex; }
 }

@@ -12,7 +12,7 @@ export function MagpieToolkit() { return <svg className="magpie-toolkit" viewBox
 type BrandedCardProps = Omit<WorkflowCardProps, "title" | "icon" | "tone"> & { title?: string };
 
 export function ManualCard(props: BrandedCardProps) {
-  const { title = "The old way", ...rest } = props;
+  const { title = "Good old days", ...rest } = props;
   return <WorkflowCard {...rest} title={title} icon={<NotebookPen aria-hidden="true" />} tone="manual" />;
 }
 

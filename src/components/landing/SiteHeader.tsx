@@ -1,7 +1,8 @@
+import HomeNavigation from "./HomeNavigation";
 import { Menu, Search, Moon, Sun } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
-export function SiteHeader({ search = false, currentPath = "" }: { search?: boolean; currentPath?: string }) {
+export function SiteHeader({ search = false, currentPath = "", homepage = false }: { search?: boolean; currentPath?: string; homepage?: boolean }) {
   const installing = currentPath.replace(/\/$/, "") === "/start";
   const themeToggle = <button className="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><Moon className="theme-moon" size={18} aria-hidden="true" /><Sun className="theme-sun" size={18} aria-hidden="true" /></button>;
   return <header className="site-header">
@@ -13,10 +14,10 @@ export function SiteHeader({ search = false, currentPath = "" }: { search?: bool
         <button className="docs-search-trigger" aria-label="Search docs" data-search-open><Search size={18} aria-hidden="true" /><span>Search docs</span><kbd>⌘ K</kbd></button>
         {themeToggle}
       </div> : <nav className="site-navigation" aria-label="Main navigation">
-        <a className="nav-story" href={withBase("/#how-it-works")}>How it works</a>
-        <a href={withBase("/docs")} target="_blank" rel="noreferrer">Docs</a>
+        {homepage ? <HomeNavigation /> : <a className="nav-story" href={withBase("/#how-it-works")}>How it works</a>}
+        <a className={homepage ? "home-header-docs" : undefined} href={withBase("/docs")} target="_blank" rel="noreferrer">Docs</a>
         {themeToggle}
-        {!installing && <a className="button button-small" href={withBase("/start")} target="_blank" rel="noreferrer">Get started</a>}
+        {!installing && <a className={`button button-small${homepage ? " home-header-start" : ""}`} href={withBase("/start")} target="_blank" rel="noreferrer">Get started</a>}
       </nav>}
     </div>
   </header>;
