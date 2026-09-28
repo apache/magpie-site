@@ -266,8 +266,8 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   const articleOrder = await page.locator('.case-layout').evaluate(el => [...el.children].map(child => child.className));
   expect(articleOrder).toEqual(['case-intro','case-evidence','case-quote','case-walkthrough']);
   await expect(page.locator('#airflow > .container > h2')).toHaveCount(1);
-  await expect(page.locator('#airflow')).toHaveAccessibleName('Success stories');
-  await expect(page.locator('.case-intro p')).toHaveText('Magpie helped Airflow keep up with security reports.');
+  await expect(page.locator('#airflow')).toHaveAccessibleName('Who’s using Magpie');
+  await expect(page.locator('.case-intro p')).toHaveText('Airflow maintainers use Magpie to investigate security reports and prepare fixes.');
   await expect(page.locator('.case-quote :is(h2,h3,a)')).toHaveCount(0);
   const portrait = page.locator('.case-quote .quote-person img');
   await portrait.scrollIntoViewIfNeeded();
@@ -292,7 +292,7 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
       await expect(mark).toHaveCSS('fill',await mark.evaluate(el => getComputedStyle(el.parentElement).color));
       await expect(mark).toHaveCSS('stroke','none');
     }
-    await expect(page.locator('.case-layout')).toHaveAccessibleName('Magpie helped Airflow keep up with security reports.');
+    await expect(page.locator('.case-layout')).toHaveAccessibleName('Airflow maintainers use Magpie to investigate security reports and prepare fixes.');
     const introStyle = await page.locator('.security-walkthrough .lifecycle-heading p').evaluate(el => {
       const style = getComputedStyle(el);
       return Object.fromEntries(['font-family','font-size','font-weight','line-height','letter-spacing'].map(property => [property,style.getPropertyValue(property)]));
