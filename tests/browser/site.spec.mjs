@@ -24,6 +24,10 @@ for (const { route } of manifest.pages) test('responsive and accessible ' + rout
   page.on('pageerror', error => failures.push(error.message));
   const response = await page.goto(route);
   expect(response.headers()['x-magpie-build']).toBe(manifest.token);
+  // Layout and accessibility checks scale with the page. The longest docs page
+  // (secure-agent-setup, ~400 KB) needs more than the default budget on a
+  // one-CPU runner; every other route keeps it, so a stuck page still fails.
+  test.slow((await response.body()).length > 300_000, 'a very long page');
   await page.evaluate(() => document.fonts.ready);
   for (const width of widths) {
     await page.setViewportSize({ width, height:900 });
