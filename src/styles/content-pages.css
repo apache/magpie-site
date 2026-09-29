@@ -17,7 +17,7 @@
 .content-page details { border-top: 1px solid var(--line); padding-block: 20px; }
 .content-page details summary { font-size: 18px; font-weight: 500; }
 .content-page details[open] summary { margin-bottom: 20px; }
-.arch-flow { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--card-gap); margin-block: var(--space-8); }
+.arch-flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--card-gap); margin-block: var(--space-8); }
 .arch-card { text-decoration: none; grid-row: span 2; grid-template-rows: subgrid; }
 .arch-score strong { color: var(--ink); }
 .reference-table th { padding: var(--space-3) var(--space-5); text-align: left; background: var(--surface); color: var(--surface-ink); font-weight: 600; white-space: nowrap; }
@@ -31,6 +31,9 @@
 .reference-table td { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.7; overflow-wrap: break-word; }
 .reference-table td:first-child { width: 30%; color: var(--ink); white-space: nowrap; }
 .reference-table tr:last-child td { border-bottom: 0; }
+/* On a phone a table scrolls within itself, as docs tables do, rather than
+   widening the page; it is focusable (tabindex) so the keyboard can scroll it. */
+@media (max-width: 650px) { .reference-table { display: block; max-width: 100%; overflow-x: auto; } .reference-table :is(td,th) { padding: var(--space-3); } }
 .brand-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--card-gap); margin-top: var(--space-6); }
 .asset-preview { height: 180px; display: flex; align-items: center; justify-content: center; padding: var(--card-padding); background: #eff2ec; border-radius: var(--radius-card); }
 .asset-preview img { max-height: 120px; max-width: 100%; object-fit: contain; }

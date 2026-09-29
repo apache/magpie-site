@@ -20,9 +20,13 @@ test('docs tables never split words, and short row labels stay on one line', asy
         const style = getComputedStyle(cell);
         if (style.overflowWrap === 'anywhere' || style.wordBreak === 'break-all') out.push('word splitting allowed: ' + cell.textContent.trim().slice(0, 40));
         if (cell.classList.contains('table-label')) {
+          // Inline pieces (a link around code) sit a pixel or two apart on one
+          // line; a new line starts only below the previous line's boxes.
           const range = document.createRange(); range.selectNodeContents(cell);
-          const lines = new Set([...range.getClientRects()].map(r => Math.round(r.top)));
-          if (lines.size > 1) out.push('label wraps: ' + cell.textContent.trim());
+          const boxes = [...range.getClientRects()].filter(r => r.width && r.height).sort((a, b) => a.top - b.top);
+          let lines = 0, bottom = -Infinity;
+          for (const box of boxes) { if (box.top >= bottom - 1) { lines += 1; bottom = box.bottom; } else bottom = Math.max(bottom, box.bottom); }
+          if (lines > 1) out.push('label wraps: ' + cell.textContent.trim());
         }
       }
       return out;
@@ -35,5 +39,10 @@ test('docs tables never split words, and short row labels stay on one line', asy
   await page.goto('/docs/modes/');
   const label = page.locator('.docs-prose td.table-label', { hasText:/^experimental$/ }).first();
   await expect(label).toBeVisible();
-  expect(await label.evaluate(el => el.getClientRects().length && Math.round(el.getBoundingClientRect().height))).toBeLessThan(60);
+  // The cell is as tall as its row; what matters is that its text is one line.
+  expect(await label.evaluate(el => {
+    const range = document.createRange(); range.selectNodeContents(el);
+    const tops = [...range.getClientRects()].filter(r => r.width).map(r => r.top);
+    return Math.max(...tops) - Math.min(...tops);
+  })).toBeLessThan(4);
 });

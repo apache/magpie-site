@@ -22,7 +22,7 @@ const expectTarget = async (page, href) => {
 
 test('architecture sums up skills, capabilities and tools, each linking to its list', async ({ page }) => {
   await page.goto('/architecture/');
-  const cards = page.locator('.arch-card');
+  const cards = page.locator('.arch-flow').first().locator('.arch-card');
   const capabilities = Object.keys(data.contracts).length + Object.keys(data.substrates).length;
   await expect(cards.locator('.workflow-card-title')).toHaveText([`${data.skills.total} skills`, `${capabilities} capabilities`, `${data.tools.length} tools`]);
   const targets = await cards.evaluateAll(links => links.map(a => a.getAttribute('href')));
