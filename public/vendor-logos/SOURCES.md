@@ -15,3 +15,13 @@ Marks identify compatible products, without implying endorsement.
 Additional marks retrieved on 2026-09-22.
 
 - `airflow.svg`: official Apache Airflow logo, extracted unchanged from https://airflow.apache.org/.
+
+# Tool vendor marks
+
+Restored for the tools page from commit 03585bd, where they were first added.
+They identify the backend a tool talks to, without implying endorsement.
+
+- `github.svg`, `git.svg`, `subversion.svg`, `atlassian.svg`, `google.svg`:
+  brand marks in the Simple Icons SVG format.
+- `oak.svg`: the Apache Software Foundation oak leaf. The ASF is always shown
+  with this mark, never the feather.

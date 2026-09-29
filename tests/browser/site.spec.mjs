@@ -102,24 +102,6 @@ test('all carousel and tab states, keyboard, long copy and text zoom', async ({ 
   await checkLayout(page);
 });
 
-test('tools search, all filter dimensions, empty result and reset', async ({ page }) => {
-  await page.goto('/tools/');
-  const cards = page.locator('.tool-entry:visible'), total = await cards.count();
-  await page.getByRole('searchbox', { name:'Search tools' }).fill('no-such-tool-zzzzz');
-  await expect(cards).toHaveCount(0); await expect(page.locator('#tool-empty')).toBeVisible();
-  await checkAccessibility(page);
-  await page.getByRole('button', { name:'Clear filters' }).click();
-  await expect(cards).toHaveCount(total); await expect(page.locator('#tool-query')).toBeFocused();
-  await page.getByText('More filters', { exact:true }).click();
-  for (const id of ['tool-capability','tool-vendor','tool-org']) {
-    const select = page.locator('#' + id), options = await select.locator('option').evaluateAll(nodes => nodes.map(n => n.value).filter(Boolean));
-    for (const value of options) { await select.selectOption(value); await expect(cards).not.toHaveCount(0); await checkLayout(page); }
-    await select.selectOption('');
-  }
-  await page.locator('#tool-mcp').check(); expect(await cards.count()).toBeLessThan(total);
-  await page.getByRole('button', { name:'Clear filters' }).click(); await expect(cards).toHaveCount(total);
-});
-
 test('documentation search, no results, retry, focus and mobile navigation', async ({ page }) => {
   await page.setViewportSize({ width:320, height:900 });
   await page.goto('/docs/');

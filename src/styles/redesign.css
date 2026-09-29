@@ -98,7 +98,6 @@ body.docs-navigation-open { overflow:hidden; }
   .header-inner { gap:12px; }
   .official-wordmark { width:120px; }
   .header-actions, .site-navigation { gap:12px; }
-  .site-navigation .nav-story { display:none; }
   .site-navigation>a:where(:not(.button)) { font-size:.875rem; }
   .footer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }

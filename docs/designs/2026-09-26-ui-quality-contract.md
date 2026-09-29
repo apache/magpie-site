@@ -11,8 +11,11 @@ three-column reading layout; content pages have a narrower reading measure.
   Airflow illustration, a four-layer agent protection diagram, three educational
   paths into the existing documentation, project setup and installation links.
 - `/start`: five installation variants, real clipboard feedback and setup text.
-- `/tools`: search, capability/vendor/organisation filters, MCP switch, empty
-  results and reset. Cards and filter options come from generated tool metadata.
+- `/tools`: search; contract, substrate, vendor and organisation menus with
+  several choices each (any choice within a menu, every menu together), per-option
+  counts that match the tools shown, removable active-filter chips; MCP switch,
+  empty results and reset. Tools are shared surface cards. Cards and filter
+  options come from generated tool metadata.
 - `/stories/airflow`: nine chart metrics, monthly/quarterly periods, keyboard
   inspection and a data table. Source data and its qualifications remain intact.
 - `/docs` and `/docs/**`: generated content, nested disclosure navigation,

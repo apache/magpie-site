@@ -14,10 +14,10 @@ export function SiteHeader({ search = false, currentPath = "", homepage = false 
         <button className="docs-search-trigger" aria-label="Search docs" data-search-open><Search size={18} aria-hidden="true" /><span>Search docs</span><kbd>⌘ K</kbd></button>
         {themeToggle}
       </div> : <nav className="site-navigation" aria-label="Main navigation">
-        {homepage ? <HomeNavigation /> : <a className="nav-story" href={withBase("/#how-it-works")}>How it works</a>}
-        <a className={homepage ? "home-header-docs" : undefined} href={withBase("/docs")} target="_blank" rel="noreferrer">Docs</a>
+        <HomeNavigation homepage={homepage} />
+        <a className="home-header-docs" href={withBase("/docs")} target="_blank" rel="noreferrer">Docs</a>
         {themeToggle}
-        {!installing && <a className={`button button-small${homepage ? " home-header-start" : ""}`} href={withBase("/start")} target="_blank" rel="noreferrer">Get started</a>}
+        {!installing && <a className="button button-small home-header-start" href={withBase("/start")} target="_blank" rel="noreferrer">Get started</a>}
       </nav>}
     </div>
   </header>;

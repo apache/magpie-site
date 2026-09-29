@@ -1,43 +1,196 @@
 ---
-import { toolSummaries } from '../lib/tool-summaries';
-import ContentLayout from '../layouts/ContentLayout.astro';
-import { buildToolsView } from '../lib/tools-view';
+import { Search, FileCode2, Layers, Server, Landmark, Plug, X, ChevronDown, Blocks } from "lucide-react";
+import { toolSummaries } from "../lib/tool-summaries";
+import ContentLayout from "../layouts/ContentLayout.astro";
+import { buildToolsView, INTERFACE, AGNOSTIC } from "../lib/tools-view";
 import { siteEditUrl } from "../lib/site";
-const plainDescription = (text: string) => text.replace(/`([^`]+)`/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1');
-const { tools, contractList, substrateList, vendorChips, orgChips, stateBadge } = buildToolsView();
+const plainDescription = (text: string) => text.replace(/`([^`]+)`/g, "$1").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*([^*]+)\*\*/g, "$1");
+const { tools, dimensions, labelDefs, stats, vendorLogo, orgLogo, orgLabel, isImplementation } = buildToolsView();
+const dimensionIcon = { contract: FileCode2, substrate: Layers, vendor: Server, org: Landmark } as const;
 ---
 <ContentLayout editUrl={siteEditUrl("src/pages/tools.astro")} title="Tools" description="Find the adapters and utilities that connect Magpie to the services you use." wide>
-  <div class="tool-filters" role="search" aria-label="Filter tools">
-    <input class="field-control" type="search" id="tool-query" aria-label="Search tools" placeholder="Search tools…" />
-    <select class="field-control" id="tool-capability" aria-label="Filter by capability"><option value="">All capabilities</option><optgroup label="Contracts">{contractList.map(c=><option value={`contract:${c.key}`}>{c.key}</option>)}</optgroup><optgroup label="Low-level capabilities">{substrateList.map(c=><option value={`substrate:${c.key}`}>{c.key}</option>)}</optgroup></select>
-    <details class="tool-extra-filters"><summary>More filters<span id="tool-extra-count"></span></summary><div>
-    <select class="field-control" id="tool-vendor" aria-label="Filter by vendor"><option value="">All vendors</option>{vendorChips.map(v=><option value={v.vendor}>{v.vendor}</option>)}<option value="__interface">Interface specifications</option></select>
-    <select class="field-control" id="tool-org" aria-label="Filter by organization"><option value="">All organizations</option>{orgChips.map(o=><option value={o.id}>{o.label}</option>)}<option value="__agnostic">Organization agnostic</option></select>
-    <label><input id="tool-mcp" type="checkbox" />MCP tools</label></div></details><button class="button button-quiet button-small" id="tool-reset" hidden>Clear filters</button>
+  <p class="tool-stats">
+    <span><strong>{stats.tools}</strong> tools</span>
+    <span><strong>{stats.contractTools}</strong> across {stats.contracts} contracts</span>
+    <span><strong>{stats.substrateTools}</strong> substrates</span>
+    <span><strong>{stats.implemented}</strong> implemented</span>
+    <span><strong>{stats.mcp}</strong> wrap an MCP server</span>
+  </p>
+
+  <div class="tool-toolbar" id="tool-filters" role="search" aria-label="Filter tools">
+    <div class="tool-search">
+      <Search className="tool-search-icon" size={18} aria-hidden="true" />
+      <input class="field-control" type="search" id="tool-query" aria-label="Search tools" placeholder="Search tools…" autocomplete="off" />
+    </div>
+    <div class="tool-filter-row">
+      {dimensions.map((dim) => {
+        const Icon = dimensionIcon[dim.key as keyof typeof dimensionIcon];
+        return (
+          <details class="filter-menu" data-dim={dim.key}>
+            <summary class="button button-small button-secondary">
+              <Icon size={18} aria-hidden="true" />
+              <span>{dim.label}</span>
+              <span class="filter-badge" data-badge hidden>0</span>
+              <ChevronDown className="filter-chevron" size={18} aria-hidden="true" />
+            </summary>
+            <div class="filter-panel" role="group" aria-label={`Filter by ${dim.label.toLowerCase()}`}>
+              {dim.options.map((o) => (
+                <label class="filter-option" title={o.def || undefined}>
+                  <input type="checkbox" data-dim={dim.key} value={o.value} data-label={o.label} />
+                  {o.logo
+                    ? <img class="filter-logo" src={o.logo} alt="" width="18" height="18" loading="lazy" />
+                    : dim.key === "vendor" || dim.key === "org"
+                      ? (o.value === INTERFACE ? <Blocks size={18} aria-hidden="true" /> : o.value === AGNOSTIC ? <Landmark size={18} aria-hidden="true" /> : <Server size={18} aria-hidden="true" />)
+                      : null}
+                  <span class="filter-option-label">{o.label}</span>
+                  <span class="filter-option-count">{o.count}</span>
+                </label>
+              ))}
+            </div>
+          </details>
+        );
+      })}
+      <button type="button" class="button button-small button-secondary filter-toggle" id="tool-mcp" aria-pressed="false" title="Tools that wrap a Model Context Protocol server as their backend">
+        <Plug size={18} aria-hidden="true" /><span>Wraps an MCP server</span><span class="filter-option-count">{stats.mcp}</span>
+      </button>
+      <button type="button" class="button button-small button-quiet" id="tool-reset" hidden><X size={18} aria-hidden="true" /><span>Clear filters</span></button>
+    </div>
+    <div class="tool-active" id="tool-active" hidden aria-label="Active filters"></div>
   </div>
-  <p id="tool-count" class="tool-count" role="status" aria-live="polite">{tools.length} tools</p>
-  <div class="tool-list">{tools.map(tool=><a class="tool-entry" href={`/docs/tools/${tool.name}/readme`} data-search={`${tool.title} ${tool.description} ${toolSummaries[tool.name] ?? ""} ${tool.name} ${tool.labels.map(label => label.name).join(" ")} ${tool.vendor ?? ""}`.toLowerCase()} data-caps={tool.labels.map(l=>`${l.kind}:${l.name}`).join(' ')} data-vendor={tool.vendorKind === 'interface' ? '__interface' : tool.vendor ?? ''} data-org={tool.organization ?? '__agnostic'} data-mcp={Boolean(tool.mcp)}><h2>{tool.title}</h2><p>{toolSummaries[tool.name] ?? plainDescription(tool.description)}</p><div class="tool-meta">{tool.state !== 'implemented' && <span class="tool-unavailable">{stateBadge(tool).label}</span>}{tool.vendor && <span>{tool.vendor}</span>}{tool.maturity === 'experimental' && <span>Experimental</span>}</div></a>)}</div>
-  <p id="tool-empty" hidden>No matching tools. Try another search or clear the filters.</p>
-  <div class="link-row"><a href="/architecture">How these tools fit together </a></div>
+
+  <p id="tool-count" class="tool-count" role="status" aria-live="polite">Showing all {tools.length} tools</p>
+  <ul id="tool-defs" class="tool-defs" hidden></ul>
+
+  <div class="tool-grid">
+    {tools.map((tool) => {
+      const vendor = isImplementation(tool) ? tool.vendor : null;
+      const vLogo = vendorLogo(tool), oLogo = orgLogo(tool), org = orgLabel(tool);
+      return (
+        <a class="surface-card tool-entry" href={`/docs/tools/${tool.name}/readme`}
+          data-search={`${tool.title} ${tool.description} ${toolSummaries[tool.name] ?? ""} ${tool.name} ${tool.labels.map((l) => l.name).join(" ")} ${vendor ?? ""}`.toLowerCase()}
+          data-caps={tool.labels.map((l) => `${l.kind}:${l.name}`).join(" ")}
+          data-vendor={vendor ?? ""} data-interface={tool.vendorKind === "interface" ? "1" : "0"}
+          data-org={tool.organization ?? AGNOSTIC} data-mcp={tool.mcp ? "1" : "0"}>
+          <h2>{tool.title}</h2>
+          <p>{toolSummaries[tool.name] ?? plainDescription(tool.description)}</p>
+          <ul class="tool-tags" aria-label="Details">
+            {vendor && <li class="tool-tag">{vLogo ? <img class="filter-logo" src={vLogo} alt="" width="18" height="18" loading="lazy" /> : <Server size={18} aria-hidden="true" />}{vendor}</li>}
+            {tool.vendorKind === "interface" && <li class="tool-tag"><Blocks size={18} aria-hidden="true" />Interface</li>}
+            {org && tool.organization !== vendor && <li class="tool-tag">{oLogo ? <img class="filter-logo" src={oLogo} alt="" width="18" height="18" loading="lazy" /> : <Landmark size={18} aria-hidden="true" />}{tool.organization}</li>}
+            {tool.mcp && <li class="tool-tag tool-tag-accent" title={`Wraps ${tool.mcp.server} (${tool.mcp.prefix})`}><Plug size={18} aria-hidden="true" />MCP</li>}
+            <li class={`tool-tag ${tool.hasCode ? "tool-tag-ok" : "tool-tag-spec"}`}>{tool.hasCode ? "Implemented" : "Adapter / spec"}</li>
+            {tool.maturity === "experimental" && <li class="tool-tag tool-tag-warn">Experimental</li>}
+          </ul>
+          <ul class="tool-caps" aria-label="Capabilities">
+            {tool.labels.map((l) => <li class={l.kind === "substrate" ? "tool-cap tool-cap-substrate" : "tool-cap"}>{l.name}</li>)}
+          </ul>
+        </a>
+      );
+    })}
+  </div>
+  <p id="tool-empty" class="tool-empty" hidden>No matching tools. Try another search or clear the filters.</p>
+  <div class="link-row"><a href="/architecture">How these tools fit together</a></div>
 </ContentLayout>
-<script>
- const query = document.querySelector<HTMLInputElement>('#tool-query')!;
- const cap = document.querySelector<HTMLSelectElement>('#tool-capability')!;
- const vendor = document.querySelector<HTMLSelectElement>('#tool-vendor')!;
- const org = document.querySelector<HTMLSelectElement>('#tool-org')!;
- const mcp = document.querySelector<HTMLInputElement>('#tool-mcp')!;
- const reset = document.querySelector<HTMLButtonElement>('#tool-reset')!;
- const cards = [...document.querySelectorAll<HTMLElement>('.tool-entry')];
- const update = () => {
-   const terms = query.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-   let count = 0;
-   cards.forEach(card => { const show = terms.every(term=>card.dataset.search!.includes(term)) && (!cap.value || card.dataset.caps!.split(' ').includes(cap.value)) && (!vendor.value || card.dataset.vendor === vendor.value) && (!org.value || card.dataset.org === org.value) && (!mcp.checked || card.dataset.mcp === 'true'); card.hidden = !show; if(show) count++; });
-   document.querySelector('#tool-count')!.textContent = `${count} of ${cards.length} tools`;
-   document.querySelector<HTMLElement>('#tool-empty')!.hidden = count !== 0;
-   const extras = Number(Boolean(vendor.value)) + Number(Boolean(org.value)) + Number(mcp.checked);
-   document.querySelector('#tool-extra-count')!.textContent = extras ? ` (${extras} active)` : '';
-   reset.hidden = !query.value && !cap.value && !vendor.value && !org.value && !mcp.checked;
- };
- query.addEventListener('input',update); [cap,vendor,org,mcp].forEach(control=>control.addEventListener('change',update));
- reset.addEventListener('click',()=>{query.value='';cap.value='';vendor.value='';org.value='';mcp.checked=false;update();query.focus();});
+
+<script is:inline define:vars={{ labelDefs, total: tools.length, INTERFACE, AGNOSTIC }}>
+  const bar = document.getElementById("tool-filters");
+  const query = document.getElementById("tool-query");
+  const boxes = [...bar.querySelectorAll("input[type=checkbox][data-dim]")];
+  const menus = [...bar.querySelectorAll("details.filter-menu")];
+  const mcp = document.getElementById("tool-mcp");
+  const reset = document.getElementById("tool-reset");
+  const active = document.getElementById("tool-active");
+  const countText = document.getElementById("tool-count");
+  const defs = document.getElementById("tool-defs");
+  const empty = document.getElementById("tool-empty");
+  const cards = [...document.querySelectorAll(".tool-entry")];
+
+  const selected = (dim) => boxes.filter((b) => b.dataset.dim === dim && b.checked).map((b) => b.value);
+
+  function apply() {
+    const terms = query.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const caps = [...selected("contract"), ...selected("substrate")];
+    const vendors = selected("vendor"), orgs = selected("org");
+    const mcpOnly = mcp.getAttribute("aria-pressed") === "true";
+    let shown = 0;
+    for (const card of cards) {
+      const cardCaps = card.dataset.caps.split(" ");
+      // Any choice within a dimension; every dimension together.
+      const show =
+        terms.every((t) => card.dataset.search.includes(t)) &&
+        (caps.length === 0 || caps.some((c) => cardCaps.includes(c))) &&
+        (vendors.length === 0 || vendors.some((v) => (v === INTERFACE ? card.dataset.interface === "1" : card.dataset.vendor === v))) &&
+        (orgs.length === 0 || orgs.includes(card.dataset.org)) &&
+        (!mcpOnly || card.dataset.mcp === "1");
+      card.hidden = !show;
+      if (show) shown += 1;
+    }
+
+    for (const menu of menus) {
+      const n = selected(menu.dataset.dim).length;
+      const badge = menu.querySelector("[data-badge]");
+      badge.textContent = String(n);
+      badge.hidden = n === 0;
+      menu.classList.toggle("is-active", n > 0);
+    }
+    mcp.classList.toggle("is-active", mcpOnly);
+
+    // Every active choice as a removable chip.
+    active.replaceChildren();
+    for (const box of boxes.filter((b) => b.checked)) {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "tool-chip";
+      chip.textContent = box.dataset.label;
+      chip.setAttribute("aria-label", `Remove filter ${box.dataset.label}`);
+      chip.addEventListener("click", () => { box.checked = false; apply(); });
+      active.append(chip);
+    }
+    active.hidden = active.childElementCount === 0;
+
+    const filtered = terms.length || caps.length || vendors.length || orgs.length || mcpOnly;
+    reset.hidden = !filtered;
+    empty.hidden = shown !== 0;
+    countText.textContent = filtered ? `Showing ${shown} of ${total} tools` : `Showing all ${total} tools`;
+
+    // What each chosen capability means, as on the tools page before the redesign.
+    defs.replaceChildren(...caps.map((c) => {
+      const li = document.createElement("li");
+      const name = document.createElement("code");
+      name.textContent = c.replace(/^[a-z]+:/, "");
+      li.append(name, ` — ${labelDefs[c] || ""}`);
+      return li;
+    }));
+    defs.hidden = caps.length === 0;
+  }
+
+  query.addEventListener("input", apply);
+  for (const box of boxes) box.addEventListener("change", apply);
+  mcp.addEventListener("click", () => {
+    mcp.setAttribute("aria-pressed", mcp.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    apply();
+  });
+  reset.addEventListener("click", () => {
+    query.value = "";
+    for (const box of boxes) box.checked = false;
+    mcp.setAttribute("aria-pressed", "false");
+    for (const menu of menus) menu.open = false;
+    apply();
+    query.focus();
+  });
+
+  // One menu open at a time; close on an outside click or Escape.
+  for (const menu of menus) menu.addEventListener("toggle", () => {
+    if (menu.open) for (const other of menus) if (other !== menu) other.open = false;
+  });
+  document.addEventListener("click", (e) => {
+    if (!(e.target instanceof Node) || !bar.contains(e.target)) for (const menu of menus) menu.open = false;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const open = menus.find((m) => m.open);
+    if (open) { open.open = false; open.querySelector("summary").focus(); }
+  });
+
+  apply();
 </script>
