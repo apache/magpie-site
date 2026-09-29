@@ -36,6 +36,10 @@
 .docs-prose table { display:block; max-width:100%; overflow-x:auto; font-size:.875rem; border-collapse:collapse; margin-block:16px; }
 .docs-prose th { background:var(--surface); font-weight:600; }
 .docs-prose th, .docs-prose td { border:1px solid var(--line); padding:10px 12px; text-align:left; }
+/* Cells keep words whole (the page otherwise breaks anywhere), and a short row
+   label stays on one line (scripts/markdown-table-labels.mjs); tables scroll. */
+.docs-prose :is(th,td) { overflow-wrap:break-word; }
+.docs-prose :is(.table-label, .table-label *) { white-space:nowrap; overflow-wrap:normal; }
 .docs-prose img { max-width:100%; height:auto; margin-block:16px; }
 .docs-prose hr { border:0; border-top:1px solid var(--line); margin-block:var(--space-8); }
 .docs-prose .docs-lead { font-size:var(--text-lead); margin-bottom:var(--space-8); }

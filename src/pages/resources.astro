@@ -1,15 +1,19 @@
 ---
 import ContentLayout from '../layouts/ContentLayout.astro';
+import { CardHeading } from '../components/landing/WorkflowCard';
+import { Rocket, GraduationCap, Compass, Users, PenLine, BookOpen, Blocks, Layers } from 'lucide-react';
 import { siteEditUrl } from '../lib/site';
 const resources = [
-  ['Get started', 'Install Magpie in your own workspace.', '/start'],
-  ['Working with agents', 'A practical introduction for maintainers.', '/docs/education/readme'],
-  ['Choose a workflow', 'Find the skills that fit your project.', '/docs/quick-start/families'],
-  ['Adopt Magpie as a team', 'Agree the conventions your project shares.', '/docs/setup/team-adoption'],
-  ['Write a skill', 'Build and test your own maintainer workflow.', '/docs/education/your-first-skill'],
-  ['Training materials', 'Lessons and a hands-on lab for your team.', '/docs/education/training/readme'],
-  ['Extend Magpie', 'Add a tool, workflow, or organization.', '/docs/extending'],
-  ['Agentic modes', 'Understand the maturity of each way of working.', '/docs/modes'],
+  { title: 'Get started', text: 'Install Magpie in your own workspace.', href: '/start', icon: Rocket },
+  { title: 'Working with agents', text: 'A practical introduction for maintainers.', href: '/docs/education/readme', icon: GraduationCap },
+  { title: 'Choose a workflow', text: 'Find the skills that fit your project.', href: '/docs/quick-start/families', icon: Compass },
+  { title: 'Adopt as a team', text: 'Agree the conventions your project shares.', href: '/docs/setup/team-adoption', icon: Users },
+  { title: 'Write a skill', text: 'Build and test your own maintainer workflow.', href: '/docs/education/your-first-skill', icon: PenLine },
+  { title: 'Training materials', text: 'Lessons and a hands-on lab for your team.', href: '/docs/education/training/readme', icon: BookOpen },
+  { title: 'Extend Magpie', text: 'Add a tool, workflow, or organization.', href: '/docs/extending', icon: Blocks },
+  { title: 'Agentic modes', text: 'How mature each way of working is.', href: '/docs/modes', icon: Layers },
 ];
 ---
-<ContentLayout editUrl={siteEditUrl('src/pages/resources.astro')} title="Learn and extend" description="Practical guides for using Magpie and making it your own."><div class="resource-list">{resources.map(([title,description,href])=><a href={href}><span><strong>{title}</strong><small>{description}</small></span></a>)}</div></ContentLayout>
+<ContentLayout editUrl={siteEditUrl('src/pages/resources.astro')} title="Learn and extend" description="Practical guides for using Magpie and making it your own.">
+  <div class="arch-flow">{resources.map(item => <a href={item.href} class="surface-card workflow-card card-link arch-card"><CardHeading title={item.title} linkArrow><item.icon slot="icon" aria-hidden="true" /></CardHeading><p>{item.text}</p></a>)}</div>
+</ContentLayout>

@@ -9,7 +9,8 @@ import { readTree, fail } from './files.mjs';
 // This is deliberately not a prefix safelist: a new t-unused class must fail.
 export const runtimeClasses = new Set(['t-prompt', 't-muted', 't-result', 't-gate',
   'doc-callout', 'doc-callout-title', 'doc-callout-note', 'doc-callout-tip',
-  'doc-callout-important', 'doc-callout-warning', 'doc-callout-caution']);
+  'doc-callout-important', 'doc-callout-warning', 'doc-callout-caution',
+  'table-label']);
 
 export function sourceTokens(sources) {
   const tokens = new Set(runtimeClasses);

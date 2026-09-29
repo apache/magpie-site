@@ -1,6 +1,16 @@
 .start-guide { max-width: 850px; }
 .agent-choice { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; margin-bottom: var(--space-8); }
 .agent-choice label { font-size: var(--text-body); font-weight: 550; }
+/* The agent picker: the chosen agent's mark beside a native select, with its
+   own chevron. The field keeps the shared control's size and padding. */
+.agent-select { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-3); border-radius: var(--radius-card); background: var(--surface); }
+.agent-select-logo { width: 28px; height: 28px; object-fit: contain; flex: none; }
+html[data-theme=dark] .agent-select-logo[src$='/copilot.svg'] { filter: brightness(0) invert(.9); }
+.agent-select-field { position: relative; flex: 1; }
+.agent-select select { appearance: none; -webkit-appearance: none; width: 100%; min-width: 260px; padding-right: 44px; font-weight: 550; cursor: pointer; }
+.agent-select select:hover:not(:disabled) { border-color: var(--blue); }
+.agent-select select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.agent-select-chevron { position: absolute; right: 12px; top: 50%; translate: 0 -50%; color: var(--blue); pointer-events: none; }
 .start-step { display:grid; gap:var(--content-gap); }
 .start-step > :is(h2,p,.copy-block) { margin:0; }
 .copy-block { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:var(--space-4); }
@@ -12,5 +22,6 @@
 @media(max-width:600px) {
  .copy-block { grid-template-columns:minmax(0,1fr); }
  .agent-choice label { flex-basis: 100%; }
- .agent-choice select { width: 100%; }
+ .agent-select { flex-basis: 100%; }
+ .agent-select select { min-width: 0; }
 }

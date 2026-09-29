@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, ChevronDown } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
+
+// The agents' own marks, as the home page shows them.
+const AGENT_LOGOS: Record<string, string> = { claude: "claude.png", codex: "openai.png", gemini: "gemini.ico", cursor: "cursor.svg", copilot: "copilot.svg" };
 
 export type InstallOption = { id: string; name: string; where: string; commands: string; detail: string; guide: string; verify: string };
 function CopyText({ text, label }: { text: string; label: string }) {
@@ -25,7 +28,7 @@ export default function StartGuide({ agents }: { agents: InstallOption[] }) {
   const setupPrompt = "Set up Magpie for my own work on this project, including secure isolation and privacy settings. Show me the proposed changes before installing anything.";
   const reviewPrompt = "Install Magpie’s PR review workflows and help me review a pull request. Ask me for the PR, then prepare findings for my approval.";
   return <div className="start-guide">
-    <div className="agent-choice"><label htmlFor="start-agent">Which agent do you use?</label><select className="field-control" disabled={!ready} id="start-agent" value={selected} onChange={event => setSelected(event.target.value)}>{agents.map(item => <option value={item.id} key={item.id}>{item.name}</option>)}</select><a className="text-link" href={withBase('/docs/setup/marketplace-install')} target="_blank" rel="noreferrer">Another agent</a></div>
+    <div className="agent-choice"><label htmlFor="start-agent">Which agent do you use?</label><div className="agent-select">{AGENT_LOGOS[agent.id] && <img className="agent-select-logo" src={withBase(`/vendor-logos/${AGENT_LOGOS[agent.id]}`)} alt="" width="28" height="28" />}<div className="agent-select-field"><select className="field-control" disabled={!ready} id="start-agent" value={selected} onChange={event => setSelected(event.target.value)}>{agents.map(item => <option value={item.id} key={item.id}>{item.name}</option>)}</select><ChevronDown className="agent-select-chevron" size={18} aria-hidden="true" /></div></div><a className="text-link" href={withBase('/docs/setup/marketplace-install')} target="_blank" rel="noreferrer">Another agent</a></div>
     <section id="install" className="start-step" aria-labelledby="install-title">
       <h2 id="install-title">Install Magpie in {agent.name}</h2>
       <p>{agent.where}</p>

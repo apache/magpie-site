@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { satteri } from '@astrojs/markdown-satteri';
 import callouts from './scripts/markdown-callouts.mjs';
 import projectFiles from './scripts/markdown-project-files.mjs';
+import tableLabels from './scripts/markdown-table-labels.mjs';
 import { markdownSemantics, taskLabels } from './scripts/markdown-semantics.mjs';
 import islandStyle from './scripts/quality/hoist-island-style.mjs';
 import publishDocAssets from './scripts/quality/prune-doc-assets.mjs';
@@ -48,7 +49,7 @@ export default defineConfig({
   cacheDir: `${cache}/astro`,
   markdown: {
     shikiConfig: { theme:'github-dark-high-contrast' },
-    processor: satteri({ mdastPlugins: [markdownSemantics], hastPlugins: [callouts, projectFiles, taskLabels] }),
+    processor: satteri({ mdastPlugins: [markdownSemantics], hastPlugins: [callouts, projectFiles, taskLabels, tableLabels] }),
   },
   // Markdown twins of docs pages (/docs/<page>.md) are alternates of the HTML
   // page, not pages, so they stay out of the sitemap.

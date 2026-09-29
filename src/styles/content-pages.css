@@ -17,16 +17,20 @@
 .content-page details { border-top: 1px solid var(--line); padding-block: 20px; }
 .content-page details summary { font-size: 18px; font-weight: 500; }
 .content-page details[open] summary { margin-bottom: 20px; }
-.resource-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
-.resource-list a { display: flex; align-items: center; justify-content: space-between; padding: var(--space-6) 0; border-top: 1px solid var(--line); text-decoration: none; gap: 20px; }
-.resource-list strong { display: block; color: var(--ink); font-size: 18px; font-weight: 500; }
-.resource-list small { display: block; font-size: 16px; line-height: 1.6; color: var(--muted); margin-top: 7px; }
 .arch-flow { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--card-gap); margin-block: var(--space-8); }
-.arch-flow h3 { margin-top: 0; }
-.arch-flow p { font-size: 16px; margin-bottom: 0; }
+.arch-card { text-decoration: none; grid-row: span 2; grid-template-rows: subgrid; }
+.arch-score strong { color: var(--ink); }
+.reference-table th { padding: var(--space-3) var(--space-5); text-align: left; background: var(--surface); color: var(--surface-ink); font-weight: 600; white-space: nowrap; }
+.arch-coverage { margin-block: var(--space-6); }
+.arch-coverage .arch-gap td:last-child { color: var(--warning); }
+.arch-orgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: var(--card-gap); margin-block: var(--space-6); }
+.arch-org h3 { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-2); }
+.arch-org p { margin: 0; }
+.arch-card p { margin: 0; }
 .reference-table { width: 100%; border-collapse: collapse; font-size: 16px; }
-.reference-table td { padding: 15px 10px 15px 0; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.7; }
-.reference-table td:first-child { width: 30%; color: var(--ink); }
+.reference-table td { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.7; overflow-wrap: break-word; }
+.reference-table td:first-child { width: 30%; color: var(--ink); white-space: nowrap; }
+.reference-table tr:last-child td { border-bottom: 0; }
 .brand-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--card-gap); margin-top: var(--space-6); }
 .asset-preview { height: 180px; display: flex; align-items: center; justify-content: center; padding: var(--card-padding); background: #eff2ec; border-radius: var(--radius-card); }
 .asset-preview img { max-height: 120px; max-width: 100%; object-fit: contain; }
@@ -40,7 +44,7 @@
 .release-card { margin-bottom: var(--space-8); }
 .release-card h2 { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; }
 .release-card h2 small { font-size: 16px; color: var(--muted); font-weight: 400; letter-spacing: 0; }
-@media(max-width:650px) { .content-page { padding-bottom:var(--space-16); }.content-page-heading{margin-bottom:var(--space-8)}.resource-list{grid-template-columns:1fr}.arch-flow{grid-template-columns:1fr}.brand-grid{grid-template-columns:1fr 1fr;gap:20px 14px}.brand-grid>div:first-child{grid-column:1/-1}.palette{grid-template-columns:repeat(3,1fr);gap:20px 12px}.asset-preview{height:150px}.reference-table td:first-child{width:36%;overflow-wrap:anywhere}.type-sample{font-size:27px !important} }
+@media(max-width:650px) { .content-page { padding-bottom:var(--space-16); }.content-page-heading{margin-bottom:var(--space-8)}.arch-flow{grid-template-columns:1fr}.brand-grid{grid-template-columns:1fr 1fr;gap:20px 14px}.brand-grid>div:first-child{grid-column:1/-1}.palette{grid-template-columns:repeat(3,1fr);gap:20px 12px}.asset-preview{height:150px}.reference-table td:first-child{width:36%;overflow-wrap:anywhere}.type-sample{font-size:27px !important} }
 
 /* Tools browser. Filters stay pinned under the site header while the grid
    scrolls; each dimension is a menu of checkboxes (any choice within a
