@@ -22,6 +22,7 @@ import {
   mkdirSync,
 } from "node:fs";
 import path from "node:path";
+import { githubSourceUrl } from "./github-source.mjs";
 
 const [, , root, docsDir] = process.argv;
 if (!root || !docsDir) {
@@ -30,8 +31,6 @@ if (!root || !docsDir) {
 }
 
 const toolsDir = path.join(root, "tools");
-const GITHUB_BLOB = "https://github.com/apache/magpie/blob/main";
-const GITHUB_TREE = "https://github.com/apache/magpie/tree/main";
 
 if (!existsSync(toolsDir)) {
   console.warn(`⚠ no tools/ under ${root}; skipping tool-doc sync`);
@@ -49,8 +48,7 @@ function rewriteLinks(md, toolName) {
     const repoPath = path.posix.normalize(
       path.posix.join("tools", toolName, rawPath),
     );
-    const blob = /\.[a-z0-9]+$/i.test(rawPath) ? GITHUB_BLOB : GITHUB_TREE;
-    return `](${blob}/${repoPath}${hash})`;
+    return `](${githubSourceUrl(root, repoPath, hash)})`;
   });
 }
 
