@@ -4,7 +4,7 @@ import { withBase } from "@/ui/lib/utils";
 const columns = [
   { title: "Explore", links: [["Documentation", "/docs"], ["Learning guides", "/resources"], ["Architecture", "/architecture"], ["Tools", "/tools"], ["Downloads", "/downloads"], ["Brand assets", "/brand"]] },
   { title: "Take part", links: [["Contributing", "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"], ["Mailing list", "https://lists.apache.org/list.html?dev@magpie.apache.org"], ["Discord", "https://discord.gg/bfVyXTgak"], ["Issue tracker", "https://github.com/apache/magpie/issues"], ["Changelog", "https://github.com/apache/magpie/releases"]] },
-  { title: "Apache", links: [["The Foundation", "https://www.apache.org/"], ["License", "https://www.apache.org/licenses/"], ["Security", "https://www.apache.org/security/"], ["Privacy", "https://privacy.apache.org/policies/privacy-policy-public.html"], ["Support Apache", "https://www.apache.org/foundation/sponsorship.html"]] },
+  { title: "Apache", links: [["The Foundation", "https://www.apache.org/"], ["License", "https://www.apache.org/licenses/"], ["Events", "https://www.apache.org/events/current-event"], ["Security", "https://www.apache.org/security/"], ["Privacy", "https://privacy.apache.org/policies/privacy-policy-public.html"], ["Sponsorship", "https://www.apache.org/foundation/sponsorship.html"], ["Thanks", "https://www.apache.org/foundation/thanks.html"]] },
 ];
 export function SiteFooter() {
   return <footer className="site-footer"><div className="container footer-grid">
