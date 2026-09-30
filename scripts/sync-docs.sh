@@ -103,7 +103,7 @@ else
 fi
 
 echo "→ Rewriting internal .md links in markdown (→ site routes / GitHub)"
-node "$(dirname "$0")/rewrite-doc-links.mjs" "$DEST" "${SITE_BASE:-/}"
+node "$(dirname "$0")/rewrite-doc-links.mjs" "$TMP" "$DEST" "${SITE_BASE:-/}"
 
 count=$(find "$DEST" -name '*.md' | wc -l)
 echo "✓ Synced $count markdown files into $DEST"
