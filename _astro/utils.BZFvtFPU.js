@@ -1,0 +1,1 @@
+import{t as e}from"./createLucideIcon.D49tBsQm.js";var t={name:`check`,size:24,node:[[`path`,{d:`M20 6 9 17l-5-5`,key:`1gmf2c`}]]};t.node;var n=e(t),r=`/`.replace(/\/$/,``);function i(e){return e.startsWith(`http`)||e.startsWith(`mailto:`)||e.startsWith(`#`)?e:e.startsWith(`/`)?`${r}${e}`:`${r}/${e}`}export{n,i as t};

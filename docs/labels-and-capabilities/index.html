@@ -1,0 +1,1223 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>Labels and capabilities — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/labels-and-capabilities/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="Labels and capabilities — Apache Magpie Docs"><meta property="og:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta property="og:url" content="https://magpie.apache.org/docs/labels-and-capabilities/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Labels and capabilities — Apache Magpie Docs"><meta name="twitter:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      if (location.hostname === "magpie.apache.org") {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+      }
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.CGxjxYk9.css"><link rel="stylesheet" href="/_astro/DocsLayout.5MFayD3p.css"></head><body data-astro-cid-z4jru4n3><header class="site-header" data-magpie-src="src/components/landing/SiteHeader.tsx:8"><a class="skip-link" href="#main-content" data-magpie-src="src/components/landing/SiteHeader.tsx:9">Skip to content</a><div class="header-inner" data-magpie-src="src/components/landing/SiteHeader.tsx:10"><a class="brand-lockup" href="/" aria-label="Apache Magpie home" data-magpie-src="src/components/landing/SiteHeader.tsx:11"><img class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45" data-magpie-src="src/components/landing/SiteHeader.tsx:11"/></a><div class="header-actions" data-magpie-src="src/components/landing/SiteHeader.tsx:12"><button class="button button-quiet button-icon docs-menu-toggle" aria-label="Browse documentation" aria-expanded="false" aria-controls="docs-sidebar" data-magpie-src="src/components/landing/SiteHeader.tsx:13"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:13">Browse</span></button><button class="docs-search-trigger" aria-label="Search docs" data-search-open="true" data-magpie-src="src/components/landing/SiteHeader.tsx:14"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:14">Search docs</span><kbd data-magpie-src="src/components/landing/SiteHeader.tsx:14">⌘ K</kbd></button><button class="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" data-magpie-src="src/components/landing/SiteHeader.tsx:7"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button></div></div></header><dialog class="search-dialog" aria-labelledby="search-title" data-index="/search-index.json"><div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off"><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div><div class="search-results" id="search-results"></div><p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p><div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div></dialog><script type="module">var e=document.querySelector(`.search-dialog`),t=e.querySelector(`input`),n=e.querySelector(`.search-results`),r=e.querySelector(`.search-status`),i=document.querySelector(`[data-search-open]`),a,o=-1,s=[],c=!1,l=[`/start`,`/docs/security/readme`,`/docs/pr-management/readme`,`/docs/setup/privacy-llm`,`/docs/education/readme`],u=()=>{if(!a)return;let e=t.value.trim().toLowerCase(),i=e.split(/\s+/).filter(Boolean);s=e?a.map(t=>{let n=t.title.toLowerCase(),r=`${n} ${t.section} ${t.text}`.toLowerCase();return{entry:t,score:i.every(e=>r.includes(e))?i.reduce((e,t)=>e+(n.includes(t)?15:1),0)+(n.includes(e)?30:0):0}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score).slice(0,12).map(e=>e.entry):l.map(e=>a.find(t=>t.path.endsWith(e))).filter(e=>!!e),n.replaceChildren(),o=-1;for(let e of s){let t=document.createElement(`a`);t.href=e.path;let r=document.createElement(`strong`);r.textContent=e.title;let i=document.createElement(`span`);i.textContent=e.section,t.append(r,i),n.append(t)}r.textContent=e?s.length?`${s.length} results. Use arrow keys to choose a page.`:`No pages found. Try “security”, “setup”, or “release”.`:`A few useful places to start.`},d=async()=>{if(e.showModal(),t.focus(),!a){r.textContent=`Loading the documentation index…`;try{let t=await fetch(e.dataset.index);if(!t.ok)throw Error(`Index unavailable`);a=await t.json(),c=!1}catch{c=!0,r.textContent=`Search is temporarily unavailable. You can still browse the sidebar.`}}c||u()};i.addEventListener(`click`,d),e.querySelector(`[data-search-close]`).addEventListener(`click`,()=>e.close()),e.addEventListener(`click`,t=>{if(t.target===e){let n=e.getBoundingClientRect();(t.clientX<n.left||t.clientX>n.right||t.clientY<n.top||t.clientY>n.bottom)&&e.close()}}),t.addEventListener(`input`,u),e.addEventListener(`keydown`,t=>{if(t.key===`Tab`){let n=[...e.querySelectorAll(`input,button,a[href]`)].filter(e=>!e.hasAttribute(`disabled`)),r=n[0],i=n.at(-1);t.shiftKey&&document.activeElement===r?(t.preventDefault(),i?.focus()):!t.shiftKey&&document.activeElement===i&&(t.preventDefault(),r?.focus())}if((t.key===`ArrowDown`||t.key===`ArrowUp`)&&s.length){t.preventDefault(),o=(o+(t.key===`ArrowDown`?1:-1)+s.length)%s.length;let e=[...n.querySelectorAll(`a`)];e.forEach((e,t)=>e.classList.toggle(`selected`,t===o)),e[o].focus()}}),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.open?e.close():d())}),e.addEventListener(`close`,()=>i.focus()),i.querySelector(`kbd`).textContent=navigator.platform.includes(`Mac`)?`⌘ K`:`Ctrl K`;</script><div class="container docs-shell"><aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation"><div id="docs-nav-scroll"><a href="/start" class="docs-overview-link">Install Magpie</a><a href="/docs" class="docs-overview-link">Introduction</a><nav aria-label="Documentation sections"><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Quick start</span></summary><a href="/docs/quick-start/readme" aria-label="Quick start overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Concepts</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" aria-current="page" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/ai-contribution-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="ai contribution policy" data-astro-cid-lihgpoae>ai contribution policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Updating Magpie</span></summary><a href="/docs/updating-magpie" aria-label="Updating Magpie overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Setup</span></summary><a href="/docs/setup/readme" aria-label="Setup overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/commit-attribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="commit attribution" data-astro-cid-lihgpoae>commit attribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Education</span></summary><a href="/docs/education/readme" aria-label="Education overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Training</span></summary><a href="/docs/education/training/readme" aria-label="Training overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Security</span></summary><a href="/docs/security/readme" aria-label="Security overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Release Management</span></summary><a href="/docs/release-management/readme" aria-label="Release Management overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/reproducibility" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="reproducibility" data-astro-cid-lihgpoae>reproducibility</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Mentoring</span></summary><a href="/docs/mentoring/readme" aria-label="Mentoring overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Adapters</span></summary><a href="/docs/adapters/readme" aria-label="Adapters overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/aider" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="aider" data-astro-cid-lihgpoae>aider</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/copilot" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="copilot" data-astro-cid-lihgpoae>copilot</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/goose" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="goose" data-astro-cid-lihgpoae>goose</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Contracts (27)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat" data-astro-cid-lihgpoae>chat</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-slack/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-slack" data-astro-cid-lihgpoae>chat-slack</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gitlab/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gitlab" data-astro-cid-lihgpoae>gitlab</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/osv/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="osv" data-astro-cid-lihgpoae>osv</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Substrates (29)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/adversarial-review/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="adversarial-review" data-astro-cid-lihgpoae>adversarial-review</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/container-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="container-gateway" data-astro-cid-lihgpoae>container-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/contributor-metrics/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="contributor-metrics" data-astro-cid-lihgpoae>contributor-metrics</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pr-management-stats" data-astro-cid-lihgpoae>pr-management-stats</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/reproducible-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="reproducible-archive" data-astro-cid-lihgpoae>reproducible-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/setup-preflight/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="setup-preflight" data-astro-cid-lihgpoae>setup-preflight</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>RFCs</span></summary><a href="/docs/rfcs/readme" aria-label="RFCs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>External Skill Sources</span></summary><a href="/docs/skill-sources/readme" aria-label="External Skill Sources overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Designs</span></summary><a href="/docs/designs/readme" aria-label="Designs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-17-body-owned-config-layers" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="body owned config layers" data-astro-cid-lihgpoae>body owned config layers</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-20-reproducible-releases" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="reproducible releases" data-astro-cid-lihgpoae>reproducible releases</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-21-marketplace-reconciliation-tracking" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="marketplace reconciliation tracking" data-astro-cid-lihgpoae>marketplace reconciliation tracking</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-23-adversarial-review" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="adversarial review" data-astro-cid-lihgpoae>adversarial review</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-27-contributor-growth-calibration-and-screening" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="contributor growth calibration and screening" data-astro-cid-lihgpoae>contributor growth calibration and screening</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main id="main-content" tabindex="-1" class="docs-main"><div class="docs-breadcrumb"><a href="/docs">Docs</a><span>/</span><span>labels and capabilities</span><button class="button button-secondary button-small copy-page" data-markdown="/docs/labels-and-capabilities.md">Copy page</button></div><article class="prose docs-prose"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="labels-and-capabilities">Labels and capabilities</h1>
+<p>This page is the canonical reference for the label taxonomy used on
+issues and pull requests in this framework repository
+(<code>apache/magpie</code>). It also defines the <strong>capability</strong> model
+that classifies what each skill or tool in the framework actually
+<em>does</em>, independent of which subject area it sits under.</p>
+<p>Every issue and pull request opened against this repository should
+carry at least one <strong><code>family:*</code></strong> label and at least one
+<strong><code>capability:*</code></strong> label. New tools and new skills must declare their
+capability up front (see <a href="#the-rule">The rule</a>).</p>
+<blockquote>
+<p><strong>Scope caveat.</strong> This taxonomy applies to <em>this framework
+repository</em>. Skills that create issues or PRs on an <strong>adopter’s
+tracker</strong> (e.g. <code>security-issue-import</code>, <code>security-issue-fix</code>,
+<code>issue-fix-workflow</code>) use the adopter’s own label scheme — adopters
+are free to mirror this taxonomy in their own repo but are not
+required to.</p>
+</blockquote>
+<hr>
+<h2 id="label-dimensions">Label dimensions</h2>
+<p>The repository’s labels fall into four orthogonal dimensions. An issue
+or PR typically carries one label from each dimension that applies.</p>
+<h3 id="1-family--subject">1. <code>family:*</code> — subject</h3>
+<p>What part of the framework does this touch?</p>
+<p>Ten of these labels mirror the <strong>canonical skill-family vocabulary</strong> —
+the closed set every skill declares in its <code>family:</code> frontmatter key,
+enforced as <code>ALLOWED_FAMILIES</code> by
+<a href="https://github.com/apache/magpie/tree/main/tools/skill-and-tool-validator"><code>skill-and-tool-validator</code></a> and
+summarised in <a href="https://github.com/apache/magpie/blob/main/README.md#skill-families"><code>README.md</code> → Skill families</a>.
+Two of them (<code>setup</code>, <code>utilities</code>) are the always-on families wired on
+every install; the other eight are opt-in (see
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/setup/SKILL.md"><code>skills/setup/SKILL.md</code></a> Golden rule 8).</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Type</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>family:setup</code></td>
+<td>always-on</td>
+<td><code>setup</code> plus the <code>setup-*</code> skills — framework adoption / upgrade / verify, isolated-agent sandbox setup, shared-config sync (<a href="/docs/setup/readme"><code>docs/setup/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:utilities</code></td>
+<td>always-on</td>
+<td>Framework meta-skills: <code>write-skill</code>, <code>optimize-skill</code>, <code>skill-reconciler</code>, <code>report-framework-issue</code>, <code>list-skills</code> (<a href="/docs/utilities/readme"><code>docs/utilities/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:security</code></td>
+<td>opt-in</td>
+<td><code>security-issue-*</code>, <code>security-cve-allocate</code>, <code>security-model-*</code>, <code>security-tracker-stats-dashboard</code> (<a href="/docs/security/readme"><code>docs/security/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:issue</code></td>
+<td>opt-in</td>
+<td><code>issue-*</code> skills (<code>issue-triage</code>, <code>issue-reproducer</code>, <code>issue-fix-workflow</code>, <code>issue-reassess</code>, <code>issue-reassess-stats</code>, <code>issue-stale-sweep</code>, <code>issue-deduplicate</code>, <code>issue-backlog-stats</code>) (<a href="/docs/issue-management/readme"><code>docs/issue-management/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:pr-management</code></td>
+<td>opt-in</td>
+<td><code>pr-management-*</code> skills plus <code>pr-stale-sweep</code>, <code>pre-first-pr-check</code>, <code>reviewer-routing</code> (<a href="/docs/pr-management/readme"><code>docs/pr-management/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:release-management</code></td>
+<td>opt-in</td>
+<td><code>release-*</code> skills — planning, RC cut, <code>[VOTE]</code> draft + tally, promote, <code>[ANNOUNCE]</code>, archive sweep, audit report, keys sync (<a href="/docs/release-management/readme"><code>docs/release-management/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:repo-health</code></td>
+<td>opt-in</td>
+<td>Read-only repository audits and their follow-up fixes: <code>ci-runner-audit</code>, <code>workflow-security-audit</code>, <code>dependency-audit</code>, <code>dependency-license-audit</code>, <code>license-compliance-audit</code>, <code>flaky-test-triage</code>, <code>audit-finding-fix</code> (<a href="/docs/repo-health/readme"><code>docs/repo-health/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:pairing</code></td>
+<td>opt-in</td>
+<td><code>pairing-self-review</code>, <code>pairing-multi-agent-review</code> (<a href="/docs/pairing/readme"><code>docs/pairing/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:mentoring</code></td>
+<td>opt-in</td>
+<td><code>mentoring-welcome</code>, <code>newcomer-issue-explainer</code>, <code>good-first-issue-author</code>, <code>good-first-issue-sweep</code> (<a href="/docs/mentoring/readme"><code>docs/mentoring/</code></a>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:contributor-growth</code></td>
+<td>opt-in</td>
+<td>The path-to-committer track: <code>contributor-activity-sweep</code>, <code>contributor-sentiment</code>, <code>contributor-to-committer</code>, <code>contributor-nomination</code>, <code>contributor-calibrate</code>, <code>contributor-candidate-screen</code>, <code>committer-onboarding</code>, <code>contributor-identity-map</code>, <code>onboarding-concierge</code> (<a href="/docs/contributor-growth/readme"><code>docs/contributor-growth/</code></a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Three further <code>family:*</code> labels cover parts of the repository that are
+<strong>not</strong> a skill family. They exist only as issue / PR labels and never
+appear in a <code>family:</code> frontmatter key — the validator would reject them:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>family:tools</code></td>
+<td>Substrate tools and capability adapters under <code>tools/*</code> (CLI bridges, agent-runtime adapters, mail-source backends)</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:ci</code></td>
+<td><code>.github/</code> workflows, prek hooks, validators</td>
+</tr>
+<tr>
+<td class="table-label"><code>family:docs</code></td>
+<td><code>docs/</code>, <code>MISSION.md</code>, READMEs</td>
+</tr>
+</tbody>
+</table>
+<p>A change that spans both dimensions carries both labels — a new
+mentoring skill and its guide is <code>family:mentoring</code> + <code>family:docs</code>.
+The two tables above are the reference for the repository’s label set:
+if the label you need is not on the repository yet, a committer creates
+it from here rather than reaching for an approximate existing one.</p>
+<h3 id="2-capability--two-axes-skills-vs-tools">2. capability — two axes (skills vs tools)</h3>
+<p>Per <a href="/docs/rfcs/rfc-ai-0005">RFC-AI-0005</a>, “capability” is <strong>two orthogonal
+vocabularies</strong>, one per entity. A skill carries one or more <strong>skill
+capabilities</strong> (<code>capability:*</code>); a tool carries one or more <strong>tool
+capabilities</strong> (<code>contract:*</code> or <code>substrate:*</code>). List <strong>all</strong> that apply;
+do not pick a single “primary”.</p>
+<p><strong>Axis 1 — skill capability</strong> (<code>capability:*</code>) — the workflow-lifecycle
+phase a skill performs:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>capability:triage</code></td>
+<td>Sweep a queue, classify candidates, propose dispositions for human confirmation.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:review</code></td>
+<td>Deep per-item code review of a PR or local diff; also contributor mentoring (single-item teaching intervention).</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:fix</code></td>
+<td>Implement a code change against an upstream repo to resolve a triaged issue.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:intake</code></td>
+<td>Import external signal (mailing list, scan report, public PR) into a tracker entry, or keep an existing entry reconciled with one of those sources.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:reconciliation</code></td>
+<td>Compare tracker state against an external inventory (e.g. ASF security dashboard, organization-wide issue registry); surface drift; propose corrections. Does <strong>not</strong> write to either source.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:resolve</code></td>
+<td>Close-out actions: invalidate, dedupe, CVE-allocate, post-announcement housekeeping.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:reassess</code></td>
+<td>Re-run resolved or end-of-life issues against current code to verify still-fixed / still-broken.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:stats</code></td>
+<td>Read-only dashboards, metrics, governance evidence, contributor nomination briefs.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:platform</code></td>
+<td>Framework / agent substrate skills: install, verify, update, doctor, override-upstream, status, shared-config-sync, the <code>setup</code> bootstrap.</td>
+</tr>
+<tr>
+<td class="table-label"><code>capability:authoring</code></td>
+<td>Skills that author or maintain a durable framework artefact rather than acting on a queue item: other skills (<code>write-skill</code>, <code>optimize-skill</code>) and the project’s own security model (<code>security-model-prepare</code>, <code>security-model-update</code>).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Axis 2 — tool capability</strong> (<code>contract:*</code> / <code>substrate:*</code>) — the
+interface a tool/adapter provides. <code>contract:&lt;name&gt;</code> implements a
+capability contract under <code>tools/&lt;contract&gt;/</code>; <code>substrate:&lt;name&gt;</code> is
+framework substrate:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Kind</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>contract:tracker</code></td>
+<td>contract</td>
+<td>Issue / board / label backend.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:source-control</code></td>
+<td>contract</td>
+<td>Branch / commit / diff / push (VCS).</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:change-request</code></td>
+<td>contract</td>
+<td>Proposed-change review + merge gate (pull request / merge request / Gerrit change).</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:mail-archive</code></td>
+<td>contract</td>
+<td>Mailing-list / forum archive reads.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:chat</code></td>
+<td>contract</td>
+<td>Project chat reads — public channels only (Slack, Discord). Read-only; never posts.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:mail-source</code></td>
+<td>contract</td>
+<td>Inbound-mail ingestion (mbox / IMAP / …).</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:mail-create</code></td>
+<td>contract</td>
+<td>Outbound mail composition. Always produces an editable draft; sending is a separate human-approved step on that draft (draft mode = default and the only mode implemented today; send mode declared but unimplemented — no autonomous send).</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:cve-authority</code></td>
+<td>contract</td>
+<td>CVE allocation / record management / publication.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:report-relay</code></td>
+<td>contract</td>
+<td>Inbound security-report relay detection.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:scan-format</code></td>
+<td>contract</td>
+<td>Security-scanner report parsing.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:project-metadata</code></td>
+<td>contract</td>
+<td>Governance rosters / people / releases.</td>
+</tr>
+<tr>
+<td class="table-label"><code>contract:security-cross-ref</code></td>
+<td>contract</td>
+<td>Vulnerability database / cross-reference alias lookup (OSV.dev / NVD).</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:analytics</code></td>
+<td>substrate</td>
+<td>Read-only metrics / dashboards / renderers.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:sandbox</code></td>
+<td>substrate</td>
+<td>Agent isolation, egress control, settings audit.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:action-guard</code></td>
+<td>substrate</td>
+<td>Deterministic pre-tool-use command guards.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:privacy</code></td>
+<td>substrate</td>
+<td>PII redaction / approved-LLM gating.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:framework-dev</code></td>
+<td>substrate</td>
+<td>Build / validate / eval the framework itself.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:release</code></td>
+<td>substrate</td>
+<td>Release-artefact helpers an adopter’s release process runs: reproducible-archive build, lint and comparison.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:setup</code></td>
+<td>substrate</td>
+<td>Adopter-side setup state an agent resolves at runtime rather than at development time: lock parsing, floor comparison, reconciliation fingerprints.</td>
+</tr>
+<tr>
+<td class="table-label"><code>substrate:review</code></td>
+<td>substrate</td>
+<td>A second model’s read of a change before it is published: other models’ CLIs run read-only, findings merged.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="coverage-qualifiers">Coverage qualifiers</h3>
+<p>Some tool READMEs may declare a <code>Coverage:</code> qualifier next to a capability
+when the tool intentionally implements only part of a contract.</p>
+<p><code>partial-read-only</code> means the tool implements a read-only subset of named
+contract operations, but does not satisfy the complete contract and must not
+be advertised as a complete/selectable backend.
+<code>partial</code> means the same without the read-only restriction: some named
+operations, including writes, are implemented, but not the complete contract.</p>
+<p>The README form is a line <code>**Coverage:** partial</code> (or <code>partial-read-only</code>).
+<a href="https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"><code>tools/vendor-neutrality-score</code></a> reads it
+and never counts a partial tool as a backend vendor, so a partial foundation
+cannot turn a contract green in
+<a href="/docs/vendor-neutrality"><code>docs/vendor-neutrality.md</code></a>.</p>
+<p>Both capability axes are <strong>orthogonal</strong> to <code>family:*</code>. A single
+query can answer “how is our triage stack doing across PR + issue +
+security?” by filtering on <code>capability:triage</code> alone, without
+enumerating per-area queries.</p>
+<p><strong>Agent-harness support (substrate tools only).</strong> A substrate tool that
+integrates with the agent harness (a hook, a settings file, a launcher)
+declares a <code>**Harness:**</code> field naming the harness(es) it supports, or
+<code>agnostic</code> when it depends on none. This is the <em>agent-harness</em> axis of
+LLM-integration neutrality and is scored by
+<a href="https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"><code>tools/vendor-neutrality-score</code></a> —
+distinct from a tool’s <code>**Runtime:**</code> field, which is its <em>execution</em>
+environment (e.g. “Python stdlib”). The recognised harnesses are: Claude
+Code, Codex, Cursor, Gemini CLI, Copilot, OpenCode, Kiro. A tool is
+harness-neutral when it is <code>agnostic</code> or supports two or more harnesses.</p>
+<h3 id="3-kind--change-type-pre-existing">3. <code>kind:*</code> — change type (pre-existing)</h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>kind:dx</code></td>
+<td>Maintainer dev-loop / CLI UX</td>
+</tr>
+<tr>
+<td class="table-label"><code>kind:policy</code></td>
+<td>Rule changes (eligibility, thresholds, behaviour switches)</td>
+</tr>
+<tr>
+<td class="table-label"><code>kind:perf</code></td>
+<td>Token / latency / API-call budget</td>
+</tr>
+<tr>
+<td class="table-label"><code>kind:adopter-config</code></td>
+<td>Per-adopter knob</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-mode--handling-mode-pre-existing">4. <code>mode:*</code> — handling mode (pre-existing)</h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Label</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>mode:Triage</code></td>
+<td>Agentic Triage — spot, classify, route, surface duplicates</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:Mentoring</code></td>
+<td>Agentic Mentoring — teaching-register issue/PR interventions + good-first-issue authoring</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:Drafting</code></td>
+<td>Agentic Drafting — agent-authored fix, human-reviewed PR</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:Pairing</code></td>
+<td>Agentic Pairing — developer-side dev-cycle skills with mentorship intrinsic</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:Autonomous</code></td>
+<td>Agentic Autonomous — narrowly-scoped auto-merge (off until Triage/Mentoring/Drafting run 2 quarters)</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:cross-cutting</code></td>
+<td>Spans multiple modes</td>
+</tr>
+<tr>
+<td class="table-label"><code>mode:platform</code></td>
+<td>Substrate / infra — not a mode (sandbox, CI, validators)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standalone-labels">Standalone labels</h3>
+<p><code>marketing</code> (branding artefacts), <code>dependencies</code> (dependency-update
+PRs), <code>python:uv</code> (Python uv-managed code), plus the default GitHub
+labels (<code>bug</code>, <code>enhancement</code>, <code>documentation</code>, <code>good first issue</code>,
+etc.).</p>
+<hr>
+<h2 id="capability-to-skill-map">Capability to skill map</h2>
+<p>Capabilities for every skill currently in
+<a href="https://github.com/apache/magpie/tree/main/skills"><code>.claude/skills/</code></a>. Skills with two values
+(separated by <code>+</code>) carry both labels.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Capability / capabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>pr-management-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-stale-sweep</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-stale-sweep</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>ci-runner-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>dependency-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>dependency-license-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>workflow-security-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>license-compliance-audit</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>flaky-test-triage</code></td>
+<td><code>capability:triage</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>reviewer-routing</code></td>
+<td><code>capability:triage</code> <em>(scores the configured reviewer roster on area match, git-history familiarity, and open-review load; proposes a primary reviewer plus optional backup — read-only, propose-then-confirm)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-quick-merge</code></td>
+<td><code>capability:triage</code> + <code>capability:review</code> <em>(screens the ready-for-review queue for trivial, all-gates-green PRs — triage; submits the maintainer’s approve on per-PR confirmation — review)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-code-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>pairing-self-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>pairing-multi-agent-review</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>pre-first-pr-check</code></td>
+<td><code>capability:review</code> <em>(newcomer-facing pre-flight checklist: SPDX headers, commit shape, Generated-by trailer, placeholder convention — read-only)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-mentor</code></td>
+<td><code>capability:review</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>good-first-issue-author</code></td>
+<td><code>capability:review</code> <em>(authors a newcomer-ready good first issue — contributor mentoring on the supply side)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>good-first-issue-sweep</code></td>
+<td><code>capability:review</code> + <code>capability:triage</code> <em>(sweeps the open issue backlog for GFI candidates; scores each against the G1–G7 rubric and proposes the label on maintainer confirmation — a triage sweep in the mentoring family)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>mentoring-welcome</code></td>
+<td><code>capability:review</code> <em>(drafts a first-contact orientation comment for first-time contributors on issues and PRs)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>onboarding-concierge</code></td>
+<td><code>capability:review</code> <em>(answers newcomer “how do I contribute here” questions from the project’s contributing guide; hands off design, security, and out-of-scope queries to a human)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>newcomer-issue-explainer</code></td>
+<td><code>capability:review</code> <em>(explains a good-first-issue in beginner terms and sketches an approach; read-only, never posts without confirmation)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-verify</code></td>
+<td><code>capability:review</code> <em>(pre-flight on a published security model: discoverability chain plus completeness against the minimum-bar rubric; remediates with a repo PR or a private-list mail, never a public issue)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-fix-workflow</code></td>
+<td><code>capability:fix</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>audit-finding-fix</code></td>
+<td><code>capability:fix</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-fix</code></td>
+<td><code>capability:fix</code> + <code>capability:resolve</code> <em>(opens the PR that closes the tracker — both phases)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import-from-md</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import-from-pr</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td><code>security-issue-import-via-forwarder</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import-from-scan</code></td>
+<td><code>capability:intake</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-sync</code></td>
+<td><code>capability:intake</code> <em>(+ <code>capability:reconciliation</code> once <a href="https://github.com/apache/magpie/issues/337">#337</a> lands the ASF-dashboard step)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-shared-config-sync</code></td>
+<td><code>capability:intake</code> + <code>capability:platform</code> <em>(reconciles user-scope config to a sync repo; the act is intake, the subject is setup)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-vote-tally</code></td>
+<td><code>capability:triage</code> + <code>capability:resolve</code> <em>(reads the vote thread / approval signal, classifies each reply as binding or non-binding, tallies the result — triage over the vote-thread queue — and drafts the <code>[RESULT] [VOTE]</code> close-out email for RM review — resolve)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-prepare</code></td>
+<td><code>capability:resolve</code> <em>(drafts the planning issue, prep PR, and post-release bump PR that open the release lifecycle)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-announce-draft</code></td>
+<td><code>capability:resolve</code> <em>(drafts the <code>[ANNOUNCE]</code> email and opens the site-bump PR that complete the release lifecycle)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-verify-rc</code></td>
+<td><code>capability:triage</code> <em>(read-only RC pre-flight: verifies GPG signatures, checksums, RAT licence headers, NOTICE/LICENSE presence, prohibited binaries, and version-string consistency; emits a PASS/PASS-WITH-WARNINGS/FAIL report)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-promote</code></td>
+<td><code>capability:resolve</code> <em>(emits the backend-shaped promotion command set that moves a passed-vote RC to the release distribution area; never runs the command itself)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-keys-sync</code></td>
+<td><code>capability:resolve</code> <em>(drafts the KEYS file diff and paste-ready <code>svn</code> command sequence to add the RM’s public key; validates key strength against the ASF floor)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-rc-cut</code></td>
+<td><code>capability:resolve</code> <em>(emits the paste-ready tag, build, sign, checksum, and staging command sequences for an RC)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-vote-draft</code></td>
+<td><code>capability:resolve</code> <em>(drafts the <code>[VOTE]</code> email and planning-issue comment that advance the release to the vote stage)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-archive-sweep</code></td>
+<td><code>capability:resolve</code> + <code>capability:triage</code> <em>(scans the dist area, classifies each release against the retention rule — triage — and proposes the command set to move past-retention releases to the archive — resolve)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-cve-allocate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-invalidate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-deduplicate</code></td>
+<td><code>capability:resolve</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-deduplicate</code></td>
+<td><code>capability:resolve</code> <em>(closes a duplicate general-issue and posts cross-reference comments; maintainer confirms before any action is applied)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-update</code></td>
+<td><code>capability:reassess</code> + <code>capability:authoring</code> <em>(re-reads closed trackers, reporter threads, and canned responses against the published model — reassess — and proposes the known-non-finding and gap diff — authoring)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-reassess</code></td>
+<td><code>capability:reassess</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-reproducer</code></td>
+<td><code>capability:reassess</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-reassess-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-backlog-stats</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-tracker-stats-dashboard</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-nomination</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-to-committer</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-calibrate</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-candidate-screen</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-activity-sweep</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-identity-map</code></td>
+<td><code>capability:intake</code> <em>(brings a contributor’s identities on external channels into the project’s identity file, keeping existing entries reconciled)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-sentiment</code></td>
+<td><code>capability:stats</code> <em>(measures contributor-sentiment signals — thread tone, time-to-first-reply, first-PR retention, reviewer load — and produces the gate report for experimental→stable advancement)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>committer-onboarding</code></td>
+<td><code>capability:resolve</code> + <code>capability:triage</code> <em>(post-vote onboarding close-out — resolve — after validating the vote result in pre-flight — triage)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>list-skills</code></td>
+<td><code>capability:stats</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>release-audit-report</code></td>
+<td><code>capability:stats</code> <em>(assembles the per-release audit record from the planning issue, vote thread, artefact list, and announce archive URL)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-privacy-llm</code></td>
+<td><code>capability:platform</code> <em>(configures which LLMs may see the project’s private foundation content, and verifies the gate and the PII redactor — framework plumbing, not an act on any issue or PR)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-status</code></td>
+<td><code>capability:stats</code> + <code>capability:platform</code> <em>(reports the adoption configuration — stats — and delegates reconfiguration to the setup skill)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-isolated-setup-install</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-isolated-setup-verify</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-isolated-setup-update</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-isolated-setup-doctor</code></td>
+<td><code>capability:platform</code> + <code>capability:reassess</code> <em>(re-checks an installed sandbox against current spec — the phase is reassess on subject setup)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-override-upstream</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>setup-upstream-fix</code></td>
+<td><code>capability:platform</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>report-framework-issue</code></td>
+<td><code>capability:platform</code> <em>(files a redacted bug / change-proposal issue against the framework repo when a skill or tool misbehaves; the mandatory public-disclosure scrub keeps private tracker / CVE / cross-project content out of the public issue; never files without confirmation)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-prepare</code></td>
+<td><code>capability:authoring</code> <em>(produces the project’s first security model in draft-first mode and lands it, plus its discoverability chain, as one reviewable PR per repository)</em></td>
+</tr>
+<tr>
+<td class="table-label"><code>write-skill</code></td>
+<td><code>capability:authoring</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>optimize-skill</code></td>
+<td><code>capability:authoring</code></td>
+</tr>
+<tr>
+<td class="table-label"><code>skill-reconciler</code></td>
+<td><code>capability:reconciliation</code> <em>(compares two near-duplicate skill copies and classifies every difference as ALLOWED, DRIFT, or SAFETY-BASELINE; proposes convergence; never writes either copy)</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="capability-to-tool-map">Capability to tool map</h2>
+<p>Tools under <a href="https://github.com/apache/magpie/tree/main/tools"><code>tools/</code></a>. A tool’s capability is the interface
+it provides; a tool may carry more than one value (separated by <code>+</code>) when
+it provides more than one interface — either several contracts (e.g.
+<code>tools/gmail</code> provides <code>mail-source</code>, <code>mail-archive</code>, and <code>mail-create</code>)
+or a contract-free mix of substrates (e.g. <code>tools/spec-inventory</code> is
+<code>substrate:framework-dev</code> + <code>substrate:analytics</code>).</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Tool</th>
+<th>Capability / capabilities</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/agent-guard"><code>tools/agent-guard</code></a></td>
+<td><code>substrate:action-guard</code></td>
+<td>Deterministic pre-execution guard dispatcher (harness-neutral core behind a Claude Code <code>PreToolUse</code> hook, an OpenCode <code>tool.execute.before</code> plugin, a Kiro <code>preToolUse</code> hook, and a Gemini CLI <code>BeforeTool</code> hook): blocks <code>gh</code>/<code>git</code> commands that would ping maintainers, carry a <code>Co-Authored-By</code> trailer, mark-ready prematurely, leak security language publicly, or empty a PR via force-push. Extensible — skills contribute guards via <code>guards.d</code></td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/agent-isolation"><code>tools/agent-isolation</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Secure-agent sandbox helpers</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/apache-projects"><code>tools/apache-projects</code></a></td>
+<td><code>contract:project-metadata</code></td>
+<td>ASF project-metadata substrate (<code>apache/comdev</code> <code>apache-projects-mcp</code>); read-only <code>projects.apache.org/json</code> rosters / people / releases. Backs <code>contributor-nomination</code> and the security roster-resolution paths; tracked at <code>main</code>, not pinned</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/asf-svn"><code>tools/asf-svn</code></a></td>
+<td><code>contract:source-control</code></td>
+<td>ASF SVN tool adapter: source-control binding for <code>svn.apache.org</code> working copies (centralized model), <code>svn</code> CLI operation catalogue, <code>dist.apache.org</code> release-distribution helpers (stage/promote/prune), ASF committer/PMC authorization, and optional svnpubsub site publishing. The SVN counterpart to <code>tools/github/</code> for ASF projects. Also the <code>land</code> delegate for the <code>jira-patch</code> and <code>mail-patch</code> change-request backends (<code>svn patch</code> + <code>svn commit</code>)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/change-request"><code>tools/change-request</code></a></td>
+<td><code>contract:change-request</code></td>
+<td>Adapter contract for the proposed-change review + merge gate (pull request / merge request / patch). Pure interface spec; no executable code — backends under <code>tools/github/</code> (PR), <code>tools/jira-patch/</code>, and <code>tools/mail-patch/</code> implement it. The seam that lets <code>pr-management-*</code> skills run on non-GitHub backends</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/cve-org"><code>tools/cve-org</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>CVE.org services adapter: publishes records to CVE.org and reads back the resulting CVE state. Implements the <code>tools/cve-tool/</code> contract for the CVE.org-direct backend</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/cve-tool"><code>tools/cve-tool</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>Adapter contract for CNA backends (Vulnogram, MITRE form, CVE.org direct, GHSA). Pure interface spec; no executable code — adapters under sibling <code>tools/cve-tool-*/</code> directories implement it.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/cve-tool-vulnogram"><code>tools/cve-tool-vulnogram</code></a></td>
+<td><code>contract:cve-authority</code></td>
+<td>ASF Vulnogram CVE-allocation adapter. Implements the <code>tools/cve-tool/</code> contract. Previously named <code>tools/vulnogram/</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/dashboard-generator"><code>tools/dashboard-generator</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Self-contained HTML dashboard generator</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/dev"><code>tools/dev</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Framework dev-loop helpers</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/egress-gateway"><code>tools/egress-gateway</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Egress-allowlist forward proxy (proxy.py plugin); host-level egress chokepoint — defence-in-depth for RFC-AI-0003 §4.4</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/container-gateway"><code>tools/container-gateway</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Per-project policy proxy for the podman / docker API; label-scoped, mount- and privilege-checked container access from inside the sandbox</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/forwarder-relay"><code>tools/forwarder-relay</code></a></td>
+<td><code>contract:report-relay</code></td>
+<td>Adapter contract for inbound-relay backends (ASF Security relay, huntr.com, HackerOne triagers). Pure interface spec; adapters declare detection + credit-extraction + reporter-addressing rules.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/bitbucket"><code>tools/bitbucket</code></a></td>
+<td><code>contract:change-request</code> + <code>contract:tracker</code></td>
+<td>Coverage: <code>partial</code>. Bitbucket Cloud and Bitbucket Data Center bridge foundation for repository metadata context, branch restriction context for PR-management decisions, pull-request discovery/fetching, read-only commit fetching, read-only diff fetching, comments-only discussion fetching, read-only review-state fetching, Cloud-only pull-request task listing/fetching, read-only merge-check context fetching, and read-only status fetching, plus narrowly scoped Cloud pull-request comment creation and approve/unapprove actions. Tracker coverage includes Cloud-only issue listing/fetching, issue comment fetching, issue attachment metadata fetching, and confirmed issue-comment creation. The <code>partial</code> qualifier means this tool implements named contract operations but does not satisfy the complete contract and must not be counted as a complete/selectable backend. Broader pull-request review/mutation, broader issue writes, and linked Jira handoff coverage remain incomplete.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/fossil"><code>tools/fossil</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code></td>
+<td>Fossil SCM forge bridge: integrates local SQLite-backed ticket tracking, wiki, and forum reads with the version-control shim</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/github"><code>tools/github</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code> + <code>contract:change-request</code></td>
+<td>GitHub REST / GraphQL tracker substrate (called by every lifecycle phase) plus the Git source-control binding documented in <a href="https://github.com/apache/magpie/blob/main/tools/github/source-control.md"><code>source-control.md</code></a> (runnable backend in <a href="https://github.com/apache/magpie/tree/main/tools/vcs"><code>tools/vcs</code></a>) and the pull-request review/merge gate (<code>change-request</code>; the ASF default backend, alongside <code>tools/jira-patch/</code> and <code>tools/mail-patch/</code> for SVN-first projects)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/gitlab"><code>tools/gitlab</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code> + <code>contract:change-request</code></td>
+<td>Coverage: <code>partial</code>. GitLab REST API v4 forge bridge foundation for repository metadata context under <code>contract:source-control</code>, issue listing/fetching under <code>contract:tracker</code>, and merge request discovery, diffs, commits, and CI pipeline status under <code>contract:change-request</code>. The <code>partial</code> qualifier means this tool implements named contract operations but does not satisfy the complete contract and must not be counted as a complete/selectable backend. Write operations, issue mutation, and merge request mutations remain out of scope for this foundation.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/github-body-field"><code>tools/github-body-field</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>Read or rewrite one <code>### Field</code> section of a GitHub issue body without bringing the body into agent context — substrate helper for the security-sync skills</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/github-rollup"><code>tools/github-rollup</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>Append to (or create) the status-rollup comment on a GitHub issue without bringing the rollup body into agent context — substrate helper for every status-update-emitting skill</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/gmail"><code>tools/gmail</code></a></td>
+<td><code>contract:mail-source</code> + <code>contract:mail-create</code> + <code>contract:mail-archive</code></td>
+<td>Gmail API substrate — inbound report intake (<code>mail-source</code>), thread / archive reads (<code>mail-archive</code>), plus outbound courtesy-reply drafting (<code>mail-create</code>); read + draft only, never sends</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/jira"><code>tools/jira</code></a></td>
+<td><code>contract:tracker</code></td>
+<td>JIRA REST substrate (read-only today; write subcommands tracked in <a href="https://github.com/apache/magpie/issues/301">#301</a>)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/jira-patch"><code>tools/jira-patch</code></a></td>
+<td><code>contract:change-request</code></td>
+<td>JIRA-patch change-request backend: patches attached to JIRA issues as the proposal, reviewed via JIRA comments, landed via <code>contract:source-control</code> (<code>svn patch</code> + <code>svn commit</code>). Composes <code>tools/jira/</code> (REST) + <code>tools/asf-svn/</code> (land). Implements the <code>tools/change-request/</code> contract</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/chat"><code>tools/chat</code></a></td>
+<td><code>contract:chat</code></td>
+<td>Adapter contract for project chat (Slack, Discord): public-channel reads for community signals. Pure interface spec.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/chat-slack"><code>tools/chat-slack</code></a></td>
+<td><code>contract:chat</code></td>
+<td>Slack adapter for the <code>tools/chat/</code> contract, over the Slack MCP; public channels only, never posts.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/mail-archive"><code>tools/mail-archive</code></a></td>
+<td><code>contract:mail-archive</code></td>
+<td>Adapter contract for public mail-archive backends (PonyMail, Hyperkitty, Discourse, Google Groups, GitHub Discussions). Pure interface spec.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/mail-patch"><code>tools/mail-patch</code></a></td>
+<td><code>contract:change-request</code></td>
+<td><code>[PATCH]</code>-mail change-request backend: a <code>[PATCH]</code> thread on <code>dev@</code> as the proposal, reviewed via drafted replies (<code>contract:mail-create</code>), read via <code>contract:mail-archive</code>, landed via <code>contract:source-control</code> (<code>svn patch</code> + <code>svn commit</code>). Implements the <code>tools/change-request/</code> contract</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/mail-source"><code>tools/mail-source</code></a></td>
+<td><code>contract:mail-source</code></td>
+<td>Mail-source backend abstraction (mbox / IMAP / Mailman 3) feeding a uniform inbound thread/message view to the intake pipeline</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/maildir"><code>tools/maildir</code></a></td>
+<td><code>contract:mail-source</code> + <code>contract:mail-create</code></td>
+<td>Local <strong>Maildir</strong> backend (Vendor: Maildir) — the offline, credential-free counterpart of <code>tools/gmail</code>. Implements <code>mail-create</code> by filing editable outbound drafts into a local Maildir for any mail client to send (never sends itself); its <code>mail-source</code> side is the local mbox/Maildir archive reader (<code>tools/mail-source/mbox</code>). The second, non-Google <code>mail-create</code> backend — closes the outbound-mail vendor-neutrality gap</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/osv"><code>tools/osv</code></a></td>
+<td><code>contract:security-cross-ref</code></td>
+<td>OSV.dev vulnerability cross-reference client (Vendor: OSV.dev): queries vulnerability records, alias cross-references (CVE ↔ GHSA ↔ OSV IDs), affected package versions, and vulnerabilities associated with a public upstream commit via OSV.dev REST API v1</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/ponymail"><code>tools/ponymail</code></a></td>
+<td><code>contract:mail-archive</code> + <code>contract:mail-source</code></td>
+<td>PonyMail public mail-archive substrate (ASF <code>lists.apache.org</code>); implements the <code>tools/mail-archive/</code> contract for archive reads and the <code>tools/mail-source/</code> contract for inbound list-traffic ingestion</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/scan-format"><code>tools/scan-format</code></a></td>
+<td><code>contract:scan-format</code></td>
+<td>Adapter contract for security-scanner report formats (ASVS reference); reads a scan’s finding index + per-finding evidence for the <code>security-issue-import-from-scan</code> pipeline.</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/permission-audit"><code>tools/permission-audit</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Audit + atomically edit Claude Code <code>permissions.allow[]</code> entries; backs <code>/magpie-setup verify --apply-permission-audit</code> (check 8d)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/adversarial-review"><code>tools/adversarial-review</code></a></td>
+<td><code>substrate:review</code></td>
+<td>Runs other models’ CLIs (Codex, Copilot, Gemini, Claude) read-only over a change before its PR is created, and merges their findings into one advisory JSON report</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/vetted-ops"><code>tools/vetted-ops</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Fixed, policy-scoped forge operations — a closed catalogue whose parameters can never become commands or flags, so one <code>allow</code> entry replaces the wildcard Layer 3 <code>ask</code> rules</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/contributor-metrics"><code>tools/contributor-metrics</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Deterministic contributor activity counts, per-area shares and automated-work weighting for the contributor-growth skills</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/pr-management-stats"><code>tools/pr-management-stats</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>PR-backlog analytics engine</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/preflight-audit"><code>tools/preflight-audit</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Dry-run the bulk-mode pre-flight classifier; measure skip-rate before / after any rule edit in the security-issue-sync skill</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/privacy-llm"><code>tools/privacy-llm</code></a></td>
+<td><code>substrate:privacy</code></td>
+<td>Privacy-LLM PII-scrubbing gate</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/probe-templates"><code>tools/probe-templates</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Sandbox-doctor probe templates</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/sandbox-lint"><code>tools/sandbox-lint</code></a></td>
+<td><code>substrate:sandbox</code></td>
+<td>Sandbox settings linter</td>
+</tr>
+<tr>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/security-tracker-stats-dashboard"><code>tools/security-tracker-stats-dashboard</code></a></td>
+<td><code>substrate:analytics</code></td>
+<td>Security-tracker analytics engine</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/setup-preflight"><code>tools/setup-preflight</code></a></td>
+<td><code>substrate:setup</code></td>
+<td>Deterministic setup pre-flight: resolves a project’s lock, floor and reconciliation state plus one skill’s fingerprint into a JSON verdict, so every skill’s shared pre-flight block runs a command instead of re-deriving the rules from prose</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/spec-loop"><code>tools/spec-loop</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Spec-driven build loop runner (Ralph-style) for framework development</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/skill-evals"><code>tools/skill-evals</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Eval harness for skills; framework-dev infrastructure whose run output is governance evidence</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/skill-and-tool-validator"><code>tools/skill-and-tool-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Skill-frontmatter and convention validator</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/skill-token-count"><code>tools/skill-token-count</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Reproducible full-file skill token measurements and documentation drift check</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/spec-inventory"><code>tools/spec-inventory</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Compact routing inventory for spec-loop prompts — summarizes specs, skills, and tool metadata so agents can choose relevant files before direct verification</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/spec-status-index"><code>tools/spec-status-index</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Index of spec / RFC implementation status — framework-dev substrate that also doubles as a governance/stats view (<code>analytics</code>)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/vendor-neutrality-score"><code>tools/vendor-neutrality-score</code></a></td>
+<td><code>substrate:framework-dev</code> + <code>substrate:analytics</code></td>
+<td>Deterministic vendor-neutrality score — reads each contract tool’s <code>**Kind:**</code> / <code>**Vendor:**</code> metadata and scores per-contract + per-skill neutrality (<code>analytics</code>); backs the score block in <a href="/docs/vendor-neutrality"><code>docs/vendor-neutrality.md</code></a></td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/spec-validator"><code>tools/spec-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Spec-frontmatter and body-section validator — counterpart to <code>skill-and-tool-validator</code> for <code>tools/spec-loop/specs/</code></td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/reproducible-archive"><code>tools/reproducible-archive</code></a></td>
+<td><code>substrate:release</code></td>
+<td><code>repro-archive</code> — build, lint and compare reproducible source archives from a git ref (<code>git archive</code> + <code>.gitattributes</code> <code>export-ignore</code>, every reproducible-builds.org archive rule applied); used by <code>release-rc-cut</code> Step 2/2b and <code>release-verify-rc</code> Step 9</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/symlink-lint"><code>tools/symlink-lint</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Self-adoption symlink hygiene — rejects cyclic symlinks, misdirected skill relays (canonical/relay target-correctness), and incomplete self-adoption symlink sets</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/pilot-report-validator"><code>tools/pilot-report-validator</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Adopter pilot-report validator — required frontmatter keys, no unfilled placeholders, valid profile, and required body sections; counterpart to <code>spec-validator</code> for <code>docs/pilot-report-template.md</code></td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/skill-reconciler-diff"><code>tools/skill-reconciler-diff</code></a></td>
+<td><code>substrate:framework-dev</code></td>
+<td>Deterministic structural diff between two skill trees — parses frontmatter, section headings, step inventory, placeholders, support files, and safety-baseline clauses into a JSON diff object for the <code>skill-reconciler</code> skill</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/vcs"><code>tools/vcs</code></a></td>
+<td><code>contract:source-control</code></td>
+<td>Backend-dispatching implementation of the source-control (VCS) capability (<a href="https://github.com/apache/magpie/blob/main/tools/github/source-control.md"><code>tools/github/source-control.md</code></a>); complete Git, Mercurial (Hg), and Fossil backends, plus detected extension point for SVN (#602)</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/tree/main/tools/sourcehut"><code>tools/sourcehut</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code> + <code>contract:mail-archive</code></td>
+<td>SourceHut (sr.ht) forge bridge: todo.sr.ht, lists.sr.ht, builds.sr.ht, and git/hg repository reads</td>
+</tr>
+</tbody>
+</table>
+<p>A tool’s capability is the <strong>interface it provides</strong>, not which skills
+happen to consume it (RFC-AI-0005). <code>tools/github</code> provides the
+<code>contract:tracker</code> interface; <code>tools/cve-tool-vulnogram</code> provides
+<code>contract:cve-authority</code>; <code>tools/privacy-llm</code> is <code>substrate:privacy</code>.
+Use a <code>contract:&lt;name&gt;</code> value when the tool implements a capability
+contract under <code>tools/&lt;contract&gt;/</code>, and a <code>substrate:&lt;name&gt;</code> value for
+framework substrate. A tool may carry more than one value whenever it
+genuinely exposes several interfaces — the multi-value rows in the table
+above are the authoritative list, and they are a normal case rather than
+an exception (forge bridges such as <code>tools/github</code>, <code>tools/fossil</code>, and
+<code>tools/sourcehut</code>; the mail backends <code>tools/gmail</code>, <code>tools/maildir</code>, and
+<code>tools/ponymail</code>; and the framework-dev tools that double as analytics).</p>
+<h2 id="mcp-servers-classified-by-capability">MCP servers, classified by capability</h2>
+<p>Several tools wrap a <a href="https://modelcontextprotocol.io">Model Context Protocol</a>
+(MCP) server as their concrete backend. An MCP server is <strong>not</strong> a
+separate axis — it is classified by the capability its <em>wrapping tool</em>
+provides; the MCP is just the transport, interchangeable with a CLI or
+REST backend behind the same contract. A skill never names an MCP
+server — it targets the capability, and the tool routes to whichever
+backend the adopter wired in. The framework consumes five:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">MCP server</th>
+<th>Tool prefix</th>
+<th>Wrapped by</th>
+<th>Capability provided</th>
+<th>Organization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label">GitHub MCP</td>
+<td><code>mcp__github__*</code></td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/github"><code>tools/github</code></a></td>
+<td><code>contract:tracker</code> + <code>contract:source-control</code> + <code>contract:change-request</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td class="table-label">Gmail MCP (claude.ai)</td>
+<td><code>mcp__claude_ai_Gmail__*</code></td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/gmail"><code>tools/gmail</code></a></td>
+<td><code>contract:mail-source</code> + <code>contract:mail-create</code> + <code>contract:mail-archive</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td class="table-label">PonyMail MCP (<code>apache/comdev</code>)</td>
+<td><code>mcp__ponymail__*</code></td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/ponymail"><code>tools/ponymail</code></a></td>
+<td><code>contract:mail-archive</code> + <code>contract:mail-source</code></td>
+<td>ASF</td>
+</tr>
+<tr>
+<td class="table-label">Slack MCP (claude.ai)</td>
+<td><code>mcp__claude_ai_Slack__*</code></td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/chat-slack"><code>tools/chat-slack</code></a></td>
+<td><code>contract:chat</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>apache-projects MCP (<code>apache/comdev</code>)</td>
+<td><code>mcp__apache-projects__*</code></td>
+<td><a href="https://github.com/apache/magpie/tree/main/tools/apache-projects"><code>tools/apache-projects</code></a></td>
+<td><code>contract:project-metadata</code></td>
+<td>ASF</td>
+</tr>
+</tbody>
+</table>
+<p>Each wrapping tool declares this relationship in its own README with an
+<code>**MCP:** &lt;server&gt; (mcp__&lt;prefix&gt;__*)</code> marker (see
+<a href="https://github.com/apache/magpie/blob/main/tools/AGENTS.md"><code>tools/AGENTS.md</code></a>) — that per-tool marker is the
+source of truth; this table mirrors it for a one-glance overview.</p>
+<p>Non-MCP backends fulfil the same contracts: JIRA is reached over REST
+and <code>gh</code> is the CLI fallback, both <code>contract:tracker</code>. See
+<a href="/docs/quick-start/prerequisites"><code>docs/prerequisites.md</code></a> for connection setup.</p>
+<p><strong>MCP servers are installed for the user, not the project.</strong> They are
+registered at <strong>user scope</strong> (<code>claude mcp add … -s user</code>), so a single
+registration serves every repository on the machine. Consequently they
+are usable by <strong>any</strong> agent session — not only Magpie-adopting projects
+or Magpie-related work. Magpie surfaces the registration command and
+verifies it during setup, but the server itself is a plain,
+project-agnostic MCP: once registered it is available to any agentic
+session the same way a globally-installed CLI would be. Nothing about
+using one ties a session to Magpie.</p>
+<hr>
+<h2 id="the-rule">The rule</h2>
+<p>When you create any of the following on this repository, declare the
+capability:</p>
+<h3 id="a-github-issue">A GitHub issue</h3>
+<p>Apply at least one <code>family:*</code> AND one capability label — a skill
+capability (<code>capability:*</code>) for skill work, a tool capability
+(<code>contract:*</code> / <code>substrate:*</code>) for tool work. If the issue genuinely
+spans capabilities, apply all that apply.</p>
+<h3 id="a-pull-request">A pull request</h3>
+<p>Same: <code>family:*</code> AND the matching capability. Match the capability the
+change is <em>implementing</em>, not the file paths it happens to touch. A PR
+that adjusts the validator config to support a new triage rule is
+<code>capability:triage</code> (the change’s purpose), not <code>substrate:framework-dev</code>
+(the file it edited).</p>
+<p>The tool-capability labels are pre-applied within an hour of a PR being opened:
+the scheduled <a href="https://github.com/apache/magpie/blob/main/.github/workflows/labeler.yml"><code>.github/workflows/labeler.yml</code></a>
+labels each new PR once, with the <code>**Capability:**</code> of every tool directory it
+touches, from
+<a href="https://github.com/apache/magpie/blob/main/.github/labeler.yml"><code>.github/labeler.yml</code></a>, which
+<a href="https://github.com/apache/magpie/blob/main/tools/dev/generate-labeler-config.py"><code>tools/dev/generate-labeler-config.py</code></a>
+generates from the tool READMEs.
+That is a starting point, not the answer: remove a label the change does not
+implement, and add the skill capability yourself.
+Bot PRs and sweeps that would gain more than eight labels are left unlabelled.</p>
+<h3 id="a-new-tool-under-tools">A new tool under <code>tools/</code></h3>
+<p>Declare the tool’s capability in the <strong>first paragraph of its README</strong>
+using the line:</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#F0F3F6;font-weight:bold">**Capability:**</span><span style="color:#F0F3F6"> contract:NAME</span></span></code></pre>
+<p>…or <code>substrate:NAME</code> for framework substrate. If the tool serves more
+than one, list them (<code>contract:a + substrate:b</code>). Pick the
+<code>contract:&lt;name&gt;</code> that matches the capability contract the tool
+implements, or the <code>substrate:&lt;name&gt;</code> kind that fits.</p>
+<h3 id="a-new-skill-under-claudeskills">A new skill under <code>.claude/skills/</code></h3>
+<p>Declare the capability in the skill’s frontmatter:</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#91CBFF">---</span></span>
+<span class="line"><span style="color:#72F088">name</span><span style="color:#F0F3F6">: </span><span style="color:#ADDCFF">my-new-skill</span></span>
+<span class="line"><span style="color:#72F088">description</span><span style="color:#F0F3F6">: </span><span style="color:#FF9492">|</span></span>
+<span class="line"><span style="color:#ADDCFF">  ...</span></span>
+<span class="line"><span style="color:#72F088">capability</span><span style="color:#F0F3F6">: </span><span style="color:#ADDCFF">capability:NAME</span></span>
+<span class="line"><span style="color:#91CBFF">---</span></span></code></pre>
+<p>The <a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/write-skill/SKILL.md"><code>write-skill</code></a> skill
+prompts for this on every new-skill scaffold.</p>
+<h3 id="a-new-doc-under-docs">A new doc under <code>docs/</code></h3>
+<p>Capability-specific docs (e.g. a guide for a single skill family)
+should link to this page and name the capability in their first
+paragraph. Cross-cutting docs (<code>MISSION.md</code>, top-level READMEs) need
+no capability marker.</p>
+<hr>
+<h2 id="why-this-exists">Why this exists</h2>
+<p>The original <code>family:*</code> labels split issues by subject — useful for
+“what part of the codebase is this?” but unable to answer “what kind
+of thing is this?”. The <code>capability:*</code> dimension fills that gap and
+is orthogonal: a triage-rule change in PR management
+(<code>family:pr-management</code> + <code>capability:triage</code>) and a triage-rule change
+in security (<code>family:security</code> + <code>capability:triage</code>) become trivially
+findable as a cohort even though they live in different families.</p>
+<p>Capability is also a forcing function for skill design: if a new skill
+doesn’t fit any of the ten skill-capability buckets cleanly, that’s a
+signal worth inspecting before the skill ships.</p>
+</article></main><aside class="docs-toc" aria-label="On this page"><span class="eyebrow">On this page</span><nav><ul><li><a href="#label-dimensions" style="padding-left: 0rem">Label dimensions</a></li><li><a href="#1-family--subject" style="padding-left: 0.75rem">1. family:* — subject</a></li><li><a href="#2-capability--two-axes-skills-vs-tools" style="padding-left: 0.75rem">2. capability — two axes (skills vs tools)</a></li><li><a href="#coverage-qualifiers" style="padding-left: 0.75rem">Coverage qualifiers</a></li><li><a href="#3-kind--change-type-pre-existing" style="padding-left: 0.75rem">3. kind:* — change type (pre-existing)</a></li><li><a href="#4-mode--handling-mode-pre-existing" style="padding-left: 0.75rem">4. mode:* — handling mode (pre-existing)</a></li><li><a href="#standalone-labels" style="padding-left: 0.75rem">Standalone labels</a></li><li><a href="#capability-to-skill-map" style="padding-left: 0rem">Capability to skill map</a></li><li><a href="#capability-to-tool-map" style="padding-left: 0rem">Capability to tool map</a></li><li><a href="#mcp-servers-classified-by-capability" style="padding-left: 0rem">MCP servers, classified by capability</a></li><li><a href="#the-rule" style="padding-left: 0rem">The rule</a></li><li><a href="#a-github-issue" style="padding-left: 0.75rem">A GitHub issue</a></li><li><a href="#a-pull-request" style="padding-left: 0.75rem">A pull request</a></li><li><a href="#a-new-tool-under-tools" style="padding-left: 0.75rem">A new tool under tools/</a></li><li><a href="#a-new-skill-under-claudeskills" style="padding-left: 0.75rem">A new skill under .claude/skills/</a></li><li><a href="#a-new-doc-under-docs" style="padding-left: 0.75rem">A new doc under docs/</a></li><li><a href="#why-this-exists" style="padding-left: 0rem">Why this exists</a></li></ul></nav></aside></div><footer class="site-footer" data-magpie-src="src/components/landing/SiteFooter.tsx:10"><div class="container footer-grid" data-magpie-src="src/components/landing/SiteFooter.tsx:10"><div class="footer-intro" data-magpie-src="src/components/landing/SiteFooter.tsx:11"><a class="brand-lockup" href="/" aria-label="Apache Magpie home" data-magpie-src="src/components/landing/SiteFooter.tsx:11"><img class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45" data-magpie-src="src/components/landing/SiteFooter.tsx:11"/></a><span class="footer-asf" data-magpie-src="src/components/landing/SiteFooter.tsx:11">An Apache Software Foundation project.</span></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Explore</h2><a href="/docs" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Documentation</a><a href="/resources" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Learning guides</a><a href="/architecture" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Architecture</a><a href="/tools" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Tools</a><a href="/downloads" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Downloads</a><a href="/brand" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Brand assets</a></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Take part</h2><a href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Contributing</a><a href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Mailing list</a><a href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Discord</a><a href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Issue tracker</a><a href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Changelog</a></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Apache</h2><a href="https://www.apache.org/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">The Foundation</a><a href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">License</a><a href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Events</a><a href="https://www.apache.org/security/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Security</a><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Privacy</a><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Sponsorship</a><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Thanks</a></div></div><div class="container footer-bottom" data-magpie-src="src/components/landing/SiteFooter.tsx:13"><p data-magpie-src="src/components/landing/SiteFooter.tsx:13">© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p data-magpie-src="src/components/landing/SiteFooter.tsx:13">Apache <strong class="brand-name" data-magpie-src="src/components/landing/BrandName.tsx:2">Magpie</strong>, <strong class="brand-name" data-magpie-src="src/components/landing/BrandName.tsx:2">Magpie</strong>, and Apache are trademarks of The Apache Software Foundation.</p></div></footer><script type="module">var e=document.querySelector(`.docs-menu-toggle`),t=document.querySelector(`.docs-sidebar`),n=[...document.querySelectorAll(`.docs-main, .docs-toc, .site-footer`)],r=()=>{t.classList.remove(`is-open`),e.setAttribute(`aria-expanded`,`false`),document.body.classList.remove(`docs-navigation-open`),n.forEach(e=>{e.inert=!1})};e.addEventListener(`click`,()=>{if(t.classList.contains(`is-open`)){r();return}t.classList.add(`is-open`),e.setAttribute(`aria-expanded`,`true`),document.body.classList.add(`docs-navigation-open`),n.forEach(e=>{e.inert=!0}),t.querySelector(`a`)?.focus()}),document.querySelector(`[data-search-open]`)?.addEventListener(`click`,r),matchMedia(`(min-width: 801px)`).addEventListener(`change`,e=>{e.matches&&r()}),document.addEventListener(`keydown`,n=>{if(n.key!==`Tab`||!t.classList.contains(`is-open`))return;let r=[e,...t.querySelectorAll(`a, summary, button`)].filter(e=>e.getClientRects().length>0),i=r[0],a=r[r.length-1];n.shiftKey&&document.activeElement===i?(n.preventDefault(),a.focus()):!n.shiftKey&&document.activeElement===a&&(n.preventDefault(),i.focus())}),document.addEventListener(`keydown`,n=>{n.key===`Escape`&&t.classList.contains(`is-open`)&&(r(),e.focus())}),t.querySelectorAll(`a`).forEach(e=>e.addEventListener(`click`,r)),document.querySelector(`.copy-page`)?.addEventListener(`click`,async e=>{let t=e.currentTarget;try{let e=await fetch(t.dataset.markdown);if(!e.ok)throw Error(`Unavailable`);await navigator.clipboard.writeText(await e.text()),t.textContent=`Copied ✓`}catch{t.textContent=`Could not copy`}setTimeout(()=>{t.textContent=`Copy page ⧉`},2200)});var i=[...document.querySelectorAll(`.docs-toc nav a`)],a=new IntersectionObserver(e=>{for(let t of e)t.isIntersecting&&i.forEach(e=>{let n=decodeURIComponent(e.hash.slice(1))===t.target.id;e.classList.toggle(`active`,n),n?e.setAttribute(`aria-current`,`location`):e.removeAttribute(`aria-current`)})},{rootMargin:`-140px 0px -60% 0px`});i.forEach(e=>{let t=document.getElementById(decodeURIComponent(e.hash.slice(1)));t&&a.observe(t)});</script><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/labels-and-capabilities.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a><script type="module">function e(){let e=document.querySelector(`main`);if(!e)return;let t=[...e.querySelectorAll(`section[id]`)].filter(e=>!e.matches(`[role="tabpanel"]`)&&!e.parentElement?.closest(`section[id]`)),n=e.querySelector(`.docs-prose`)?[...e.querySelectorAll(`.docs-prose :is(h2,h3)[id]`)]:t;if(!n.length)return;let r=!1,i=!1,a=()=>{r=!0},o=()=>{r=!1};window.addEventListener(`wheel`,a,{passive:!0}),window.addEventListener(`touchmove`,a,{passive:!0}),document.addEventListener(`pointerdown`,a,{passive:!0}),document.addEventListener(`keydown`,e=>{let t=e.target;t instanceof Element&&t.closest(`input,textarea,select,[contenteditable="true"]`)||[`ArrowUp`,`ArrowDown`,`PageUp`,`PageDown`,`Home`,`End`,` `].includes(e.key)&&a()}),document.addEventListener(`click`,e=>{e.target instanceof Element&&e.target.closest(`a[href]`)&&o()}),window.addEventListener(`hashchange`,o),window.addEventListener(`popstate`,o),window.addEventListener(`pageshow`,o),window.addEventListener(`scroll`,()=>{!r||i||(i=!0,requestAnimationFrame(()=>{if(i=!1,!r)return;let e=document.querySelector(`.site-header`)?.getBoundingClientRect().bottom??0,t=Math.max(0,e)+24,a;for(let e of n)window.scrollY>0&&e.getClientRects().length&&e.getBoundingClientRect().top<=t&&(a=e);let o=new URL(window.location.href),s=null;try{s=document.getElementById(decodeURIComponent(o.hash.slice(1)))}catch{}if(a&&s&&a.contains(s))return;let c=a?`#${a.id}`:``;o.hash!==c&&(o.hash=c,history.replaceState(history.state,``,o))}))},{passive:!0})}function t(){let e=document.createElement(`div`);e.className=`copy-link-status`,e.setAttribute(`role`,`status`),document.body.append(e);let t;document.addEventListener(`click`,async n=>{if(n.button||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target instanceof Element?n.target.closest(`.section-heading > a[href]`):null;if(r){try{await navigator.clipboard.writeText(r.href),e.textContent=`Link copied`}catch{e.textContent=`Copy the link from the address bar`}clearTimeout(t),t=setTimeout(()=>{e.textContent=``},2e3)}});let n=document.querySelector(`.home-navigation`);if(!n)return;let r=n.querySelector(`summary`);n.addEventListener(`click`,e=>{let t=e.target instanceof Element?e.target.closest(`a[href]`):null;if(t&&(n.open=!1,!(e instanceof MouseEvent&&(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))&&t.getAttribute(`href`)?.startsWith(`#`))){let e=document.getElementById(t.hash.slice(1));e?.setAttribute(`tabindex`,`-1`),e?.focus({preventScroll:!0})}}),document.addEventListener(`click`,e=>{e.target instanceof Node&&!n.contains(e.target)&&(n.open=!1)}),document.addEventListener(`keydown`,e=>{e.key===`Escape`&&n.open&&(n.open=!1,r?.focus({preventScroll:!0}))})}e(),t();var n=document.querySelector(`.theme-toggle`),r=()=>{let e=document.documentElement.dataset.theme===`dark`;n?.setAttribute(`aria-pressed`,String(e)),n?.setAttribute(`aria-label`,`Switch to ${e?`light`:`dark`} mode`)};n?.addEventListener(`click`,()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme===`dark`?`light`:`dark`;try{localStorage.setItem(`magpie-theme`,document.documentElement.dataset.theme)}catch{}r()}),r();</script><!-- magpie-preview-overlay -->
+<script src="/_preview/html2canvas-pro.min.js"></script>
+<script src="/_preview/review.js"></script>
+</body></html>

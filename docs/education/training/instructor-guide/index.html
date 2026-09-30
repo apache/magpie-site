@@ -1,0 +1,775 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>Facilitator guide — Building and running AI agents for open-source projects — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/education/training/instructor-guide/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="Facilitator guide — Building and running AI agents for open-source projects — Apache Magpie Docs"><meta property="og:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta property="og:url" content="https://magpie.apache.org/docs/education/training/instructor-guide/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Facilitator guide — Building and running AI agents for open-source projects — Apache Magpie Docs"><meta name="twitter:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      if (location.hostname === "magpie.apache.org") {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+      }
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.CGxjxYk9.css"><link rel="stylesheet" href="/_astro/DocsLayout.5MFayD3p.css"></head><body data-astro-cid-z4jru4n3><header class="site-header" data-magpie-src="src/components/landing/SiteHeader.tsx:8"><a class="skip-link" href="#main-content" data-magpie-src="src/components/landing/SiteHeader.tsx:9">Skip to content</a><div class="header-inner" data-magpie-src="src/components/landing/SiteHeader.tsx:10"><a class="brand-lockup" href="/" aria-label="Apache Magpie home" data-magpie-src="src/components/landing/SiteHeader.tsx:11"><img class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45" data-magpie-src="src/components/landing/SiteHeader.tsx:11"/></a><div class="header-actions" data-magpie-src="src/components/landing/SiteHeader.tsx:12"><button class="button button-quiet button-icon docs-menu-toggle" aria-label="Browse documentation" aria-expanded="false" aria-controls="docs-sidebar" data-magpie-src="src/components/landing/SiteHeader.tsx:13"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:13">Browse</span></button><button class="docs-search-trigger" aria-label="Search docs" data-search-open="true" data-magpie-src="src/components/landing/SiteHeader.tsx:14"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:14">Search docs</span><kbd data-magpie-src="src/components/landing/SiteHeader.tsx:14">⌘ K</kbd></button><button class="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" data-magpie-src="src/components/landing/SiteHeader.tsx:7"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button></div></div></header><dialog class="search-dialog" aria-labelledby="search-title" data-index="/search-index.json"><div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off"><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div><div class="search-results" id="search-results"></div><p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p><div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div></dialog><script type="module">var e=document.querySelector(`.search-dialog`),t=e.querySelector(`input`),n=e.querySelector(`.search-results`),r=e.querySelector(`.search-status`),i=document.querySelector(`[data-search-open]`),a,o=-1,s=[],c=!1,l=[`/start`,`/docs/security/readme`,`/docs/pr-management/readme`,`/docs/setup/privacy-llm`,`/docs/education/readme`],u=()=>{if(!a)return;let e=t.value.trim().toLowerCase(),i=e.split(/\s+/).filter(Boolean);s=e?a.map(t=>{let n=t.title.toLowerCase(),r=`${n} ${t.section} ${t.text}`.toLowerCase();return{entry:t,score:i.every(e=>r.includes(e))?i.reduce((e,t)=>e+(n.includes(t)?15:1),0)+(n.includes(e)?30:0):0}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score).slice(0,12).map(e=>e.entry):l.map(e=>a.find(t=>t.path.endsWith(e))).filter(e=>!!e),n.replaceChildren(),o=-1;for(let e of s){let t=document.createElement(`a`);t.href=e.path;let r=document.createElement(`strong`);r.textContent=e.title;let i=document.createElement(`span`);i.textContent=e.section,t.append(r,i),n.append(t)}r.textContent=e?s.length?`${s.length} results. Use arrow keys to choose a page.`:`No pages found. Try “security”, “setup”, or “release”.`:`A few useful places to start.`},d=async()=>{if(e.showModal(),t.focus(),!a){r.textContent=`Loading the documentation index…`;try{let t=await fetch(e.dataset.index);if(!t.ok)throw Error(`Index unavailable`);a=await t.json(),c=!1}catch{c=!0,r.textContent=`Search is temporarily unavailable. You can still browse the sidebar.`}}c||u()};i.addEventListener(`click`,d),e.querySelector(`[data-search-close]`).addEventListener(`click`,()=>e.close()),e.addEventListener(`click`,t=>{if(t.target===e){let n=e.getBoundingClientRect();(t.clientX<n.left||t.clientX>n.right||t.clientY<n.top||t.clientY>n.bottom)&&e.close()}}),t.addEventListener(`input`,u),e.addEventListener(`keydown`,t=>{if(t.key===`Tab`){let n=[...e.querySelectorAll(`input,button,a[href]`)].filter(e=>!e.hasAttribute(`disabled`)),r=n[0],i=n.at(-1);t.shiftKey&&document.activeElement===r?(t.preventDefault(),i?.focus()):!t.shiftKey&&document.activeElement===i&&(t.preventDefault(),r?.focus())}if((t.key===`ArrowDown`||t.key===`ArrowUp`)&&s.length){t.preventDefault(),o=(o+(t.key===`ArrowDown`?1:-1)+s.length)%s.length;let e=[...n.querySelectorAll(`a`)];e.forEach((e,t)=>e.classList.toggle(`selected`,t===o)),e[o].focus()}}),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.open?e.close():d())}),e.addEventListener(`close`,()=>i.focus()),i.querySelector(`kbd`).textContent=navigator.platform.includes(`Mac`)?`⌘ K`:`Ctrl K`;</script><div class="container docs-shell"><aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation"><div id="docs-nav-scroll"><a href="/start" class="docs-overview-link">Install Magpie</a><a href="/docs" class="docs-overview-link">Introduction</a><nav aria-label="Documentation sections"><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Quick start</span></summary><a href="/docs/quick-start/readme" aria-label="Quick start overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Concepts</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/ai-contribution-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="ai contribution policy" data-astro-cid-lihgpoae>ai contribution policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Updating Magpie</span></summary><a href="/docs/updating-magpie" aria-label="Updating Magpie overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Setup</span></summary><a href="/docs/setup/readme" aria-label="Setup overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/commit-attribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="commit attribution" data-astro-cid-lihgpoae>commit attribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Education</span></summary><a href="/docs/education/readme" aria-label="Education overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Training</span></summary><a href="/docs/education/training/readme" aria-label="Training overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" aria-current="page" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Security</span></summary><a href="/docs/security/readme" aria-label="Security overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Release Management</span></summary><a href="/docs/release-management/readme" aria-label="Release Management overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/reproducibility" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="reproducibility" data-astro-cid-lihgpoae>reproducibility</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Mentoring</span></summary><a href="/docs/mentoring/readme" aria-label="Mentoring overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Adapters</span></summary><a href="/docs/adapters/readme" aria-label="Adapters overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/aider" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="aider" data-astro-cid-lihgpoae>aider</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/copilot" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="copilot" data-astro-cid-lihgpoae>copilot</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/goose" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="goose" data-astro-cid-lihgpoae>goose</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Contracts (27)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat" data-astro-cid-lihgpoae>chat</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-slack/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-slack" data-astro-cid-lihgpoae>chat-slack</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gitlab/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gitlab" data-astro-cid-lihgpoae>gitlab</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/osv/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="osv" data-astro-cid-lihgpoae>osv</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Substrates (29)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/adversarial-review/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="adversarial-review" data-astro-cid-lihgpoae>adversarial-review</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/container-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="container-gateway" data-astro-cid-lihgpoae>container-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/contributor-metrics/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="contributor-metrics" data-astro-cid-lihgpoae>contributor-metrics</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pr-management-stats" data-astro-cid-lihgpoae>pr-management-stats</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/reproducible-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="reproducible-archive" data-astro-cid-lihgpoae>reproducible-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/setup-preflight/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="setup-preflight" data-astro-cid-lihgpoae>setup-preflight</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>RFCs</span></summary><a href="/docs/rfcs/readme" aria-label="RFCs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>External Skill Sources</span></summary><a href="/docs/skill-sources/readme" aria-label="External Skill Sources overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Designs</span></summary><a href="/docs/designs/readme" aria-label="Designs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-17-body-owned-config-layers" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="body owned config layers" data-astro-cid-lihgpoae>body owned config layers</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-20-reproducible-releases" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="reproducible releases" data-astro-cid-lihgpoae>reproducible releases</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-21-marketplace-reconciliation-tracking" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="marketplace reconciliation tracking" data-astro-cid-lihgpoae>marketplace reconciliation tracking</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-23-adversarial-review" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="adversarial review" data-astro-cid-lihgpoae>adversarial review</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-27-contributor-growth-calibration-and-screening" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="contributor growth calibration and screening" data-astro-cid-lihgpoae>contributor growth calibration and screening</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main id="main-content" tabindex="-1" class="docs-main"><div class="docs-breadcrumb"><a href="/docs">Docs</a><span>/</span><span>education</span><button class="button button-secondary button-small copy-page" data-markdown="/docs/education/training/instructor-guide.md">Copy page</button></div><article class="prose docs-prose"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="facilitator-guide--building-and-running-ai-agents-for-open-source-projects">Facilitator guide — Building and running AI agents for open-source projects</h1>
+<p>This guide is for <strong>instructors and facilitators</strong> running the Apache Training
+module (this directory) as a structured course. Learners working through the
+material self-paced do not need it — the lesson files stand alone.</p>
+<hr>
+<h2 id="who-this-guide-is-for">Who this guide is for</h2>
+<p>A <strong>facilitator</strong> is anyone organising and running the module for others:
+a PMC member running a project on-boarding session, a community mentor
+hosting a workshop at a conference, or a team lead running a weekly reading
+group. No prior experience teaching AI is required; the lesson files carry the
+technical content. This guide covers the logistics, timing, and facilitation
+moves that turn static reading material into an active learning session.</p>
+<hr>
+<h2 id="module-overview">Module overview</h2>
+<p>Eleven lessons totalling approximately 7.5 hours of learner time:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Lesson</th>
+<th>Topic</th>
+<th>Learner time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label">1</td>
+<td>What agents are</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td class="table-label">2</td>
+<td>Working with agents</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td class="table-label">3</td>
+<td>Choosing models</td>
+<td>35 min</td>
+</tr>
+<tr>
+<td class="table-label">4</td>
+<td>Your first skill</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td class="table-label">5</td>
+<td>Writing safe skills</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td class="table-label">6</td>
+<td>Debugging a skill</td>
+<td>50 min</td>
+</tr>
+<tr>
+<td class="table-label">7</td>
+<td>Writing portable skills</td>
+<td>35 min</td>
+</tr>
+<tr>
+<td class="table-label">8</td>
+<td>Eval-driven development</td>
+<td>60 min</td>
+</tr>
+<tr>
+<td class="table-label">9</td>
+<td>Agentic and autonomous work</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td class="table-label">10</td>
+<td>English as a programming language</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td class="table-label">11</td>
+<td>How to contribute</td>
+<td>30 min</td>
+</tr>
+</tbody>
+</table>
+<p>Each lesson follows the same structure: read the source page → work through
+four or five exercises (20–40 min) → answer the self-check questions. Exercises need
+no computer; they use paper, a whiteboard, or a shared document. The self-check
+questions include hidden answers that learners reveal to grade themselves.</p>
+<hr>
+<h2 id="delivery-formats">Delivery formats</h2>
+<h3 id="self-paced-with-facilitator-check-ins">Self-paced with facilitator check-ins</h3>
+<p>Learners work through one or two lessons per week on their own. The
+facilitator runs a 30-minute weekly check-in to answer questions and debrief
+the self-check answers. <strong>Recommended for distributed teams and reading
+groups.</strong> Lowest facilitation overhead; high learner flexibility.</p>
+<h3 id="instructor-led-workshop-one-day">Instructor-led workshop (one day)</h3>
+<p>Cover all eleven lessons in a single day. Use the one-day schedule in the
+<a href="#schedule-templates">Schedule templates</a> section. Requires a dedicated room
+or video-conference session. Best for initial project on-boarding, conference
+tutorials, or intensive team training.</p>
+<h3 id="two-session-intensive">Two-session intensive</h3>
+<p>Split the module across two half-days or two evenings. Lessons 1–5 (concepts
+and first skill) in session one; lessons 6–11 (safety, portability, evals,
+autonomy, prose discipline, and contributing) in session two. A natural break point: session two
+builds on working skills, so learners have time between sessions to write one
+for their own project.</p>
+<h3 id="lms-based-self-study">LMS-based self-study</h3>
+<p>Upload each lesson file as a unit in your learning management system. Tag
+learning time using the per-lesson estimates above. Use the self-check
+questions as the in-LMS quiz. The facilitator role reduces to answering
+questions in the discussion forum.</p>
+<hr>
+<h2 id="environment-setup">Environment setup</h2>
+<h3 id="in-person">In-person</h3>
+<ul>
+<li><strong>Projector or large screen.</strong> You will display source pages, lesson files,
+and learner diagrams. A browser with two tabs (source page and lesson file)
+is all you need.</li>
+<li><strong>Whiteboard or flip chart.</strong> Every exercise mentions “paper or whiteboard”;
+a shared whiteboard (physical or digital) works well for group exercises.</li>
+<li><strong>No computers for learners</strong> are required for the exercises themselves. If
+learners have laptops, remind them to close them during exercise time to
+keep the group in sync.</li>
+<li><strong>Printed exercise sheets (optional).</strong> The exercises are short enough to
+read from a screen, but some facilitators find printed sheets reduce context
+switching during exercises.</li>
+</ul>
+<h3 id="virtual">Virtual</h3>
+<ul>
+<li><strong>Video-conference platform</strong> with screen sharing and a breakout-room
+feature. Breakout rooms let pairs or small groups work through exercises
+without the full group listening in.</li>
+<li><strong>Shared document</strong> (a collaborative whiteboard or a shared markdown file)
+replaces the physical whiteboard. One doc per lesson works well; create them
+before the session.</li>
+<li><strong>Paste the exercise text into the shared doc</strong> so learners can write their
+answers inline. After the exercise, unmute/reconvene and ask two or three
+groups to share.</li>
+</ul>
+<hr>
+<h2 id="schedule-templates">Schedule templates</h2>
+<h3 id="one-day-workshop-8-hours-with-breaks">One-day workshop (~8 hours with breaks)</h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Time</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label">09:00–09:15</td>
+<td>Welcome, objectives, module overview</td>
+</tr>
+<tr>
+<td class="table-label">09:15–09:45</td>
+<td>Lesson 1 — What agents are</td>
+</tr>
+<tr>
+<td class="table-label">09:45–10:15</td>
+<td>Lesson 2 — Working with agents</td>
+</tr>
+<tr>
+<td class="table-label">10:15–10:50</td>
+<td>Lesson 3 — Choosing models</td>
+</tr>
+<tr>
+<td class="table-label">10:50–11:00</td>
+<td>Break</td>
+</tr>
+<tr>
+<td class="table-label">11:00–12:00</td>
+<td>Lesson 4 — Your first skill (60 min)</td>
+</tr>
+<tr>
+<td class="table-label">12:00–13:00</td>
+<td>Lunch</td>
+</tr>
+<tr>
+<td class="table-label">13:00–13:45</td>
+<td>Lesson 5 — Writing safe skills</td>
+</tr>
+<tr>
+<td class="table-label">13:45–14:35</td>
+<td>Lesson 6 — Debugging a skill</td>
+</tr>
+<tr>
+<td class="table-label">14:35–15:10</td>
+<td>Lesson 7 — Writing portable skills</td>
+</tr>
+<tr>
+<td class="table-label">15:10–15:20</td>
+<td>Break</td>
+</tr>
+<tr>
+<td class="table-label">15:20–16:20</td>
+<td>Lesson 8 — Eval-driven development (60 min)</td>
+</tr>
+<tr>
+<td class="table-label">16:20–17:05</td>
+<td>Lesson 9 — Agentic and autonomous work</td>
+</tr>
+<tr>
+<td class="table-label">17:05–17:35</td>
+<td>Lesson 10 — English as a programming language</td>
+</tr>
+<tr>
+<td class="table-label">17:35–18:05</td>
+<td>Lesson 11 — How to contribute</td>
+</tr>
+<tr>
+<td class="table-label">18:05–18:20</td>
+<td>Wrap-up and next steps</td>
+</tr>
+</tbody>
+</table>
+<p>Reduce to a half-day by covering lessons 1–5 only (concepts and first
+skill). Lessons 6–11 form a natural second half.</p>
+<h3 id="two-session-intensive-1">Two-session intensive</h3>
+<p><strong>Session 1 (~3.75 hours):</strong> Welcome (15 min), lessons 1–5 (200 min), wrap-up
+(10 min). Assign: write one skill for your project between sessions.</p>
+<p><strong>Session 2 (~4.75 hours):</strong> Review and share skills from the between-session
+assignment (20 min), lessons 6–11 (250 min), retrospective (15 min).</p>
+<h3 id="weekly-reading-group-11-weeks">Weekly reading group (~11 weeks)</h3>
+<p>One lesson per week, 45 minutes per session. Learners read the source page
+and lesson file before the session. The session time is for exercises and
+debrief only.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Week</th>
+<th>Lesson</th>
+<th>Prep (before session)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label">1</td>
+<td>What agents are</td>
+<td>Read <code>what-agents-are.md</code> and lesson 1</td>
+</tr>
+<tr>
+<td class="table-label">2</td>
+<td>Working with agents</td>
+<td>Read <code>working-with-agents.md</code> and lesson 2</td>
+</tr>
+<tr>
+<td class="table-label">3</td>
+<td>Choosing models</td>
+<td>Read <code>choosing-models.md</code> and lesson 3</td>
+</tr>
+<tr>
+<td class="table-label">4</td>
+<td>Your first skill</td>
+<td>Read <code>your-first-skill.md</code> and lesson 4</td>
+</tr>
+<tr>
+<td class="table-label">5</td>
+<td>Writing safe skills</td>
+<td>Read <code>writing-safe-skills.md</code> and lesson 5</td>
+</tr>
+<tr>
+<td class="table-label">6</td>
+<td>Debugging a skill</td>
+<td>Read <code>debugging-skills.md</code> and lesson 6</td>
+</tr>
+<tr>
+<td class="table-label">7</td>
+<td>Writing portable skills</td>
+<td>Read <code>portable-skills.md</code> and lesson 7</td>
+</tr>
+<tr>
+<td class="table-label">8</td>
+<td>Eval-driven development</td>
+<td>Read <code>eval-driven-development.md</code> and lesson 8</td>
+</tr>
+<tr>
+<td class="table-label">9</td>
+<td>Agentic and autonomous work</td>
+<td>Read <code>agentic-work.md</code> and lesson 9</td>
+</tr>
+<tr>
+<td class="table-label">10</td>
+<td>English as a programming language</td>
+<td>Read <code>english-as-code.md</code> and lesson 10</td>
+</tr>
+<tr>
+<td class="table-label">11</td>
+<td>How to contribute</td>
+<td>Read <code>contributing.md</code> and lesson 11</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="per-lesson-facilitator-notes">Per-lesson facilitator notes</h2>
+<p>For each lesson: the core idea to anchor, discussion prompts to deepen the
+group’s understanding, common misconceptions to correct, and rough timing
+guidance for instructor-led delivery.</p>
+<p>These timings are for instructor-led delivery, where the reading is compressed
+(skimmed, or presented together) to leave most of the slot for exercises. They
+deliberately allocate less reading time than the self-paced estimates in each
+lesson’s own header — a workshop should spend its time on active practice, not
+on reading the source page aloud.</p>
+<hr>
+<h3 id="lesson-01-what-agents-are">Lesson 01: What agents are</h3>
+<p><strong>Core idea.</strong> An agent is a loop: model, tools, loop, context. Every other
+idea in the module is a consequence of this structure.</p>
+<p><strong>Timing.</strong> 30 min: 10 min to read the source page together or in pairs,
+15 min exercises, 5 min self-check debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Before this lesson, how would you have described what an AI agent does?
+What would you change about that description now?”</li>
+<li>“The source page says the model can only reason about what is in its
+context. What does that mean for a skill you want to write for
+<code>&lt;PROJECT&gt;</code>? What would you need to put into context?”</li>
+<li>“Why does probabilistic behaviour matter more for testing an agent than
+for testing a function? What would you do differently?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“The agent has access to the whole repo / internet / database.”</em> No — it
+can only see what has been explicitly put into context via tools. Draw the
+loop on the board and mark where information enters.</li>
+<li><em>“Agents are deterministic if you use them the same way each time.”</em>
+No — the model is probabilistic. The same input can produce different
+outputs. This is not a defect; it is a property to design around.</li>
+</ul>
+<hr>
+<h3 id="lesson-02-working-with-agents">Lesson 02: Working with agents</h3>
+<p><strong>Core idea.</strong> An agent is a collaborator, not a command-runner. The quality
+of what you get out depends on the quality of what you put in.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Think about a task you would want to delegate to an agent in <code>&lt;PROJECT&gt;</code>.
+Write the first message you would send. Now read it back — is it complete?
+What would the agent need to clarify?”</li>
+<li>“The page talks about ‘treating outside text as data, not instructions’.
+What does that mean in practice for a skill that processes issue comments
+from the public?”</li>
+<li>“When should you give up on steering a mid-task agent and start over?
+What signals tell you the agent is on the wrong path?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“You should give the agent as much context as possible.”</em> More context is
+not always better — a long, unfocused context degrades response quality.
+The lesson’s point is <em>relevant</em> context, not maximum context.</li>
+<li><em>“If the agent makes a mistake, retry until it gets it right.”</em> Retrying
+without changing the prompt will produce the same distribution of answers.
+Diagnose first; change the prompt, not just the run count.</li>
+</ul>
+<hr>
+<h3 id="lesson-03-choosing-models">Lesson 03: Choosing models</h3>
+<p><strong>Core idea.</strong> There is no single best model for every task; there is a
+best model for a given capability, speed, and cost combination, and the
+eval suite is what decides.</p>
+<p><strong>Timing.</strong> 35 min: 10 min reading, 20 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For a skill that triages incoming issues on <code>&lt;PROJECT&gt;</code>, would you reach
+for the cheapest available model, the most capable, or something in
+between? What information would you need to decide?”</li>
+<li>“The page says ‘let evals decide’. What does an eval tell you that a few
+manual test runs don’t?”</li>
+<li>“A ‘judge model’ is a model that scores another model’s output. When might
+you use a judge model for <code>&lt;PROJECT&gt;</code> tasks? What could go wrong?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Always use the most capable model — it is most reliable.”</em> Capability
+and reliability are different dimensions. The most capable model may be
+over-specified, slower, and more expensive for simple triage tasks.</li>
+<li><em>“Local models are always worse.”</em> For focused, rule-following tasks with
+tight prompts, a local model can match hosted performance at zero cost.
+The <code>local-smoke</code> eval tag exists precisely to test this claim.</li>
+</ul>
+<hr>
+<h3 id="lesson-04-your-first-skill">Lesson 04: Your first skill</h3>
+<p><strong>Core idea.</strong> A skill is a plain Markdown file with YAML frontmatter. Writing
+one is within reach of any contributor who can open a pull request.</p>
+<p><strong>Timing.</strong> 60 min: 15 min reading, 35 min exercises (the writing exercise
+takes longer), 10 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“What task in <code>&lt;PROJECT&gt;</code> would benefit most from a repeatable agent skill?
+Why that one?”</li>
+<li>“What is the difference between a skill and a script? When would you reach
+for one instead of the other?”</li>
+<li>“The skill format requires a <code>description</code> field that triggers the skill.
+If your description is vague, what happens? Try writing two descriptions
+for the same skill — one vague, one precise — and compare them.”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“A skill needs to handle every possible edge case before I can ship it.”</em>
+No — ship the happy path first, add an eval suite, and expand from there.
+A skill without an eval suite is incomplete; a skill with an eval suite can
+grow incrementally.</li>
+<li><em>“The <code>description</code> field is just documentation.”</em> The description is what
+the agent reads to decide <em>when</em> to invoke the skill. It is a trigger, not
+a comment.</li>
+</ul>
+<hr>
+<h3 id="lesson-05-writing-safe-skills">Lesson 05: Writing safe skills</h3>
+<p><strong>Core idea.</strong> Safety is not a review gate at the end; it is three properties
+built into the skill as you write it: propose-confirm-act, data-not-instructions,
+and sandbox-by-default.</p>
+<p><strong>Timing.</strong> 45 min: 10 min reading, 30 min exercises (the propose/confirm
+classification exercise is dense), 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For the skill you imagined in lesson 4, which steps would need a
+confirm gate and which could run without one? Where is the line for
+<code>&lt;PROJECT&gt;</code>’s context?”</li>
+<li>“What is the difference between treating outside text as data vs.
+as instructions? Give an example from <code>&lt;PROJECT&gt;</code>’s issue tracker of
+text that could be mistaken for an instruction.”</li>
+<li>“A skill that reads files only needs no special sandbox configuration.
+A skill that writes to the repo, posts comments, or sends email needs
+explicit permission entries. Why is the default ‘no permission’ and not
+‘ask at runtime’?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Propose-confirm-act slows the agent down — we want automation.”</em>
+The confirm step is cheap: it is a human reading a proposal and pressing
+one button. Removing it when the action is irreversible (a posted comment,
+a merged PR) removes the only safety net.</li>
+<li><em>“Data-not-instructions only applies to security-sensitive skills.”</em>
+It applies to any skill that processes public or user-supplied text.
+Prompt injection is not limited to security contexts.</li>
+</ul>
+<hr>
+<h3 id="lesson-06-debugging-a-skill">Lesson 06: Debugging a skill</h3>
+<p><strong>Core idea.</strong> Debugging an agent is diagnostic work: isolate the failing
+step, read the transcript, find the moment the agent diverged, and adjust the
+prompt or context — not the retry count.</p>
+<p><strong>Timing.</strong> 50 min: 10 min reading, 35 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“You run a skill three times on the same issue and get three different
+verdicts. How do you diagnose whether this is a prompt problem, a context
+problem, or just normal variance?”</li>
+<li>“What is the first thing you would look at in a skill transcript when the
+output looks wrong?”</li>
+<li>“When is it correct to increase the temperature of a model, and when is
+that the wrong move?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Add more examples to the prompt and the skill will stop making mistakes.”</em>
+More examples help with format and style. They do not fix ambiguous
+instructions — the model will still apply the ambiguous rule, just more
+consistently. Fix the rule first, then add examples.</li>
+<li><em>“If the eval passes, the skill is correct.”</em> An eval passing means the
+skill behaves correctly on the cases you tested. It does not mean it is
+correct on all inputs. Eval coverage is a claim about the tested set, not
+the full input space.</li>
+</ul>
+<hr>
+<h3 id="lesson-07-writing-portable-skills">Lesson 07: Writing portable skills</h3>
+<p><strong>Core idea.</strong> A skill that hard-codes project names, tool paths, or hosting
+assumptions only works in one place. Portability comes from placeholders and
+config-resolution, not from “making it generic.”</p>
+<p><strong>Timing.</strong> 35 min: 10 min reading, 20 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Look at the skill draft you started in lesson 4. How many project-specific
+strings are in it? What would you need to replace to make it reusable across
+<code>&lt;PROJECT&gt;</code> and a sister project?”</li>
+<li>“The <code>&lt;tracker&gt;</code> placeholder resolves differently for a GitHub project and
+a Jira-backed project. Who decides which adapter to load, and when?”</li>
+<li>“What is the difference between a placeholder and a conditional? When is
+‘if GitHub else Jira’ the wrong approach?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“My skill only runs on <code>&lt;PROJECT&gt;</code>, so portability is not my concern.”</em>
+Even a project-internal skill benefits from placeholders: it is easier to
+test with a dummy config, easier to explain to new contributors, and easier
+to donate upstream if the project later wants to.</li>
+<li><em>“Placeholders make the skill harder to read.”</em> A well-named placeholder
+(<code>&lt;tracker&gt;</code>, <code>&lt;PROJECT&gt;</code>) is more readable than a hardcoded URL. It makes
+the assumption explicit rather than hiding it in a string.</li>
+</ul>
+<hr>
+<h3 id="lesson-08-eval-driven-development">Lesson 08: Eval-driven development</h3>
+<p><strong>Core idea.</strong> Correctness for an agent is not a binary; it is a distribution
+over many inputs. An eval suite is how you measure that distribution and track
+it over time.</p>
+<p><strong>Timing.</strong> 60 min: 15 min reading, 35 min exercises (the fixture design
+exercise takes longer), 10 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“For the skill you started in lesson 4, what are the four cases that
+every eval suite should cover? Write them out.”</li>
+<li>“A colleague says their skill ‘works fine’ because they ran it five times
+on the same issue and it produced a good result. What is missing from that
+claim?”</li>
+<li>“What is the difference between a <code>local-smoke</code> eval case and a
+<code>frontier-only</code> case? Why does that distinction matter for a project that
+wants to adopt the skill with a local model?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“I will add evals after the skill is stable.”</em> A skill without an eval
+suite cannot be called stable. Evals are what establish the baseline that
+‘stable’ means.</li>
+<li><em>“More eval cases are always better.”</em> Coverage matters more than count.
+Ten well-designed cases covering distinct failure modes are more useful than
+a hundred cases that all test the same happy path.</li>
+</ul>
+<hr>
+<h3 id="lesson-09-agentic-and-autonomous-work">Lesson 09: Agentic and autonomous work</h3>
+<p><strong>Core idea.</strong> Autonomy is not an on/off switch; it is a dial with four
+rungs. Moving up the dial is only safe once you have the guardrails and evals
+that make it safe — not before.</p>
+<p><strong>Timing.</strong> 45 min: 15 min reading, 25 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Where on the supervision dial does <code>&lt;PROJECT&gt;</code>’s current automated
+work sit? Where would you <em>want</em> it to sit in twelve months, and what
+guardrails would you need to add first?”</li>
+<li>“The propose-confirm-act pattern is the guardrail for supervised
+automation. What is the equivalent guardrail for unattended automation?”</li>
+<li>“A skill that runs on a cron schedule and posts comments autonomously
+has a larger blast radius than one that posts under human review. What
+does ‘larger blast radius’ mean concretely for <code>&lt;PROJECT&gt;</code>’s community?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Fully autonomous is the goal — human review is just friction.”</em>
+Autonomy is a tool, not an end state. The question is not ‘how do we
+remove the human?’ but ‘at what rung is the risk acceptable given the
+guardrails we have?’</li>
+<li><em>“Compounding errors are unlikely in practice.”</em> In a short session they
+are unlikely. In a long autonomous run, the probability compounds across
+each action taken. One misclassified issue that triggers an incorrect
+follow-up action that triggers a public reply illustrates the chain.</li>
+</ul>
+<hr>
+<h3 id="lesson-10-english-as-a-programming-language">Lesson 10: English as a programming language</h3>
+<p><strong>Core idea.</strong> The words in a skill are the program. Ambiguity is a bug
+class. The four disambiguating moves — define terms, say what done looks
+like, state boundaries, name edge cases — are the tools for closing gaps.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Find a word in a skill you have read (or written) that is not defined.
+What would a model do with it? Write a one-sentence definition that closes
+the gap.”</li>
+<li>“The page says ‘ambiguity is the new class of bug’. Give an example of
+a wording ambiguity in a skill that would not be caught by a linter or
+type-checker but would cause the agent to behave unexpectedly.”</li>
+<li>“DRY applies to prose as well as code. Find two skills in the framework
+that define the same concept differently. What is the cost of that
+duplication, and how would you fix it?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“Natural language is inherently imprecise — there is nothing you can do.”</em>
+Natural language <em>can</em> be precise. Technical writing, legal text, and
+formal specifications are all precise natural language. The discipline is
+learnable and the four moves are concrete.</li>
+<li><em>“The model will ask for clarification if something is ambiguous.”</em>
+Models do not reject ambiguous instructions; they act on a plausible
+interpretation. The result is silent divergence between intent and
+execution.</li>
+</ul>
+<hr>
+<h3 id="lesson-11-how-to-contribute">Lesson 11: How to contribute</h3>
+<p><strong>Core idea.</strong> Most of Magpie is prose the agent executes, so contributing is
+within reach of anyone who can write precisely. The four first contributions —
+fix a skill, improve a doc, add a pattern, write a new skill — all follow the
+same spec-first, eval-backed, reviewed path.</p>
+<p><strong>Timing.</strong> 30 min: 10 min reading, 15 min exercises, 5 min debrief.</p>
+<p><strong>Discussion prompts.</strong></p>
+<ul>
+<li>“Of the four first-contribution types (fix a skill, improve a doc, add a
+pattern, write a new skill), which would you start with for <code>&lt;PROJECT&gt;</code>, and
+why that one?”</li>
+<li>“Take a change you might make to one of <code>&lt;PROJECT&gt;</code>’s skills. Does it alter a
+rule, a flow, or a contract? Walk the group through whether it needs a spec
+update.”</li>
+<li>“You are reviewing a contributor’s first skill PR. Which of the five
+framework rules would you check first, and what would you look for in the
+diff?”</li>
+</ul>
+<p><strong>Common misconceptions.</strong></p>
+<ul>
+<li><em>“You need to be a strong programmer to contribute.”</em> No — most contributions
+are prose the agent executes. Clear thinking and precise writing are the core
+skills; systems programming is only needed for the tool layer (<code>tools/</code>).</li>
+<li><em>“Evals can come in a follow-up PR.”</em> No — a skill without a matching eval
+suite is not finished, and a PR that defers the evals will not pass review.
+The eval suite ships in the same PR as the skill.</li>
+</ul>
+<hr>
+<h2 id="customising-for-your-project">Customising for your project</h2>
+<h3 id="replacing-placeholders">Replacing placeholders</h3>
+<p>Every exercise uses <code>&lt;PROJECT&gt;</code> where a real project name would appear.
+Before running the module, decide whether to:</p>
+<ol>
+<li><strong>Replace globally</strong> — do a find-and-replace in your copies of the lesson
+files. Fast; produces more readable exercise sheets.</li>
+<li><strong>Ask learners to substitute as they go</strong> — keeps the original files
+unmodified; slightly more cognitive load during exercises.</li>
+</ol>
+<p>Other placeholders you may encounter:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Placeholder</th>
+<th>What it represents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>&lt;PROJECT&gt;</code></td>
+<td>The adopting project’s name</td>
+</tr>
+<tr>
+<td class="table-label"><code>&lt;tracker&gt;</code></td>
+<td>The issue tracker (e.g. GitHub Issues, JIRA)</td>
+</tr>
+<tr>
+<td class="table-label"><code>&lt;upstream&gt;</code></td>
+<td>The main repository (e.g. <code>org/repo</code>)</td>
+</tr>
+<tr>
+<td class="table-label"><code>&lt;security-list&gt;</code></td>
+<td>The private security mailing list</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adapting-examples">Adapting examples</h3>
+<p>The source pages draw examples from open-source project maintenance. If your
+audience works in a different domain (internal tooling, data pipelines,
+etc.), swap the examples. The lesson structure remains the same; only the
+illustrative context changes.</p>
+<h3 id="selecting-lessons">Selecting lessons</h3>
+<p>You do not need to teach all eleven lessons in one sitting. A team that already
+has experience with agent concepts and wants to focus on safety can start at
+lesson 5. A team writing its first eval suite can teach lessons 1, 4, and 8
+as a standalone mini-module. The lessons reference each other but are
+designed to be understandable on their own.</p>
+<hr>
+<h2 id="assessment-and-progression">Assessment and progression</h2>
+<h3 id="self-check-questions">Self-check questions</h3>
+<p>Each lesson ends with five or six self-check questions with hidden answers. Learners
+reveal the answers themselves and grade their own understanding. This is
+intentional: the goal is self-knowledge, not formal grading.</p>
+<p>In an instructor-led session, use the self-check as a <strong>group debrief</strong>:
+read each question aloud and ask learners to write a brief answer before you
+reveal the answer. Gaps between a learner’s answer and the reference answer
+are the most productive discussion point.</p>
+<h3 id="when-a-learner-is-not-ready-to-proceed">When a learner is not ready to proceed</h3>
+<p>If a learner cannot answer two or more self-check questions for a lesson,
+suggest re-reading the source page before moving on. The lessons build
+sequentially: a learner who does not understand context (lesson 1) will
+struggle with evals (lesson 8).</p>
+<h3 id="no-formal-certification">No formal certification</h3>
+<p>This module does not issue certificates. The intended outcome is that a
+learner can read, write, debug, and evaluate a skill for their own project.
+The evidence of that outcome is a skill they have written and an eval suite
+that passes — not a quiz score.</p>
+<hr>
+<h2 id="frequently-asked-questions">Frequently asked questions</h2>
+<p><strong>“Do learners need a running agent installation?”</strong>
+No. The exercises are paper-based or whiteboard-based. Learners can work
+through all eleven lessons without installing any software. Lesson 4 (your first
+skill) suggests writing a skill file; that requires only a text editor.</p>
+<p><strong>“Can I skip the exercises and just present the source pages?”</strong>
+You can, but learners retain substantially less without active practice.
+Exercises in this module are not optional enrichment; they are the mechanism
+by which learners move from reading to application.</p>
+<p><strong>“What if learners have very different backgrounds — some have never seen
+a language model, others use one daily?”</strong>
+Lesson 1 is the equaliser: it defines terms that even experienced users often
+hold loosely (the difference between a model and an agent, what context means
+precisely). Spend extra time there. Experienced learners often find the
+precision useful even if the concept is familiar.</p>
+<p><strong>“How do I handle learners who want to build something live during the
+module?”</strong>
+Encourage it as optional enrichment, but do not let live-building block
+the group. Live building sessions fit better in the hands-on lab
+(<a href="/docs/education/tutorials"><code>tutorials.md</code></a>) than during the lesson sequence. Point
+interested learners there after the module.</p>
+<p><strong>“Are there formal assessment instruments for each lesson?”</strong>
+Not yet. The self-check questions are the primary formative assessment.
+Formal rubrics and summative assessments are planned for a future iteration
+of the module; facilitators who develop them are encouraged to contribute
+them back upstream (see <a href="#upstream-contribution">Upstream contribution</a>).</p>
+<hr>
+<h2 id="upstream-contribution">Upstream contribution</h2>
+<p>This module is shaped for contribution to
+<a href="https://training.apache.org/">Apache Training</a> so it can be taught beyond
+the projects that adopt this framework. If you run the module and find gaps —
+a lesson that generates persistent confusion, a discussion prompt that
+falls flat, a misconception this guide does not address — please:</p>
+<ol>
+<li>Open an issue or pull request against this repository (the framework
+repo, not your adopter repo) with the proposed change.</li>
+<li>If you are contributing to Apache Training directly, the module’s
+Apache-2.0 licence permits it. Coordinate with the Apache Training
+project on format requirements before submitting.</li>
+<li>Add your project’s experience to the module’s pilot record so future
+facilitators can calibrate against real data.</li>
+</ol>
+<p>Contributions that improve the instructor guide carry the same
+<code>Generated-by:</code> convention as contributions to the lesson files: if you use
+a generative tool to draft a section, note it in the commit message following
+<a href="https://www.apache.org/legal/generative-tooling-guidance.html">ASF Generative Tooling Guidance</a>.</p>
+<hr>
+<h2 id="licence">Licence</h2>
+<p>Apache License 2.0 (PRINCIPLE 18). Pages written with help from AI carry a
+<code>Generated-by:</code> note in their commit message following ASF Generative Tooling
+Guidance.</p>
+</article></main><aside class="docs-toc" aria-label="On this page"><span class="eyebrow">On this page</span><nav><ul><li><a href="#who-this-guide-is-for" style="padding-left: 0rem">Who this guide is for</a></li><li><a href="#module-overview" style="padding-left: 0rem">Module overview</a></li><li><a href="#delivery-formats" style="padding-left: 0rem">Delivery formats</a></li><li><a href="#self-paced-with-facilitator-check-ins" style="padding-left: 0.75rem">Self-paced with facilitator check-ins</a></li><li><a href="#instructor-led-workshop-one-day" style="padding-left: 0.75rem">Instructor-led workshop (one day)</a></li><li><a href="#two-session-intensive" style="padding-left: 0.75rem">Two-session intensive</a></li><li><a href="#lms-based-self-study" style="padding-left: 0.75rem">LMS-based self-study</a></li><li><a href="#environment-setup" style="padding-left: 0rem">Environment setup</a></li><li><a href="#in-person" style="padding-left: 0.75rem">In-person</a></li><li><a href="#virtual" style="padding-left: 0.75rem">Virtual</a></li><li><a href="#schedule-templates" style="padding-left: 0rem">Schedule templates</a></li><li><a href="#one-day-workshop-8-hours-with-breaks" style="padding-left: 0.75rem">One-day workshop (~8 hours with breaks)</a></li><li><a href="#two-session-intensive-1" style="padding-left: 0.75rem">Two-session intensive</a></li><li><a href="#weekly-reading-group-11-weeks" style="padding-left: 0.75rem">Weekly reading group (~11 weeks)</a></li><li><a href="#per-lesson-facilitator-notes" style="padding-left: 0rem">Per-lesson facilitator notes</a></li><li><a href="#lesson-01-what-agents-are" style="padding-left: 0.75rem">Lesson 01: What agents are</a></li><li><a href="#lesson-02-working-with-agents" style="padding-left: 0.75rem">Lesson 02: Working with agents</a></li><li><a href="#lesson-03-choosing-models" style="padding-left: 0.75rem">Lesson 03: Choosing models</a></li><li><a href="#lesson-04-your-first-skill" style="padding-left: 0.75rem">Lesson 04: Your first skill</a></li><li><a href="#lesson-05-writing-safe-skills" style="padding-left: 0.75rem">Lesson 05: Writing safe skills</a></li><li><a href="#lesson-06-debugging-a-skill" style="padding-left: 0.75rem">Lesson 06: Debugging a skill</a></li><li><a href="#lesson-07-writing-portable-skills" style="padding-left: 0.75rem">Lesson 07: Writing portable skills</a></li><li><a href="#lesson-08-eval-driven-development" style="padding-left: 0.75rem">Lesson 08: Eval-driven development</a></li><li><a href="#lesson-09-agentic-and-autonomous-work" style="padding-left: 0.75rem">Lesson 09: Agentic and autonomous work</a></li><li><a href="#lesson-10-english-as-a-programming-language" style="padding-left: 0.75rem">Lesson 10: English as a programming language</a></li><li><a href="#lesson-11-how-to-contribute" style="padding-left: 0.75rem">Lesson 11: How to contribute</a></li><li><a href="#customising-for-your-project" style="padding-left: 0rem">Customising for your project</a></li><li><a href="#replacing-placeholders" style="padding-left: 0.75rem">Replacing placeholders</a></li><li><a href="#adapting-examples" style="padding-left: 0.75rem">Adapting examples</a></li><li><a href="#selecting-lessons" style="padding-left: 0.75rem">Selecting lessons</a></li><li><a href="#assessment-and-progression" style="padding-left: 0rem">Assessment and progression</a></li><li><a href="#self-check-questions" style="padding-left: 0.75rem">Self-check questions</a></li><li><a href="#when-a-learner-is-not-ready-to-proceed" style="padding-left: 0.75rem">When a learner is not ready to proceed</a></li><li><a href="#no-formal-certification" style="padding-left: 0.75rem">No formal certification</a></li><li><a href="#frequently-asked-questions" style="padding-left: 0rem">Frequently asked questions</a></li><li><a href="#upstream-contribution" style="padding-left: 0rem">Upstream contribution</a></li><li><a href="#licence" style="padding-left: 0rem">Licence</a></li></ul></nav></aside></div><footer class="site-footer" data-magpie-src="src/components/landing/SiteFooter.tsx:10"><div class="container footer-grid" data-magpie-src="src/components/landing/SiteFooter.tsx:10"><div class="footer-intro" data-magpie-src="src/components/landing/SiteFooter.tsx:11"><a class="brand-lockup" href="/" aria-label="Apache Magpie home" data-magpie-src="src/components/landing/SiteFooter.tsx:11"><img class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45" data-magpie-src="src/components/landing/SiteFooter.tsx:11"/></a><span class="footer-asf" data-magpie-src="src/components/landing/SiteFooter.tsx:11">An Apache Software Foundation project.</span></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Explore</h2><a href="/docs" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Documentation</a><a href="/resources" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Learning guides</a><a href="/architecture" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Architecture</a><a href="/tools" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Tools</a><a href="/downloads" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Downloads</a><a href="/brand" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Brand assets</a></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Take part</h2><a href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Contributing</a><a href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Mailing list</a><a href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Discord</a><a href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Issue tracker</a><a href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Changelog</a></div><div class="footer-column" data-magpie-src="src/components/landing/SiteFooter.tsx:12"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:12">Apache</h2><a href="https://www.apache.org/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">The Foundation</a><a href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">License</a><a href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Events</a><a href="https://www.apache.org/security/" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Security</a><a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Privacy</a><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Sponsorship</a><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer" data-magpie-src="src/components/landing/SiteFooter.tsx:12">Thanks</a></div></div><div class="container footer-bottom" data-magpie-src="src/components/landing/SiteFooter.tsx:13"><p data-magpie-src="src/components/landing/SiteFooter.tsx:13">© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p data-magpie-src="src/components/landing/SiteFooter.tsx:13">Apache <strong class="brand-name" data-magpie-src="src/components/landing/BrandName.tsx:2">Magpie</strong>, <strong class="brand-name" data-magpie-src="src/components/landing/BrandName.tsx:2">Magpie</strong>, and Apache are trademarks of The Apache Software Foundation.</p></div></footer><script type="module">var e=document.querySelector(`.docs-menu-toggle`),t=document.querySelector(`.docs-sidebar`),n=[...document.querySelectorAll(`.docs-main, .docs-toc, .site-footer`)],r=()=>{t.classList.remove(`is-open`),e.setAttribute(`aria-expanded`,`false`),document.body.classList.remove(`docs-navigation-open`),n.forEach(e=>{e.inert=!1})};e.addEventListener(`click`,()=>{if(t.classList.contains(`is-open`)){r();return}t.classList.add(`is-open`),e.setAttribute(`aria-expanded`,`true`),document.body.classList.add(`docs-navigation-open`),n.forEach(e=>{e.inert=!0}),t.querySelector(`a`)?.focus()}),document.querySelector(`[data-search-open]`)?.addEventListener(`click`,r),matchMedia(`(min-width: 801px)`).addEventListener(`change`,e=>{e.matches&&r()}),document.addEventListener(`keydown`,n=>{if(n.key!==`Tab`||!t.classList.contains(`is-open`))return;let r=[e,...t.querySelectorAll(`a, summary, button`)].filter(e=>e.getClientRects().length>0),i=r[0],a=r[r.length-1];n.shiftKey&&document.activeElement===i?(n.preventDefault(),a.focus()):!n.shiftKey&&document.activeElement===a&&(n.preventDefault(),i.focus())}),document.addEventListener(`keydown`,n=>{n.key===`Escape`&&t.classList.contains(`is-open`)&&(r(),e.focus())}),t.querySelectorAll(`a`).forEach(e=>e.addEventListener(`click`,r)),document.querySelector(`.copy-page`)?.addEventListener(`click`,async e=>{let t=e.currentTarget;try{let e=await fetch(t.dataset.markdown);if(!e.ok)throw Error(`Unavailable`);await navigator.clipboard.writeText(await e.text()),t.textContent=`Copied ✓`}catch{t.textContent=`Could not copy`}setTimeout(()=>{t.textContent=`Copy page ⧉`},2200)});var i=[...document.querySelectorAll(`.docs-toc nav a`)],a=new IntersectionObserver(e=>{for(let t of e)t.isIntersecting&&i.forEach(e=>{let n=decodeURIComponent(e.hash.slice(1))===t.target.id;e.classList.toggle(`active`,n),n?e.setAttribute(`aria-current`,`location`):e.removeAttribute(`aria-current`)})},{rootMargin:`-140px 0px -60% 0px`});i.forEach(e=>{let t=document.getElementById(decodeURIComponent(e.hash.slice(1)));t&&a.observe(t)});</script><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/education/training/instructor-guide.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a><script type="module">function e(){let e=document.querySelector(`main`);if(!e)return;let t=[...e.querySelectorAll(`section[id]`)].filter(e=>!e.matches(`[role="tabpanel"]`)&&!e.parentElement?.closest(`section[id]`)),n=e.querySelector(`.docs-prose`)?[...e.querySelectorAll(`.docs-prose :is(h2,h3)[id]`)]:t;if(!n.length)return;let r=!1,i=!1,a=()=>{r=!0},o=()=>{r=!1};window.addEventListener(`wheel`,a,{passive:!0}),window.addEventListener(`touchmove`,a,{passive:!0}),document.addEventListener(`pointerdown`,a,{passive:!0}),document.addEventListener(`keydown`,e=>{let t=e.target;t instanceof Element&&t.closest(`input,textarea,select,[contenteditable="true"]`)||[`ArrowUp`,`ArrowDown`,`PageUp`,`PageDown`,`Home`,`End`,` `].includes(e.key)&&a()}),document.addEventListener(`click`,e=>{e.target instanceof Element&&e.target.closest(`a[href]`)&&o()}),window.addEventListener(`hashchange`,o),window.addEventListener(`popstate`,o),window.addEventListener(`pageshow`,o),window.addEventListener(`scroll`,()=>{!r||i||(i=!0,requestAnimationFrame(()=>{if(i=!1,!r)return;let e=document.querySelector(`.site-header`)?.getBoundingClientRect().bottom??0,t=Math.max(0,e)+24,a;for(let e of n)window.scrollY>0&&e.getClientRects().length&&e.getBoundingClientRect().top<=t&&(a=e);let o=new URL(window.location.href),s=null;try{s=document.getElementById(decodeURIComponent(o.hash.slice(1)))}catch{}if(a&&s&&a.contains(s))return;let c=a?`#${a.id}`:``;o.hash!==c&&(o.hash=c,history.replaceState(history.state,``,o))}))},{passive:!0})}function t(){let e=document.createElement(`div`);e.className=`copy-link-status`,e.setAttribute(`role`,`status`),document.body.append(e);let t;document.addEventListener(`click`,async n=>{if(n.button||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target instanceof Element?n.target.closest(`.section-heading > a[href]`):null;if(r){try{await navigator.clipboard.writeText(r.href),e.textContent=`Link copied`}catch{e.textContent=`Copy the link from the address bar`}clearTimeout(t),t=setTimeout(()=>{e.textContent=``},2e3)}});let n=document.querySelector(`.home-navigation`);if(!n)return;let r=n.querySelector(`summary`);n.addEventListener(`click`,e=>{let t=e.target instanceof Element?e.target.closest(`a[href]`):null;if(t&&(n.open=!1,!(e instanceof MouseEvent&&(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))&&t.getAttribute(`href`)?.startsWith(`#`))){let e=document.getElementById(t.hash.slice(1));e?.setAttribute(`tabindex`,`-1`),e?.focus({preventScroll:!0})}}),document.addEventListener(`click`,e=>{e.target instanceof Node&&!n.contains(e.target)&&(n.open=!1)}),document.addEventListener(`keydown`,e=>{e.key===`Escape`&&n.open&&(n.open=!1,r?.focus({preventScroll:!0}))})}e(),t();var n=document.querySelector(`.theme-toggle`),r=()=>{let e=document.documentElement.dataset.theme===`dark`;n?.setAttribute(`aria-pressed`,String(e)),n?.setAttribute(`aria-label`,`Switch to ${e?`light`:`dark`} mode`)};n?.addEventListener(`click`,()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme===`dark`?`light`:`dark`;try{localStorage.setItem(`magpie-theme`,document.documentElement.dataset.theme)}catch{}r()}),r();</script><!-- magpie-preview-overlay -->
+<script src="/_preview/html2canvas-pro.min.js"></script>
+<script src="/_preview/review.js"></script>
+</body></html>
