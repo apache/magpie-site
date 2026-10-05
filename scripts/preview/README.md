@@ -16,7 +16,7 @@ build say which source line each element came from.
 |---|---|
 | `publish.mjs` and its modules | The privileged publisher run by `preview-publish.yml` |
 | `overlay/` | The review overlay injected into every published page |
-| `adapters/astro/` | Babel plugin stamping JSX, used by this site |
+| `adapters/astro/` | Vite plugin stamping JSX, used by this site |
 | `adapters/jekyll/` | Jekyll plugin stamping Markdown, layouts and includes |
 
 ## The build contract

@@ -32,8 +32,8 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-satteri": "0.4.2",
     "@astrojs/react": "^7.0.0",
+    "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
-    "@babel/core": "^8.0.6",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.2",
@@ -50,6 +50,6 @@
     "satteri": "0.10.5",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "@astrojs/sitemap": "^3.7.4"
+    "vite": "^8.3.2"
   }
 }

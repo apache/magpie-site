@@ -121,8 +121,8 @@ annotated, the walk continues up the tree; if the walk reaches `<body>` with no
 annotation, there is no source line and the fallback below applies.
 
 Only `.tsx` and `.jsx` are annotated. `.astro` templates and the synced
-markdown docs are not: annotating them needs the Astro compiler rather than
-Babel. Content originating there resolves no source and falls back to the
+markdown docs are not: annotating them needs the Astro compiler rather than a
+JSX parser. Content originating there resolves no source and falls back to the
 Conversation tab — which means a documentation-only pull request never gets
 diff-line landing. On this repository that is 25 `.tsx` against 13 `.astro`
 and 159 markdown files, so the landing page is covered and the docs are not.

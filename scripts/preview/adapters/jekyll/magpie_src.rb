@@ -20,7 +20,7 @@
 # Stamps rendered elements with the source file and line they came from, as
 # data-magpie-src="<repo-relative path>:<line>", so a preview's review overlay
 # can resolve a marked region back to a diff line. The Jekyll counterpart of
-# adapters/astro/babel-plugin-magpie-src.mjs.
+# adapters/astro/vite-plugin-magpie-src.mjs.
 #
 # Preview builds only: prepare.sh copies this file into the site's _plugins/
 # for the preview build, and nothing else loads it. A production build must

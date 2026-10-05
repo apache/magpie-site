@@ -10,6 +10,7 @@ import tableLabels from './scripts/markdown-table-labels.mjs';
 import { markdownSemantics, taskLabels } from './scripts/markdown-semantics.mjs';
 import islandStyle from './scripts/quality/hoist-island-style.mjs';
 import publishDocAssets from './scripts/quality/prune-doc-assets.mjs';
+import magpieSrc from './scripts/preview/adapters/astro/vite-plugin-magpie-src.mjs';
 
 // Production is served directly at the apex https://magpie.apache.org/ (root path).
 // Override SITE_URL / SITE_BASE if you ever need to preview under a subpath.
@@ -57,23 +58,16 @@ export default defineConfig({
     sitemap({ filter: (page) => !page.endsWith('.md') }),
     islandStyle(),
     publishDocAssets(),
-    react(
-      process.env.MAGPIE_PREVIEW_ANNOTATE === "1"
-        ? {
-            babel: {
-              plugins: [
-                // Preview builds only: stamps data-magpie-src so the review
-                // overlay can map a marked region back to a diff line.
-                ["./scripts/preview/adapters/astro/babel-plugin-magpie-src.mjs", { root: process.cwd() }],
-              ],
-            },
-          }
-        : {},
-    ),
+    react(),
   ],
   vite: {
     cacheDir: `${cache}/vite`,
     server: { strictPort:true, watch:{ignored:['**/.builds/**']} },
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      // Preview builds only: stamps data-magpie-src so the review overlay can
+      // map a marked region back to a diff line.
+      process.env.MAGPIE_PREVIEW_ANNOTATE === "1" && magpieSrc(),
+    ],
   },
 });
