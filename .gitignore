@@ -6,9 +6,10 @@ dist/
 .astro/
 # editor
 .vscode/
-# synced docs (regenerated via scripts/sync-docs.sh)
+# synced docs and data (regenerated via scripts/sync-docs.sh)
 src/content/docs/
 public/docs-assets/
+src/data/tools.json
 
 # dependencies
 node_modules/
@@ -48,6 +49,9 @@ docs/superpowers/
 # when. Compared against the committed .apache-magpie.lock to
 # detect drift.
 /.apache-magpie.local.lock
+
+# Per-machine runtime state: the container gateway's log, pid and sockets.
+/.apache-magpie-local/
 
 # Trusted external skill sources: the gitignored fetch and its
 # per-machine fetch fingerprint. The committed per-source pins

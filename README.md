@@ -20,7 +20,7 @@ Zero runtime dependency on closed-source design tooling. All components are owne
 
 ```bash
 npm install
-npm run sync-docs    # one-time fetch of markdown from apache/magpie
+npm run sync-docs    # fetch markdown and generate tools data from apache/magpie
 npm run dev          # http://localhost:4321
 ```
 
@@ -33,7 +33,7 @@ The `prebuild` hook runs `sync-docs` automatically, so `npm run build` always pu
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Dev server with HMR (telemetry disabled via `scripts/dev.sh`) |
-| `npm run sync-docs` | Clone `apache/magpie` (sparse, `docs/` + `images/`) into `src/content/docs/` and `public/docs-assets/` |
+| `npm run sync-docs` | Clone `apache/magpie` (sparse, `docs/` + `images/`) into `src/content/docs/` and `public/docs-assets/`, and generate `src/data/tools.json` |
 | `npm run build` | Static build to `dist/` (runs sync-docs first) |
 | `npm run preview` | Serve the built site locally |
 | `npm run astro` | Astro CLI passthrough |
