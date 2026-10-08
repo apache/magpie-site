@@ -1,14 +1,38 @@
+import { BookOpen, Compass, GitBranch, Wrench, PackageCheck, Blocks, type LucideIcon } from "lucide-react";
 import BrandName from "./BrandName";
 import { withBase } from "@/ui/lib/utils";
 
+const exploreIcons: Record<string, LucideIcon> = {
+  Documentation: BookOpen,
+  "Learning guides": Compass,
+  Architecture: GitBranch,
+  Tools: Wrench,
+  Downloads: PackageCheck,
+  "Brand assets": Blocks,
+};
 const columns = [
   { title: "Explore", links: [["Documentation", "/docs"], ["Learning guides", "/resources"], ["Architecture", "/architecture"], ["Tools", "/tools"], ["Downloads", "/downloads"], ["Brand assets", "/brand"]] },
-  { title: "Take part", links: [["Contributing", "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"], ["Mailing list", "https://lists.apache.org/list.html?dev@magpie.apache.org"], ["Discord", "https://discord.gg/bfVyXTgak"], ["Issue tracker", "https://github.com/apache/magpie/issues"], ["Changelog", "https://github.com/apache/magpie/releases"]] },
+  { title: "Take part", links: [["Contributing", "https://github.com/apache/magpie/blob/main/CONTRIBUTING.md"], ["Mailing list", "https://lists.apache.org/list.html?dev@magpie.apache.org"], ["Discord", "https://discord.gg/bfVyXTgak"], ["LinkedIn", "https://www.linkedin.com/company/apache-magpie/"], ["Issue tracker", "https://github.com/apache/magpie/issues"], ["Changelog", "https://github.com/apache/magpie/releases"]] },
   { title: "Apache", links: [["The Foundation", "https://www.apache.org/"], ["License", "https://www.apache.org/licenses/"], ["Events", "https://www.apache.org/events/current-event"], ["Security", "https://www.apache.org/security/"], ["Privacy", "https://privacy.apache.org/policies/privacy-policy-public.html"], ["Sponsorship", "https://www.apache.org/foundation/sponsorship.html"], ["Thanks", "https://www.apache.org/foundation/thanks.html"]] },
 ];
+const serviceLogo = (href: string) => {
+  if (href.includes("linkedin.com")) return "/service-logos/linkedin.svg";
+  if (href.includes("discord.gg")) return "/service-logos/discord.svg";
+  if (href.includes("github.com")) return "/vendor-logos/github.svg";
+  if (href.includes("apache.org")) return "/vendor-logos/oak.svg";
+  return null;
+};
 export function SiteFooter() {
   return <footer className="site-footer"><div className="container footer-grid">
     <div className="footer-intro"><a className="brand-lockup" href={withBase("/")} aria-label="Apache Magpie home"><img className="official-wordmark" src={withBase("/wordmark.svg")} alt="Apache Magpie" width="160" height="45" /></a><span className="footer-asf">An Apache Software Foundation project.</span></div>
-    {columns.map(col => <div key={col.title} className="footer-column"><h2>{col.title}</h2>{col.links.map(([label, href]) => <a key={label} href={href.startsWith("/") ? withBase(href) : href} {...((!href.startsWith("/") || href.startsWith("/docs")) ? { target: "_blank", rel: "noreferrer" } : {})}>{label}</a>)}</div>)}
+    {columns.map(col => <div key={col.title} className="footer-column"><h2>{col.title}</h2>{col.links.map(([label, href]) => {
+      const logo = serviceLogo(href);
+      const ExploreIcon = col.title === "Explore" ? exploreIcons[label] : null;
+      return <a key={label} href={href.startsWith("/") ? withBase(href) : href} {...((!href.startsWith("/") || href.startsWith("/docs")) ? { target: "_blank", rel: "noreferrer" } : {})}>
+        {ExploreIcon && <ExploreIcon className="footer-link-icon" size={16} strokeWidth={1.8} aria-hidden="true" />}
+        {logo && <img className="footer-link-logo" src={withBase(logo)} alt="" aria-hidden="true" width="16" height="16" />}
+        {label}
+      </a>;
+    })}</div>)}
   </div><div className="container footer-bottom"><p>© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p>Apache <BrandName />, <BrandName />, and Apache are trademarks of The Apache Software Foundation.</p></div></footer>;
 }

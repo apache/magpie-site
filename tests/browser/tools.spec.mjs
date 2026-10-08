@@ -10,6 +10,7 @@ if (!process.env.MAGPIE_TEST_MANIFEST) throw new Error('Use npm run test:browser
 const data = JSON.parse(readFileSync('src/data/tools.json', 'utf8'));
 const tools = [...data.tools].sort((a, b) => a.name.localeCompare(b.name));
 const implementation = t => t.vendorKind === 'implementation' && t.vendor && t.vendor !== 'agnostic';
+const exactText = text => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
 
 const checkLayout = async page => {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -103,9 +104,9 @@ test('tool cards carry the details of each tool', async ({ page }) => {
     await expect(card).toHaveAttribute('href', `/docs/tools/${tool.name}/readme`);
     await expect(card.locator('.tool-cap')).toHaveText(tool.labels.map(l => l.name));
     const tags = card.locator('.tool-tag');
-    if (implementation(tool)) await expect(tags.filter({ hasText: tool.vendor })).toHaveCount(1);
+    if (implementation(tool)) await expect(tags.filter({ hasText: exactText(tool.vendor) })).toHaveCount(1);
     // The organization gets its own tag only when it is not already the vendor.
-    if (tool.organization && tool.organization !== tool.vendor) await expect(tags.filter({ hasText: tool.organization })).toHaveCount(1);
+    if (tool.organization && tool.organization !== tool.vendor) await expect(tags.filter({ hasText: exactText(tool.organization) })).toHaveCount(1);
     await expect(tags.filter({ hasText:/^MCP$/ })).toHaveCount(tool.mcp ? 1 : 0);
     await expect(tags.filter({ hasText:/^Interface$/ })).toHaveCount(tool.vendorKind === 'interface' ? 1 : 0);
     await expect(tags.filter({ hasText: tool.hasCode ? 'Implemented' : 'Adapter / spec' })).toHaveCount(1);
