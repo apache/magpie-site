@@ -13,6 +13,19 @@ const checkAccessibility = async page => {
   const result = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
   expect(result.violations.map(v => ({ id:v.id, nodes:v.nodes.map(n => ({ target:n.target, summary:n.failureSummary })) }))).toEqual([]);
 };
+test('footer links include service marks and the Apache Magpie LinkedIn page', async ({ page }) => {
+  await page.goto('/');
+  const footer = page.locator('.site-footer');
+  const linkedin = footer.getByRole('link', { name: 'LinkedIn' });
+  await expect(linkedin).toHaveAttribute('href', 'https://www.linkedin.com/company/apache-magpie/');
+  await expect(linkedin).toHaveAttribute('target', '_blank');
+  await expect(linkedin).toHaveAttribute('rel', 'noreferrer');
+  await expect(linkedin.locator('img')).toHaveAttribute('src', '/service-logos/linkedin.svg');
+  await expect(footer.getByRole('link', { name: 'Discord' }).locator('img')).toHaveAttribute('src', '/service-logos/discord.svg');
+  for (const src of await footer.locator('a[href^="https://"] img').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('src')))])) {
+    expect((await page.request.get(src)).status(), src).toBe(200);
+  }
+});
 const checkLayout = async page => {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await expect.poll(() => page.evaluate(measureLayout), { message:'Layout must settle without overflow or misaligned shared components' }).toEqual([]);

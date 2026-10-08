@@ -79,7 +79,9 @@ a.surface-card:hover { outline:1px solid currentColor; outline-offset:0; text-de
 .footer-grid { padding-block:var(--space-12); display:grid; grid-template-columns:1.7fr repeat(3,minmax(0,1fr)); gap:var(--space-8); }
 .footer-asf { display:block; margin-top:var(--space-4); color:var(--muted); font-size:var(--text-small); line-height:1.6; }
 .footer-column h2 { font-size:var(--text-small); font-weight:600; margin:0 0 var(--space-4); }
-.footer-column a { display:flex; align-items:center; gap:4px; color:var(--muted); text-decoration:none; font-size:var(--text-small); line-height:1.6; margin-bottom:12px; }
+.footer-column a { display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none; font-size:var(--text-small); line-height:1.6; margin-bottom:12px; }
+.footer-link-logo { width:16px; height:16px; object-fit:contain; flex:none; }
+html[data-theme=dark] .footer-link-logo[src$="github.svg"] { filter:invert(1); }
 .footer-column a:hover { color:var(--blue); text-decoration:underline; }
 .footer-bottom { border-top:1px solid var(--line); padding-block:var(--space-6); color:var(--muted); display:flex; flex-wrap:wrap; gap:8px 24px; font-size:.8125rem; line-height:1.6; }
 .footer-bottom p { margin:0; }
