@@ -16,6 +16,9 @@ const checkAccessibility = async page => {
 test('footer links include service marks and the Apache Magpie LinkedIn page', async ({ page }) => {
   await page.goto('/');
   const footer = page.locator('.site-footer');
+  const exploreLinks = footer.locator('.footer-column').first().locator('a');
+  await expect(exploreLinks).toHaveCount(6);
+  await expect(exploreLinks.locator('.footer-link-icon')).toHaveCount(6);
   const linkedin = footer.getByRole('link', { name: 'LinkedIn' });
   await expect(linkedin).toHaveAttribute('href', 'https://www.linkedin.com/company/apache-magpie/');
   await expect(linkedin).toHaveAttribute('target', '_blank');
