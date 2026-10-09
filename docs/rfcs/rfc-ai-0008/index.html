@@ -1,0 +1,779 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>RFC-AI-0008: The coordinator role — multi-hop relay of security reports — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/rfcs/rfc-ai-0008/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="RFC-AI-0008: The coordinator role — multi-hop relay of security reports — Apache Magpie Docs"><meta property="og:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta property="og:url" content="https://magpie.apache.org/docs/rfcs/rfc-ai-0008/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="RFC-AI-0008: The coordinator role — multi-hop relay of security reports — Apache Magpie Docs"><meta name="twitter:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      if (location.hostname === "magpie.apache.org") {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+      }
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.BtLYpxD0.css"><link rel="stylesheet" href="/_astro/DocsLayout.5MFayD3p.css"></head><body data-astro-cid-z4jru4n3><header data-magpie-src="src/components/landing/SiteHeader.tsx:8" class="site-header"><a data-magpie-src="src/components/landing/SiteHeader.tsx:9" class="skip-link" href="#main-content">Skip to content</a><div data-magpie-src="src/components/landing/SiteHeader.tsx:10" class="header-inner"><a data-magpie-src="src/components/landing/SiteHeader.tsx:11" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-magpie-src="src/components/landing/SiteHeader.tsx:11" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><div data-magpie-src="src/components/landing/SiteHeader.tsx:12" class="header-actions"><button data-magpie-src="src/components/landing/SiteHeader.tsx:13" class="button button-quiet button-icon docs-menu-toggle" aria-label="Browse documentation" aria-expanded="false" aria-controls="docs-sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:13">Browse</span></button><button data-magpie-src="src/components/landing/SiteHeader.tsx:14" class="docs-search-trigger" aria-label="Search docs" data-search-open="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:14">Search docs</span><kbd data-magpie-src="src/components/landing/SiteHeader.tsx:14">⌘ K</kbd></button><button data-magpie-src="src/components/landing/SiteHeader.tsx:7" class="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button></div></div></header><dialog class="search-dialog" aria-labelledby="search-title" data-index="/search-index.json"><div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off"><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div><div class="search-results" id="search-results"></div><p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p><div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div></dialog><script type="module">var e=document.querySelector(`.search-dialog`),t=e.querySelector(`input`),n=e.querySelector(`.search-results`),r=e.querySelector(`.search-status`),i=document.querySelector(`[data-search-open]`),a,o=-1,s=[],c=!1,l=[`/start`,`/docs/security/readme`,`/docs/pr-management/readme`,`/docs/setup/privacy-llm`,`/docs/education/readme`],u=()=>{if(!a)return;let e=t.value.trim().toLowerCase(),i=e.split(/\s+/).filter(Boolean);s=e?a.map(t=>{let n=t.title.toLowerCase(),r=`${n} ${t.section} ${t.text}`.toLowerCase();return{entry:t,score:i.every(e=>r.includes(e))?i.reduce((e,t)=>e+(n.includes(t)?15:1),0)+(n.includes(e)?30:0):0}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score).slice(0,12).map(e=>e.entry):l.map(e=>a.find(t=>t.path.endsWith(e))).filter(e=>!!e),n.replaceChildren(),o=-1;for(let e of s){let t=document.createElement(`a`);t.href=e.path;let r=document.createElement(`strong`);r.textContent=e.title;let i=document.createElement(`span`);i.textContent=e.section,t.append(r,i),n.append(t)}r.textContent=e?s.length?`${s.length} results. Use arrow keys to choose a page.`:`No pages found. Try “security”, “setup”, or “release”.`:`A few useful places to start.`},d=async()=>{if(e.showModal(),t.focus(),!a){r.textContent=`Loading the documentation index…`;try{let t=await fetch(e.dataset.index);if(!t.ok)throw Error(`Index unavailable`);a=await t.json(),c=!1}catch{c=!0,r.textContent=`Search is temporarily unavailable. You can still browse the sidebar.`}}c||u()};i.addEventListener(`click`,d),e.querySelector(`[data-search-close]`).addEventListener(`click`,()=>e.close()),e.addEventListener(`click`,t=>{if(t.target===e){let n=e.getBoundingClientRect();(t.clientX<n.left||t.clientX>n.right||t.clientY<n.top||t.clientY>n.bottom)&&e.close()}}),t.addEventListener(`input`,u),e.addEventListener(`keydown`,t=>{if(t.key===`Tab`){let n=[...e.querySelectorAll(`input,button,a[href]`)].filter(e=>!e.hasAttribute(`disabled`)),r=n[0],i=n.at(-1);t.shiftKey&&document.activeElement===r?(t.preventDefault(),i?.focus()):!t.shiftKey&&document.activeElement===i&&(t.preventDefault(),r?.focus())}if((t.key===`ArrowDown`||t.key===`ArrowUp`)&&s.length){t.preventDefault(),o=(o+(t.key===`ArrowDown`?1:-1)+s.length)%s.length;let e=[...n.querySelectorAll(`a`)];e.forEach((e,t)=>e.classList.toggle(`selected`,t===o)),e[o].focus()}}),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.open?e.close():d())}),e.addEventListener(`close`,()=>i.focus()),i.querySelector(`kbd`).textContent=navigator.platform.includes(`Mac`)?`⌘ K`:`Ctrl K`;</script><div class="container docs-shell"><aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation"><div id="docs-nav-scroll"><a href="/start" class="docs-overview-link">Install Magpie</a><a href="/docs" class="docs-overview-link">Introduction</a><nav aria-label="Documentation sections"><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Quick start</span></summary><a href="/docs/quick-start/readme" aria-label="Quick start overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Concepts</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/ai-contribution-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="ai contribution policy" data-astro-cid-lihgpoae>ai contribution policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/when-to-use-mods" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="when to use mods" data-astro-cid-lihgpoae>when to use mods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Updating Magpie</span></summary><a href="/docs/updating-magpie" aria-label="Updating Magpie overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Setup</span></summary><a href="/docs/setup/readme" aria-label="Setup overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/commit-attribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="commit attribution" data-astro-cid-lihgpoae>commit attribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Education</span></summary><a href="/docs/education/readme" aria-label="Education overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Training</span></summary><a href="/docs/education/training/readme" aria-label="Training overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Security</span></summary><a href="/docs/security/readme" aria-label="Security overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Release Management</span></summary><a href="/docs/release-management/readme" aria-label="Release Management overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/reproducibility" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="reproducibility" data-astro-cid-lihgpoae>reproducibility</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Mentoring</span></summary><a href="/docs/mentoring/readme" aria-label="Mentoring overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Adapters</span></summary><a href="/docs/adapters/readme" aria-label="Adapters overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/aider" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="aider" data-astro-cid-lihgpoae>aider</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/copilot" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="copilot" data-astro-cid-lihgpoae>copilot</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/goose" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="goose" data-astro-cid-lihgpoae>goose</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Contracts (33)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-nexus/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-nexus" data-astro-cid-lihgpoae>asf-nexus</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat" data-astro-cid-lihgpoae>chat</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-discord/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-discord" data-astro-cid-lihgpoae>chat-discord</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-slack/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-slack" data-astro-cid-lihgpoae>chat-slack</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forgejo/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forgejo" data-astro-cid-lihgpoae>forgejo</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gitlab/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gitlab" data-astro-cid-lihgpoae>gitlab</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/osv/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="osv" data-astro-cid-lihgpoae>osv</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/people/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="people" data-astro-cid-lihgpoae>people</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/tracker/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="tracker" data-astro-cid-lihgpoae>tracker</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/typed-decision/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="typed-decision" data-astro-cid-lihgpoae>typed-decision</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Substrates (32)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/adversarial-review/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="adversarial-review" data-astro-cid-lihgpoae>adversarial-review</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/container-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="container-gateway" data-astro-cid-lihgpoae>container-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/contributor-metrics/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="contributor-metrics" data-astro-cid-lihgpoae>contributor-metrics</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maven-artifact-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maven-artifact-verify" data-astro-cid-lihgpoae>maven-artifact-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pr-management-stats" data-astro-cid-lihgpoae>pr-management-stats</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-config/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-config" data-astro-cid-lihgpoae>release-config</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-verify" data-astro-cid-lihgpoae>release-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/reproducible-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="reproducible-archive" data-astro-cid-lihgpoae>reproducible-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/setup-preflight/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="setup-preflight" data-astro-cid-lihgpoae>setup-preflight</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>RFCs</span></summary><a href="/docs/rfcs/readme" aria-label="RFCs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" aria-current="page" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>External Skill Sources</span></summary><a href="/docs/skill-sources/readme" aria-label="External Skill Sources overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Designs</span></summary><a href="/docs/designs/readme" aria-label="Designs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-17-body-owned-config-layers" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="body owned config layers" data-astro-cid-lihgpoae>body owned config layers</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-20-reproducible-releases" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="reproducible releases" data-astro-cid-lihgpoae>reproducible releases</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-21-marketplace-reconciliation-tracking" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="marketplace reconciliation tracking" data-astro-cid-lihgpoae>marketplace reconciliation tracking</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-23-adversarial-review" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="adversarial review" data-astro-cid-lihgpoae>adversarial review</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-27-contributor-growth-calibration-and-screening" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="contributor growth calibration and screening" data-astro-cid-lihgpoae>contributor growth calibration and screening</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main id="main-content" tabindex="-1" class="docs-main"><div class="docs-breadcrumb"><a href="/docs">Docs</a><span>/</span><span>rfcs</span><button class="button button-secondary button-small copy-page" data-markdown="/docs/rfcs/rfc-ai-0008.md">Copy page</button></div><article class="prose docs-prose"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="rfc-ai-0008-the-coordinator-role--multi-hop-relay-of-security-reports">RFC-AI-0008: The coordinator role — multi-hop relay of security reports</h1>
+<h2 id="abstract">Abstract</h2>
+<p>Every security-family skill assumes the adopter is the party that <strong>owns the code and the verdict</strong> —
+what coordinated vulnerability disclosure (CVD) literature calls the <em>vendor</em>.
+Real disclosure chains have a second kind of participant:
+the <strong>coordinator</strong>,
+who receives reports,
+triages them on behalf of others,
+and forwards them to the owning vendor.
+Coordinators, established and newly created, include:</p>
+<ul>
+<li>the <strong>ASF Security team</strong>, operating <code>security@apache.org</code> for ~200 PMCs;</li>
+<li><strong>CERT/CC</strong>, coordinating multi-party disclosure through its VINCE platform;</li>
+<li><strong>JPCERT/CC</strong>, coordinating disclosure for reports received through Japan’s national reporting scheme,
+published as Japan Vulnerability Notes (JVN);</li>
+<li><strong>CNCERT/CC</strong>, coordinating disclosure of the reports behind China’s national
+vulnerability database (CNVD);</li>
+<li><strong>ZDI</strong> (Trend Micro Zero-Day Initiative),
+a commercial bug-bounty broker coordinating its researchers’ findings with vendors;</li>
+<li><strong>AWS Security</strong>, relaying findings from its internal security reviews
+to the upstream projects it depends on;</li>
+<li><strong>Akrites</strong> (Linux Foundation),
+a clearinghouse that deduplicates AI-generated reports for critical open source software,
+opening automated intake in September 2026 on a VINCE-based platform;</li>
+<li><strong>Gold Eagle</strong> (US government),
+the federal clearinghouse for AI-discovered vulnerabilities,
+runs on a VINCE-derived platform built with CERT/CC;</li>
+<li><strong>Athena</strong> (Chainguard) and <strong>Lightwell</strong> (IBM/Red Hat),
+industry coalitions that pool frontier-model findings and coordinate upstream patches.</li>
+</ul>
+<p>Chains compose:
+the same project can receive reports directly (reporter → vendor),
+through one coordinator,
+or through several,
+for example, reporter → VINCE → ASF Security → PMC.</p>
+<p>Magpie already models the coordinator — but only from the <strong>receiving side</strong>:
+the <a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-via-forwarder/SKILL.md"><code>security-issue-import-via-forwarder</code></a> sub-skill,
+the <a href="https://github.com/apache/magpie/blob/main/tools/forwarder-relay/README.md">forwarder-relay adapter contract</a>,
+and the <a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md">ASF-relay drafting rules</a>
+all describe what a vendor does when a coordinator’s mail arrives.
+The ASF Security team’s own pipeline lives out of tree (the private <code>apache/security</code> repo),
+so the sender-side templates and the receiver-side detection signatures are maintained in different places
+and can drift apart silently.</p>
+<p>This RFC names the <strong>coordinator persona</strong>
+and defines its profile by function and termination authority, never by chain position:
+the relay contract is strictly <strong>pairwise</strong>,
+so chains of any depth need no new vocabulary.
+It adds the <strong>provenance fields</strong> every hop must carry
+(finder credits preserved verbatim, an ordered reporter chain each hop appends itself to, origin references, embargo terms),
+makes forwarder adapters <strong>bidirectional</strong> —
+one adapter carries both the emit templates and the detect signatures,
+closing the drift gap above —
+and sketches the coordinator-mode skills that generalize the ASF Security team’s existing pipeline into the framework.</p>
+<h2 id="status-of-this-document">Status of this document</h2>
+<p><strong>Draft.</strong>
+Nothing in this RFC is implemented.
+A working coordinator pipeline already runs out of tree —
+the ASF Security team’s, in the private <code>apache/security</code> repo —
+and would be the natural migration source for the coordinator-mode skills proposed here.</p>
+<h2 id="motivation">Motivation</h2>
+<ol>
+<li>
+<p><strong>The two ends of one contract are maintained in two repos.</strong>
+The ASF Security team’s <code>templates/forward.md</code> <em>generates</em> the
+“Dear PMC, The security vulnerability report has been received by the Apache Security Team…” preamble
+that <a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md"><code>tools/gmail/asf-relay.md</code></a> teaches vendor-side skills to <em>detect</em>.
+Either side can change without the other noticing,
+and vendor-side classification then breaks silently.
+Both ends of the contract belong in one adapter directory.</p>
+</li>
+<li>
+<p><strong>Coordinators re-implement framework machinery out of tree.</strong>
+The ASF Security team’s pipeline duplicates what the security family already has:
+mail intake and thread-head selection
+(<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import/SKILL.md"><code>security-issue-import</code></a> Steps 1 and 3),
+a classification cascade (Step 3),
+prior-report and prior-rejection dedup search (Steps 2a/2b),
+threat-model triage (<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-triage/SKILL.md"><code>security-issue-triage</code></a>),
+and draft-only reporter correspondence.
+The differences are parameters, not different work:
+the role settings,
+and where triage results are kept —
+a Pony Mail archive instead of a bug tracker.</p>
+</li>
+<li>
+<p><strong>Chain depth is not stable, so nothing may hardcode it.</strong>
+The same PMC receives reports at depth 0 (reporter → PMC),
+depth 1 (reporter → ASF → PMC),
+and depth 2 (reporter → clearinghouse → ASF → PMC).
+Any design that names levels (“first-level triage”, “foundation triage”)
+breaks each time a coordinator appears or disappears.
+Akrites is the live proof:
+a new coordinator with <strong>no traffic yet</strong> —
+which also means, for once, that the wire format can be agreed <em>before</em> the first message
+instead of being reverse-engineered from received mail afterward.</p>
+</li>
+<li>
+<p><strong>Round-trip testability.</strong>
+When a coordinator running Magpie sends what a vendor running Magpie receives,
+the whole relay round trip
+(forward → via-forwarder import → reporter question relayed back up)
+exercises one contract from both ends and becomes testable in one place.</p>
+</li>
+</ol>
+<h2 id="proposal">Proposal</h2>
+<h3 id="cvd-vocabulary-not-level-names">CVD vocabulary, not level names</h3>
+<p>Adopt the standard CVD role names (CERT/CC’s CVD guide, ISO 29147 / 30111):</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Role</th>
+<th>Definition</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><strong>finder</strong></td>
+<td>Discovers the vulnerability. The identity advisory credit attaches to; invariant along the chain.</td>
+<td>An individual researcher; the employee behind a company’s report.</td>
+</tr>
+<tr>
+<td class="table-label"><strong>reporter</strong></td>
+<td>Conveys the report to the receiving party <em>on a given hop</em>. Hop-relative: at the first hop usually the finder; on every relayed hop the forwarding party is the proximate reporter.</td>
+<td>The finder themselves; a company’s product-security team; the upstream coordinator.</td>
+</tr>
+<tr>
+<td class="table-label"><strong>coordinator</strong></td>
+<td>Receives, triages on behalf of others, forwards to the owner. Never owns the verdict.</td>
+<td>CERT/CC (VINCE), the ASF Security team, Akrites.</td>
+</tr>
+<tr>
+<td class="table-label"><strong>vendor</strong></td>
+<td>Owns the code and the verdict (non-issue / hardening / CVE).</td>
+<td>A PMC, any project security team — Magpie’s existing persona.</td>
+</tr>
+</tbody>
+</table>
+<p>Finder and reporter usually coincide at the first hop and split as soon as anyone relays:
+a company’s product-security team reporting an employee’s discovery is the reporter for that employee’s finding,
+and each forwarding coordinator becomes the proximate reporter on its hop.
+The finder is invariant along the chain;
+the reporter is not —
+which is why the provenance block (below) carries the finder verbatim
+and the reporters as an ordered, append-only chain.
+The split also maps onto two fields every hop already keeps separate:
+who to greet in correspondence (the proximate reporter)
+versus who to credit in the advisory (the finder).</p>
+<p>Levels get <strong>no names</strong>.
+The relay contract is pairwise:
+every node sees only its immediate upstream (as a forwarder adapter)
+and its immediate downstream (as a routing target).
+A vendor’s <code>forwarders.enabled</code> lists <code>asf-security</code>;
+the ASF coordinator’s own config lists <code>vince</code>, <code>akrites</code>, <code>ghsa</code>.
+Nobody declares chain depth —
+the chain emerges hop by hop, the way SMTP <code>Received:</code> headers do.</p>
+<p>The existing <a href="/docs/security/forwarder-routing-policy">forwarder-routing policy</a>
+(milestones DO relay / negative space DO NOT relay)
+generalizes unchanged:
+each node applies it <strong>toward its upstream</strong>, whatever that upstream is.</p>
+<h3 id="the-coordinator-profile">The coordinator profile</h3>
+<p>What distinguishes coordinators from each other is not position but <strong>function</strong> and <strong>termination authority</strong>,
+declared in the adopter’s <code>&lt;project-config&gt;/project.md</code> security-workflow section:</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#72F088">coordinator</span><span style="color:#F0F3F6">:</span></span>
+<span class="line"><span style="color:#BDC4CC">  # Which triage functions this node performs.</span></span>
+<span class="line"><span style="color:#BDC4CC">  #   routing       — decide which downstream party owns the report</span></span>
+<span class="line"><span style="color:#BDC4CC">  #   assessment    — screen plausibility against the OWNER's threat model</span></span>
+<span class="line"><span style="color:#BDC4CC">  #   deduplication — consolidate reports of the same flaw into one</span></span>
+<span class="line"><span style="color:#BDC4CC">  #                   downstream case before forwarding</span></span>
+<span class="line"><span style="color:#BDC4CC">  #   bookkeeping   — track the status of every report through to</span></span>
+<span class="line"><span style="color:#BDC4CC">  #                   resolution, including reports that reached the</span></span>
+<span class="line"><span style="color:#BDC4CC">  #                   owner directly, and chase the ones that stall</span></span>
+<span class="line"><span style="color:#BDC4CC">  #   (verdict is never a coordinator function; it belongs to the vendor)</span></span>
+<span class="line"><span style="color:#72F088">  functions</span><span style="color:#F0F3F6">: [</span><span style="color:#ADDCFF">routing</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">assessment</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">deduplication</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">bookkeeping</span><span style="color:#F0F3F6">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#BDC4CC">  # Dispositions this node may terminate itself, instead of forwarding.</span></span>
+<span class="line"><span style="color:#BDC4CC">  # Every coordinator may drop spam. Anything beyond that is delegated</span></span>
+<span class="line"><span style="color:#BDC4CC">  # authority the downstream parties have granted (explicitly or by</span></span>
+<span class="line"><span style="color:#BDC4CC">  # long-standing practice) and must be exercised non-assertively.</span></span>
+<span class="line"><span style="color:#BDC4CC">  # Terminating as a hardening also makes this node responsible for</span></span>
+<span class="line"><span style="color:#BDC4CC">  # the public-issue conversion (see "Hardening conversion" below).</span></span>
+<span class="line"><span style="color:#72F088">  may_terminate</span><span style="color:#F0F3F6">: [</span><span style="color:#ADDCFF">spam</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">false-positive-decline</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">hardening-decline</span><span style="color:#F0F3F6">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#BDC4CC">  # Immediate upstreams — forwarder adapters, same contract as a</span></span>
+<span class="line"><span style="color:#BDC4CC">  # vendor's `forwarders.enabled`.</span></span>
+<span class="line"><span style="color:#72F088">  upstreams</span><span style="color:#F0F3F6">: [</span><span style="color:#ADDCFF">vince</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">akrites</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">ghsa</span><span style="color:#F0F3F6">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#BDC4CC">  # How downstream owners are resolved. A vendor resolves &lt;tracker&gt;,</span></span>
+<span class="line"><span style="color:#BDC4CC">  # &lt;security-model&gt;, &lt;security-list&gt; ONCE from config; a coordinator</span></span>
+<span class="line"><span style="color:#BDC4CC">  # resolves them PER REPORT from a directory of downstream parties.</span></span>
+<span class="line"><span style="color:#72F088">  downstream_directory</span><span style="color:#F0F3F6">: </span><span style="color:#ADDCFF">&lt;tool or config reference&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#BDC4CC">  # Where a bookkeeping node observes report status beyond its own</span></span>
+<span class="line"><span style="color:#BDC4CC">  # forwards. Only meaningful with `bookkeeping` declared.</span></span>
+<span class="line"><span style="color:#72F088">  status_sources</span><span style="color:#F0F3F6">: [</span><span style="color:#ADDCFF">owner-security-lists</span><span style="color:#F0F3F6">, </span><span style="color:#ADDCFF">tracker-notifications</span><span style="color:#F0F3F6">]</span></span></code></pre>
+<p>Under this profile, VINCE is <code>functions: [routing]</code>, <code>may_terminate: [spam]</code>;
+Akrites is <code>functions: [routing, deduplication]</code> —
+consolidation is its stated purpose;
+the ASF Security team declares all four,
+with delegated decline authority for high-confidence false positives.
+The word <em>triage</em> stays one word —
+a node’s profile says which functions of it the node performs.</p>
+<p>The two non-obvious functions deserve a word each.
+Declared <strong>deduplication</strong> is consolidation as a service —
+merging several upstream reports of the same flaw into one downstream case,
+which is what makes finder credits and origin references list-valued in the provenance block.
+It is distinct from the local dedup pass every hop runs regardless of profile
+(see <a href="#deduplication-composes-per-hop">Deduplication composes per hop</a>).
+<strong>Bookkeeping</strong> is the one function whose scope extends beyond the reports the node itself relays:
+the ASF Security team is copied on every <code>security@&lt;pmc&gt;.apache.org</code> message
+and receives the private-tracker notifications,
+so it tracks the status of each report through to resolution —
+including reports that reached a PMC directly and were never forwarded by anyone —
+and can answer status queries and nudge handling that stalls.
+Bookkeeping is also what makes the
+<a href="#the-handling-identifier-exchange">handling-identifier exchange</a>
+worth its records:
+the identifiers a bookkeeping node collects are how it follows a report it no longer holds.</p>
+<p>The <code>downstream_directory</code> is the coordinator’s defining feature:
+where every existing security-family skill reads <code>&lt;tracker&gt;</code> / <code>&lt;security-model&gt;</code> / <code>&lt;security-list&gt;</code> once per adopter,
+a coordinator-mode skill resolves the owning project, its security model, and its delivery address per report.</p>
+<h3 id="provenance-fields--carried-across-hops">Provenance fields — carried across hops</h3>
+<p>Pairwise recursion is only safe
+if the fields that belong to the chain’s <em>endpoints</em> survive every hop untouched.
+The relay contract gains a <strong>provenance block</strong>:
+every field in it is preserved verbatim,
+except the reporter chain, which is append-only:</p>
+<ul>
+<li><strong>Finder credits</strong> (<em>list</em>) —
+carried verbatim, never re-derived from <code>From:</code> headers:
+on a relayed hop <code>From:</code> is the proximate reporter, never the finder.
+A list because a consolidating coordinator carries every finder’s credit,
+exactly as <a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-deduplicate/SKILL.md"><code>security-issue-deduplicate</code></a>
+already preserves multiple <code>credits[]</code> entries in CVE JSON.</li>
+<li><strong>Reporter chain</strong> (<em>ordered list</em>) —
+the parties that conveyed the report, origin first;
+each party appends itself when it forwards
+and never rewrites or removes an earlier entry
+(the <code>Received:</code>-header analogy made literal).
+The last entry is the proximate reporter —
+the party this hop corresponds with and relays milestones back to;
+the chain as a whole is how a hop tells a relayed report from a direct one.
+It is the one provenance field that grows per hop instead of being preserved unchanged.</li>
+<li><strong>Origin references</strong> (<em>list</em>) —
+VINCE case URL, GHSA URL, HackerOne URL, Akrites case URL.
+Clickable URLs, not bare IDs
+(per the existing <a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md"><code>asf-relay.md</code></a> rule),
+and drawn from an archive, not from a private workspace:
+an ASF forward carries the Pony Mail permalink of the original report
+on <code>security@apache.org</code>
+(resolvable by the Security team and ASF Members),
+and the forward itself acquires one in the <code>security@&lt;pmc&gt;</code> archive
+the receiving PMC can read.
+The Gmail label the ASF pipeline currently tracks reports under
+(e.g. <code>logging/2026-08-24 syslog crlf injection</code>)
+may accompany the permalink as a human-readable handle, but never replace it;
+the trade-offs between the ASF’s candidate identifiers are discussed under the
+<a href="#the-handling-identifier-exchange">handling-identifier exchange</a>.
+A list, because a deduplicating coordinator may consolidate several origins into one forward.</li>
+<li><strong>Embargo / disclosure-timeline terms</strong> —
+set by the finder or the first coordinator;
+relayed, never renegotiated mid-chain by a hop.</li>
+<li><strong>Upstream dedup claims</strong> —
+“consolidated from N reports” is recorded as a <em>hint</em>,
+never as permission to skip the local dedup pass
+(see <a href="#deduplication-composes-per-hop">Deduplication composes per hop</a>).</li>
+<li><strong>Back-channel convention</strong> —
+content destined for the reporter travels as the ready-to-paste, reporter-voiced block
+(<a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md"><code>asf-relay.md</code></a>),
+wrapped hop by hop in both directions:
+a vendor’s question to the reporter transits each coordinator,
+and each hop wraps — none rewrites.</li>
+</ul>
+<h3 id="the-handling-identifier-exchange">The handling-identifier exchange</h3>
+<p>Every hop that accepts a report returns to the party it received it from,
+the identifier under which it handles it:
+a tracker issue number, a case id, a thread link —
+whatever the receiving hop’s own pipeline keys on.
+The exchange is pairwise, like everything else in the contract:</p>
+<ul>
+<li>the upstream records the returned identifier next to its own record of the report
+and cites it in every later message about it —
+status queries, milestone relays, relayed reporter questions —
+so cross-hop correspondence needs no fuzzy re-matching;</li>
+<li>the identifier is a reference, not access:
+returning a private tracker’s issue number grants nothing;
+it names the report in future correspondence;</li>
+<li>a consolidating hop returns the same identifier for several upstream reports —
+which is itself a dedup signal one hop up;</li>
+<li>the two flows meet:
+the identifier a hop returns upstream is the same one it sends downstream as an origin reference when it forwards.
+A VINCE case URL is VINCE’s handling identifier returned to the reporting company
+<em>and</em> the origin reference on VINCE’s forward to the next hop.</li>
+</ul>
+<p>Existing practice already has instances of the shape —
+VINCE case numbers, GHSA identifiers, HackerOne report URLs —
+this section makes the exchange a contract obligation on every hop
+rather than a per-platform habit.</p>
+<p>Which identifier the ASF Security team should share is a genuine design choice.
+Pony Mail addresses an archived message in two ways —
+a <strong>permalink</strong>, keyed on Pony Mail’s internal id,
+and a <strong>lookup</strong> (<code>thread/&lt;Message-ID&gt;?&lt;listid&gt;</code>), keyed on the message’s <code>Message-ID</code>,
+which exists only for messages that carry one —
+and none of the three candidate identifiers wins on every axis:</p>
+<ul>
+<li><strong>The Pony Mail permalink of the original report</strong> on <code>security@apache.org</code>.
+Known at send time,
+so it can ride on the forward itself as an origin reference;
+the receiver can even reconstruct the same message’s lookup on its own,
+since a forward carries the original’s <code>Message-ID</code> in its <code>References:</code> header.
+But it resolves only for the Security team and ASF Members:
+most PMC members can cite it, not open it.</li>
+<li><strong>The Pony Mail permalink of the forwarded message</strong> in the <code>security@&lt;pmc&gt;</code> archive.
+The PMC can actually open this one,
+which matters most on duplicates:
+told “this duplicates the report behind &lt;permalink&gt;”,
+the PMC can verify it is in fact the same report rather than take the claim on faith.
+However, this permalink cannot be included in the forward itself,
+because it is not known at send time;
+only the forward’s own lookup can.</li>
+<li><strong>The internal Gmail label</strong>
+(e.g. <code>logging/2026-08-24 syslog crlf injection</code>).
+Resolvable by nobody outside the pipeline,
+yet the friendliest handle in human correspondence:
+a PMC answering that <code>logging/2026-08-24 syslog crlf injection</code>
+duplicates <code>logging/2026-08-25 rfc5424 crlf injection</code>
+is stating something a reader follows at a glance —
+the same sentence in two Pony Mail references is opaque until dereferenced.</li>
+</ul>
+<p>Two caveats keep the Pony Mail candidates honest.</p>
+<p><strong>Unicity.</strong>
+The GMail label is the only canonical identifier:
+one per report, assigned at intake.
+Pony Mail references are plural by construction —
+every message of the thread, in every archive that holds a copy,
+addressable by permalink and (usually) by lookup —
+so two correspondents can cite the same report by different references
+and neither is wrong.
+Every reference canonicalizes back to the label,
+but only the Security team can perform that conversion:
+the mapping lives in its pipeline.
+The contract consequence:
+the label is what gets <em>matched on</em>;
+a permalink or lookup arriving in correspondence is an alias to canonicalize on receipt,
+and a correspondent who knows the label echoes it.</p>
+<p><strong>Privacy.</strong>
+Permalink and lookup are not interchangeable toward reporters.
+A lookup embeds the message’s <code>Message-ID</code> —
+for an original report, minted by the reporter’s own mail system
+and often enough to identify them.
+A permalink carries no such payload.
+So lookups —
+including the one the forward itself can carry —
+stay between hops that already hold the message
+(the Security team and the receiving PMC leak nothing to each other),
+while anything reporter-facing,
+above all a dedup answer sent to a <em>different</em> reporter,
+uses permalinks only.</p>
+<p>What remains between the candidates is a compromise between comforts:
+the label is the form the Security team’s own records key on,
+the forward’s permalink the one the PMC can open and check.
+The pragmatic emit rule is therefore a <strong>pair</strong>:
+the label as the canonical, human-readable handle,
+plus a Pony Mail reference as the resolvable one —
+the original report’s permalink for parties who can read <code>security@apache.org</code>,
+the forward’s own (as a lookup at send time) for the receiving PMC.
+Pinning that pair down is exactly what the <code>asf-security</code> adapter’s
+emit templates (below) are for.
+Mail-based coordinators still get a head start —
+when the handling record <em>is</em> an archived message,
+its lookup needs no separate bookkeeping —
+but the reporter-safe permalink must still be fetched from the archive and stated,
+so the exchange never disappears entirely.</p>
+<p>The hardening conversion (below) relies on the same exchange run in reverse:
+the reporter, having opened the requested public issue,
+returns its identifier to the declining hop.</p>
+<h3 id="forwarder-adapters-become-bidirectional">Forwarder adapters become bidirectional</h3>
+<p>Today a forwarder adapter
+(per <a href="https://github.com/apache/magpie/blob/main/tools/forwarder-relay/README.md"><code>tools/forwarder-relay/README.md</code></a>)
+faces the upstream only:
+it detects inbound relays, extracts credits,
+and renders reporter-facing wrappers (<code>reporter_addressing_block</code>),
+but carries no normative templates for the forward a coordinator emits downstream —
+which is exactly where the drift lives.
+This RFC extends the adapter contract with a <strong>sender side</strong>:
+the normative outbound templates
+(forwarding preamble, credit-line format, AI-disclaimer line, provenance block layout)
+live in the <em>same adapter directory</em> as the detection signatures derived from them.</p>
+<p>Concretely, the <code>asf-security</code> adapter absorbs the ASF Security team’s <code>templates/forward.md</code> family
+as its normative emit templates;
+the detection rules in <a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md"><code>asf-relay.md</code></a>
+become derived-from-the-template rather than reverse-engineered.
+One directory, one source of truth, both roles consume it.</p>
+<p>For Akrites the order inverts, deliberately:
+the adapter’s emit side is written <strong>first</strong> —
+proposed to the Akrites project as the format to emit —
+and the detect side follows mechanically.
+Since Akrites is itself a coordinator,
+the better outcome is that it adopts the coordinator-mode skills and emits the contract natively;
+the adapter then exists mostly as the pinned description of that agreement.</p>
+<h3 id="coordinator-mode-skills">Coordinator-mode skills</h3>
+<p>Two new skills in the <code>security</code> family (mode: Triage),
+generalized from the ASF pipeline:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Capability</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>security-coordinator-import</code></td>
+<td><code>capability:intake</code></td>
+<td>Sweep the coordinator’s inbox through a mail-source backend; select thread heads on header facts; classify each candidate through the config-driven cascade (below); resolve the owning downstream party; record everything in the coordinator’s local tracker. Raw message bytes are read by a lightweight-model subagent that returns a typed proposal — the orchestrating context never ingests untrusted mail directly.</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-coordinator-assess</code></td>
+<td><code>capability:triage</code></td>
+<td>For each classified report: dedup against the coordinator’s own archive (text-confirmed, sibling-vs-duplicate discipline); screen against the <em>owner’s</em> threat model using the ASF pipeline’s assessment triple (adversary in the model × attacker-controllable input × violated security property); then draft — a forward to the downstream owner carrying the provenance block, or, within <code>may_terminate</code> authority only, a non-assertive decline to the reporter — a hardening decline also carrying the responsibility for the public-issue conversion (below). Drafts only; a human sends.</td>
+</tr>
+</tbody>
+</table>
+<p>Both fan out <strong>per downstream party</strong>
+(one assessor per owning project,
+reusing that project’s threat model and source checkout across its reports),
+which is the coordinator’s structural difference from every vendor-mode skill.</p>
+<p>The <code>bookkeeping</code> function gets no skill in this RFC:
+a status sweep over the profile’s <code>status_sources</code>
+(matching handling identifiers against owner-list traffic and tracker notifications,
+surfacing reports that have gone quiet)
+is deliberately left for a follow-up once the profile stabilizes.</p>
+<p>Existing vendor-mode skills are untouched;
+a vendor receiving from a coordinator continues through
+<code>security-issue-import</code> + <code>security-issue-import-via-forwarder</code> exactly as today.</p>
+<h3 id="classification-cascade-becomes-config-driven">Classification cascade becomes config-driven</h3>
+<p><code>security-issue-import</code> Step 3 and the ASF pipeline’s category table are the same mechanism with different rows.
+The cascade becomes a table the adopter profile extends:
+the vendor baseline keeps today’s classes
+(Report, CVE-tool bookkeeping, scanner dump, consolidated multi-issue, media request, spam, cross-thread-followup, fix-already-public…),
+and the coordinator profile adds its own
+(digest, <strong>mirror</strong>, license-confusion, dependency-inquiry).
+Step 3 already runs the via-forwarder sub-skill ahead of its own table
+whenever <code>forwarders.enabled</code> is non-empty —
+the dispatch seam the config-driven cascade generalizes.</p>
+<p>The <strong>mirror</strong> class is worth naming in the contract itself:
+it exists <em>because</em> chains deliver the same report along two paths
+(once via a coordinator, once directly from the reporter),
+which pure vendors at depth 0 never see.
+Every coordinator profile needs it;
+with Akrites in the chain it also appears one level up.</p>
+<h3 id="hardening-conversion--exactly-one-hop">Hardening conversion — exactly one hop</h3>
+<p>Non-issues, bugs and hardenings both terminate the private track,
+but they differ in what should survive:
+a non-issue ends and nothing is owed;
+a bug or hardening is a fact-correct improvement that falls outside the owner’s threat model —
+worth implementing, just not as a security issue.
+A multi-hop chain gives hardenings a failure mode of their own:
+every hop can assume another hop (or the reporter) will file the improvement publicly,
+and nobody does.
+Today’s practice is the right first step with no fallback:
+decline replies invite the reporter to take the finding to the public tracker,
+and the improvement is lost whenever the reporter does not follow through.</p>
+<p>The rule:
+<strong>opening the public issue falls on the reporter first;
+the hop that terminated the private handling is responsible for ensuring it happens.</strong></p>
+<ul>
+<li>The decline invites the reporter to open the public issue
+and to return its identifier —
+the <a href="#the-handling-identifier-exchange">handling-identifier exchange</a> run in reverse.
+When the terminating hop is mid-chain,
+the invitation relays upstream hop by hop,
+like every other reporter-facing message.</li>
+<li>Reporter-opened is the preferred outcome:
+the improvement is filed under the finder’s own name,
+so attribution needs no consent machinery.</li>
+<li>If no identifier comes back within the window the decline states,
+the terminating hop files the issue itself.
+A fallback filing is written fresh,
+as an improvement request in the filer’s own words:
+a hardening is public-safe by definition (no exploitable vulnerability is disclosed),
+but the private thread is not —
+no verbatim paste of the report,
+and the finder is credited only with their consent.</li>
+<li>Either way the terminating hop records the issue identifier in its decline record,
+so later duplicates of the same finding can be answered with
+“here is where the improvement is tracked”.</li>
+<li>Any hop that forwards instead passes the responsibility down with the report.
+It therefore always lands on exactly the terminating hop —
+never duplicated, never dropped.</li>
+</ul>
+<p>At depth 0 the vendor’s <code>DEFENSE-IN-DEPTH</code> disposition
+(<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-triage/SKILL.md"><code>security-issue-triage</code></a>:
+“close as wontfix + file a public PR for the hardening”)
+already implements the fallback arm;
+this rule adds the reporter-first invitation before it.</p>
+<h3 id="deduplication-composes-per-hop">Deduplication composes per hop</h3>
+<p>Each hop’s dedup scope is its own inbox and archive:
+Akrites dedups across what flowed through Akrites;
+the ASF coordinator dedups across <code>security@apache.org</code>
+(including direct reports Akrites never saw);
+the vendor dedups across its tracker.
+Therefore:</p>
+<ul>
+<li>an upstream “already deduplicated” provenance claim is a hint that seeds the local check,
+never a reason to skip it;</li>
+<li>a local dedup match is confirmed by <strong>text</strong>,
+never by tags, labels, or upstream claims alone
+(the ASF pipeline’s sibling-vs-duplicate and open-vs-closed relabel rules
+move into the shared dedup guidance);</li>
+<li>consolidation at any hop makes finder credits and origin references <em>lists</em> everywhere downstream
+(see the provenance block).</li>
+</ul>
+<p>The local pass described here is not declarable — every hop runs it, whatever its profile says.
+The profile’s <code>deduplication</code> function is the stronger, opt-in thing built on top of it:
+consolidating the matches into one downstream case instead of merely cross-referencing them.</p>
+<h3 id="tools">Tools</h3>
+<ul>
+<li><strong><code>tools/mail-source/</code></strong> gains the ASF pipeline’s read-only Gmail-API backend
+(<code>gmail.readonly</code> scope, OAuth via environment)
+as a concrete adapter beside <code>imap/</code> and <code>mbox/</code>.
+It complements, not replaces, the existing
+<a href="https://github.com/apache/magpie/blob/main/tools/gmail/README.md"><code>tools/gmail/</code></a> (gmail-mcp) backend —
+the reference adopter’s primary full read + write backend —
+as the narrower-scoped choice for pipelines that only read and classify.</li>
+<li><strong><code>tools/vince/</code></strong> —
+upstream forwarder adapter for CERT/CC’s VINCE platform,
+per the (now bidirectional) contract.
+Akrites runs on VINCE and Gold Eagle on a VINCE derivative,
+so this adapter is the base the next two specialize.</li>
+<li><strong><code>tools/akrites/</code></strong> —
+adapter for the Linux Foundation’s Akrites clearinghouse
+(automated intake from September 2026).
+Its emit side is the format-agreement opportunity named in
+<a href="#reference-adopter-and-migration">Reference adopter and migration</a>:
+written and proposed before the first report flows.</li>
+<li><strong><code>tools/gold-eagle/</code></strong> —
+adapter for the US-government Gold Eagle clearinghouse
+(CERT/CC-built VINCE derivative);
+expected to share most of its detect/emit rules with <code>tools/vince/</code>.</li>
+<li><strong><code>tools/jpcert/</code></strong> —
+adapter for JPCERT/CC.
+The easiest coordinator to support:
+JPCERT/CC communicates over plain e-mail rather than a lock-in portal,
+so the adapter is nothing but mail conventions —
+a preamble to detect,
+a case reference (JVN / JPCERT# identifiers) to record,
+and a reply address to relay through.</li>
+<li><strong><code>tools/cncert/</code></strong> —
+adapter for CNCERT/CC, the coordinator behind China’s CNVD database.
+E-mail-based (<code>vsupport@cert.org.cn</code>) with the highest-effort detect side:
+notifications are Chinese-language and carry CNVD rather than CVE identifiers,
+so the adapter holds the subject/preamble patterns and the CNVD id format.</li>
+<li><strong><code>tools/zdi/</code></strong> —
+adapter for Trend Micro’s Zero Day Initiative,
+e-mail-based with stable per-case identifiers (<code>ZDI-CAN-NNNNN</code>)
+and fixed disclosure-deadline terms to record as embargo provenance.</li>
+<li><strong><code>tools/aws-security/</code></strong> —
+adapter for AWS Security acting as a coordinator.
+E-mail-based like JPCERT/CC,
+and its newer messages carry an <code>Engagement ID: &lt;m&gt;.2.&lt;n&gt;:mailto:amazon.com</code> line —
+a ready-made instance of the
+<a href="#the-handling-identifier-exchange">handling-identifier exchange</a>
+to record and quote back.</li>
+<li><strong><code>tools/athena/</code></strong>, <strong><code>tools/lightwell/</code></strong> —
+adapters for the Chainguard Athena and IBM/Red Hat Lightwell coalitions,
+whose platforms are their own;
+added when each relationship goes live.
+Both pool frontier-model findings before forwarding,
+so their preambles are where consolidated multi-origin reports
+(list-valued finder credits and origin references, per the provenance block)
+are most expected.</li>
+</ul>
+<p>ASF-specific machinery
+(Whimsy PMC lookup, Pony Mail archive search, the tag vocabulary, the <code>email-classification</code> archive layout)
+stays in the adopter’s <code>&lt;project-config&gt;/</code> —
+it is the ASF coordinator’s <code>downstream_directory</code> and archive implementation,
+not framework surface.</p>
+<h3 id="reference-adopter-and-migration">Reference adopter and migration</h3>
+<p>The ASF Security team’s <code>inbox-manager</code> repo is already a Magpie adopter
+and becomes the reference coordinator.
+Migration is phased so each step is independently useful:</p>
+<ol>
+<li><strong>Single-source-of-truth first</strong>:
+move the forwarding preamble / credit-line / disclaimer formats
+into the <code>asf-security</code> adapter as emit templates;
+upstream the dedup discipline and the assessment triple into the shared security docs,
+reconciling the triple with
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-triage/SKILL.md"><code>security-issue-triage</code></a>’s existing vocabulary
+(the Security Model applied verbatim, plus the trust-boundary cheat-sheet).
+The out-of-tree SKILLs cite the framework instead of restating it.</li>
+<li><strong>Tools</strong>:
+the read-only Gmail backend into <code>tools/mail-source/</code>.</li>
+<li><strong>Skills</strong>:
+<code>security-coordinator-import</code> / <code>-assess</code>,
+parameterized from the out-of-tree originals;
+the reference adopter retires its local SKILL bodies
+for the snapshot symlinks plus <code>&lt;project-config&gt;/</code> content and <code>.apache-magpie-overrides/</code>.</li>
+<li><strong>Akrites</strong>:
+agree the emit format (adapter sender side) before the first report;
+wire the detect side when traffic starts.</li>
+</ol>
+<h2 id="security-model">Security model</h2>
+<ul>
+<li><strong>The vendor owns the verdict — structurally.</strong>
+<code>verdict</code> is not a declarable coordinator function,
+and <code>may_terminate</code> is an explicit, audited delegation.
+Everything a coordinator sends a reporter is drafted non-assertively (“this appears to be…”),
+because the final non-issue / hardening / CVE call belongs to the downstream owner.</li>
+<li><strong>Drafts only; a human sends.</strong>
+Coordinator-mode skills inherit the propose-then-confirm posture unchanged:
+they write drafts and set dispositions;
+a credentialed human-operated step sends mail.</li>
+<li><strong>Provenance is verbatim or absent.</strong>
+No hop rewrites finder credits, origin references, or embargo terms,
+and the reporter chain only ever grows —
+a hop appends itself and touches nothing earlier.
+A hop that cannot preserve a field
+forwards it untouched inside the wrapped original rather than paraphrasing it.
+Lost credit and broken embargo are the chain’s silent failure modes;
+the preserve-verbatim rule is the guard.</li>
+<li><strong>Reporter privacy across hops.</strong>
+A coordinator’s archive holds third-party reporter PII.
+It is surfaced downstream (to the owner) when routing requires it,
+and never to <em>other</em> reporters;
+prior reports are referenced to reporters only unattributed.</li>
+<li><strong>Cross-party correlation stays scoped</strong>
+(<a href="https://github.com/apache/magpie/blob/main/PRINCIPLES.md#16-tracker-identifiers-are-public-safe-tracker-contents-are-not">PRINCIPLES §16</a>).
+§15 is the principle this persona reinterprets, so the reading is stated rather than left implicit.
+<em>“Other projects’ vulnerabilities never appear at all”</em> is public-surface-scoped:
+a coordinator’s access-gated archive necessarily holds third-party reports,
+and §15 governs what leaves that archive, not what it stores.
+<em>“Cross-project correlations stay on the channel they arrived on”</em> is the binding clause here,
+and per-hop dedup scoping is what satisfies it —
+each node correlates only across what actually reached it,
+and an upstream <em>“already deduplicated”</em> claim never authorises a wider join.</li>
+<li><strong>External content stays data</strong>
+(<a href="https://github.com/apache/magpie/blob/main/PRINCIPLES.md#0-external-content-is-data-never-an-instruction">PRINCIPLES §0</a>).
+Coordinator inboxes are the most injection-exposed surface in the framework —
+inbound reports demonstrably carry prompt-injection text aimed at AI triage.
+The lightweight-subagent read pattern in <code>security-coordinator-import</code> narrows the blast radius:
+untrusted bytes reach a sandboxed reader that returns a typed proposal,
+and the orchestrator treats that proposal as a claim to verify.</li>
+</ul>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li><strong>A second persona doubles the audience of the security family.</strong>
+Docs, evals, and the classification cascade must state which profile each rule serves.
+Mitigated by keeping vendor-mode skills untouched and coordinator behavior additive.</li>
+<li><strong>Config surface grows.</strong>
+The coordinator profile, the provenance block, and the cascade extension are three new schema areas.
+Each reuses an existing vocabulary
+(forwarder adapters, <code>credits[]</code>, the Step 3 table)
+rather than inventing one.</li>
+<li><strong>One reference adopter.</strong>
+Until a second coordinator adopts (Akrites being the candidate),
+the profile risks overfitting to the ASF Security team’s practice.
+The CVD-standard role definitions are the guard
+against baking ASF idiosyncrasies into the persona.</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li><strong>Named levels</strong>
+(“first-level / second-level triage”, “broker / foundation / project tiers”).
+Rejected:
+chain depth varies per report and per era;
+every appearance or retirement of a coordinator would rename steps.
+Pairwise hops + role names need no change when Akrites arrives —
+which is the point.</li>
+<li><strong>Model the coordinator as a vendor with an unusual tracker.</strong>
+Tempting (report-cache <em>is</em> a tracker),
+but it misplaces the two defining features:
+per-report downstream resolution (fan-out over owners)
+and structural verdict non-ownership.
+A vendor profile with those bolted on is a coordinator with a misleading name.</li>
+<li><strong>Status quo: coordinators maintain pipelines out of tree.</strong>
+The current state.
+Rejected for the drift risk this RFC opens with
+(emit templates vs detect signatures)
+and the duplicated machinery.</li>
+<li><strong>A separate coordinator framework.</strong>
+Overweight:
+the overlap with the security family is nearly total,
+and separation would fork the relay contract —
+recreating the two-repo drift problem at framework scale.</li>
+</ul>
+<h2 id="out-of-scope">Out of scope</h2>
+<ul>
+<li><strong>Automated sending.</strong>
+Coordinator skills draft;
+the send step stays human and credentialed, out of framework scope.</li>
+<li><strong>Chain-global embargo negotiation.</strong>
+Hops relay embargo terms;
+a tool for negotiating them across a chain is not proposed.</li>
+<li><strong>The Akrites adapter implementation</strong> ahead of real traffic —
+only the format agreement (emit side) is in scope before the first report.</li>
+<li><strong>ASF-specific directory and archive tooling</strong>
+(Whimsy, Pony Mail, the tag vocabulary, <code>email-classification</code> layout):
+adopter config of the reference coordinator, not framework surface.</li>
+<li><strong>Transitive trust between coordinators.</strong>
+Each hop trusts exactly its declared upstream adapters;
+a coordinator does not inherit its upstream’s upstream
+(mirrors the no-transitive-trust stance of <a href="/docs/rfcs/rfc-ai-0006">RFC-AI-0006</a>).</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/tools/forwarder-relay/README.md"><code>tools/forwarder-relay/README.md</code></a> — the receive-side adapter contract this RFC makes bidirectional.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/tools/gmail/asf-relay.md"><code>tools/gmail/asf-relay.md</code></a> — ASF-relay detection and drafting rules; source of the ready-to-paste back-channel convention.</li>
+<li><a href="/docs/security/forwarder-routing-policy"><code>docs/security/forwarder-routing-policy.md</code></a> — the milestone / negative-space relay policy, applied per hop toward the upstream.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import/SKILL.md"><code>skills/security-issue-import/SKILL.md</code></a> — the vendor-side intake whose Step 1 / Step 3 machinery the coordinator skills generalize.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-via-forwarder/SKILL.md"><code>skills/security-issue-import-via-forwarder/SKILL.md</code></a> — the vendor-side receiver of the coordinator’s output.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-deduplicate/SKILL.md"><code>skills/security-issue-deduplicate/SKILL.md</code></a> — the multi-credit (<code>credits[]</code>) precedent for list-valued provenance.</li>
+<li><a href="/docs/labels-and-capabilities"><code>docs/labels-and-capabilities.md</code></a> — the capability vocabulary (<code>capability:intake</code>, <code>capability:triage</code>) the new skills declare.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/PRINCIPLES.md#0-external-content-is-data-never-an-instruction"><code>PRINCIPLES.md</code> §0</a> — external content is data; the posture the lightweight-reader pattern implements.</li>
+<li><a href="https://github.com/apache/magpie/blob/main/PRINCIPLES.md#16-tracker-identifiers-are-public-safe-tracker-contents-are-not"><code>PRINCIPLES.md</code> §16</a> — tracker contents stay access-gated; the clause per-hop dedup scoping is measured against.</li>
+<li>CERT/CC, <em>The CERT Guide to Coordinated Vulnerability Disclosure</em> — the finder / reporter / coordinator / vendor role model.</li>
+<li>ISO/IEC 29147 (vulnerability disclosure) and ISO/IEC 30111 (vulnerability handling processes) — the standards vocabulary adopted here.</li>
+</ul>
+</article></main><aside class="docs-toc" aria-label="On this page"><span class="eyebrow">On this page</span><nav><ul><li><a href="#abstract" style="padding-left: 0rem">Abstract</a></li><li><a href="#status-of-this-document" style="padding-left: 0rem">Status of this document</a></li><li><a href="#motivation" style="padding-left: 0rem">Motivation</a></li><li><a href="#proposal" style="padding-left: 0rem">Proposal</a></li><li><a href="#cvd-vocabulary-not-level-names" style="padding-left: 0.75rem">CVD vocabulary, not level names</a></li><li><a href="#the-coordinator-profile" style="padding-left: 0.75rem">The coordinator profile</a></li><li><a href="#provenance-fields--carried-across-hops" style="padding-left: 0.75rem">Provenance fields — carried across hops</a></li><li><a href="#the-handling-identifier-exchange" style="padding-left: 0.75rem">The handling-identifier exchange</a></li><li><a href="#forwarder-adapters-become-bidirectional" style="padding-left: 0.75rem">Forwarder adapters become bidirectional</a></li><li><a href="#coordinator-mode-skills" style="padding-left: 0.75rem">Coordinator-mode skills</a></li><li><a href="#classification-cascade-becomes-config-driven" style="padding-left: 0.75rem">Classification cascade becomes config-driven</a></li><li><a href="#hardening-conversion--exactly-one-hop" style="padding-left: 0.75rem">Hardening conversion — exactly one hop</a></li><li><a href="#deduplication-composes-per-hop" style="padding-left: 0.75rem">Deduplication composes per hop</a></li><li><a href="#tools" style="padding-left: 0.75rem">Tools</a></li><li><a href="#reference-adopter-and-migration" style="padding-left: 0.75rem">Reference adopter and migration</a></li><li><a href="#security-model" style="padding-left: 0rem">Security model</a></li><li><a href="#drawbacks" style="padding-left: 0rem">Drawbacks</a></li><li><a href="#alternatives-considered" style="padding-left: 0rem">Alternatives considered</a></li><li><a href="#out-of-scope" style="padding-left: 0rem">Out of scope</a></li><li><a href="#references" style="padding-left: 0rem">References</a></li></ul></nav></aside></div><footer data-magpie-src="src/components/landing/SiteFooter.tsx:26" class="site-footer"><div data-magpie-src="src/components/landing/SiteFooter.tsx:26" class="container footer-grid"><div data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="footer-intro"><a data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><span data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="footer-asf">An Apache Software Foundation project.</span></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Explore</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/docs" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open footer-link-icon" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>Documentation</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/resources"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass footer-link-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>Learning guides</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/architecture"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-branch footer-link-icon" aria-hidden="true"><path d="M15 6a9 9 0 0 0-9 9V3"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle></svg>Architecture</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/tools"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench footer-link-icon" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></svg>Tools</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/downloads"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check footer-link-icon" aria-hidden="true"><path d="M12 22V12"></path><path d="m16 17 2 2 4-4"></path><path d="M21 11.127V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l1.32-.753"></path><path d="M3.29 7 12 12l8.71-5"></path><path d="m7.5 4.27 8.997 5.148"></path></svg>Downloads</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/brand"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks footer-link-icon" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg>Brand assets</a></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Take part</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Contributing</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Mailing list</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/discord.svg" alt="" aria-hidden="true" width="16" height="16"/>Discord</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.linkedin.com/company/apache-magpie/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/linkedin.svg" alt="" aria-hidden="true" width="16" height="16"/>LinkedIn</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Issue tracker</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Changelog</a></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Apache</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>The Foundation</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>License</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Events</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/security/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Security</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Privacy</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Sponsorship</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Thanks</a></div></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:37" class="container footer-bottom"><p data-magpie-src="src/components/landing/SiteFooter.tsx:37">© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p data-magpie-src="src/components/landing/SiteFooter.tsx:37">Apache <strong data-magpie-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, <strong data-magpie-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, and Apache are trademarks of The Apache Software Foundation.</p></div></footer><script type="module">var e=document.querySelector(`.docs-menu-toggle`),t=document.querySelector(`.docs-sidebar`),n=[...document.querySelectorAll(`.docs-main, .docs-toc, .site-footer`)],r=()=>{t.classList.remove(`is-open`),e.setAttribute(`aria-expanded`,`false`),document.body.classList.remove(`docs-navigation-open`),n.forEach(e=>{e.inert=!1})};e.addEventListener(`click`,()=>{if(t.classList.contains(`is-open`)){r();return}t.classList.add(`is-open`),e.setAttribute(`aria-expanded`,`true`),document.body.classList.add(`docs-navigation-open`),n.forEach(e=>{e.inert=!0}),t.querySelector(`a`)?.focus()}),document.querySelector(`[data-search-open]`)?.addEventListener(`click`,r),matchMedia(`(min-width: 801px)`).addEventListener(`change`,e=>{e.matches&&r()}),document.addEventListener(`keydown`,n=>{if(n.key!==`Tab`||!t.classList.contains(`is-open`))return;let r=[e,...t.querySelectorAll(`a, summary, button`)].filter(e=>e.getClientRects().length>0),i=r[0],a=r[r.length-1];n.shiftKey&&document.activeElement===i?(n.preventDefault(),a.focus()):!n.shiftKey&&document.activeElement===a&&(n.preventDefault(),i.focus())}),document.addEventListener(`keydown`,n=>{n.key===`Escape`&&t.classList.contains(`is-open`)&&(r(),e.focus())}),t.querySelectorAll(`a`).forEach(e=>e.addEventListener(`click`,r)),document.querySelector(`.copy-page`)?.addEventListener(`click`,async e=>{let t=e.currentTarget;try{let e=await fetch(t.dataset.markdown);if(!e.ok)throw Error(`Unavailable`);await navigator.clipboard.writeText(await e.text()),t.textContent=`Copied ✓`}catch{t.textContent=`Could not copy`}setTimeout(()=>{t.textContent=`Copy page ⧉`},2200)});var i=[...document.querySelectorAll(`.docs-toc nav a`)],a=new IntersectionObserver(e=>{for(let t of e)t.isIntersecting&&i.forEach(e=>{let n=decodeURIComponent(e.hash.slice(1))===t.target.id;e.classList.toggle(`active`,n),n?e.setAttribute(`aria-current`,`location`):e.removeAttribute(`aria-current`)})},{rootMargin:`-140px 0px -60% 0px`});i.forEach(e=>{let t=document.getElementById(decodeURIComponent(e.hash.slice(1)));t&&a.observe(t)});</script><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/rfcs/RFC-AI-0008.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a><script type="module">function e(){let e=document.querySelector(`main`);if(!e)return;let t=[...e.querySelectorAll(`section[id]`)].filter(e=>!e.matches(`[role="tabpanel"]`)&&!e.parentElement?.closest(`section[id]`)),n=e.querySelector(`.docs-prose`)?[...e.querySelectorAll(`.docs-prose :is(h2,h3)[id]`)]:t;if(!n.length)return;let r=!1,i=!1,a=()=>{r=!0},o=()=>{r=!1};window.addEventListener(`wheel`,a,{passive:!0}),window.addEventListener(`touchmove`,a,{passive:!0}),document.addEventListener(`pointerdown`,a,{passive:!0}),document.addEventListener(`keydown`,e=>{let t=e.target;t instanceof Element&&t.closest(`input,textarea,select,[contenteditable="true"]`)||[`ArrowUp`,`ArrowDown`,`PageUp`,`PageDown`,`Home`,`End`,` `].includes(e.key)&&a()}),document.addEventListener(`click`,e=>{e.target instanceof Element&&e.target.closest(`a[href]`)&&o()}),window.addEventListener(`hashchange`,o),window.addEventListener(`popstate`,o),window.addEventListener(`pageshow`,o),window.addEventListener(`scroll`,()=>{r&&!i&&(i=!0,requestAnimationFrame(()=>{if(i=!1,!r)return;let e=document.querySelector(`.site-header`)?.getBoundingClientRect().bottom??0,t=Math.max(0,e)+24,a;for(let e of n)window.scrollY>0&&e.getClientRects().length&&e.getBoundingClientRect().top<=t&&(a=e);let o=new URL(window.location.href),s=null;try{s=document.getElementById(decodeURIComponent(o.hash.slice(1)))}catch{}if(a&&s&&a.contains(s))return;let c=a?`#${a.id}`:``;o.hash!==c&&(o.hash=c,history.replaceState(history.state,``,o))}))},{passive:!0})}function t(){let e=document.createElement(`div`);e.className=`copy-link-status`,e.setAttribute(`role`,`status`),document.body.append(e);let t;document.addEventListener(`click`,async n=>{if(n.button||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target instanceof Element?n.target.closest(`.section-heading > a[href]`):null;if(r){try{await navigator.clipboard.writeText(r.href),e.textContent=`Link copied`}catch{e.textContent=`Copy the link from the address bar`}clearTimeout(t),t=setTimeout(()=>{e.textContent=``},2e3)}});let n=document.querySelector(`.home-navigation`);if(!n)return;let r=n.querySelector(`summary`);n.addEventListener(`click`,e=>{let t=e.target instanceof Element?e.target.closest(`a[href]`):null;if(t&&(n.open=!1,!(e instanceof MouseEvent&&(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))&&t.getAttribute(`href`)?.startsWith(`#`))){let e=document.getElementById(t.hash.slice(1));e?.setAttribute(`tabindex`,`-1`),e?.focus({preventScroll:!0})}}),document.addEventListener(`click`,e=>{e.target instanceof Node&&!n.contains(e.target)&&(n.open=!1)}),document.addEventListener(`keydown`,e=>{e.key===`Escape`&&n.open&&(n.open=!1,r?.focus({preventScroll:!0}))})}e(),t();var n=document.querySelector(`.theme-toggle`),r=()=>{let e=document.documentElement.dataset.theme===`dark`;n?.setAttribute(`aria-pressed`,String(e)),n?.setAttribute(`aria-label`,`Switch to ${e?`light`:`dark`} mode`)};n?.addEventListener(`click`,()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme===`dark`?`light`:`dark`;try{localStorage.setItem(`magpie-theme`,document.documentElement.dataset.theme)}catch{}r()}),r();</script><!-- magpie-preview-overlay -->
+<script src="/_preview/html2canvas-pro.min.js"></script>
+<script src="/_preview/review.js"></script>
+</body></html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+  GENERATED FILE - do not edit.
+
+  Written by tools/dev/render-wizard.py. Illustrative of the shape of a
+  run, not a recording of one.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 705 760"
+     width="705" height="760" role="img"
+     data-magpie-generated="render-wizard"
+     aria-label="An animated /magpie-setup config run for the contributor-growth family: the check failing, values derived from the repository, one question, and personal files written">
+  <title>/magpie-setup config — contributor-growth</title>
+  <desc>Illustrative animation of a configuration run for the contributor-growth family. Derived from the skills' declared required configuration.</desc>
+  <rect width="705" height="760" rx="10" fill="#1d1f21"/>
+  <rect x="0" y="0" width="705" height="34" rx="10" fill="#2b2e31"/>
+  <rect x="0" y="24" width="705" height="10" fill="#2b2e31"/>
+  <circle cx="22" cy="17" r="6" fill="#3f4448"/>
+  <circle cx="44" cy="17" r="6" fill="#3f4448"/>
+  <circle cx="66" cy="17" r="6" fill="#3f4448"/>
+  <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="17" xml:space="preserve">
+    <text x="26" y="80" fill="#8abeb7" opacity="0">&gt; /magpie-contributor-growth:&lt;skill&gt;<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0000;0.0010;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="128" fill="#d8a657" opacity="0">  ✗ project configuration — 7 required, none found<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0360;0.0370;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="176" fill="#8a8f94" opacity="0">  Configuring now. Gitignored files in this clone only.<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0720;0.0730;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="224" fill="#7f9f7f" opacity="0">  ✓ project.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1080;0.1090;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="248" fill="#8a8f94" opacity="0">      upstream_repo   acme/toolkit   from the origin remote<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1439;0.1449;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="296" fill="#c5c8c6" opacity="0">  One question, for what the repository cannot tell me:<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1799;0.1809;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="320" fill="#c5c8c6" opacity="0">      committer-onboarding-config.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2159;0.2169;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="344" fill="#8a8f94" opacity="0">          Capability-flag vocabulary for committer intake and…<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2519;0.2529;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="368" fill="#c5c8c6" opacity="0">      committer-readiness.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2879;0.2889;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="392" fill="#8a8f94" opacity="0">          The project's declared committer and PMC thresholds —…<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3239;0.3249;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="416" fill="#c5c8c6" opacity="0">      contributor-nomination-config.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3598;0.3608;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="440" fill="#8a8f94" opacity="0">          Nomination-brief thresholds and assessment window<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3958;0.3968;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="464" fill="#c5c8c6" opacity="0">      contributor-sentiment-config.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4318;0.4328;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="488" fill="#8a8f94" opacity="0">          Signal thresholds for the sentiment gate<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4678;0.4688;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="512" fill="#c5c8c6" opacity="0">      onboarding-concierge-config.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5038;0.5048;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="536" fill="#8a8f94" opacity="0">          The path a new contributor is walked through, and who…<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5398;0.5408;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="560" fill="#c5c8c6" opacity="0">      privacy-llm.md<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5758;0.5768;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="584" fill="#8a8f94" opacity="0">          Which model tier may see which class of content, for…<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.6117;0.6127;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="632" fill="#7f9f7f" opacity="0">  Written to .git/apache-magpie/  — nothing in the working<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.6477;0.6487;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="656" fill="#7f9f7f" opacity="0">  tree, nothing staged, no teammate affected.<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.6837;0.6847;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="704" fill="#8a8f94" opacity="0">  The project can also adopt Magpie, so contributors get this<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7197;0.7207;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <text x="26" y="728" fill="#8a8f94" opacity="0">  on clone: /magpie-setup adopt<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7557;0.7567;1" dur="10.6s" repeatCount="indefinite"/></text>
+    <rect x="26" y="715" width="10" height="17" fill="#c5c8c6"><animate attributeName="opacity" values="1;1;0;0;1" dur="1.2s" repeatCount="indefinite"/></rect>
+  </g>
+</svg>

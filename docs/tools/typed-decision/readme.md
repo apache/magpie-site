@@ -1,0 +1,58 @@
+# `tools/typed-decision/`
+
+Rendered page: https://magpie.apache.org/docs/tools/typed-decision/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/tools/typed-decision/readme.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+**Capability:** contract:typed-decision
+
+**Kind:** implementation
+
+**Vendor:** TypeSafe
+
+**Harness:** agnostic
+
+Provider-agnostic typed decision adapter contract (`choice`, `score`, `noul`) with TypeSafe's Jev API (`api.typesafe.ai/v1/systemone`) as the initial reference backend.
+See [`tool.md`](https://github.com/apache/magpie/blob/main/tools/typed-decision/tool.md) for full contract specifications and Python API usage.
+
+## Prerequisites
+
+- **Runtime:** Python 3.11+ via `uv`.
+  The implementation is stdlib-only (`urllib.request`), introducing zero third-party dependencies.
+- **CLIs:** None.
+- **Credentials / auth:** `TYPESAFE_API_KEY` (or `JEV_API_KEY`) environment variable or home-directory key at `~/.config/apache-magpie/typesafe.key`.
+  Outbound prompts are strictly gated through [`tools/privacy-llm/`](https://github.com/apache/magpie/tree/main/tools/privacy-llm) and deny unapproved destinations by default.
+- **Network:** `api.typesafe.ai` over HTTPS.
+- **Secure agent setup:** under [`docs/setup/secure-agent-setup.md`](https://github.com/apache/magpie/blob/main/docs/setup/secure-agent-setup.md) the sandbox cannot read `~/`, so the key file is not found and every call resolves to `TypedDecisionUnavailable`.
+  After the privacy-llm opt-in is signed off, an adopter enables the provider by passing the key through an environment variable the clean-env wrapper forwards, and by adding `api.typesafe.ai` to their own `sandbox.network.allowedDomains`.
+  The framework's default allowlist does not include it, by design.
+
+## Operations
+
+The contract defines three operations (see [`tool.md`](https://github.com/apache/magpie/blob/main/tools/typed-decision/tool.md) for parameter details):
+
+1. **`choice(prompt, options: list[str]) -> {label, confidence}`** — Discrete option selection.
+2. **`score(prompt, scale) -> {value, confidence}`** — Bounded numeric scoring along a range.
+3. **`noul(prompt) -> {probability}`** — Semantic null/binary decision probability.
+
+## Configuration
+
+Adopters configure the provider and credentials via environment variables:
+
+| Variable | Description | Default |
+|---|---|---|
+| `MAGPIE_TYPED_DECISION_PROVIDER` | Selected decision backend (`jev`) | `jev` if credentials configured, else reports unavailable |
+| `TYPESAFE_API_KEY` | API key for TypeSafe Jev provider | Unset (can also use `JEV_API_KEY` or `~/.config/apache-magpie/typesafe.key`) |
+
+Third-party destinations such as `api.typesafe.ai` deny by default per [`tools/privacy-llm/models.md`](https://github.com/apache/magpie/blob/main/tools/privacy-llm/models.md).
+They require an explicit opt-in entry in `<project-config>/privacy-llm.md` with filled `Data-residency contract` and `Approved-by` sign-offs.
+
+## Fail-Open Contract
+
+In adherence with RFC-AI-0004:
+- On missing credentials, timeout, network failure, or provider error, every operation raises `TypedDecisionUnavailable`.
+- The tool **never fabricates an answer** or returns synthetic defaults.
+- Callers must catch `TypedDecisionUnavailable` and fall back to maintainer confirmation or primary LLM reasoning.

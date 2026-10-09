@@ -1,0 +1,1202 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>Mode economics — what does each mode cost to run? — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/mode-economics/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="Mode economics — what does each mode cost to run? — Apache Magpie Docs"><meta property="og:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta property="og:url" content="https://magpie.apache.org/docs/mode-economics/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mode economics — what does each mode cost to run? — Apache Magpie Docs"><meta name="twitter:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      if (location.hostname === "magpie.apache.org") {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+      }
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.BtLYpxD0.css"><link rel="stylesheet" href="/_astro/DocsLayout.5MFayD3p.css"></head><body data-astro-cid-z4jru4n3><header data-magpie-src="src/components/landing/SiteHeader.tsx:8" class="site-header"><a data-magpie-src="src/components/landing/SiteHeader.tsx:9" class="skip-link" href="#main-content">Skip to content</a><div data-magpie-src="src/components/landing/SiteHeader.tsx:10" class="header-inner"><a data-magpie-src="src/components/landing/SiteHeader.tsx:11" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-magpie-src="src/components/landing/SiteHeader.tsx:11" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><div data-magpie-src="src/components/landing/SiteHeader.tsx:12" class="header-actions"><button data-magpie-src="src/components/landing/SiteHeader.tsx:13" class="button button-quiet button-icon docs-menu-toggle" aria-label="Browse documentation" aria-expanded="false" aria-controls="docs-sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:13">Browse</span></button><button data-magpie-src="src/components/landing/SiteHeader.tsx:14" class="docs-search-trigger" aria-label="Search docs" data-search-open="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span data-magpie-src="src/components/landing/SiteHeader.tsx:14">Search docs</span><kbd data-magpie-src="src/components/landing/SiteHeader.tsx:14">⌘ K</kbd></button><button data-magpie-src="src/components/landing/SiteHeader.tsx:7" class="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button></div></div></header><dialog class="search-dialog" aria-labelledby="search-title" data-index="/search-index.json"><div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off"><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div><div class="search-results" id="search-results"></div><p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p><div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div></dialog><script type="module">var e=document.querySelector(`.search-dialog`),t=e.querySelector(`input`),n=e.querySelector(`.search-results`),r=e.querySelector(`.search-status`),i=document.querySelector(`[data-search-open]`),a,o=-1,s=[],c=!1,l=[`/start`,`/docs/security/readme`,`/docs/pr-management/readme`,`/docs/setup/privacy-llm`,`/docs/education/readme`],u=()=>{if(!a)return;let e=t.value.trim().toLowerCase(),i=e.split(/\s+/).filter(Boolean);s=e?a.map(t=>{let n=t.title.toLowerCase(),r=`${n} ${t.section} ${t.text}`.toLowerCase();return{entry:t,score:i.every(e=>r.includes(e))?i.reduce((e,t)=>e+(n.includes(t)?15:1),0)+(n.includes(e)?30:0):0}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score).slice(0,12).map(e=>e.entry):l.map(e=>a.find(t=>t.path.endsWith(e))).filter(e=>!!e),n.replaceChildren(),o=-1;for(let e of s){let t=document.createElement(`a`);t.href=e.path;let r=document.createElement(`strong`);r.textContent=e.title;let i=document.createElement(`span`);i.textContent=e.section,t.append(r,i),n.append(t)}r.textContent=e?s.length?`${s.length} results. Use arrow keys to choose a page.`:`No pages found. Try “security”, “setup”, or “release”.`:`A few useful places to start.`},d=async()=>{if(e.showModal(),t.focus(),!a){r.textContent=`Loading the documentation index…`;try{let t=await fetch(e.dataset.index);if(!t.ok)throw Error(`Index unavailable`);a=await t.json(),c=!1}catch{c=!0,r.textContent=`Search is temporarily unavailable. You can still browse the sidebar.`}}c||u()};i.addEventListener(`click`,d),e.querySelector(`[data-search-close]`).addEventListener(`click`,()=>e.close()),e.addEventListener(`click`,t=>{if(t.target===e){let n=e.getBoundingClientRect();(t.clientX<n.left||t.clientX>n.right||t.clientY<n.top||t.clientY>n.bottom)&&e.close()}}),t.addEventListener(`input`,u),e.addEventListener(`keydown`,t=>{if(t.key===`Tab`){let n=[...e.querySelectorAll(`input,button,a[href]`)].filter(e=>!e.hasAttribute(`disabled`)),r=n[0],i=n.at(-1);t.shiftKey&&document.activeElement===r?(t.preventDefault(),i?.focus()):!t.shiftKey&&document.activeElement===i&&(t.preventDefault(),r?.focus())}if((t.key===`ArrowDown`||t.key===`ArrowUp`)&&s.length){t.preventDefault(),o=(o+(t.key===`ArrowDown`?1:-1)+s.length)%s.length;let e=[...n.querySelectorAll(`a`)];e.forEach((e,t)=>e.classList.toggle(`selected`,t===o)),e[o].focus()}}),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.open?e.close():d())}),e.addEventListener(`close`,()=>i.focus()),i.querySelector(`kbd`).textContent=navigator.platform.includes(`Mac`)?`⌘ K`:`Ctrl K`;</script><div class="container docs-shell"><aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation"><div id="docs-nav-scroll"><a href="/start" class="docs-overview-link">Install Magpie</a><a href="/docs" class="docs-overview-link">Introduction</a><nav aria-label="Documentation sections"><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Quick start</span></summary><a href="/docs/quick-start/readme" aria-label="Quick start overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Concepts</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" aria-current="page" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/ai-contribution-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="ai contribution policy" data-astro-cid-lihgpoae>ai contribution policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/when-to-use-mods" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="when to use mods" data-astro-cid-lihgpoae>when to use mods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Updating Magpie</span></summary><a href="/docs/updating-magpie" aria-label="Updating Magpie overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Setup</span></summary><a href="/docs/setup/readme" aria-label="Setup overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/commit-attribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="commit attribution" data-astro-cid-lihgpoae>commit attribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Education</span></summary><a href="/docs/education/readme" aria-label="Education overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Training</span></summary><a href="/docs/education/training/readme" aria-label="Training overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Security</span></summary><a href="/docs/security/readme" aria-label="Security overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Release Management</span></summary><a href="/docs/release-management/readme" aria-label="Release Management overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/reproducibility" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="reproducibility" data-astro-cid-lihgpoae>reproducibility</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Mentoring</span></summary><a href="/docs/mentoring/readme" aria-label="Mentoring overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Adapters</span></summary><a href="/docs/adapters/readme" aria-label="Adapters overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/aider" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="aider" data-astro-cid-lihgpoae>aider</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/copilot" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="copilot" data-astro-cid-lihgpoae>copilot</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/goose" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="goose" data-astro-cid-lihgpoae>goose</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Contracts (33)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-nexus/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-nexus" data-astro-cid-lihgpoae>asf-nexus</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat" data-astro-cid-lihgpoae>chat</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-discord/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-discord" data-astro-cid-lihgpoae>chat-discord</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-slack/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-slack" data-astro-cid-lihgpoae>chat-slack</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forgejo/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forgejo" data-astro-cid-lihgpoae>forgejo</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gitlab/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gitlab" data-astro-cid-lihgpoae>gitlab</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/osv/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="osv" data-astro-cid-lihgpoae>osv</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/people/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="people" data-astro-cid-lihgpoae>people</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/tracker/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="tracker" data-astro-cid-lihgpoae>tracker</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/typed-decision/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="typed-decision" data-astro-cid-lihgpoae>typed-decision</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Substrates (32)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/adversarial-review/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="adversarial-review" data-astro-cid-lihgpoae>adversarial-review</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/container-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="container-gateway" data-astro-cid-lihgpoae>container-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/contributor-metrics/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="contributor-metrics" data-astro-cid-lihgpoae>contributor-metrics</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maven-artifact-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maven-artifact-verify" data-astro-cid-lihgpoae>maven-artifact-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management-stats/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pr-management-stats" data-astro-cid-lihgpoae>pr-management-stats</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-config/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-config" data-astro-cid-lihgpoae>release-config</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-verify" data-astro-cid-lihgpoae>release-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/reproducible-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="reproducible-archive" data-astro-cid-lihgpoae>reproducible-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/setup-preflight/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="setup-preflight" data-astro-cid-lihgpoae>setup-preflight</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>RFCs</span></summary><a href="/docs/rfcs/readme" aria-label="RFCs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>External Skill Sources</span></summary><a href="/docs/skill-sources/readme" aria-label="External Skill Sources overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Designs</span></summary><a href="/docs/designs/readme" aria-label="Designs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-17-body-owned-config-layers" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="body owned config layers" data-astro-cid-lihgpoae>body owned config layers</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-20-reproducible-releases" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="reproducible releases" data-astro-cid-lihgpoae>reproducible releases</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-21-marketplace-reconciliation-tracking" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="marketplace reconciliation tracking" data-astro-cid-lihgpoae>marketplace reconciliation tracking</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-23-adversarial-review" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="adversarial review" data-astro-cid-lihgpoae>adversarial review</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-27-contributor-growth-calibration-and-screening" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="contributor growth calibration and screening" data-astro-cid-lihgpoae>contributor growth calibration and screening</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main id="main-content" tabindex="-1" class="docs-main"><div class="docs-breadcrumb"><a href="/docs">Docs</a><span>/</span><span>mode economics</span><button class="button button-secondary button-small copy-page" data-markdown="/docs/mode-economics.md">Copy page</button></div><article class="prose docs-prose"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="mode-economics--what-does-each-mode-cost-to-run">Mode economics — what does each mode cost to run?</h1>
+<blockquote>
+<p><strong>Indicative, not a quote.</strong> The numbers on this page describe the
+measured file sizes, bounded replay samples, and unvalidated planning estimates.
+Token prices vary by provider, model, date, and discount tier. Always
+multiply by your own provider’s current rate — or by zero if you are
+running local inference.</p>
+</blockquote>
+<p>This page exists because <a href="https://github.com/apache/magpie/blob/main/MISSION.md#affordability-and-vendor-neutrality--the-public-good-commitment">MISSION.md § Affordability</a>
+commits to documenting mode economics honestly: a maintainer evaluating
+adoption should be able to make an informed decision, not discover the
+cost after the fact. The same data informs the long-term capacity
+planning for an ASF-hosted inference endpoint
+(see <a href="#long-term-the-asf-inference-endpoint">Long-term: the ASF inference endpoint</a>).</p>
+<hr>
+<h2 id="how-to-read-this-page">How to read this page</h2>
+<h3 id="what-tokens-means-here">What “tokens” means here</h3>
+<p>One token ≈ 0.75 words in English prose, or roughly one character in
+structured code or JSON. Token counts on this page use <strong>K</strong> for a
+thousand tokens and <strong>M</strong> for a million (so <code>30K</code> = 30,000 and
+<code>1.5M</code> = 1,500,000). Practical anchors:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Content</th>
+<th>Approximate token count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Typical bug-report body (400 words)</td>
+<td>~530 tokens</td>
+</tr>
+<tr>
+<td class="table-label">Small PR diff (50 lines changed)</td>
+<td>~800 tokens</td>
+</tr>
+<tr>
+<td>Medium PR diff (300 lines changed)</td>
+<td>~5K tokens</td>
+</tr>
+<tr>
+<td>Large PR diff (1,500 lines changed)</td>
+<td>~25K tokens</td>
+</tr>
+<tr>
+<td class="table-label">Mail thread, 10 messages</td>
+<td>~3K–8K tokens</td>
+</tr>
+</tbody>
+</table>
+<p>Full skill-file sizes are measured separately in the generated table below.
+They describe the file loaded when that skill is invoked, not the full session
+or the always-on plugin description cost. Referenced documents and tool output
+add further context. Other token ranges on this page are planning estimates;
+they are not measured runtime percentiles. The separately labeled replay
+benchmark below provides sample percentiles for its own bounded workloads.
+Different model tokenizers can produce different counts; no universal conversion
+percentage is assumed.</p>
+<h3 id="measured-skill-file-tokens">Measured skill-file tokens</h3>
+<p>Restamp with <code>uv run --project tools/skill-token-count skill-token-count --write</code>.
+The <a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/README.md">measurement tool</a> documents the scope
+and normalization. Where the per-skill figures live and how to print them is at
+the end of this section.</p>
+<p>Every non-<code>setup</code> skill’s figure below includes the shared reconciliation
+pre-flight check, and is <strong>smaller than it was before that check existed</strong>.</p>
+<p>The check first grew the shared pre-flight block from 1,679 to 3,271
+tokens — <strong>+1,608</strong> on each of the 65 skills carrying it, +49.0% on the
+smallest. Three changes reversed that, each removing a layer rather than
+adding one. The block was split into a decision path and a cold sidecar.
+Then the deterministic half — read a lock, order two versions, compare
+two hashes, subtract two dates, decide whether a proposal was already
+shown — moved out of prose entirely into
+<a href="https://github.com/apache/magpie/blob/main/tools/setup-preflight/README.md"><code>tools/setup-preflight</code></a>, which the
+block runs as one command. Then the rules prose moved there too, and the
+command now emits the sections its own findings name, so there is no
+second file to read and no per-skill copy of one.</p>
+<p>The block is <strong>585 tokens</strong>, against 1,679 before the check existed and
+3,271 at its peak. Each of the 65 skills is <strong>1,075–1,081 tokens cheaper
+than on <code>main</code></strong> while carrying the whole check: <code>ci-runner-audit</code> 3,281 →
+2,203 (−32.9%), and the sidecar that briefly cost 2,516 tokens × 65 copies
+in the repository is gone.</p>
+<p>The rules are 2,057 tokens across eight sections, held once in the tool. A
+run that needs one pays for one — typically 120 to 580 tokens — and the
+ordinary <code>{"verdict": "ok"}</code> pays for none.</p>
+<p>What is left in the block is the part a model is for: run the command,
+stay silent on <code>ok</code>, follow the rules a finding carries, and never run
+<code>/magpie-setup adopt</code> unattended. What is left in neither is the
+arithmetic, which is now tested rather than graded.</p>
+<p>Each skill’s count lives in its own <code>SKILL.md</code>, as a generated
+<code>measured_tokens:</code> frontmatter line, the same way <code>surface_hash:</code> does. It is
+measured with <a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/README.md"><code>tools/skill-token-count</code></a>
+(pinned <code>tiktoken</code>, <code>cl100k_base</code>): the full UTF-8 file, frontmatter and
+comments included, excluding the <code>measured_tokens:</code> line itself. The
+<a href="https://magpie.apache.org/docs/mode-economics/">website</a> renders the
+per-skill table from those stamps at build time; to print it locally:</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFB757">uv</span><span style="color:#ADDCFF"> run</span><span style="color:#91CBFF"> --project</span><span style="color:#ADDCFF"> tools/skill-token-count</span><span style="color:#ADDCFF"> skill-token-count</span><span style="color:#91CBFF"> --table</span></span></code></pre>
+<p>The table is not committed here. A single generated table covering every skill
+made any two skill PRs conflict on its shared lines; a per-skill stamp only
+conflicts when two PRs edit the same skill.</p>
+<p>Tokenizer: <code>cl100k_base</code> (pinned <code>tiktoken</code>). Each figure is the skill’s own
+<code>measured_tokens:</code> stamp: the full file, frontmatter and comments included,
+excluding the stamp line itself.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill file</th>
+<th style="text-align: right">Measured tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/audit-finding-fix/SKILL.md">audit-finding-fix</a></td>
+<td style="text-align: right">4,810</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/ci-runner-audit/SKILL.md">ci-runner-audit</a></td>
+<td style="text-align: right">2,295</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/committer-onboarding/SKILL.md">committer-onboarding</a></td>
+<td style="text-align: right">4,722</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/activity-sweep/SKILL.md">contributor-activity-sweep</a></td>
+<td style="text-align: right">3,482</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/calibrate/SKILL.md">contributor-calibrate</a></td>
+<td style="text-align: right">3,733</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/candidate-screen/SKILL.md">contributor-candidate-screen</a></td>
+<td style="text-align: right">3,695</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/identity-map/SKILL.md">contributor-identity-map</a></td>
+<td style="text-align: right">3,489</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/nomination/SKILL.md">contributor-nomination</a></td>
+<td style="text-align: right">5,318</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/sentiment/SKILL.md">contributor-sentiment</a></td>
+<td style="text-align: right">4,618</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/contributor-to-committer/SKILL.md">contributor-to-committer</a></td>
+<td style="text-align: right">5,210</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/dependency-audit/SKILL.md">dependency-audit</a></td>
+<td style="text-align: right">3,237</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/dependency-license-audit/SKILL.md">dependency-license-audit</a></td>
+<td style="text-align: right">3,582</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/flaky-test-triage/SKILL.md">flaky-test-triage</a></td>
+<td style="text-align: right">3,166</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/good-first-issue-author/SKILL.md">good-first-issue-author</a></td>
+<td style="text-align: right">3,742</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/good-first-issue-sweep/SKILL.md">good-first-issue-sweep</a></td>
+<td style="text-align: right">4,364</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/backlog-stats/SKILL.md">issue-backlog-stats</a></td>
+<td style="text-align: right">4,942</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/deduplicate/SKILL.md">issue-deduplicate</a></td>
+<td style="text-align: right">4,681</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/fix-workflow/SKILL.md">issue-fix-workflow</a></td>
+<td style="text-align: right">4,998</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/reassess/SKILL.md">issue-reassess</a></td>
+<td style="text-align: right">5,117</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/reassess-stats/SKILL.md">issue-reassess-stats</a></td>
+<td style="text-align: right">3,129</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/reproducer/SKILL.md">issue-reproducer</a></td>
+<td style="text-align: right">5,258</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/stale-sweep/SKILL.md">issue-stale-sweep</a></td>
+<td style="text-align: right">5,121</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-issue/skills/triage/SKILL.md">issue-triage</a></td>
+<td style="text-align: right">5,193</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/license-compliance-audit/SKILL.md">license-compliance-audit</a></td>
+<td style="text-align: right">4,716</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/list-skills/SKILL.md">list-skills</a></td>
+<td style="text-align: right">2,413</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/welcome/SKILL.md">mentoring-welcome</a></td>
+<td style="text-align: right">3,461</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/newcomer-issue-explainer/SKILL.md">newcomer-issue-explainer</a></td>
+<td style="text-align: right">3,618</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/onboarding-concierge/SKILL.md">onboarding-concierge</a></td>
+<td style="text-align: right">3,368</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/optimize-skill/SKILL.md">optimize-skill</a></td>
+<td style="text-align: right">3,336</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pairing/skills/multi-agent-review/SKILL.md">pairing-multi-agent-review</a></td>
+<td style="text-align: right">3,705</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pairing/skills/self-review/SKILL.md">pairing-self-review</a></td>
+<td style="text-align: right">3,688</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/code-review/SKILL.md">pr-management-code-review</a></td>
+<td style="text-align: right">5,053</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/mentor/SKILL.md">pr-management-mentor</a></td>
+<td style="text-align: right">3,182</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/quick-merge/SKILL.md">pr-management-quick-merge</a></td>
+<td style="text-align: right">4,844</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/stack-review/SKILL.md">pr-management-stack-review</a></td>
+<td style="text-align: right">5,529</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/stats/SKILL.md">pr-management-stats</a></td>
+<td style="text-align: right">3,561</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/pr-triage/SKILL.md">pr-management-triage</a></td>
+<td style="text-align: right">5,206</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/pr-stale-sweep/SKILL.md">pr-stale-sweep</a></td>
+<td style="text-align: right">5,059</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/pre-first-pr-check/SKILL.md">pre-first-pr-check</a></td>
+<td style="text-align: right">3,628</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/announce-draft/SKILL.md">release-announce-draft</a></td>
+<td style="text-align: right">6,825</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/archive-sweep/SKILL.md">release-archive-sweep</a></td>
+<td style="text-align: right">4,573</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/audit-report/SKILL.md">release-audit-report</a></td>
+<td style="text-align: right">6,673</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/keys-sync/SKILL.md">release-keys-sync</a></td>
+<td style="text-align: right">4,871</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/prepare/SKILL.md">release-prepare</a></td>
+<td style="text-align: right">5,532</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/promote/SKILL.md">release-promote</a></td>
+<td style="text-align: right">6,982</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/rc-cut/SKILL.md">release-rc-cut</a></td>
+<td style="text-align: right">9,962</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/verify-rc/SKILL.md">release-verify-rc</a></td>
+<td style="text-align: right">9,936</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/vote-draft/SKILL.md">release-vote-draft</a></td>
+<td style="text-align: right">6,842</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-release-management/skills/vote-tally/SKILL.md">release-vote-tally</a></td>
+<td style="text-align: right">5,799</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/report-framework-issue/SKILL.md">report-framework-issue</a></td>
+<td style="text-align: right">4,697</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/reviewer-routing/SKILL.md">reviewer-routing</a></td>
+<td style="text-align: right">4,994</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/cve-allocate/SKILL.md">security-cve-allocate</a></td>
+<td style="text-align: right">6,964</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-deduplicate/SKILL.md">security-issue-deduplicate</a></td>
+<td style="text-align: right">5,585</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-fix/SKILL.md">security-issue-fix</a></td>
+<td style="text-align: right">6,080</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import/SKILL.md">security-issue-import</a></td>
+<td style="text-align: right">9,417</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-md/SKILL.md">security-issue-import-from-md</a></td>
+<td style="text-align: right">6,695</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-pr/SKILL.md">security-issue-import-from-pr</a></td>
+<td style="text-align: right">8,063</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-scan/SKILL.md">security-issue-import-from-scan</a></td>
+<td style="text-align: right">5,578</td>
+</tr>
+<tr>
+<td><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-via-forwarder/SKILL.md">security-issue-import-via-forwarder</a></td>
+<td style="text-align: right">5,813</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-invalidate/SKILL.md">security-issue-invalidate</a></td>
+<td style="text-align: right">7,148</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-sync/SKILL.md">security-issue-sync</a></td>
+<td style="text-align: right">6,330</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-triage/SKILL.md">security-issue-triage</a></td>
+<td style="text-align: right">6,726</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/model-prepare/SKILL.md">security-model-prepare</a></td>
+<td style="text-align: right">4,647</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/model-update/SKILL.md">security-model-update</a></td>
+<td style="text-align: right">4,779</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/model-verify/SKILL.md">security-model-verify</a></td>
+<td style="text-align: right">5,584</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/tracker-stats-dashboard/SKILL.md">security-tracker-stats-dashboard</a></td>
+<td style="text-align: right">3,832</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/setup/SKILL.md">setup</a></td>
+<td style="text-align: right">4,600</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/isolated-setup-doctor/SKILL.md">setup-isolated-setup-doctor</a></td>
+<td style="text-align: right">6,108</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/isolated-setup-install/SKILL.md">setup-isolated-setup-install</a></td>
+<td style="text-align: right">5,726</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/isolated-setup-update/SKILL.md">setup-isolated-setup-update</a></td>
+<td style="text-align: right">5,260</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/isolated-setup-verify/SKILL.md">setup-isolated-setup-verify</a></td>
+<td style="text-align: right">5,098</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/override-upstream/SKILL.md">setup-override-upstream</a></td>
+<td style="text-align: right">4,573</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/privacy-llm/SKILL.md">setup-privacy-llm</a></td>
+<td style="text-align: right">2,218</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/shared-config-sync/SKILL.md">setup-shared-config-sync</a></td>
+<td style="text-align: right">3,761</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/status/SKILL.md">setup-status</a></td>
+<td style="text-align: right">2,404</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/upstream-fix/SKILL.md">setup-upstream-fix</a></td>
+<td style="text-align: right">5,303</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/skill-reconciler/SKILL.md">skill-reconciler</a></td>
+<td style="text-align: right">4,641</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-repo-health/skills/workflow-security-audit/SKILL.md">workflow-security-audit</a></td>
+<td style="text-align: right">3,657</td>
+</tr>
+<tr>
+<td class="table-label"><a href="https://github.com/apache/magpie/blob/main/plugins/magpie-utilities/skills/write-skill/SKILL.md">write-skill</a></td>
+<td style="text-align: right">2,583</td>
+</tr>
+</tbody>
+</table>
+<h3 id="measured-runtime-replay-sample">Measured runtime replay sample</h3>
+<p>On 2026-09-11, 30 actual Claude Code invocations ran synthetic tasks through
+five skills across four modes to their final draft/report boundary: three scenarios per skill,
+two repetitions each, using <code>claude-haiku-4-5-20251001</code> and Claude Code 2.1.268.
+Full entrypoints and sibling Markdown references were supplied, along with
+captured configuration and tool observations. Live tools and posting were disabled.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Mode and measured skill</th>
+<th style="text-align: right">Runs</th>
+<th style="text-align: right">p50 total tokens</th>
+<th style="text-align: right">p90 total tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label">Triage: <code>issue-triage</code></td>
+<td style="text-align: right">6</td>
+<td style="text-align: right">34,825</td>
+<td style="text-align: right">35,055</td>
+</tr>
+<tr>
+<td class="table-label">Mentoring: <code>pr-management-mentor</code></td>
+<td style="text-align: right">6</td>
+<td style="text-align: right">28,907</td>
+<td style="text-align: right">29,592.5</td>
+</tr>
+<tr>
+<td>Mentoring: <code>good-first-issue-author</code></td>
+<td style="text-align: right">6</td>
+<td style="text-align: right">26,567</td>
+<td style="text-align: right">26,653</td>
+</tr>
+<tr>
+<td class="table-label">Drafting: <code>issue-fix-workflow</code></td>
+<td style="text-align: right">6</td>
+<td style="text-align: right">28,714</td>
+<td style="text-align: right">29,406.5</td>
+</tr>
+<tr>
+<td class="table-label">Pairing: <code>pairing-self-review</code></td>
+<td style="text-align: right">6</td>
+<td style="text-align: right">22,975</td>
+<td style="text-align: right">24,475</td>
+</tr>
+</tbody>
+</table>
+<p>Totals use CLI-reported per-model usage, including uncached input, cache creation,
+cache reads, output, and auxiliary CLI calls. Thinking is included in output,
+not added twice. These are token-traffic counts, not equivalent billing units.
+p50/p90 use inclusive linear interpolation. Six runs across three synthetic
+scenarios are an exploratory sample, not typical costs for an entire mode.</p>
+<p>Concrete first-attempt examples:</p>
+<ul>
+<li><strong>Triage:</strong> classify an empty-input bug and draft a proposal: <strong>34,962 tokens</strong>.</li>
+<li><strong>Mentoring:</strong> draft regression-test guidance for a newcomer: <strong>29,207 tokens</strong>.</li>
+<li><strong>Mentoring, issue authoring:</strong> draft an issue for a missing test: <strong>26,131 tokens</strong>.</li>
+<li><strong>Drafting:</strong> draft a one-file empty-input fix and regression test: <strong>28,600 tokens</strong>.</li>
+<li><strong>Pairing:</strong> review one file whose empty-input guard was removed: <strong>22,406 tokens</strong>.</li>
+</ul>
+<p>The <a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/2026-09-11.md">measurement report</a>
+provides input/cache/output breakdowns and methodology. The
+<a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/2026-09-11.json">records and final responses</a>
+and <a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/replay-v1.json">synthetic corpus</a>
+provide the first 24 calls. The <a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/2026-09-11-drafting.md">Drafting report</a>,
+<a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/2026-09-11-drafting.json">records</a>, and
+<a href="https://github.com/apache/magpie/blob/main/tools/skill-token-count/benchmarks/drafting-v1.json">corpus</a> cover six further
+calls on an empty-input fix, a weighted-mean denominator fix, and a two-module
+summary fix. All 30 CLI calls produced artifacts; completion is not a correctness
+grade. One two-file review miscounted deleted lines. One Drafting response
+asserted that tests were green inside its proposed PR text although no tests ran.
+These outputs need human review and are not verified fixes.</p>
+<p>The initial sample mislabeled <code>good-first-issue-author</code> as Drafting. It is
+Mentoring; metadata has been corrected without changing prompts, usage, or
+responses. Legacy <code>drafting-*</code> case IDs in that sample refer to issue authoring.
+The collector now checks each case against the skill’s declared mode before
+launching calls. Percentiles are grouped by skill, not pooled across a mode.</p>
+<p>These observations do not measure live GitHub/tool calls, follow-up discussions,
+patch application and test execution, or multi-agent pipelines. They must not be substituted
+for the broader planning ranges below or generalized to other models.</p>
+<p>Security draft pre-flight also loads the shared CC-resolution rule from
+<code>tools/mail-source/contract.md</code>: approximately 600 additional tokens once
+per run, estimated from the rule’s prose and configuration identifiers.
+It reuses already-loaded project/organization configuration and adds no
+mail or tracker calls, so the per-mode ranges below remain unchanged.</p>
+<h3 id="model-classes">Model classes</h3>
+<p>Skills are written against a capability contract, not a vendor.
+Three capability classes cover the realistic range for these workflows:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Class</th>
+<th>Parameter scale</th>
+<th>Characteristics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><strong>Small</strong></td>
+<td>~7B–13B equivalent</td>
+<td>Fast and cheap. Good at extraction, classification, and short structured drafts. Struggles on long-chain reasoning, large contexts, and novel patterns.</td>
+</tr>
+<tr>
+<td class="table-label"><strong>Mid-tier</strong></td>
+<td>~70B equivalent</td>
+<td>Balanced quality and cost. Handles the full skill catalogue well. Recommended starting point for new adopters.</td>
+</tr>
+<tr>
+<td class="table-label"><strong>Large</strong></td>
+<td>Frontier reasoning</td>
+<td>Highest capability and highest cost. Use where mid-tier recall or reasoning falls short — complex security analysis, multi-step code fix drafting, detecting novel vulnerability patterns.</td>
+</tr>
+</tbody>
+</table>
+<p>Local models (Ollama, vLLM, llama.cpp) map onto Small or Mid-tier by
+capability; they incur hardware cost rather than per-token billing. See
+<a href="#local-and-self-hosted-inference">Local and self-hosted inference</a>.</p>
+<hr>
+<h2 id="per-mode-token-shape">Per-mode token shape</h2>
+<p><strong>Planning estimates are unvalidated hypotheses, not observed bounds or averages.</strong>
+The replay p50 column refers only to the exact skill and synthetic workload
+above, using Claude Code’s total token traffic including cache and auxiliary
+calls. <code>Not measured</code> means there is no corresponding session evidence here.
+It does not mean zero, and another skill’s p50 must not be substituted.</p>
+<p>For example, <code>issue-triage</code> has replay p50 <strong>34,825</strong>, above the old <strong>4K-15K</strong>
+planning estimate; <code>pr-management-mentor</code> also exceeds its estimate. Loading
+full entrypoints and sibling references plus CLI overhead differs from the
+unspecified protocol behind those estimates. We cannot attribute the discrepancy
+to one cause or validate the old bounds from this sample. Use a workload-matched
+pilot for budgeting; the old estimates are retained for context, not as a cap.</p>
+<h3 id="triage">Triage</h3>
+<p>Most Agentic Triage skills are read-bounded: the
+expensive part is loading context (PR diff, report body, existing
+issue sample), not generating output. Every output is a short
+proposal — a label suggestion, a routing recommendation, a
+classification with rationale — so output tokens are low relative
+to input.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Typical invocation</th>
+<th>Planning estimate</th>
+<th>Primary cost driver</th>
+<th>Replay p50 tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>pr-management-triage</code></td>
+<td>Single PR triage pass</td>
+<td>5K–30K</td>
+<td>PR diff size and comment count</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-stats</code></td>
+<td>Weekly queue report</td>
+<td>10K–50K</td>
+<td>Number of open PRs read</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-code-review</code></td>
+<td>Single PR deep review</td>
+<td>15K–80K</td>
+<td>Diff size; code-heavy PRs are expensive</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>pr-management-stack-review</code></td>
+<td>One stack (5–10 layers)</td>
+<td>30K–150K</td>
+<td>Lines read in full (Tier A/B); structure is script-side and nearly free, mechanical and generated layers cost one exemplar each</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-triage</code></td>
+<td>Single issue classification</td>
+<td>4K–15K</td>
+<td>Issue body length + similar-issue cross-check sample</td>
+<td>34,825</td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-reassess</code></td>
+<td>Pool-level sweep (10 issues)</td>
+<td>30K–120K</td>
+<td>Pool size; batch cost scales linearly</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import</code></td>
+<td>Single inbound report</td>
+<td>8K–25K</td>
+<td>Report length + known-dup cross-check</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import-from-pr</code></td>
+<td>Single security PR import</td>
+<td>10K–30K</td>
+<td>PR diff + associated discussion</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-import-from-md</code></td>
+<td>Batch import (5 findings)</td>
+<td>15K–60K</td>
+<td>Number of findings × finding length</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-deduplicate</code></td>
+<td>Two-tracker merge</td>
+<td>10K–30K</td>
+<td>Tracker age and mail-thread depth</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-invalidate</code></td>
+<td>Single invalid close</td>
+<td>8K–20K</td>
+<td>Report length + reply draft</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-sync</code></td>
+<td>Full tracker reconciliation</td>
+<td>20K–100K</td>
+<td>Tracker age, mail-thread depth, linked PRs</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-cve-allocate</code></td>
+<td>CVE allocation workflow</td>
+<td>5K–12K</td>
+<td>Mostly procedural; low variance</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-verify</code></td>
+<td>One repository, both checks</td>
+<td>10K–40K</td>
+<td>Reads the chain plus the whole model document; a shared model is read once for the repository set</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-identity-map</code></td>
+<td>One contributor’s channel identities</td>
+<td>5K–20K</td>
+<td>Number of reachable sources and name-match candidates</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-activity-sweep</code></td>
+<td>Single-contributor activity card</td>
+<td>10K–40K</td>
+<td>Activity volume in the configured window</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-sentiment</code></td>
+<td>Full sentiment gate report</td>
+<td>20K–80K</td>
+<td>Number of threads and signals sampled</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-nomination</code></td>
+<td>Nomination evidence brief</td>
+<td>20K–70K</td>
+<td>Contributor activity breadth read, plus the conversations on up to 50 authored items, 50 comment threads and 20 reviews for the automated-contribution discount, and any project expectation documents</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Illustrative planning assumption, not a measured average:</strong> assuming 10K-30K
+tokens per item and 50 items per week gives 500K-1.5M tokens/week. The measured
+replay above exceeds that per-item assumption; validate it for your workload.</p>
+<h3 id="mentoring">Mentoring</h3>
+<p>Agentic Mentoring is conversational and per-reply: the agent reads thread
+context, project conventions, and contributor history, then produces
+a single targeted response. Cost per reply is moderate; total weekly
+cost depends on contributor volume.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Typical invocation</th>
+<th>Planning estimate</th>
+<th>Notes</th>
+<th>Replay p50 tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>pr-management-mentor</code></td>
+<td>Single threaded reply</td>
+<td>6K–20K</td>
+<td>Estimated; skill experimental</td>
+<td>28,907</td>
+</tr>
+<tr>
+<td class="table-label"><code>good-first-issue-author</code></td>
+<td>One candidate → one issue draft</td>
+<td>6K–18K</td>
+<td>Estimated; reads one candidate + named source files, no full-thread history; skill experimental</td>
+<td>26,567</td>
+</tr>
+<tr>
+<td class="table-label"><code>newcomer-issue-explainer</code></td>
+<td>One issue → one beginner explanation draft</td>
+<td>4K–12K</td>
+<td>Estimated; reads one issue body + a small set of named source files; read-only; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>mentoring-welcome</code></td>
+<td>One first-time contributor → one welcome draft</td>
+<td>4K–12K</td>
+<td>Estimated; reads the triggering thread + contributing-guide pointers, no full-thread history; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>onboarding-concierge</code></td>
+<td>One newcomer question → one grounded answer draft</td>
+<td>4K–12K</td>
+<td>Estimated; reads <code>CONTRIBUTING.md</code> + the relevant doc excerpt; read-only; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-to-committer</code></td>
+<td>Single contributor activity brief</td>
+<td>20K–70K</td>
+<td>Estimated; reads the contributor’s activity history against the adopter’s thresholds, plus the conversations on up to 50 authored items, 50 comment threads and 20 reviews for the automated-contribution discount, and any project expectation documents; read-only; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-calibrate</code></td>
+<td>One calibration run (~100 past nominations)</td>
+<td>150K–500K</td>
+<td>Estimated; reads the private list’s nomination threads (rows only are kept), then runs <code>contributor-metrics</code> per nominee and window with up to 10 pushback confirmations each; read-only until the confirmed config diff; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>contributor-candidate-screen</code></td>
+<td>One screening run (pool of ~100, ~15 listed)</td>
+<td>200K–800K</td>
+<td>Estimated; count-only pre-filter over the pool, then <code>contributor-metrics</code> and community signals per survivor and listed candidate, plus two or three paragraphs each; writes only after confirmation; skill experimental</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>good-first-issue-sweep</code></td>
+<td>Backlog sweep (10 issues)</td>
+<td>20K–80K</td>
+<td>Estimated; scales linearly with the number of issues scored; skill experimental</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Unvalidated planning assumption for Agentic Mentoring:</strong> budget 10K–20K tokens per
+contributor interaction. A project with 20 active contributors each
+receiving 3 agent replies per week: roughly 600K–1.2M
+tokens/week.</p>
+<h3 id="drafting">Drafting</h3>
+<p>The most variable mode. Short reporter replies are inexpensive;
+agent-drafted code fixes are expensive because the agent reads relevant
+source files in addition to the issue or report.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Typical invocation</th>
+<th>Planning estimate</th>
+<th>Notes</th>
+<th>Replay p50 tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>security-issue-fix</code> — reporter reply</td>
+<td>Single reply draft</td>
+<td>10K–35K</td>
+<td>Reads report + canned responses + prior thread</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-issue-fix</code> — code fix</td>
+<td>Agent-drafted fix + PR</td>
+<td>30K–150K</td>
+<td>Adds source files; wide variance</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>issue-fix-workflow</code></td>
+<td>Issue fix + PR</td>
+<td>25K–120K</td>
+<td>Bounded by what the skill reads from the codebase</td>
+<td>28,714 (patch draft only)</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-update</code></td>
+<td>One update cycle</td>
+<td>40K–200K</td>
+<td>Dominated by the corpus: closed trackers with discussion, the reporter threads, and the model itself. Scales with the window, not the diff</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-model-prepare</code></td>
+<td>First model for one project</td>
+<td>150K–600K+</td>
+<td>The deep surface pass over in-scope entry points is the cost, and it is meant to be — a model written from the README alone is a summary of marketing copy. Budget it as a project, not an invocation</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Unvalidated planning assumptions for Agentic Drafting:</strong> 15K-25K tokens
+for reporter replies and 50K-100K tokens for code-producing invocations
+depending on codebase scope. Limiting the skill to the relevant source
+files is the single biggest lever on Agentic Drafting cost.</p>
+<p><code>security-model-prepare</code> is the outlier in this table and is best
+budgeted separately: it is a one-off per project, its cost is
+front-loaded into a code-reading pass whose whole purpose is to be
+thorough, and what it produces is amortised across every later triage
+decision the model routes. The recurring cost is
+<code>security-model-update</code>, which is bounded by the window it is given.</p>
+<h3 id="pairing">Pairing</h3>
+<p>Agentic Pairing runs in the developer’s own development cycle, not on project
+infrastructure — cost is per-developer-session. Multi-agent pipelines
+multiply the per-pass cost by the number of review agents.
+Whether a project reimburses contributors is a project policy decision.
+The following ranges are estimates, not measured session costs.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Typical invocation</th>
+<th>Planning estimate</th>
+<th>Notes</th>
+<th>Replay p50 tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>pairing-self-review</code></td>
+<td>Pre-flight review of a local diff</td>
+<td>10K–60K</td>
+<td>Estimated; skill experimental. Scales with diff size plus conventions, dependency, and release-policy doc length.</td>
+<td>22,975</td>
+</tr>
+<tr>
+<td class="table-label"><code>pairing-multi-agent-review</code></td>
+<td>Full three-pass review</td>
+<td>30K–200K</td>
+<td>Estimated; skill experimental. 3–4 × single-pass cost. Parallelism reduces latency, not billing.</td>
+<td>Not measured</td>
+</tr>
+<tr>
+<td class="table-label"><code>pre-first-pr-check</code></td>
+<td>Newcomer pre-flight checklist on a local branch</td>
+<td>5K–20K</td>
+<td>Estimated; skill experimental. Read-only; scales with diff size and convention docs read.</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Unvalidated planning assumptions for Agentic Pairing:</strong> 15K-35K tokens
+for a medium-PR self-review and 45K-90K for a three-agent review. The replay
+measures only small self-reviews; the pipeline remains unmeasured.</p>
+<h3 id="meta">Meta</h3>
+<p>The <strong>Meta</strong> mode is mostly framework machinery — setup, utilities,
+dashboards — whose cost is per machine or per repo rather than per
+maintainership item, so it is not budgeted per invocation here (see
+<a href="/docs/modes#meta"><code>docs/modes.md</code> § Meta</a>). The exception with a
+recurring per-item shape is <code>committer-onboarding</code>, which runs once
+per new committer or PMC member:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Skill</th>
+<th>Typical invocation</th>
+<th>Planning estimate</th>
+<th>Primary cost driver</th>
+<th>Replay p50 tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>committer-onboarding</code></td>
+<td>One post-vote onboarding walkthrough</td>
+<td>10K–30K</td>
+<td>Mostly procedural; podling vs TLP path length</td>
+<td>Not measured</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="auto-merge"></a>
+<a id="agentic-autonomous"></a></p>
+<h3 id="modes-not-yet-covered">Modes not yet covered</h3>
+<p><a href="/docs/modes#agentic-autonomous">Agentic Autonomous</a>, formerly Auto-merge: off, not implemented; no measured token cost.</p>
+<h2 id="model-class-and-mode-cost-shape">Model class and mode cost shape</h2>
+<p>The table below describes the quality/cost trade-off per mode, not a
+hard recommendation. “Viable” means acceptable recall on typical cases;
+“Recommended” means the sweet spot between quality and cost; “Large
+class” means quality requirements that mid-tier models often miss.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Mode</th>
+<th>Small class</th>
+<th>Mid-tier class</th>
+<th>Large class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agentic Triage — classification / routing</td>
+<td>Viable for most cases</td>
+<td>Recommended default</td>
+<td>Rarely needed</td>
+</tr>
+<tr>
+<td>Agentic Triage — security import (novel patterns)</td>
+<td>Miss rate is higher</td>
+<td>Recommended default</td>
+<td>For subtle or novel reports</td>
+</tr>
+<tr>
+<td class="table-label">Agentic Mentoring</td>
+<td>Acceptable on simple threads</td>
+<td>Recommended default</td>
+<td>Not typical</td>
+</tr>
+<tr>
+<td>Agentic Drafting — reporter reply</td>
+<td>Acceptable</td>
+<td>Recommended default</td>
+<td>Rarely needed</td>
+</tr>
+<tr>
+<td class="table-label">Agentic Drafting — code fix</td>
+<td>Often insufficient</td>
+<td>Recommended default</td>
+<td>Complex bugs or large refactors</td>
+</tr>
+<tr>
+<td class="table-label">Agentic Pairing — self-review</td>
+<td>Limited recall on conventions</td>
+<td>Recommended default</td>
+<td>Anchor pass in multi-agent pipelines</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Price comparison:</strong> this page does not maintain a dated comparison of named
+models, so it does not claim a current price multiplier between classes.
+For a concrete budget, apply the selected provider’s current input, output,
+and cached-input rates to the corresponding measured token quantities.
+The class labels alone do not establish an invocation’s price.</p>
+<hr>
+<h2 id="local-and-self-hosted-inference">Local and self-hosted inference</h2>
+<p>Running a model locally (Ollama, vLLM, llama.cpp) shifts cost from
+per-token billing to hardware:</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Inference path</th>
+<th>Per-token cost</th>
+<th>Typical hardware cost</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumer GPU, Small-class quantised model</td>
+<td>$0</td>
+<td>~$0.10–0.50/hr (capex amortised over ~3 yr lifespan × moderate utilisation)</td>
+<td>Viable for Agentic Triage and short Agentic Mentoring/Agentic Drafting</td>
+</tr>
+<tr>
+<td class="table-label">Cloud spot GPU, Mid-tier model</td>
+<td>$0</td>
+<td>~$1–4/hr depending on GPU class</td>
+<td>Viable for all modes; latency is higher than hosted APIs</td>
+</tr>
+<tr>
+<td class="table-label">CPU-only, quantised Small model</td>
+<td>$0</td>
+<td>Near-zero</td>
+<td>Very slow; not recommended for interactive Agentic Pairing</td>
+</tr>
+</tbody>
+</table>
+<p>Local inference is also the simplest privacy answer for most skills:
+data never leaves the machine, and no third-party data-processing
+agreement is needed. The framework’s vendor neutrality means local
+paths use identical skill code to hosted paths.</p>
+<hr>
+<h2 id="reducing-costs">Reducing costs</h2>
+<ol>
+<li>
+<p><strong>Match model class to task.</strong> Agentic Triage classification and short
+Agentic Mentoring replies do not need a frontier model. Reserve Large-class
+for novel-pattern security analysis and complex multi-file code fixes.</p>
+</li>
+<li>
+<p><strong>Scope code reads.</strong> The biggest driver of Agentic Drafting cost is how
+many source files the agent loads. Small, well-named files help the
+skill read only what is relevant.</p>
+</li>
+<li>
+<p><strong>Cache skill context.</strong> Most agent CLIs support prompt-level
+caching. The skill file (size varies by skill class; see
+<a href="#what-tokens-means-here">What “tokens” means here</a>) and stable
+project configuration files are ideal cache candidates — the first
+invocation pays; subsequent invocations are cheap on the cached
+portion. Note: most provider caches have a short TTL (Anthropic
+prompt cache: 5 min default, 1 h extended at higher write cost),
+so bursty same-session workloads benefit most; periodic triage runs
+spaced hours apart will typically miss the cache.</p>
+</li>
+<li>
+<p><strong>Batch triage.</strong> <code>issue-reassess</code> and <code>pr-management-stats</code>
+amortise context load across a pool. Running them weekly rather than
+per-event reduces overall token volume compared with individual calls.</p>
+</li>
+<li>
+<p><strong>Run locally for development.</strong> When authoring or testing a new
+skill override, use a local model. Save the hosted model for
+production invocations.</p>
+</li>
+</ol>
+<hr>
+<h2 id="long-term-the-asf-inference-endpoint">Long-term: the ASF inference endpoint</h2>
+<p><a href="https://github.com/apache/magpie/blob/main/MISSION.md#affordability-and-vendor-neutrality--the-public-good-commitment">MISSION.md § Affordability</a>
+names an ASF-hosted inference endpoint as a long-term roadmap item: a
+community-affordable, foundation-governed, audit-logged inference layer any
+open-source maintainer — ASF or otherwise — can use without paying a vendor or
+accepting a vendor’s gift.</p>
+<p>Part of that now exists. <strong>LLMAO</strong> (<code>llm.apache.org</code>) went live in September
+2026 as the Foundation’s sanctioned-inference gateway: a committer
+authenticates with a personal access token, and it serves three self-hosted
+models. The gateway’s defaults, model list and known limitations are recorded
+in <a href="https://github.com/apache/magpie/blob/main/organizations/ASF/organization.md#inference-endpoint"><code>organizations/ASF/organization.md</code></a>.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Model</th>
+<th style="text-align: right">Context</th>
+<th>Reasoning on by default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>gemma4-26b</code> (recommended)</td>
+<td style="text-align: right">131,072</td>
+<td>No</td>
+</tr>
+<tr>
+<td class="table-label"><code>qwen3.8-27b</code></td>
+<td style="text-align: right">131,072</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td class="table-label"><code>qwen3-8b</code></td>
+<td style="text-align: right">40,960</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Two caveats that matter for this page specifically:</p>
+<ul>
+<li><strong>It is a pilot, and its privacy class is <code>project-internal</code>.</strong> LLMAO serves
+from rented third-party GPU hardware rather than ASF-operated infra, and
+pilot traffic must be treated as visible to gateway admins. It is carved out
+of the <code>*.apache.org</code> default approval, so it is <strong>not</strong> approved for
+<code>&lt;private-list&gt;</code> or <code>&lt;security-list&gt;</code> content. See
+<a href="https://github.com/apache/magpie/blob/main/tools/privacy-llm/models.md"><code>tools/privacy-llm/models.md</code></a>.</li>
+<li><strong>Tool use over the Anthropic-compatible path is currently broken upstream.</strong>
+LiteLLM routes it to vLLM’s <code>/v1/responses</code> with a <code>tool_choice</code> shape vLLM
+rejects. Every Magpie skill is tool-driven, so the replay benchmark above
+cannot run against the gateway until that lands. Plain conversation is
+unaffected.</li>
+</ul>
+<h3 id="planned-measuring-the-modes-against-llmao">Planned: measuring the modes against LLMAO</h3>
+<p>No LLMAO figures appear on this page yet, and none should be inferred from the
+throughput numbers the gateway publishes — those come from synthetic load, not
+from skill workloads.</p>
+<p>The intended run reuses the harness that produced the replay sample above, so
+the results are comparable rather than a separate methodology: the same corpus
+and scenarios, <code>--model</code> pointed at each of the three gateway models, with
+<code>ANTHROPIC_BASE_URL</code> and a committer PAT in the environment. What it would add
+to this page is the thing the model-class table currently asserts from
+capability reasoning rather than measurement — whether a ~26B self-hosted model
+actually carries the mid-tier workloads, and which modes degrade first when it
+does not.</p>
+<p>It is gated on the tool-use limitation above; that is the first thing to
+re-test, because it decides whether the measurement is possible at all.
+Tracked in <a href="https://github.com/apache/magpie/issues/1260">issue 1260</a>.</p>
+<p>The file counts and bounded replays on this page are initial evidence for
+the capacity planning and cost models a foundation-governed endpoint will need.
+The planning estimates are not validated capacity requirements. As pilot
+adopters accumulate real usage data, this page will be updated with observed
+ranges rather than theoretical estimates, so the endpoint sizing argument rests
+on evidence.</p>
+<hr>
+<h2 id="cross-references">Cross-references</h2>
+<ul>
+<li><a href="https://github.com/apache/magpie/blob/main/MISSION.md#affordability-and-vendor-neutrality--the-public-good-commitment"><code>MISSION.md</code> § Affordability</a> — the policy commitment behind this page.</li>
+<li><a href="/docs/modes"><code>docs/modes.md</code></a> — per-mode skill catalogue and maturity status.</li>
+<li><a href="/docs/quick-start/prerequisites"><code>docs/prerequisites.md</code></a> — what you need to run the framework, including model-backend setup.</li>
+</ul>
+</article></main><aside class="docs-toc" aria-label="On this page"><span class="eyebrow">On this page</span><nav><ul><li><a href="#how-to-read-this-page" style="padding-left: 0rem">How to read this page</a></li><li><a href="#what-tokens-means-here" style="padding-left: 0.75rem">What “tokens” means here</a></li><li><a href="#measured-skill-file-tokens" style="padding-left: 0.75rem">Measured skill-file tokens</a></li><li><a href="#measured-runtime-replay-sample" style="padding-left: 0.75rem">Measured runtime replay sample</a></li><li><a href="#model-classes" style="padding-left: 0.75rem">Model classes</a></li><li><a href="#per-mode-token-shape" style="padding-left: 0rem">Per-mode token shape</a></li><li><a href="#triage" style="padding-left: 0.75rem">Triage</a></li><li><a href="#mentoring" style="padding-left: 0.75rem">Mentoring</a></li><li><a href="#drafting" style="padding-left: 0.75rem">Drafting</a></li><li><a href="#pairing" style="padding-left: 0.75rem">Pairing</a></li><li><a href="#meta" style="padding-left: 0.75rem">Meta</a></li><li><a href="#modes-not-yet-covered" style="padding-left: 0.75rem">Modes not yet covered</a></li><li><a href="#model-class-and-mode-cost-shape" style="padding-left: 0rem">Model class and mode cost shape</a></li><li><a href="#local-and-self-hosted-inference" style="padding-left: 0rem">Local and self-hosted inference</a></li><li><a href="#reducing-costs" style="padding-left: 0rem">Reducing costs</a></li><li><a href="#long-term-the-asf-inference-endpoint" style="padding-left: 0rem">Long-term: the ASF inference endpoint</a></li><li><a href="#planned-measuring-the-modes-against-llmao" style="padding-left: 0.75rem">Planned: measuring the modes against LLMAO</a></li><li><a href="#cross-references" style="padding-left: 0rem">Cross-references</a></li></ul></nav></aside></div><footer data-magpie-src="src/components/landing/SiteFooter.tsx:26" class="site-footer"><div data-magpie-src="src/components/landing/SiteFooter.tsx:26" class="container footer-grid"><div data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="footer-intro"><a data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><span data-magpie-src="src/components/landing/SiteFooter.tsx:27" class="footer-asf">An Apache Software Foundation project.</span></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Explore</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/docs" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open footer-link-icon" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>Documentation</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/resources"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass footer-link-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>Learning guides</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/architecture"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-branch footer-link-icon" aria-hidden="true"><path d="M15 6a9 9 0 0 0-9 9V3"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle></svg>Architecture</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/tools"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench footer-link-icon" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></svg>Tools</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/downloads"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check footer-link-icon" aria-hidden="true"><path d="M12 22V12"></path><path d="m16 17 2 2 4-4"></path><path d="M21 11.127V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l1.32-.753"></path><path d="M3.29 7 12 12l8.71-5"></path><path d="m7.5 4.27 8.997 5.148"></path></svg>Downloads</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="/brand"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks footer-link-icon" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg>Brand assets</a></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Take part</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Contributing</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Mailing list</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/discord.svg" alt="" aria-hidden="true" width="16" height="16"/>Discord</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.linkedin.com/company/apache-magpie/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/linkedin.svg" alt="" aria-hidden="true" width="16" height="16"/>LinkedIn</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Issue tracker</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Changelog</a></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-magpie-src="src/components/landing/SiteFooter.tsx:28">Apache</h2><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>The Foundation</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>License</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Events</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/security/" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Security</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Privacy</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Sponsorship</a><a data-magpie-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer"><img data-magpie-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Thanks</a></div></div><div data-magpie-src="src/components/landing/SiteFooter.tsx:37" class="container footer-bottom"><p data-magpie-src="src/components/landing/SiteFooter.tsx:37">© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p data-magpie-src="src/components/landing/SiteFooter.tsx:37">Apache <strong data-magpie-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, <strong data-magpie-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, and Apache are trademarks of The Apache Software Foundation.</p></div></footer><script type="module">var e=document.querySelector(`.docs-menu-toggle`),t=document.querySelector(`.docs-sidebar`),n=[...document.querySelectorAll(`.docs-main, .docs-toc, .site-footer`)],r=()=>{t.classList.remove(`is-open`),e.setAttribute(`aria-expanded`,`false`),document.body.classList.remove(`docs-navigation-open`),n.forEach(e=>{e.inert=!1})};e.addEventListener(`click`,()=>{if(t.classList.contains(`is-open`)){r();return}t.classList.add(`is-open`),e.setAttribute(`aria-expanded`,`true`),document.body.classList.add(`docs-navigation-open`),n.forEach(e=>{e.inert=!0}),t.querySelector(`a`)?.focus()}),document.querySelector(`[data-search-open]`)?.addEventListener(`click`,r),matchMedia(`(min-width: 801px)`).addEventListener(`change`,e=>{e.matches&&r()}),document.addEventListener(`keydown`,n=>{if(n.key!==`Tab`||!t.classList.contains(`is-open`))return;let r=[e,...t.querySelectorAll(`a, summary, button`)].filter(e=>e.getClientRects().length>0),i=r[0],a=r[r.length-1];n.shiftKey&&document.activeElement===i?(n.preventDefault(),a.focus()):!n.shiftKey&&document.activeElement===a&&(n.preventDefault(),i.focus())}),document.addEventListener(`keydown`,n=>{n.key===`Escape`&&t.classList.contains(`is-open`)&&(r(),e.focus())}),t.querySelectorAll(`a`).forEach(e=>e.addEventListener(`click`,r)),document.querySelector(`.copy-page`)?.addEventListener(`click`,async e=>{let t=e.currentTarget;try{let e=await fetch(t.dataset.markdown);if(!e.ok)throw Error(`Unavailable`);await navigator.clipboard.writeText(await e.text()),t.textContent=`Copied ✓`}catch{t.textContent=`Could not copy`}setTimeout(()=>{t.textContent=`Copy page ⧉`},2200)});var i=[...document.querySelectorAll(`.docs-toc nav a`)],a=new IntersectionObserver(e=>{for(let t of e)t.isIntersecting&&i.forEach(e=>{let n=decodeURIComponent(e.hash.slice(1))===t.target.id;e.classList.toggle(`active`,n),n?e.setAttribute(`aria-current`,`location`):e.removeAttribute(`aria-current`)})},{rootMargin:`-140px 0px -60% 0px`});i.forEach(e=>{let t=document.getElementById(decodeURIComponent(e.hash.slice(1)));t&&a.observe(t)});</script><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/mode-economics.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a><script type="module">function e(){let e=document.querySelector(`main`);if(!e)return;let t=[...e.querySelectorAll(`section[id]`)].filter(e=>!e.matches(`[role="tabpanel"]`)&&!e.parentElement?.closest(`section[id]`)),n=e.querySelector(`.docs-prose`)?[...e.querySelectorAll(`.docs-prose :is(h2,h3)[id]`)]:t;if(!n.length)return;let r=!1,i=!1,a=()=>{r=!0},o=()=>{r=!1};window.addEventListener(`wheel`,a,{passive:!0}),window.addEventListener(`touchmove`,a,{passive:!0}),document.addEventListener(`pointerdown`,a,{passive:!0}),document.addEventListener(`keydown`,e=>{let t=e.target;t instanceof Element&&t.closest(`input,textarea,select,[contenteditable="true"]`)||[`ArrowUp`,`ArrowDown`,`PageUp`,`PageDown`,`Home`,`End`,` `].includes(e.key)&&a()}),document.addEventListener(`click`,e=>{e.target instanceof Element&&e.target.closest(`a[href]`)&&o()}),window.addEventListener(`hashchange`,o),window.addEventListener(`popstate`,o),window.addEventListener(`pageshow`,o),window.addEventListener(`scroll`,()=>{r&&!i&&(i=!0,requestAnimationFrame(()=>{if(i=!1,!r)return;let e=document.querySelector(`.site-header`)?.getBoundingClientRect().bottom??0,t=Math.max(0,e)+24,a;for(let e of n)window.scrollY>0&&e.getClientRects().length&&e.getBoundingClientRect().top<=t&&(a=e);let o=new URL(window.location.href),s=null;try{s=document.getElementById(decodeURIComponent(o.hash.slice(1)))}catch{}if(a&&s&&a.contains(s))return;let c=a?`#${a.id}`:``;o.hash!==c&&(o.hash=c,history.replaceState(history.state,``,o))}))},{passive:!0})}function t(){let e=document.createElement(`div`);e.className=`copy-link-status`,e.setAttribute(`role`,`status`),document.body.append(e);let t;document.addEventListener(`click`,async n=>{if(n.button||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target instanceof Element?n.target.closest(`.section-heading > a[href]`):null;if(r){try{await navigator.clipboard.writeText(r.href),e.textContent=`Link copied`}catch{e.textContent=`Copy the link from the address bar`}clearTimeout(t),t=setTimeout(()=>{e.textContent=``},2e3)}});let n=document.querySelector(`.home-navigation`);if(!n)return;let r=n.querySelector(`summary`);n.addEventListener(`click`,e=>{let t=e.target instanceof Element?e.target.closest(`a[href]`):null;if(t&&(n.open=!1,!(e instanceof MouseEvent&&(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))&&t.getAttribute(`href`)?.startsWith(`#`))){let e=document.getElementById(t.hash.slice(1));e?.setAttribute(`tabindex`,`-1`),e?.focus({preventScroll:!0})}}),document.addEventListener(`click`,e=>{e.target instanceof Node&&!n.contains(e.target)&&(n.open=!1)}),document.addEventListener(`keydown`,e=>{e.key===`Escape`&&n.open&&(n.open=!1,r?.focus({preventScroll:!0}))})}e(),t();var n=document.querySelector(`.theme-toggle`),r=()=>{let e=document.documentElement.dataset.theme===`dark`;n?.setAttribute(`aria-pressed`,String(e)),n?.setAttribute(`aria-label`,`Switch to ${e?`light`:`dark`} mode`)};n?.addEventListener(`click`,()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme===`dark`?`light`:`dark`;try{localStorage.setItem(`magpie-theme`,document.documentElement.dataset.theme)}catch{}r()}),r();</script><!-- magpie-preview-overlay -->
+<script src="/_preview/html2canvas-pro.min.js"></script>
+<script src="/_preview/review.js"></script>
+</body></html>
