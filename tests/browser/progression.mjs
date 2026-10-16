@@ -51,8 +51,11 @@ export function criticalProgressionTests() {
     ]) {
       await page.locator(controls).first().click();
       await page.locator(controls).nth(1).click();
-      const transitions = await page.locator(active).evaluate(el => el.getAnimations().map(animation => ({property:animation.transitionProperty,duration:animation.effect.getTiming().duration})));
-      expect(transitions.some(t => t.property === 'opacity' && t.duration >= 150 && t.duration <= 400)).toBe(true);
+      // Poll until the CSS transition is in progress, then verify its duration.
+      await expect.poll(async () => {
+        const transitions = await page.locator(active).evaluate(el => el.getAnimations().map(a => ({property:a.transitionProperty,duration:a.effect.getTiming().duration})));
+        return transitions.filter(t => t.property === 'opacity' && t.duration >= 150 && t.duration <= 400).length;
+      }, {timeout:500}).toBeGreaterThan(0);
       await page.emulateMedia({reducedMotion:'reduce'});
       await page.locator(controls).nth(2).click();
       expect(await page.locator(active).evaluate(el => el.getAnimations().length)).toBe(0);
