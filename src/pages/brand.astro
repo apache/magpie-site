@@ -2,17 +2,20 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import { siteEditUrl } from '../lib/site';
 const assets = [
- {name:'Mark', image:'/mark.svg', links:[['SVG','/mark.svg'],['PNG','/magpie-mark.png']]},
- {name:'Wordmark', image:'/wordmark.svg', links:[['SVG','/wordmark.svg']]},
+ {name:'Mark', image:'/mark.svg', links:[['SVG','/mark.svg'],['PNG','/magpie-mark.png'],['Die-cut','/brand/magpie-mark-diecut.svg']]},
+ {name:'Wordmark', image:'/wordmark.svg', links:[['SVG','/wordmark.svg'],['Die-cut','/brand/magpie-wordmark-diecut.svg']]},
  {name:'Avatar', image:'/brand/avatar-400.png', links:[['400 px','/brand/avatar-400.png'],['1000 px','/brand/avatar-1000.png']]},
 ];
 const palette = [['Magpie blue','#004AAD'],['Ink','#172723'],['Paper','#FAFAF7'],['Surface','#F0F2ED'],['Muted','#63706A']];
-const illustrations = [['Standing','magpie-standing'],['Looking back','magpie-looking-back'],['Flying','magpie-flying']];
+const illustrations = [['Standing','magpie-standing'],['Looking back','magpie-looking-back'],['Flying','magpie-flying']].map(([name,file])=>({
+ name, image:`/illustrations/magpie/${file}.png`,
+ links:[['SVG',`/brand/${file}.svg`],['PNG',`/illustrations/magpie/${file}.png`],['Die-cut',`/brand/${file}-diecut.svg`]],
+}));
 const social = [['Wide banner','/brand/banner-1500x500.png'],['LinkedIn','/brand/banner-linkedin-1128x191.png'],['Bluesky','/brand/banner-bluesky-3000x1000.png']];
 ---
 <ContentLayout editUrl={siteEditUrl('src/pages/brand.astro')} title="Brand assets" description="The Magpie mark, illustrations, and visual language.">
  <section id="logo"><h2>Logo</h2><p>Keep the original colors and proportions, with clear space around the mark. Use these assets when referring to Apache Magpie.</p><div class="brand-grid">{assets.map(asset=><div><a href={asset.image} class="asset-preview" download><img src={asset.image} alt={`Apache Magpie ${asset.name}`} loading="lazy"/></a><div class="asset-title">{asset.name}<span>{asset.links.map(([label,href])=><a href={href} download>{label} ↓</a>)}</span></div></div>)}</div></section>
- <section id="bird"><h2>The bird</h2><div class="brand-grid">{illustrations.map(([name,file])=><div><a class="asset-preview" href={`/illustrations/magpie/${file}.png`} download><img src={`/illustrations/magpie/${file}.png`} alt={`Magpie ${name.toLowerCase()}`} loading="lazy"/></a><div class="asset-title">{name}<a href={`/illustrations/magpie/${file}.png`} download>PNG ↓</a></div></div>)}</div></section>
+ <section id="bird"><h2>The bird</h2><div class="brand-grid">{illustrations.map(bird=><div><a class="asset-preview" href={bird.image} download><img src={bird.image} alt={`Magpie ${bird.name.toLowerCase()}`} loading="lazy"/></a><div class="asset-title">{bird.name}<span>{bird.links.map(([label,href])=><a href={href} download>{label} ↓</a>)}</span></div></div>)}</div></section>
  <section id="palette"><h2>Website palette</h2><div class="palette">{palette.map(([name,hex])=><div><div class="swatch" style={`background:${hex}`}></div><strong>{name}</strong><code>{hex}</code></div>)}</div><p>The preview pairs the original Magpie blue with quiet, warm surfaces. Blue marks actions; ink carries the content.</p></section>
  <section id="typography"><h2>Typography</h2><p class="type-sample">More time for the work that matters.</p><p>Geist for headings, text, and controls. System monospace for code. Type stays upright, with weight and space providing the hierarchy.</p></section>
  <details><summary>Social banners</summary><div class="link-row">{social.map(([name,href])=><a href={href} download>{name} ↓</a>)}</div></details>

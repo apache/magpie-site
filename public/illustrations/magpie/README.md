@@ -4,6 +4,16 @@ Three raster illustration concepts derived from the bird inside `public/wordmark
 
 Created with the built-in image generation tool. Original logo files and homepage composition remain unchanged. PNG files have transparent backgrounds.
 
+The vector sources live in `public/brand/` (`magpie-<pose>.svg`, plus a `magpie-<pose>-diecut.svg` with bleed and cut-contour layers for sticker printing). The PNGs here are rendered from the plain SVGs onto a 1254 × 1254 transparent square:
+
+```sh
+for b in standing looking-back flying; do
+  rsvg-convert -w 2508 public/brand/magpie-$b.svg \
+    | magick - -resize 1254x1254 -background none -gravity center -extent 1254x1254 -strip \
+      public/illustrations/magpie/magpie-$b.png
+done
+```
+
 - `magpie-standing.png`: standing profile.
 - `magpie-flying.png`: wings raised in flight.
 - `magpie-looking-back.png`: looking over its shoulder.
