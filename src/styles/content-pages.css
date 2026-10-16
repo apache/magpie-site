@@ -37,9 +37,9 @@
 .brand-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--card-gap); margin-top: var(--space-6); }
 .asset-preview { height: 180px; display: flex; align-items: center; justify-content: center; padding: var(--card-padding); background: #eff2ec; border-radius: var(--radius-card); }
 .asset-preview img { max-height: 120px; max-width: 100%; object-fit: contain; }
-.brand-grid .asset-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; font-size: 16px; }
-.brand-grid .asset-title a { font-size: 14px; text-decoration: none; }
-.brand-grid .asset-title span { display: flex; gap: 9px; }
+.brand-grid .asset-title { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 10px; margin-top: 14px; font-size: 16px; }
+.brand-grid .asset-title a { font-size: 14px; text-decoration: none; white-space: nowrap; }
+.brand-grid .asset-title span { display: flex; flex-wrap: wrap; gap: 4px 9px; }
 .palette { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; margin-block: 25px; }
 .palette .swatch { height: 88px; border: 1px solid #17272310; border-radius: var(--radius-control); margin-bottom: 12px; }
 .palette strong { display: block; font-size: 14px; font-weight: 500; }.palette code { font-size: 14px; color: var(--muted); }
