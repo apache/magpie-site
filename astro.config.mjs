@@ -10,12 +10,19 @@ import tableLabels from './scripts/markdown-table-labels.mjs';
 import { markdownSemantics, taskLabels } from './scripts/markdown-semantics.mjs';
 import islandStyle from './scripts/quality/hoist-island-style.mjs';
 import publishDocAssets from './scripts/quality/prune-doc-assets.mjs';
-import magpieSrc from './scripts/preview/adapters/astro/vite-plugin-magpie-src.mjs';
+import * as vite from 'vite';
 
 // Production is served directly at the apex https://magpie.apache.org/ (root path).
 // Override SITE_URL / SITE_BASE if you ever need to preview under a subpath.
 const site = process.env.SITE_URL ?? 'https://magpie.apache.org';
 const base = process.env.SITE_BASE ?? '/';
+// Preview builds only: the preview-annotate action (apache/infrastructure-actions
+// website-comment) hands over its Vite plugin, which stamps data-preview-src so
+// the review overlay can map a marked region back to a diff line.
+const previewSrc =
+  process.env.PREVIEW_ANNOTATE === '1'
+    ? (await import(String(process.env.PREVIEW_VITE_PLUGIN))).default
+    : null;
 // Astro/Vite's default dependency cache is shared by dev and build. A build
 // can invalidate modules still used by an open dev page, freezing React islands.
 // Quality runs also get their own cache so parallel processes cannot overwrite it.
@@ -65,9 +72,7 @@ export default defineConfig({
     server: { strictPort:true, watch:{ignored:['**/.builds/**']} },
     plugins: [
       tailwindcss(),
-      // Preview builds only: stamps data-magpie-src so the review overlay can
-      // map a marked region back to a diff line.
-      process.env.MAGPIE_PREVIEW_ANNOTATE === "1" && magpieSrc(),
+      previewSrc && previewSrc({ vite }),
     ],
   },
 });
