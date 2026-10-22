@@ -1,5 +1,12 @@
 # Per-PR preview deployments — design
 
+> **Moved 2026-10-22.** The implementation now lives in
+> [`apache/infrastructure-actions/website-comment`](https://github.com/apache/infrastructure-actions/tree/main/website-comment)
+> as reusable actions, which this site uses. Paths below under
+> `scripts/preview/` refer to the in-repo layout at the time of writing;
+> `data-magpie-src` and `MAGPIE_PREVIEW_ANNOTATE` are now `data-preview-src`
+> and `PREVIEW_ANNOTATE`.
+
 Every open pull request against `apache/magpie-site` can be published as a live
 site at `magpie-pr<N>.staged.apache.org`, so a reviewer can look at a change
 instead of imagining it from a diff.

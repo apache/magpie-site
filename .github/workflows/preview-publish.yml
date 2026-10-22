@@ -21,9 +21,10 @@
 # This workflow holds a GITHUB_TOKEN that can push branches to an ASF
 # repository, label pull requests and comment on them, so it must never check
 # out, build, or execute code from a pull request, and never read anything
-# from the PR's tree. It only ever runs scripts from this repository's own
-# default branch, which consume an already-built artifact produced by the
-# unprivileged `pull_request` run in build.yml (screened by validate.mjs).
+# from the PR's tree. It checks out nothing at all: the publisher is the
+# preview-publish action from apache/infrastructure-actions (website-comment),
+# pinned by SHA, and it consumes an already-built artifact produced by the
+# unprivileged `pull_request` run in build.yml, which it screens.
 #
 # It does not use pull_request_target. Its triggers are signals only:
 #   - workflow_run fires when build.yml or preview-signal.yml completes for a
@@ -42,11 +43,12 @@
 # label, added by someone with write access.
 #
 # What the publisher may read about a pull request is fixed by the
-# projections in scripts/preview/github.mjs: PR number, label names, head SHA,
+# projections in the action's lib/github.mjs: PR number, label names, head SHA,
 # author login/type, and comment bodies only when they are the exact
-# /show-preview command or bot-authored. Plus the build's artifact, screened
-# and never executed. scripts/preview/boundary.test.mjs checks this file, and
-# the client's endpoints and projections, deterministically on every PR.
+# /show-preview command, bot-authored or the publisher's own. Plus the build's
+# artifact, screened and never executed. The action's boundary.test.mjs checks
+# the client's endpoints and projections; scripts/preview-workflows.test.mjs
+# checks this file and preview-signal.yml on every PR.
 #
 # Every run is a full reconcile of all open pull requests and preview
 # branches, so a run that concurrency drops is covered by the next one. A run
@@ -92,24 +94,12 @@ jobs:
       group: preview-publish
       cancel-in-progress: false
     steps:
-      - name: Checkout the default branch (never the pull request)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Publish and retire previews
+        uses: apache/infrastructure-actions/website-comment/preview-publish@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-publish/v1.0.0
         with:
-          persist-credentials: false
-
-      - name: Setup Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: "22"
-
-      - name: Publish and reap previews
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_INPUT: ${{ inputs.pr }}
-        run: |
-          if [ -n "${PR_INPUT}" ]; then
-            node scripts/preview/publish.mjs --pr "${PR_INPUT}"
-          else
-            node scripts/preview/publish.mjs
-          fi
+          site-name: magpie # magpie-pr<N>.staged.apache.org
+          build-workflow: build.yml
+          pr: ${{ inputs.pr }}
+          # Also delete this repository's head branches once all their pull
+          # requests have closed, as the in-repo publisher always did.
+          reap-head-branches: "true"

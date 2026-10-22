@@ -1,5 +1,12 @@
 # PR previews for Jekyll sites
 
+> **Moved 2026-10-22.** The implementation now lives in
+> [`apache/infrastructure-actions/website-comment`](https://github.com/apache/infrastructure-actions/tree/main/website-comment)
+> as reusable actions, which this site uses. Paths below under
+> `scripts/preview/` refer to the in-repo layout at the time of writing;
+> `data-magpie-src` and `MAGPIE_PREVIEW_ANNOTATE` are now `data-preview-src`
+> and `PREVIEW_ANNOTATE`.
+
 **Status:** implemented · **Date:** 2026-09-27
 
 ## Goal

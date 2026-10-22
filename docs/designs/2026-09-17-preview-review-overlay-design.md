@@ -1,5 +1,12 @@
 # Preview review overlay — design
 
+> **Moved 2026-10-22.** The implementation now lives in
+> [`apache/infrastructure-actions/website-comment`](https://github.com/apache/infrastructure-actions/tree/main/website-comment)
+> as reusable actions, which this site uses. Paths below under
+> `scripts/preview/` refer to the in-repo layout at the time of writing;
+> `data-magpie-src` and `MAGPIE_PREVIEW_ANNOTATE` are now `data-preview-src`
+> and `PREVIEW_ANNOTATE`.
+
 A reviewer looking at a PR preview marks a rectangle on the page, and gets a
 screenshot of it on the clipboard plus the pull request open **at the diff line
 the marked content came from**, where GitHub's inline comment box is one click

@@ -62,47 +62,6 @@ jobs:
           uv tool install prek
           prek run --all-files --color always
 
-  # The Jekyll source-annotation plugin for PR previews. This site is Astro, so
-  # nothing else here builds Jekyll; the test builds a fixture site with the
-  # plugin loaded. It runs on ubuntu-slim, which cannot start a job container,
-  # so Ruby comes from apt rather than a Ruby image, and no third-party
-  # setup-ruby action is added.
-  jekyll-adapter:
-    runs-on: ubuntu-slim
-    timeout-minutes: 10
-    permissions:
-      contents: read
-    env:
-      # Install exactly what the lockfile names, checksums included, and fail
-      # rather than re-resolve if the Gemfile and lockfile disagree.
-      BUNDLE_GEMFILE: scripts/preview/adapters/jekyll/test/Gemfile
-      BUNDLE_FROZEN: "true"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      # eventmachine and friends build native extensions, hence the toolchain.
-      - name: Install Ruby, Bundler and a C toolchain
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q --no-install-recommends ruby-full ruby-bundler build-essential
-          ruby --version
-
-      # A writable gem home, so Bundler can switch itself to the version the
-      # lockfile's BUNDLED WITH names, instead of an unpinned `gem install`.
-      - name: Use a user gem home
-        run: |
-          echo "GEM_HOME=$RUNNER_TEMP/gems" >> "$GITHUB_ENV"
-          echo "$RUNNER_TEMP/gems/bin" >> "$GITHUB_PATH"
-
-      - name: Install the locked test dependencies
-        run: bundle install
-
-      - name: Test the Jekyll adapter
-        run: bundle exec ruby scripts/preview/adapters/jekyll/test/magpie_src_test.rb
-
   # The browser suites, as their own workflow so their 17 matrix jobs are
   # grouped under one "browser" entry in the checks list. They start at once
   # rather than after lint: they are the longest part of the run, and `build`
@@ -123,6 +82,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # The PR's head, not the default merge commit: the diff anchors use
+          # the head's line numbers, and a merge would shift the stamped lines
+          # wherever main changed the same file.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
       - name: Setup Node
@@ -150,54 +113,48 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Checks the plain build. With MAIN_REVIEW_OVERLAY on, the published site
-      # is then rebuilt annotated on purpose, in the next step.
-      - name: Assert the production build carries no preview annotation
-        run: |
-          if grep -rq "data-magpie-src" dist/; then
-            echo "::error::data-magpie-src found in a production build — it must never ship to magpie.apache.org"
-            grep -rl "data-magpie-src" dist/ | head -20
-            exit 1
-          fi
-          echo "production build is clean of preview annotation"
+      # Fails if the plain build carries any preview annotation, then hands the
+      # annotated builds below their Vite plugin. With MAIN_REVIEW_OVERLAY on,
+      # the published site is rebuilt annotated on purpose.
+      - name: Switch on source annotation
+        id: annotate
+        uses: apache/infrastructure-actions/website-comment/preview-annotate@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-annotate/v1.0.0
+        with:
+          generator: astro
+          production-output: dist
 
-      - name: Build the published site with the review overlay
+      - name: Build the published site annotated
         if: github.ref == 'refs/heads/main' && env.MAIN_REVIEW_OVERLAY == 'true'
         env:
-          MAGPIE_PREVIEW_ANNOTATE: "1"
-        run: |
-          npm run build
-          node scripts/preview/inject-main.mjs dist
+          PREVIEW_ANNOTATE: "1"
+          PREVIEW_VITE_PLUGIN: ${{ steps.annotate.outputs.vite-plugin }}
+        run: npm run build
+
+      # The docs pages are synced from apache/magpie, so their source lines
+      # cannot be linked here; the issue carries only the page for those.
+      - name: Add the review overlay to the published site
+        if: github.ref == 'refs/heads/main' && env.MAIN_REVIEW_OVERLAY == 'true'
+        uses: apache/infrastructure-actions/website-comment/preview-main-overlay@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-main-overlay/v1.0.0
+        with:
+          path: dist
+          generated: src/content/docs/
 
       - name: Build the preview site with source annotation
         if: github.event_name == 'pull_request'
         env:
-          MAGPIE_PREVIEW_ANNOTATE: "1"
+          PREVIEW_ANNOTATE: "1"
+          PREVIEW_VITE_PLUGIN: ${{ steps.annotate.outputs.vite-plugin }}
         run: npm run build
 
-      # Includes the anchor manifest, derived from the PR's diff here rather than
-      # in the privileged publisher, which never reads pull-request content.
-      - name: Write preview metadata
+      # Writes preview-meta.json, with the anchor manifest derived from the PR's
+      # diff here rather than in the privileged publisher, which never reads
+      # pull-request content, and uploads dist (dotfiles included: .htaccess
+      # carries the 404 handler) as the preview-site artifact.
+      - name: Upload the preview
         if: github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          OUT: dist/preview-meta.json
-        run: node scripts/preview/write-meta.mjs
-
-      - name: Upload preview artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        uses: apache/infrastructure-actions/website-comment/preview-artifact@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-artifact/v1.0.0
         with:
-          name: preview-site
           path: dist
-          retention-days: 30
-          # dist/.htaccess is a dotfile and carries the site's 404 handler and
-          # the text/markdown headers for llms.txt. Without this it is silently
-          # dropped on the round-trip through the artifact.
-          include-hidden-files: true
 
       - name: Upload site artifact
         if: github.ref == 'refs/heads/main'
