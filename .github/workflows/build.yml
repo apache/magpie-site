@@ -14,9 +14,11 @@ on:
 permissions:
   contents: read
 
+# A newer push supersedes the run in progress: only the latest commit's build
+# is worth deploying, and the deploy's force-push of "publish" is atomic.
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   # Ship the published site (built from main) with the review overlay: one
