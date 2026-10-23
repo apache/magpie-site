@@ -23,7 +23,8 @@ env:
 
 jobs:
   # Lint and the browser suites gate pull requests; a push to main has already
-  # passed them on its PR, so it only builds and deploys.
+  # passed them on its PR, so it only builds and deploys. playwright-cache.yml
+  # keeps the browser suites' apt cache fresh on main instead.
   lint:
     if: github.event_name != 'push'
     runs-on: ubuntu-slim
