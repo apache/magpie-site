@@ -23,10 +23,13 @@
 # even when no push changes package-lock.json.
 #
 # It runs on ubuntu-latest, which has no 15-minute cap, so a slow mirror only
-# slows it down. The job runs in the plain ubuntu:24.04 image that ubuntu-slim
-# is built from: the ubuntu-latest image has most of these packages installed
-# already, so apt there would not download, and the cache would not hold, what
-# the shards need.
+# slows it down, inside the plain Ubuntu image that ubuntu-slim is built FROM:
+# the ubuntu-latest image has most of these packages installed already, so apt
+# there would not download, and the cache would not hold, what the shards
+# need. ubuntu-slim is not published as an image, so slim-release asks an
+# ubuntu-slim runner which Ubuntu release it is, and the cache job fails unless
+# its container is that release: when GitHub moves ubuntu-slim to a new one,
+# update `container` below.
 name: "Playwright cache"
 "on":
   push:
@@ -50,13 +53,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  slim-release:
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    outputs:
+      image: ${{ steps.release.outputs.image }}
+    steps:
+      - id: release
+        run: |
+          . /etc/os-release
+          echo "ubuntu-slim ${ImageVersion:-unknown} is ${PRETTY_NAME}"
+          echo "image=${ID}:${VERSION_ID}" >> "${GITHUB_OUTPUT}"
+
   playwright-cache:
+    needs: slim-release
     runs-on: ubuntu-latest
     container: ubuntu:24.04
     timeout-minutes: 45
     env:
       DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: Check the container is ubuntu-slim's release
+        env:
+          SLIM: ${{ needs.slim-release.outputs.image }}
+        run: |
+          . /etc/os-release
+          if [ "${ID}:${VERSION_ID}" != "${SLIM}" ]; then
+            echo "::error::ubuntu-slim is now ${SLIM}, but this job runs in ${ID}:${VERSION_ID}; set its container to ${SLIM}"
+            exit 1
+          fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
