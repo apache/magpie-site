@@ -17,10 +17,9 @@
 
 ---
 # The only job that saves the browser suites' Playwright apt cache; the
-# shards just restore it. It runs on main because a pull request can restore
-# caches saved on main but not another PR's. Weekly, ahead of build.yml's
-# scheduled run, it saves that week's entry with the latest Ubuntu updates
-# even when no push changes package-lock.json.
+# shards just restore it. Weekly on main, ahead of build.yml's scheduled run,
+# it saves that week's entry with the latest Ubuntu updates; a pull request can
+# restore caches saved on main. Run it by hand to seed a missing cache.
 #
 # It runs on ubuntu-latest, which has no 15-minute cap, so a slow mirror only
 # slows it down, inside the plain Ubuntu image that ubuntu-slim is built FROM:
@@ -32,24 +31,15 @@
 # update `container` below.
 name: "Playwright cache"
 "on":
-  push:
-    branches: [main]
   schedule:
     - cron: "17 3 * * 1"
-  # Exercises the job when what it runs changes; a PR's cache stays its own.
-  pull_request:
-    branches: [main]
-    paths:
-      - ".github/actions/playwright-chromium/**"
-      - ".github/workflows/playwright-cache.yml"
-      - "package-lock.json"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: playwright-cache-${{ github.ref }}
+  group: playwright-cache
   cancel-in-progress: true
 
 jobs:

@@ -35,11 +35,10 @@ runs:
     # would delete them after the install.
     #
     # An exact key hit is never saved again, so the key carries the ISO week:
-    # the first save each week stores that week's Ubuntu updates, and
-    # autoclean drops the .debs those updates superseded. The key also carries
-    # the Ubuntu release the job runs on, so packages are only ever restored
-    # onto the release they were built for. A container job runs as root
-    # without sudo.
+    # each weekly save stores that week's Ubuntu updates, and autoclean drops
+    # the .debs those updates superseded. The key also carries the Ubuntu
+    # release the job runs on, so packages are only ever restored onto the
+    # release they were built for. A container job runs as root without sudo.
     - name: Keep apt's downloads for the cache
       id: apt-cache
       shell: bash
@@ -55,10 +54,8 @@ runs:
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/apt-cache/*.deb
-        key: playwright-apt-${{ steps.apt-cache.outputs.os }}-${{ hashFiles('package-lock.json') }}-${{ steps.apt-cache.outputs.week }}
-        restore-keys: |
-          playwright-apt-${{ steps.apt-cache.outputs.os }}-${{ hashFiles('package-lock.json') }}-
-          playwright-apt-${{ steps.apt-cache.outputs.os }}-
+        key: playwright-apt-${{ steps.apt-cache.outputs.os }}-${{ steps.apt-cache.outputs.week }}
+        restore-keys: playwright-apt-${{ steps.apt-cache.outputs.os }}-
     - shell: bash
       run: |
         sudo=$(command -v sudo || true)
