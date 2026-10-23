@@ -47,6 +47,22 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
+      # Playwright's system packages (mostly fonts, ~28 MB) come from the Ubuntu
+      # mirror, which some runners reach at ~40 kB/s: the install then takes
+      # 10-13 of the job's 15 minutes and the shard times out. Keep the
+      # downloaded .debs in the Actions cache so apt installs them locally; on
+      # a miss it fetches only what the cache lacks. The runner image's
+      # docker-clean hook would delete them after the install.
+      - name: Keep apt's downloads for the cache
+        run: |
+          mkdir -p "${HOME}/apt-cache/partial"
+          sudo rm -f /etc/apt/apt.conf.d/docker-clean
+          echo "Dir::Cache::Archives \"${HOME}/apt-cache\";" | sudo tee /etc/apt/apt.conf.d/99playwright-cache
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/apt-cache/*.deb
+          key: playwright-apt-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: playwright-apt-${{ runner.os }}-
       - run: npx playwright install --with-deps chromium
       - run: npm run sync-docs
       - name: Run the suite
