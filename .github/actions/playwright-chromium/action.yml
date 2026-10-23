@@ -17,9 +17,13 @@
 
 ---
 # Installs Chromium and its system packages for Playwright, after `npm ci`.
-# Used by the browser suites, and on pushes to main to keep the cache fresh.
+# The browser suites only restore the apt cache; playwright-cache.yml saves it.
 name: "Playwright Chromium"
 description: "Install Playwright's Chromium with its apt packages kept in the Actions cache"
+inputs:
+  save:
+    description: "Save the apt cache after the install when the key was not an exact hit"
+    default: "false"
 runs:
   using: composite
   steps:
@@ -31,17 +35,20 @@ runs:
     # would delete them after the install.
     #
     # An exact key hit is never saved again, so the key carries the ISO week:
-    # the first run each week saves an entry with that week's Ubuntu updates,
-    # and autoclean drops the .debs those updates superseded.
+    # the first save each week stores that week's Ubuntu updates, and
+    # autoclean drops the .debs those updates superseded. A container job runs
+    # as root without sudo.
     - name: Keep apt's downloads for the cache
       id: apt-cache
       shell: bash
       run: |
+        sudo=$(command -v sudo || true)
         mkdir -p "${HOME}/apt-cache/partial"
-        sudo rm -f /etc/apt/apt.conf.d/docker-clean
-        echo "Dir::Cache::Archives \"${HOME}/apt-cache\";" | sudo tee /etc/apt/apt.conf.d/99playwright-cache
+        ${sudo} rm -f /etc/apt/apt.conf.d/docker-clean
+        echo "Dir::Cache::Archives \"${HOME}/apt-cache\";" | ${sudo} tee /etc/apt/apt.conf.d/99playwright-cache
         echo "week=$(date -u +%G-W%V)" >> "${GITHUB_OUTPUT}"
-    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+    - id: restore
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/apt-cache/*.deb
         key: playwright-apt-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ steps.apt-cache.outputs.week }}
@@ -50,5 +57,11 @@ runs:
           playwright-apt-${{ runner.os }}-
     - shell: bash
       run: |
+        sudo=$(command -v sudo || true)
         npx playwright install --with-deps chromium
-        sudo apt-get autoclean
+        ${sudo} apt-get autoclean
+    - if: inputs.save == 'true' && steps.restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/apt-cache/*.deb
+        key: ${{ steps.restore.outputs.cache-primary-key }}

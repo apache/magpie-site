@@ -16,28 +16,46 @@
 # under the License.
 
 ---
-# Saves the browser suites' Playwright apt cache on main. A pull request can
-# restore caches saved on main but not another PR's, and pushes to main skip
-# the browser suites. build.yml's weekly run does not: its browser suites save
-# that week's entry, which picks up Ubuntu package updates even when no push
-# changes package-lock.json.
+# The only job that saves the browser suites' Playwright apt cache; the
+# shards just restore it. It runs on main because a pull request can restore
+# caches saved on main but not another PR's. Weekly, ahead of build.yml's
+# scheduled run, it saves that week's entry with the latest Ubuntu updates
+# even when no push changes package-lock.json.
+#
+# It runs on ubuntu-latest, which has no 15-minute cap, so a slow mirror only
+# slows it down. The job runs in the plain ubuntu:24.04 image that ubuntu-slim
+# is built from: the ubuntu-latest image has most of these packages installed
+# already, so apt there would not download, and the cache would not hold, what
+# the shards need.
 name: "Playwright cache"
 "on":
   push:
     branches: [main]
+  schedule:
+    - cron: "17 3 * * 1"
+  # Exercises the job when what it runs changes; a PR's cache stays its own.
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/actions/playwright-chromium/**"
+      - ".github/workflows/playwright-cache.yml"
+      - "package-lock.json"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: playwright-cache
+  group: playwright-cache-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   playwright-cache:
-    runs-on: ubuntu-slim
-    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container: ubuntu:24.04
+    timeout-minutes: 45
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -48,3 +66,5 @@ jobs:
           cache: npm
       - run: npm ci
       - uses: $/.github/actions/playwright-chromium
+        with:
+          save: "true"
