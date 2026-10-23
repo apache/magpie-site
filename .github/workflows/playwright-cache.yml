@@ -18,15 +18,13 @@
 ---
 # Saves the browser suites' Playwright apt cache on main. A pull request can
 # restore caches saved on main but not another PR's, and pushes to main skip
-# the browser suites, so nothing else saves one there. The weekly run picks up
-# Ubuntu package updates and keeps the entry from being evicted after 7 unused
-# days, even when no push changes package-lock.json.
+# the browser suites. build.yml's weekly run does not: its browser suites save
+# that week's entry, which picks up Ubuntu package updates even when no push
+# changes package-lock.json.
 name: "Playwright cache"
 "on":
   push:
     branches: [main]
-  schedule:
-    - cron: "17 3 * * 1"
   workflow_dispatch:
 
 permissions:

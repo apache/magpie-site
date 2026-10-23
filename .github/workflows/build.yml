@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   # Weekly, so the published site picks up docs changed in apache/magpie
-  # even when nothing here is pushed.
+  # even when nothing here is pushed, and the full gate runs against main.
   schedule:
     - cron: "41 3 * * 1"
   workflow_dispatch:
@@ -26,12 +26,11 @@ env:
   MAIN_REVIEW_OVERLAY: "true"
 
 jobs:
-  # Lint and the browser suites gate pull requests; a push to main has already
-  # passed them on its PR, and the weekly run only rebuilds the same main, so
-  # both only build and deploy. playwright-cache.yml keeps the browser suites'
-  # apt cache fresh on main instead.
+  # Lint and the browser suites gate pull requests and the weekly run; a push
+  # to main has already passed them on its PR, so it only builds and deploys.
+  # playwright-cache.yml keeps the browser suites' apt cache fresh on pushes.
   lint:
-    if: github.event_name != 'push' && github.event_name != 'schedule'
+    if: github.event_name != 'push'
     runs-on: ubuntu-slim
     timeout-minutes: 10
     env:
@@ -76,7 +75,7 @@ jobs:
   # rather than after lint: they are the longest part of the run, and `build`
   # still waits for both.
   browser:
-    if: github.event_name != 'push' && github.event_name != 'schedule'
+    if: github.event_name != 'push'
     permissions:
       contents: read
     uses: $/.github/workflows/browser-tests.yml
