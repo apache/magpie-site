@@ -77,8 +77,10 @@ jobs:
 
   build:
     needs: [lint, browser]
-    # Run when lint and browser were skipped on a push, but not when they failed.
-    if: ${{ !cancelled() && !failure() }}
+    # Run when lint and browser passed, or were skipped on a push. A shard that
+    # hits its timeout ends "cancelled", not "failure", so !failure() alone
+    # would let the build through.
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
@@ -178,7 +180,7 @@ jobs:
     needs: build
     # The skipped lint and browser jobs upstream of build would otherwise skip
     # this job too.
-    if: ${{ !cancelled() && !failure() && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && needs.build.result == 'success' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
