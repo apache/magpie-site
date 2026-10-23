@@ -5,14 +5,20 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Weekly, so the published site picks up docs changed in apache/magpie
+  # even when nothing here is pushed, and the full gate runs against main.
+  schedule:
+    - cron: "41 3 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# A newer push supersedes the run in progress: only the latest commit's build
+# is worth deploying, and the deploy's force-push of "publish" is atomic.
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   # Ship the published site (built from main) with the review overlay: one
@@ -22,7 +28,11 @@ env:
   MAIN_REVIEW_OVERLAY: "true"
 
 jobs:
+  # Lint and the browser suites gate pull requests and the weekly run; a push
+  # to main has already passed them on its PR, so it only builds and deploys.
+  # playwright-cache.yml keeps the browser suites' apt cache fresh.
   lint:
+    if: github.event_name != 'push'
     runs-on: ubuntu-slim
     timeout-minutes: 10
     env:
@@ -67,12 +77,17 @@ jobs:
   # rather than after lint: they are the longest part of the run, and `build`
   # still waits for both.
   browser:
+    if: github.event_name != 'push'
     permissions:
       contents: read
     uses: $/.github/workflows/browser-tests.yml
 
   build:
     needs: [lint, browser]
+    # Run when lint and browser passed, or were skipped on a push. A shard that
+    # hits its timeout ends "cancelled", not "failure", so !failure() alone
+    # would let the build through.
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
@@ -170,7 +185,9 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    # The skipped lint and browser jobs upstream of build would otherwise skip
+    # this job too.
+    if: ${{ !cancelled() && needs.build.result == 'success' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
