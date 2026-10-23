@@ -22,7 +22,10 @@ env:
   MAIN_REVIEW_OVERLAY: "true"
 
 jobs:
+  # Lint and the browser suites gate pull requests; a push to main has already
+  # passed them on its PR, so it only builds and deploys.
   lint:
+    if: github.event_name != 'push'
     runs-on: ubuntu-slim
     timeout-minutes: 10
     env:
@@ -67,12 +70,15 @@ jobs:
   # rather than after lint: they are the longest part of the run, and `build`
   # still waits for both.
   browser:
+    if: github.event_name != 'push'
     permissions:
       contents: read
     uses: $/.github/workflows/browser-tests.yml
 
   build:
     needs: [lint, browser]
+    # Run when lint and browser were skipped on a push, but not when they failed.
+    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
@@ -170,7 +176,9 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    # The skipped lint and browser jobs upstream of build would otherwise skip
+    # this job too.
+    if: ${{ !cancelled() && !failure() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
