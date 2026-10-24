@@ -1,0 +1,10 @@
+# Beyond site-paths.txt, what the browser suites are made of: a pull request
+# changing any of these runs them, though it gets no preview. Read by
+# scripts/pr-changes.mjs; same format as site-paths.txt.
+tests/
+playwright.config.mjs
+playwright.dev.config.mjs
+.github/workflows/browser-tests.yml
+.github/actions/playwright-chromium/
+.github/site-paths.txt
+.github/browser-test-paths.txt
