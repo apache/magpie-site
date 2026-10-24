@@ -17,10 +17,15 @@ async function sampleSlide(panel, progress) {
 }
 
 // Reaching a scroll-driven walkthrough can already move it off its first stage,
-// so selecting that stage starts a slide of its own. Measure from rest.
+// so selecting that stage starts a slide of its own. Measure from rest, and
+// after the puzzle introduction: it plays once, on the first panel that is both
+// active and seen, and on a slow runner the observer reporting "seen" can come
+// after the next click, which moves the introduction onto the next panel.
 async function settle(workbench) {
+  if(await workbench.locator('.puzzle-flow').count())
+    await expect(workbench.locator('[role=tabpanel]:not([inert]) .puzzle-flow[data-puzzle-ready]')).toHaveCount(1);
   await workbench.evaluate(el=>Promise.all(el.getAnimations({subtree:true})
-    .filter(a=>a.transitionProperty==='transform'&&a.playState==='running').map(a=>a.finished)));
+    .filter(a=>(a.transitionProperty==='transform'||a.animationName?.startsWith('puzzle-'))&&a.playState==='running').map(a=>a.finished)));
 }
 
 for(const width of [1280,1524]) test(`workflow panels slide horizontally without vertical jumps at ${width}`,async({page})=>{
