@@ -2,11 +2,22 @@ import {test,expect} from './fixtures.mjs';
 import {mkdir} from 'node:fs/promises';
 
 // Sample the actual moving ancestor, whether a panel or a shared carousel rail.
+// A click's slide can start a frame or two after the click on a slow runner, so
+// wait for it in the page, up to 2s, and pause it in the frame it is found.
 async function sampleSlide(panel, progress) {
-  return panel.evaluate((el,progress)=>{
-    const animations=[];
-    for(let node=el;node&&!node.matches('.sequence-navigation');node=node.parentElement) {
-      animations.push(...node.getAnimations().filter(a=>a.transitionProperty==='transform'));
+  return panel.evaluate(async (el,progress)=>{
+    const sliding=()=>{
+      const found=[];
+      for(let node=el;node&&!node.matches('.sequence-navigation');node=node.parentElement) {
+        found.push(...node.getAnimations().filter(a=>a.transitionProperty==='transform'));
+      }
+      return found;
+    };
+    const until=performance.now()+2000;
+    let animations=sliding();
+    while(!animations.length&&performance.now()<until) {
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      animations=sliding();
     }
     for(const animation of animations) {
       animation.pause(); animation.currentTime=Number(animation.effect.getTiming().duration)*progress;
