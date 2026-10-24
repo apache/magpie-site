@@ -95,11 +95,14 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Publish and retire previews
-        uses: apache/infrastructure-actions/website-comment/preview-publish@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-publish/v1.0.0
+        uses: apache/infrastructure-actions/website-comment/preview-publish@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-publish/v1.1.0
         with:
           site-name: magpie # magpie-pr<N>.staged.apache.org
           build-workflow: build.yml
           pr: ${{ inputs.pr }}
+          # Explain previews only on PRs whose build uploaded one: build.yml
+          # skips the upload when a PR changes none of the site's paths.
+          howto: with-preview-artifact
           # Also delete this repository's head branches once all their pull
           # requests have closed, as the in-repo publisher always did.
           reap-head-branches: "true"

@@ -149,7 +149,7 @@ jobs:
       # cannot be linked here; the issue carries only the page for those.
       - name: Add the review overlay to the published site
         if: github.ref == 'refs/heads/main' && env.MAIN_REVIEW_OVERLAY == 'true'
-        uses: apache/infrastructure-actions/website-comment/preview-main-overlay@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-main-overlay/v1.0.0
+        uses: apache/infrastructure-actions/website-comment/preview-main-overlay@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-main-overlay/v1.1.0
         with:
           path: dist
           generated: src/content/docs/
@@ -165,11 +165,24 @@ jobs:
       # diff here rather than in the privileged publisher, which never reads
       # pull-request content, and uploads dist (dotfiles included: .htaccess
       # carries the 404 handler) as the preview-site artifact.
+      #
+      # Only when the PR changes what the site is built from: one that touches
+      # only CI, tests or repository settings has nothing new to preview, and
+      # preview-publish.yml then posts no explainer for it.
       - name: Upload the preview
         if: github.event_name == 'pull_request'
-        uses: apache/infrastructure-actions/website-comment/preview-artifact@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-artifact/v1.0.0
+        uses: apache/infrastructure-actions/website-comment/preview-artifact@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-artifact/v1.1.0
         with:
           path: dist
+          paths: |
+            src/
+            public/
+            scripts/
+            docs/
+            astro.config.mjs
+            tsconfig.json
+            package.json
+            package-lock.json
 
       - name: Upload site artifact
         if: github.ref == 'refs/heads/main'
