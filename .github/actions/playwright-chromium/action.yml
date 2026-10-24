@@ -59,6 +59,12 @@ runs:
     # Playwright version, which pins the browser build. The suites must find it
     # there too, so the calling job sets PLAYWRIGHT_BROWSERS_PATH, relative so
     # it resolves against the workspace on both; this step checks it.
+    #
+    # Playwright's packages all come from Ubuntu's archive, but the runner
+    # image also lists Microsoft's and Docker's repositories, and apt-get
+    # update fails the install when any of them errors: a 403 from
+    # packages.microsoft.com failed a shard of #251. Only the sources that
+    # point at Ubuntu's archive or the Azure mirror list are kept.
     - name: Keep apt's downloads and the browser for the cache
       id: apt-cache
       shell: bash
@@ -73,6 +79,10 @@ runs:
           exit 1
         fi
         echo force-unsafe-io | ${sudo} tee /etc/dpkg/dpkg.cfg.d/99playwright-unsafe-io
+        for source in /etc/apt/sources.list.d/*; do
+          [ -f "${source}" ] || continue
+          grep -qE 'ubuntu\.com|apt-mirrors\.txt' "${source}" || ${sudo} rm -v "${source}"
+        done
         . /etc/os-release
         echo "os=${ID}-${VERSION_ID}" >> "${GITHUB_OUTPUT}"
         echo "week=$(date -u +%G-W%V)" >> "${GITHUB_OUTPUT}"
