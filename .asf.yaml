@@ -30,13 +30,10 @@ github:
     merge: false
     rebase: false
 
-  # Branch protection for main, as in apache/infrastructure-actions: classic
-  # protection keeps main from being force-pushed or deleted, and the checks
-  # every PR must pass are a ruleset, because only a ruleset can name who may
-  # bypass it.
-  protected_branches:
-    main: {}
-
+  # Branch protection for main, as rulesets: only a ruleset can name who may
+  # bypass the required checks (as apache/infrastructure-actions does). Classic
+  # protection is not used; "main history" keeps main from being force-pushed
+  # or deleted instead.
   # Only checks that run on EVERY pull request may be listed here: a required
   # context whose workflow does not trigger is never reported, and the pull
   # request blocks forever with nothing to re-run. ci-passed is build.yml's
@@ -57,6 +54,16 @@ github:
   # magpie-committers team ("must be part of the ruleset source or owner
   # organization"). Raw payload syntax, as roles have no convenience key.
   rulesets:
+    # Nobody bypasses this one: main is never force-pushed or deleted. #246
+    # created it; it is listed here again so that .asf.yaml manages it, and
+    # matches it exactly, so applying it changes nothing on GitHub.
+    - name: "main history"
+      branches:
+        includes:
+          - "main"
+      restrict_deletion: true
+      restrict_force_push: true
+
     - name: "Required checks"
       target: branch
       enforcement: active
