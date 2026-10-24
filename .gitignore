@@ -14,8 +14,9 @@ src/data/tools.json
 # dependencies
 node_modules/
 
-# Playwright's apt downloads in CI (.github/actions/playwright-chromium)
+# Playwright's apt downloads and browser in CI (.github/actions/playwright-chromium)
 .apt-cache/
+.playwright-browsers/
 
 # logs
 npm-debug.log*

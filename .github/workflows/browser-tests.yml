@@ -33,6 +33,9 @@ jobs:
   browser:
     runs-on: ubuntu-slim
     timeout-minutes: 15
+    env:
+      # Where the playwright-chromium action caches the browser.
+      PLAYWRIGHT_BROWSERS_PATH: .playwright-browsers
     strategy:
       fail-fast: false
       matrix:
