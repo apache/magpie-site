@@ -61,3 +61,18 @@ jobs:
             "dev "*) npm run test:dev -- --shard="${SUITE#dev }" --fully-parallel ;;
             *) npm run test:browser -- --shard="${SUITE}" --workers=1 ;;
           esac
+      # Playwright keeps a trace, a screenshot and the error context of every
+      # failed test (trace: retain-on-failure), and they are what explains a
+      # failure the log only reports as "Received: false". Without this they
+      # are thrown away with the runner. Artifact names cannot contain the
+      # suite's "/", so the matrix index and attempt keep them apart.
+      - name: Upload the failed tests' traces
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-failures-${{ strategy.job-index }}-attempt-${{ github.run_attempt }}
+          path: |
+            .builds/test-results
+            .builds/dev-results
+          retention-days: 7
+          if-no-files-found: ignore
