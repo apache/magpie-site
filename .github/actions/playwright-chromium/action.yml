@@ -16,13 +16,14 @@
 # under the License.
 
 ---
-# Installs Chromium and its system packages for Playwright, after `npm ci`.
-# The browser suites only restore the apt cache; playwright-cache.yml saves it.
+# Installs Playwright's headless Chromium and its system packages, after
+# `npm ci`. The browser suites only restore the caches; playwright-cache.yml
+# saves them.
 name: "Playwright Chromium"
-description: "Install Playwright's Chromium with its apt packages kept in the Actions cache"
+description: "Install Playwright's headless Chromium with its apt packages and browser kept in the Actions cache"
 inputs:
   save:
-    description: "Save the apt cache after the install when the key was not an exact hit"
+    description: "Save the caches after the install when their key was not an exact hit"
     default: "false"
 runs:
   using: composite
@@ -46,8 +47,19 @@ runs:
     # Inside the workspace is the same relative place on both; actions/cache
     # refuses a path with `..`, so it cannot sit beside it. The path is also
     # part of the cache's version, so it is written the same way, as a
-    # relative literal, in both steps below. .gitignore lists the directory.
-    - name: Keep apt's downloads for the cache
+    # relative literal, in each cache step below. .gitignore lists the
+    # directories.
+    #
+    # On a slow runner, unpacking and setting up these packages took almost
+    # three minutes, against seconds elsewhere. dpkg syncs every file it
+    # writes to disk; force-unsafe-io skips that, and the runner is thrown
+    # away after the job, so nothing needs the files to survive a crash.
+    #
+    # The browser is cached the same way, inside the workspace, keyed by the
+    # Playwright version, which pins the browser build. The suites must find it
+    # there too, so the calling job sets PLAYWRIGHT_BROWSERS_PATH, relative so
+    # it resolves against the workspace on both; this step checks it.
+    - name: Keep apt's downloads and the browser for the cache
       id: apt-cache
       shell: bash
       run: |
@@ -56,22 +68,40 @@ runs:
         mkdir -p "${cache}/partial"
         ${sudo} rm -f /etc/apt/apt.conf.d/docker-clean
         echo "Dir::Cache::Archives \"${cache}\";" | ${sudo} tee /etc/apt/apt.conf.d/99playwright-cache
+        if [ "${PLAYWRIGHT_BROWSERS_PATH:-}" != .playwright-browsers ]; then
+          echo "::error::set PLAYWRIGHT_BROWSERS_PATH: .playwright-browsers in the job's env, so the suites find the cached browser"
+          exit 1
+        fi
+        echo force-unsafe-io | ${sudo} tee /etc/dpkg/dpkg.cfg.d/99playwright-unsafe-io
         . /etc/os-release
         echo "os=${ID}-${VERSION_ID}" >> "${GITHUB_OUTPUT}"
         echo "week=$(date -u +%G-W%V)" >> "${GITHUB_OUTPUT}"
+        echo "playwright=$(node -p 'require("@playwright/test/package.json").version')" >> "${GITHUB_OUTPUT}"
     - id: restore
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .apt-cache/*.deb
         key: playwright-apt-${{ steps.apt-cache.outputs.os }}-${{ steps.apt-cache.outputs.week }}
         restore-keys: playwright-apt-${{ steps.apt-cache.outputs.os }}-
+    - id: restore-browser
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .playwright-browsers
+        key: playwright-browser-${{ steps.apt-cache.outputs.os }}-${{ steps.apt-cache.outputs.playwright }}
+    # The suites run headless, which uses the headless shell: the full Chrome
+    # Playwright also installs by default is never started.
     - shell: bash
       run: |
         sudo=$(command -v sudo || true)
-        npx playwright install --with-deps chromium
+        npx playwright install --with-deps --only-shell chromium
         ${sudo} apt-get autoclean
     - if: inputs.save == 'true' && steps.restore.outputs.cache-hit != 'true'
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: .apt-cache/*.deb
         key: ${{ steps.restore.outputs.cache-primary-key }}
+    - if: inputs.save == 'true' && steps.restore-browser.outputs.cache-hit != 'true'
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .playwright-browsers
+        key: ${{ steps.restore-browser.outputs.cache-primary-key }}

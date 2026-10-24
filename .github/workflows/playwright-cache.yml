@@ -62,6 +62,8 @@ jobs:
     timeout-minutes: 45
     env:
       DEBIAN_FRONTEND: noninteractive
+      # Where the playwright-chromium action caches the browser.
+      PLAYWRIGHT_BROWSERS_PATH: .playwright-browsers
     steps:
       - name: Check the container is ubuntu-slim's release
         env:
