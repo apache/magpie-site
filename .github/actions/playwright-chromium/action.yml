@@ -43,15 +43,16 @@ runs:
     # actions/cache stores paths relative to the workspace, and the cache job's
     # container lays out its home and workspace differently from ubuntu-slim:
     # a cache of ~/apt-cache saved there unpacks somewhere else on the shards.
-    # Next to the workspace is the same relative place on both. The path is
-    # also part of the cache's version, so it is written the same way, as a
-    # literal, in both steps below.
+    # Inside the workspace is the same relative place on both; actions/cache
+    # refuses a path with `..`, so it cannot sit beside it. The path is also
+    # part of the cache's version, so it is written the same way, as a
+    # relative literal, in both steps below. .gitignore lists the directory.
     - name: Keep apt's downloads for the cache
       id: apt-cache
       shell: bash
       run: |
         sudo=$(command -v sudo || true)
-        cache="${GITHUB_WORKSPACE}/../apt-cache"
+        cache="${GITHUB_WORKSPACE}/.apt-cache"
         mkdir -p "${cache}/partial"
         ${sudo} rm -f /etc/apt/apt.conf.d/docker-clean
         echo "Dir::Cache::Archives \"${cache}\";" | ${sudo} tee /etc/apt/apt.conf.d/99playwright-cache
@@ -61,7 +62,7 @@ runs:
     - id: restore
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
-        path: ../apt-cache/*.deb
+        path: .apt-cache/*.deb
         key: playwright-apt-${{ steps.apt-cache.outputs.os }}-${{ steps.apt-cache.outputs.week }}
         restore-keys: playwright-apt-${{ steps.apt-cache.outputs.os }}-
     - shell: bash
@@ -72,5 +73,5 @@ runs:
     - if: inputs.save == 'true' && steps.restore.outputs.cache-hit != 'true'
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
-        path: ../apt-cache/*.deb
+        path: .apt-cache/*.deb
         key: ${{ steps.restore.outputs.cache-primary-key }}
