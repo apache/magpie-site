@@ -1,0 +1,14 @@
+# The paths the site is built from. A pull request that changes none of them
+# gets no preview, and runs the browser suites only if it changes one of
+# browser-test-paths.txt. Read by scripts/pr-changes.mjs.
+#
+# One path per line: `dir/` is everything under dir, anything else is that one
+# file. Every path must exist (scripts/pr-changes.test.mjs checks it).
+src/
+public/
+scripts/
+docs/
+astro.config.mjs
+tsconfig.json
+package.json
+package-lock.json

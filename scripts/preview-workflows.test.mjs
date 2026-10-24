@@ -70,3 +70,27 @@ test("preview-signal.yml has no permissions, no checkout and no expressions", as
   assert.doesNotMatch(text, /uses:/, "the signal runs no action");
   assert.doesNotMatch(text, /\$\{\{/, "the signal reads nothing from the event");
 });
+
+test("previews are offered only for site changes, on both sides", async () => {
+  // build.yml uploads a preview only when `changes` found a site change, and
+  // the publisher explains previews only where one was uploaded. Either half
+  // alone is wrong: the gate without the howto mode tells PRs with nothing to
+  // preview how to preview it, and the mode without the gate changes nothing.
+  const build = await workflow("build.yml");
+  const publish = await workflow("preview-publish.yml");
+  const upload = /- name: Upload the preview\n\s+if: (.*)\n\s+uses: apache\/infrastructure-actions\/website-comment\/preview-artifact@/.exec(build)?.[1];
+  assert.equal(upload, "github.event_name == 'pull_request' && needs.changes.outputs.site == 'true'");
+  assert.match(build, /^ {2}build:\n(?: *\n| {4}.*\n)*? {4}needs: \[changes, lint, browser\]$/m, "build waits for the decision");
+  assert.match(publish, /^\s+howto: with-preview-artifact$/m);
+});
+
+test("the browser suites run on what `changes` decided, and on every other event", async () => {
+  const build = await workflow("build.yml");
+  const job = /^ {2}browser:\n((?: *\n| {4}.*\n)+)/m.exec(build)?.[1] ?? "";
+  assert.match(job, /^ {4}needs: changes$/m);
+  assert.match(
+    job,
+    /^ {4}if: \$\{\{ !cancelled\(\) && github\.event_name != 'push' && \(github\.event_name != 'pull_request' \|\| needs\.changes\.outputs\.browser == 'true'\) \}\}$/m,
+    "skipped only on a pull request that changes neither the site nor the suites",
+  );
+});

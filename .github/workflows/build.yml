@@ -72,21 +72,55 @@ jobs:
           uv tool install prek
           prek run --all-files --color always
 
-  # The browser suites, as their own workflow so their 17 matrix jobs are
-  # grouped under one "browser" entry in the checks list. They start at once
-  # rather than after lint: they are the longest part of the run, and `build`
-  # still waits for both.
+  # What a pull request needs, from the files it changes: a preview when it
+  # changes the site (.github/site-paths.txt), and the browser suites when it
+  # changes the site or the suites (.github/browser-test-paths.txt). One
+  # decision for both, so they cannot drift apart. Other events run everything.
+  changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read # list the PR's changed files
+    outputs:
+      site: ${{ steps.decide.outputs.site }}
+      browser: ${{ steps.decide.outputs.browser }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            .github
+            scripts
+
+      - name: Decide what this pull request needs
+        id: decide
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node scripts/pr-changes.mjs
+
+  # The browser suites, as their own workflow so their 22 matrix jobs are
+  # grouped under one "browser" entry in the checks list. They start once
+  # `changes` has decided, not after lint: they are the longest part of the
+  # run, and `build` still waits for both. Skipped on a pull request that
+  # changes neither the site nor the suites; the weekly run covers main.
   browser:
-    if: github.event_name != 'push'
+    needs: changes
+    if: ${{ !cancelled() && github.event_name != 'push' && (github.event_name != 'pull_request' || needs.changes.outputs.browser == 'true') }}
     permissions:
       contents: read
     uses: $/.github/workflows/browser-tests.yml
 
   build:
-    needs: [lint, browser]
-    # Run when lint and browser passed, or were skipped on a push. A shard that
-    # hits its timeout ends "cancelled", not "failure", so !failure() alone
-    # would let the build through.
+    # `changes` is a need of its own: if it fails, browser is skipped rather
+    # than failed, and only this keeps a broken decision from passing the PR.
+    needs: [changes, lint, browser]
+    # Run when lint and browser passed, or were skipped. A shard that hits its
+    # timeout ends "cancelled", not "failure", so !failure() alone would let
+    # the build through.
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-slim
     timeout-minutes: 10
@@ -149,7 +183,7 @@ jobs:
       # cannot be linked here; the issue carries only the page for those.
       - name: Add the review overlay to the published site
         if: github.ref == 'refs/heads/main' && env.MAIN_REVIEW_OVERLAY == 'true'
-        uses: apache/infrastructure-actions/website-comment/preview-main-overlay@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-main-overlay/v1.0.0
+        uses: apache/infrastructure-actions/website-comment/preview-main-overlay@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-main-overlay/v1.1.0
         with:
           path: dist
           generated: src/content/docs/
@@ -165,9 +199,14 @@ jobs:
       # diff here rather than in the privileged publisher, which never reads
       # pull-request content, and uploads dist (dotfiles included: .htaccess
       # carries the 404 handler) as the preview-site artifact.
+      #
+      # Only when the PR changes what the site is built from, as `changes`
+      # decided: one that touches only CI, tests or repository settings has
+      # nothing new to preview, and preview-publish.yml then posts no
+      # explainer for it.
       - name: Upload the preview
-        if: github.event_name == 'pull_request'
-        uses: apache/infrastructure-actions/website-comment/preview-artifact@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-artifact/v1.0.0
+        if: github.event_name == 'pull_request' && needs.changes.outputs.site == 'true'
+        uses: apache/infrastructure-actions/website-comment/preview-artifact@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-artifact/v1.1.0
         with:
           path: dist
 
