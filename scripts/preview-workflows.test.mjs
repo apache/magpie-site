@@ -94,3 +94,15 @@ test("the browser suites run on what `changes` decided, and on every other event
     "skipped only on a pull request that changes neither the site nor the suites",
   );
 });
+
+test("ci-passed, the one required check, waits for every job and always runs", async () => {
+  // A job left out of its needs could fail without blocking a merge.
+  const build = await workflow("build.yml");
+  const jobs = [...build.slice(build.indexOf("\njobs:\n")).matchAll(/^ {2}([a-z][\w-]*):$/gm)].map((m) => m[1]);
+  const job = /^ {2}ci-passed:\n((?: *\n| {4}.*\n)+)/m.exec(build)?.[1] ?? "";
+  const needs = /^ {4}needs: \[(.*)\]$/m.exec(job)?.[1].split(/,\s*/) ?? [];
+  assert.deepEqual(needs.sort(), jobs.filter((j) => !["ci-passed", "deploy"].includes(j)).sort());
+  assert.match(job, /^ {4}if: \$\{\{ always\(\) \}\}$/m);
+  const asf = await readFile(new URL("../.asf.yaml", import.meta.url), "utf8");
+  assert.match(asf, /^ {8}contexts:\n {10}- ci-passed\n(?! {10}-)/m, ".asf.yaml requires ci-passed, and only it");
+});

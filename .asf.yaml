@@ -30,50 +30,41 @@ github:
     merge: false
     rebase: false
 
-  # Branch protection for main, as rulesets rather than classic protection,
-  # which has no way to let committers override a check. Classic protection
-  # and rulesets would both apply, so classic protection is removed.
-  protected_branches: ~
-  rulesets:
-    # Nobody bypasses this one: main is never force-pushed or deleted.
-    - name: "main history"
-      branches:
-        includes:
-          - "main"
-      restrict_deletion: true
-      restrict_force_push: true
-
-    # Only checks that run on EVERY pull request may be listed here: a
-    # required context whose workflow does not trigger is never reported, and
-    # the pull request blocks forever with nothing to re-run.
-    #
-    # Deliberately NOT required:
-    #   asf-allowlist-check - path-filtered to .github/**, so it is absent on
-    #                         any pull request that does not touch a workflow.
-    #   deploy              - gated to refs/heads/main; never runs on a PR.
-    #   publish             - PR previews: workflow_run / issue_comment /
-    #                         workflow_dispatch; never a pull request check.
-    #   signal              - preview-signal.yml; runs only on some PR events.
-    #
-    # A committer can merge a pull request whose checks have not passed, e.g.
-    # when a browser shard timed out on the Ubuntu mirror (gh pr merge
-    # --admin). The bypass works through pull requests only, so nobody pushes
-    # to main directly.
-    - name: "main checks"
-      branches:
-        includes:
-          - "main"
-      bypass_teams:
-        - "magpie-committers"
-      bypass_mode: pull_request
-      restrict_deletion: false
-      restrict_force_push: false
+  # Branch protection for main, as in apache/magpie: classic protection, which
+  # also blocks force-pushes and deletion. Only checks that run on EVERY pull
+  # request may be listed here: a required context whose workflow does not
+  # trigger is never reported, and the pull request blocks forever with
+  # nothing to re-run. ci-passed is build.yml's last job, which always runs
+  # and fails when any job before it failed or was cancelled. A job skipped
+  # because a need failed would otherwise count as passing, and so would the
+  # browser suites a PR skips when it changes neither the site nor the tests.
+  #
+  # Deliberately NOT required:
+  #   asf-allowlist-check - path-filtered to .github/**, so it is absent on
+  #                         any pull request that does not touch a workflow.
+  #   deploy              - gated to refs/heads/main; never runs on a PR.
+  #   publish             - PR previews: workflow_run / issue_comment /
+  #                         workflow_dispatch; never a pull request check.
+  #   signal              - preview-signal.yml; runs only on some PR events.
+  #
+  # No bypass: GitHub refused the magpie-committers team, a secret team, as a
+  # ruleset bypass actor ("must be part of the ruleset source or owner
+  # organization"), so a failed check is re-run, not overridden. The rulesets
+  # that tried it are removed.
+  protected_branches:
+    main:
       required_status_checks:
-        - lint
-        - build
-      # Not strict: main moves quickly, and requiring every branch to be up to
-      # date would mean rebasing each PR whenever anything merges.
-      required_status_checks_strict: false
+        # Not strict: main moves quickly, and requiring every branch to be
+        # up to date would mean rebasing each PR whenever anything merges.
+        strict: false
+        contexts:
+          - ci-passed
+  rulesets: ~
+
+  pull_requests:
+    # A pull request merges itself once ci-passed is green.
+    allow_auto_merge: true
+    allow_update_branch: true
 
 notifications:
   commits: commits@magpie.apache.org
