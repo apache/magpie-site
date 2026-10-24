@@ -8,6 +8,17 @@ import { randomUUID } from 'node:crypto';
 
 criticalProgressionTests();
 mobileExperienceTests();
+// The first click after a load is setup, not what is tested here. On the dev
+// server the island drops its ssr attribute before React handles events, so a
+// click can land on the server-rendered button and do nothing: click until the
+// choice takes. What survives the build is checked strictly below.
+async function choose(dot) {
+  await expect(async () => {
+    await dot.click();
+    await expect(dot).toHaveAttribute('aria-pressed','true',{timeout:1000});
+  }).toPass();
+}
+
 test('development preview survives a production build without losing interactive state', async ({page}) => {
   const build = () => promisify(execFile)(process.execPath,['node_modules/astro/bin/astro.mjs','build','--outDir',output], {env:{...process.env,ASTRO_TELEMETRY_DISABLED:'1'},maxBuffer:4*1024*1024});
   const output = `.builds/dev-concurrency-${randomUUID()}`;
@@ -17,7 +28,7 @@ test('development preview survives a production build without losing interactive
   await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
   await expect.poll(() => page.evaluate(measureLayout)).toEqual([]);
   const dot = page.locator('.reel-dot').nth(2);
-  await dot.click(); await expect(dot).toHaveAttribute('aria-pressed','true');
+  await choose(dot);
   await page.evaluate(() => { window.previewState = 'survived'; });
   await build();
   expect(await page.evaluate(() => window.previewState)).toBe('survived');
@@ -28,6 +39,5 @@ test('development preview survives a production build without losing interactive
   await page.reload();
   await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
   await expect.poll(() => page.evaluate(measureLayout)).toEqual([]);
-  await page.locator('.reel-dot').nth(1).click();
-  await expect(page.locator('.reel-dot').nth(1)).toHaveAttribute('aria-pressed','true');
+  await choose(page.locator('.reel-dot').nth(1));
 });

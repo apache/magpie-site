@@ -28,10 +28,13 @@ export default function HeroWorkflows() {
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const puzzleIntroduced = useRef(false);
+  // Set as soon as a dot or arrow key chooses an example, so the random first
+  // pick below cannot replace a choice made while the page was still loading.
+  const chosen = useRef(false);
   useEffect(() => {
     // Choose once after hydration: SSR stays stable, while repeat visits show
     // different examples. Manual selection and autoplay share the same state.
-    if (matchMedia("(min-width: 1101px)").matches) setSelected(Math.floor(Math.random() * examples.length));
+    if (!chosen.current && matchMedia("(min-width: 1101px)").matches) setSelected(Math.floor(Math.random() * examples.length));
     const media = matchMedia("(min-width: 1101px) and (prefers-reduced-motion: no-preference)");
     setMotionAllowed(media.matches);
     const change = () => setMotionAllowed(media.matches);
@@ -60,7 +63,7 @@ export default function HeroWorkflows() {
       boundary.removeEventListener("focusout", focus);
     };
   }, []);
-  const select = (index: number) => { setSelected(index); setUserStopped(true); };
+  const select = (index: number) => { chosen.current = true; setSelected(index); setUserStopped(true); };
   useWorkflowKeyboard(root, selected, examples.length, select, ".reel-dot");
   const advancing = motionAllowed && !userStopped && visible && !hovered && !focused;
   useEffect(() => {
