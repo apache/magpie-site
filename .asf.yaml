@@ -30,14 +30,20 @@ github:
     merge: false
     rebase: false
 
-  # Branch protection for main, as in apache/magpie: classic protection, which
-  # also blocks force-pushes and deletion. Only checks that run on EVERY pull
-  # request may be listed here: a required context whose workflow does not
-  # trigger is never reported, and the pull request blocks forever with
-  # nothing to re-run. ci-passed is build.yml's last job, which always runs
-  # and fails when any job before it failed or was cancelled. A job skipped
-  # because a need failed would otherwise count as passing, and so would the
-  # browser suites a PR skips when it changes neither the site nor the tests.
+  # Branch protection for main, as in apache/infrastructure-actions: classic
+  # protection keeps main from being force-pushed or deleted, and the checks
+  # every PR must pass are a ruleset, because only a ruleset can name who may
+  # bypass it.
+  protected_branches:
+    main: {}
+
+  # Only checks that run on EVERY pull request may be listed here: a required
+  # context whose workflow does not trigger is never reported, and the pull
+  # request blocks forever with nothing to re-run. ci-passed is build.yml's
+  # last job, which always runs and fails when any job before it failed or was
+  # cancelled. A job skipped because a need failed would otherwise count as
+  # passing, and so would the browser suites a PR skips when it changes
+  # neither the site nor the tests.
   #
   # Deliberately NOT required:
   #   asf-allowlist-check - path-filtered to .github/**, so it is absent on
@@ -47,22 +53,42 @@ github:
   #                         workflow_dispatch; never a pull request check.
   #   signal              - preview-signal.yml; runs only on some PR events.
   #
-  # No bypass: GitHub refused the magpie-committers team, a secret team, as a
-  # ruleset bypass actor ("must be part of the ruleset source or owner
-  # organization"), so a failed check is re-run, not overridden. The rulesets
-  # that tried it are removed.
-  protected_branches:
-    main:
-      required_status_checks:
-        # Not strict: main moves quickly, and requiring every branch to be
-        # up to date would mean rebasing each PR whenever anything merges.
-        strict: false
-        contexts:
-          - ci-passed
-  rulesets: ~
+  # The bypass names repository roles, not a team: GitHub refused the
+  # magpie-committers team ("must be part of the ruleset source or owner
+  # organization"). Raw payload syntax, as roles have no convenience key.
+  rulesets:
+    - name: "Required checks"
+      target: branch
+      enforcement: active
+      conditions:
+        ref_name:
+          include:
+            - "~DEFAULT_BRANCH"
+          exclude: []
+      bypass_actors:
+        # Repository admins (ASF Infra), always.
+        - actor_id: 5
+          actor_type: RepositoryRole
+          bypass_mode: always
+        # Write access, on pull requests only: a committer can merge past the
+        # checks, e.g. when a browser shard timed out on a slow runner, but
+        # never push past them (gh pr merge --admin).
+        - actor_id: 4
+          actor_type: RepositoryRole
+          bypass_mode: pull_request
+      rules:
+        - type: required_status_checks
+          parameters:
+            # Not strict: main moves quickly, and requiring every branch to be
+            # up to date would mean rebasing each PR whenever anything merges.
+            strict_required_status_checks_policy: false
+            # No integration_id: leaving it out means any source, and a
+            # string one, which is what .asf.yaml would pass, is rejected.
+            required_status_checks:
+              - context: ci-passed
 
   pull_requests:
-    # A pull request merges itself once ci-passed is green.
+    # A pull request merges itself once ci-passed is green, or is bypassed.
     allow_auto_merge: true
     allow_update_branch: true
 

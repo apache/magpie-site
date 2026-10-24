@@ -104,5 +104,5 @@ test("ci-passed, the one required check, waits for every job and always runs", a
   assert.deepEqual(needs.sort(), jobs.filter((j) => !["ci-passed", "deploy"].includes(j)).sort());
   assert.match(job, /^ {4}if: \$\{\{ always\(\) \}\}$/m);
   const asf = await readFile(new URL("../.asf.yaml", import.meta.url), "utf8");
-  assert.match(asf, /^ {8}contexts:\n {10}- ci-passed\n(?! {10}-)/m, ".asf.yaml requires ci-passed, and only it");
+  assert.match(asf, /^ {12}required_status_checks:\n {14}- context: ci-passed\n(?! {14}-)/m, ".asf.yaml requires ci-passed, and only it");
 });
