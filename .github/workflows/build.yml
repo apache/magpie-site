@@ -222,6 +222,27 @@ jobs:
           # dropped on the round-trip through the artifact.
           include-hidden-files: true
 
+  # The one required check (.asf.yaml). It always runs, and fails when any job
+  # before it failed or was cancelled: build is skipped when a need fails, and
+  # a skipped job counts as passing, so build alone cannot be required. Jobs
+  # skipped on purpose (lint and the browser suites on a push, the suites on a
+  # PR that changes neither the site nor the tests) are fine.
+  ci-passed:
+    needs: [changes, lint, browser, build]
+    if: ${{ always() }}
+    runs-on: ubuntu-slim
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Check that no job failed or was cancelled
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "changes, lint, browser, build: ${RESULTS}"
+          case " ${RESULTS} " in
+            *" failure "*|*" cancelled "*) exit 1 ;;
+          esac
+
   deploy:
     needs: build
     # The skipped lint and browser jobs upstream of build would otherwise skip
