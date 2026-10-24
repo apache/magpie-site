@@ -72,6 +72,11 @@ jobs:
             echo "::error::ubuntu-slim is now ${SLIM}, but this job runs in ${ID}:${VERSION_ID}; set its container to ${SLIM}"
             exit 1
           fi
+      # actions/cache compresses with zstd when it is installed and gzip
+      # otherwise, and a cache only restores with the method it was saved
+      # with. ubuntu-slim has zstd, the plain image does not.
+      - name: Install zstd, as the shards restoring the cache have it
+        run: apt-get update && apt-get install -y zstd
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
