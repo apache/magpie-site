@@ -1,0 +1,753 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-z4jru4n3><head><meta charset="UTF-8"><script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('magpie-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/x-icon" sizes="any" href="/favicon.ico"><title>`security-management` — Apache Magpie Docs</title><link rel="canonical" href="https://magpie.apache.org/docs/tools/security-management/readme/"><meta property="og:type" content="website"><meta property="og:site_name" content="Apache Magpie"><meta property="og:title" content="`security-management` — Apache Magpie Docs"><meta property="og:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta property="og:url" content="https://magpie.apache.org/docs/tools/security-management/readme/"><meta property="og:image" content="https://magpie.apache.org/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="`security-management` — Apache Magpie Docs"><meta name="twitter:description" content="AI agent skills for open-source maintainers. Prepare reviews, triage reports, and keep decisions in your hands."><meta name="twitter:image" content="https://magpie.apache.org/og-image.png"><script>
+      if (location.hostname === "magpie.apache.org") {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "https://analytics.apache.org/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "89"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+      }
+    </script><link rel="stylesheet" href="/_astro/SiteFooter.D33ke-Hd.css"><link rel="stylesheet" href="/_astro/DocsLayout.5MFayD3p.css"></head><body data-astro-cid-z4jru4n3><header data-preview-src="src/components/landing/SiteHeader.tsx:8" class="site-header"><a data-preview-src="src/components/landing/SiteHeader.tsx:9" class="skip-link" href="#main-content">Skip to content</a><div data-preview-src="src/components/landing/SiteHeader.tsx:10" class="header-inner"><a data-preview-src="src/components/landing/SiteHeader.tsx:11" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-preview-src="src/components/landing/SiteHeader.tsx:11" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><div data-preview-src="src/components/landing/SiteHeader.tsx:12" class="header-actions"><button data-preview-src="src/components/landing/SiteHeader.tsx:13" class="button button-quiet button-icon docs-menu-toggle" aria-label="Browse documentation" aria-expanded="false" aria-controls="docs-sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg><span data-preview-src="src/components/landing/SiteHeader.tsx:13">Browse</span></button><button data-preview-src="src/components/landing/SiteHeader.tsx:14" class="docs-search-trigger" aria-label="Search docs" data-search-open="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span data-preview-src="src/components/landing/SiteHeader.tsx:14">Search docs</span><kbd data-preview-src="src/components/landing/SiteHeader.tsx:14">⌘ K</kbd></button><button data-preview-src="src/components/landing/SiteHeader.tsx:7" class="button button-quiet button-icon theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon theme-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun theme-sun" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button></div></div></header><dialog class="search-dialog" aria-labelledby="search-title" data-index="/search-index.json"><div class="search-dialog-top"><label class="sr-only" id="search-title" for="docs-search-input">Search documentation</label><input id="docs-search-input" type="search" placeholder="What are you looking for?" autocomplete="off"><button class="button button-quiet button-small" data-search-close aria-label="Close search">Esc</button></div><div class="search-results" id="search-results"></div><p class="search-status" role="status" aria-live="polite">Search guides, workflows, and reference pages.</p><div class="search-dialog-footer"><span>↑ ↓ to move · Enter to open</span><span>Apache Magpie docs</span></div></dialog><script type="module">var e=document.querySelector(`.search-dialog`),t=e.querySelector(`input`),n=e.querySelector(`.search-results`),r=e.querySelector(`.search-status`),i=document.querySelector(`[data-search-open]`),a,o=-1,s=[],c=!1,l=[`/start`,`/docs/security/readme`,`/docs/pr-management/readme`,`/docs/setup/privacy-llm`,`/docs/education/readme`],u=()=>{if(!a)return;let e=t.value.trim().toLowerCase(),i=e.split(/\s+/).filter(Boolean);s=e?a.map(t=>{let n=t.title.toLowerCase(),r=`${n} ${t.section} ${t.text}`.toLowerCase();return{entry:t,score:i.every(e=>r.includes(e))?i.reduce((e,t)=>e+(n.includes(t)?15:1),0)+(n.includes(e)?30:0):0}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score).slice(0,12).map(e=>e.entry):l.map(e=>a.find(t=>t.path.endsWith(e))).filter(e=>!!e),n.replaceChildren(),o=-1;for(let e of s){let t=document.createElement(`a`);t.href=e.path;let r=document.createElement(`strong`);r.textContent=e.title;let i=document.createElement(`span`);i.textContent=e.section,t.append(r,i),n.append(t)}r.textContent=e?s.length?`${s.length} results. Use arrow keys to choose a page.`:`No pages found. Try “security”, “setup”, or “release”.`:`A few useful places to start.`},d=async()=>{if(e.showModal(),t.focus(),!a){r.textContent=`Loading the documentation index…`;try{let t=await fetch(e.dataset.index);if(!t.ok)throw Error(`Index unavailable`);a=await t.json(),c=!1}catch{c=!0,r.textContent=`Search is temporarily unavailable. You can still browse the sidebar.`}}c||u()};i.addEventListener(`click`,d),e.querySelector(`[data-search-close]`).addEventListener(`click`,()=>e.close()),e.addEventListener(`click`,t=>{if(t.target===e){let n=e.getBoundingClientRect();(t.clientX<n.left||t.clientX>n.right||t.clientY<n.top||t.clientY>n.bottom)&&e.close()}}),t.addEventListener(`input`,u),e.addEventListener(`keydown`,t=>{if(t.key===`Tab`){let n=[...e.querySelectorAll(`input,button,a[href]`)].filter(e=>!e.hasAttribute(`disabled`)),r=n[0],i=n.at(-1);t.shiftKey&&document.activeElement===r?(t.preventDefault(),i?.focus()):!t.shiftKey&&document.activeElement===i&&(t.preventDefault(),r?.focus())}if((t.key===`ArrowDown`||t.key===`ArrowUp`)&&s.length){t.preventDefault(),o=(o+(t.key===`ArrowDown`?1:-1)+s.length)%s.length;let e=[...n.querySelectorAll(`a`)];e.forEach((e,t)=>e.classList.toggle(`selected`,t===o)),e[o].focus()}}),document.addEventListener(`keydown`,t=>{(t.metaKey||t.ctrlKey)&&t.key.toLowerCase()===`k`&&(t.preventDefault(),e.open?e.close():d())}),e.addEventListener(`close`,()=>i.focus()),i.querySelector(`kbd`).textContent=navigator.platform.includes(`Mac`)?`⌘ K`:`Ctrl K`;</script><div class="container docs-shell"><aside id="docs-sidebar" class="docs-sidebar" aria-label="Documentation navigation"><div id="docs-nav-scroll"><a href="/start" class="docs-overview-link">Install Magpie</a><a href="/docs" class="docs-overview-link">Introduction</a><nav aria-label="Documentation sections"><ul class="flex flex-col gap-1.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Start here</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Quick start</span></summary><a href="/docs/quick-start/readme" aria-label="Quick start overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/quick-start/two-ways" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Installation or Adoption?" data-astro-cid-lihgpoae>Installation or Adoption?</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/prerequisites" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="prerequisites" data-astro-cid-lihgpoae>prerequisites</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/first-run" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Your first run with a family" data-astro-cid-lihgpoae>Your first run with a family</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/families" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="What each family solves" data-astro-cid-lihgpoae>What each family solves</a></li><li data-astro-cid-lihgpoae><a href="/docs/quick-start/other-install-methods" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="Other installation methods" data-astro-cid-lihgpoae>Other installation methods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Concepts</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/principles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="principles" data-astro-cid-lihgpoae>principles</a></li><li data-astro-cid-lihgpoae><a href="/docs/modes" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="modes" data-astro-cid-lihgpoae>modes</a></li><li data-astro-cid-lihgpoae><a href="/docs/mode-economics" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mode economics" data-astro-cid-lihgpoae>mode economics</a></li><li data-astro-cid-lihgpoae><a href="/docs/labels-and-capabilities" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="labels and capabilities" data-astro-cid-lihgpoae>labels and capabilities</a></li><li data-astro-cid-lihgpoae><a href="/docs/vendor-neutrality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="vendor neutrality" data-astro-cid-lihgpoae>vendor neutrality</a></li><li data-astro-cid-lihgpoae><a href="/docs/confidentiality" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="confidentiality" data-astro-cid-lihgpoae>confidentiality</a></li><li data-astro-cid-lihgpoae><a href="/docs/ai-contribution-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="ai contribution policy" data-astro-cid-lihgpoae>ai contribution policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/mailing-lists" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="mailing lists" data-astro-cid-lihgpoae>mailing lists</a></li><li data-astro-cid-lihgpoae><a href="/docs/when-to-use-mods" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="when to use mods" data-astro-cid-lihgpoae>when to use mods</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Updating Magpie</span></summary><a href="/docs/updating-magpie" aria-label="Updating Magpie overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/spec-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec driven development" data-astro-cid-lihgpoae>spec driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/editorial-guidelines" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="editorial guidelines" data-astro-cid-lihgpoae>editorial guidelines</a></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-sentiment" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributor sentiment" data-astro-cid-lihgpoae>contributor sentiment</a></li><li data-astro-cid-lihgpoae><a href="/docs/pilot-report-template" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pilot report template" data-astro-cid-lihgpoae>pilot report template</a></li><li data-astro-cid-lihgpoae><a href="/docs/source-release-contents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="source release contents" data-astro-cid-lihgpoae>source release contents</a></li><li data-astro-cid-lihgpoae><a href="/docs/extending" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="extending" data-astro-cid-lihgpoae>extending</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Setup</span></summary><a href="/docs/setup/readme" aria-label="Setup overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace-install" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace install" data-astro-cid-lihgpoae>marketplace install</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/marketplace" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="marketplace" data-astro-cid-lihgpoae>marketplace</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/companion-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="companion skills" data-astro-cid-lihgpoae>companion skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-setup" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent setup" data-astro-cid-lihgpoae>secure agent setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/secure-agent-internals" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="secure agent internals" data-astro-cid-lihgpoae>secure agent internals</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/uninstall" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="uninstall" data-astro-cid-lihgpoae>uninstall</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/sandbox-troubleshooting" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="sandbox troubleshooting" data-astro-cid-lihgpoae>sandbox troubleshooting</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/individual-use" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="individual use" data-astro-cid-lihgpoae>individual use</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/team-adoption" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="team adoption" data-astro-cid-lihgpoae>team adoption</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/per-role-mcp-access" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="per role mcp access" data-astro-cid-lihgpoae>per role mcp access</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/agentic-overrides" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic overrides" data-astro-cid-lihgpoae>agentic overrides</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/privacy-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="privacy llm" data-astro-cid-lihgpoae>privacy llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/setup/commit-attribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="commit attribution" data-astro-cid-lihgpoae>commit attribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Learn</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Education</span></summary><a href="/docs/education/readme" aria-label="Education overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/what-agents-are" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="what agents are" data-astro-cid-lihgpoae>what agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/working-with-agents" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="working with agents" data-astro-cid-lihgpoae>working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/choosing-models" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="choosing models" data-astro-cid-lihgpoae>choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/your-first-skill" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="your first skill" data-astro-cid-lihgpoae>your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/writing-safe-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="writing safe skills" data-astro-cid-lihgpoae>writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/debugging-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="debugging skills" data-astro-cid-lihgpoae>debugging skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/portable-skills" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="portable skills" data-astro-cid-lihgpoae>portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/eval-driven-development" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="eval driven development" data-astro-cid-lihgpoae>eval driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/agentic-work" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="agentic work" data-astro-cid-lihgpoae>agentic work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/english-as-code" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="english as code" data-astro-cid-lihgpoae>english as code</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/contributing" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="contributing" data-astro-cid-lihgpoae>contributing</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/pattern-catalogue" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="pattern catalogue" data-astro-cid-lihgpoae>pattern catalogue</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="tutorials" data-astro-cid-lihgpoae>tutorials</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Training</span></summary><a href="/docs/education/training/readme" aria-label="Training overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-01-what-agents-are" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="01 · What agents are" data-astro-cid-lihgpoae>01 · What agents are</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-02-working-with-agents" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="02 · Working with agents" data-astro-cid-lihgpoae>02 · Working with agents</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-03-choosing-models" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="03 · Choosing models" data-astro-cid-lihgpoae>03 · Choosing models</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-04-your-first-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="04 · Your first skill" data-astro-cid-lihgpoae>04 · Your first skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-05-writing-safe-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="05 · Writing safe skills" data-astro-cid-lihgpoae>05 · Writing safe skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-06-debugging-a-skill" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="06 · Debugging a skill" data-astro-cid-lihgpoae>06 · Debugging a skill</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-07-writing-portable-skills" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="07 · Writing portable skills" data-astro-cid-lihgpoae>07 · Writing portable skills</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-08-eval-driven-development" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="08 · Eval-driven development" data-astro-cid-lihgpoae>08 · Eval-driven development</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-09-agentic-and-autonomous-work" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="09 · Agentic and autonomous work" data-astro-cid-lihgpoae>09 · Agentic and autonomous work</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-10-english-as-a-programming-language" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="10 · English as a programming language" data-astro-cid-lihgpoae>10 · English as a programming language</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-11-how-to-contribute" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="11 · How to contribute" data-astro-cid-lihgpoae>11 · How to contribute</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/lesson-lab-tutorials" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="lab tutorials" data-astro-cid-lihgpoae>lab tutorials</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/instructor-guide" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="instructor guide" data-astro-cid-lihgpoae>instructor guide</a></li><li data-astro-cid-lihgpoae><a href="/docs/education/training/upstream-contribution" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="upstream contribution" data-astro-cid-lihgpoae>upstream contribution</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Maintainer workflows</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="PR Management" data-astro-cid-lihgpoae>PR Management</a></li><li data-astro-cid-lihgpoae><a href="/docs/issue-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Issue Management" data-astro-cid-lihgpoae>Issue Management</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Security</span></summary><a href="/docs/security/readme" aria-label="Security overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/security/security-model-preparation" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="security model preparation" data-astro-cid-lihgpoae>security model preparation</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/poc-handling-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="poc handling policy" data-astro-cid-lihgpoae>poc handling policy</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/roles" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="roles" data-astro-cid-lihgpoae>roles</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/fixing-security-issues" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="fixing security issues" data-astro-cid-lihgpoae>fixing security issues</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/how-the-security-team-works" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="how the security team works" data-astro-cid-lihgpoae>how the security team works</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/advisory-records" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="advisory records" data-astro-cid-lihgpoae>advisory records</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/threat-model" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="threat model" data-astro-cid-lihgpoae>threat model</a></li><li data-astro-cid-lihgpoae><a href="/docs/security/forwarder-routing-policy" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="forwarder routing policy" data-astro-cid-lihgpoae>forwarder routing policy</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/repo-health/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Repo Health" data-astro-cid-lihgpoae>Repo Health</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Release Management</span></summary><a href="/docs/release-management/readme" aria-label="Release Management overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/release-management/process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="process" data-astro-cid-lihgpoae>process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/svn-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="svn release runbook" data-astro-cid-lihgpoae>svn release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/atr-release-runbook" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="atr release runbook" data-astro-cid-lihgpoae>atr release runbook</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/manual-release-process" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="manual release process" data-astro-cid-lihgpoae>manual release process</a></li><li data-astro-cid-lihgpoae><a href="/docs/release-management/reproducibility" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="reproducibility" data-astro-cid-lihgpoae>reproducibility</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Mentoring</span></summary><a href="/docs/mentoring/readme" aria-label="Mentoring overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/mentoring/spec" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="spec" data-astro-cid-lihgpoae>spec</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/contributor-growth/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Contributor Growth" data-astro-cid-lihgpoae>Contributor Growth</a></li><li data-astro-cid-lihgpoae><a href="/docs/pairing/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Pairing" data-astro-cid-lihgpoae>Pairing</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none uppercase tracking-wider" style="padding-left: 0.350rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Extend &amp; reference</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Adapters</span></summary><a href="/docs/adapters/readme" aria-label="Adapters overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/adapters/aider" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="aider" data-astro-cid-lihgpoae>aider</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/codex" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="codex" data-astro-cid-lihgpoae>codex</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/copilot" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="copilot" data-astro-cid-lihgpoae>copilot</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/cursor" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="cursor" data-astro-cid-lihgpoae>cursor</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/gemini" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="gemini" data-astro-cid-lihgpoae>gemini</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/grok" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="grok" data-astro-cid-lihgpoae>grok</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/junie" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="junie" data-astro-cid-lihgpoae>junie</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/goose" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="goose" data-astro-cid-lihgpoae>goose</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/kiro" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="kiro" data-astro-cid-lihgpoae>kiro</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/local-llm" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="local llm" data-astro-cid-lihgpoae>local llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/opencode" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="opencode" data-astro-cid-lihgpoae>opencode</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/add-a-harness" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="add a harness" data-astro-cid-lihgpoae>add a harness</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/adapters/authoring" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring" data-astro-cid-lihgpoae>authoring</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Tools</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Contracts (37)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/apache-projects/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="apache-projects" data-astro-cid-lihgpoae>apache-projects</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-nexus/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-nexus" data-astro-cid-lihgpoae>asf-nexus</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/asf-svn/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="asf-svn" data-astro-cid-lihgpoae>asf-svn</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/bitbucket/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="bitbucket" data-astro-cid-lihgpoae>bitbucket</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/body-field-contract/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="body-field-contract" data-astro-cid-lihgpoae>body-field-contract</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/change-request/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="change-request" data-astro-cid-lihgpoae>change-request</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat" data-astro-cid-lihgpoae>chat</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-discord/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-discord" data-astro-cid-lihgpoae>chat-discord</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/chat-slack/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="chat-slack" data-astro-cid-lihgpoae>chat-slack</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-org/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-org" data-astro-cid-lihgpoae>cve-org</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool" data-astro-cid-lihgpoae>cve-tool</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/cve-tool-vulnogram/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="cve-tool-vulnogram" data-astro-cid-lihgpoae>cve-tool-vulnogram</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/discourse/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="discourse" data-astro-cid-lihgpoae>discourse</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forgejo/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forgejo" data-astro-cid-lihgpoae>forgejo</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/forwarder-relay/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="forwarder-relay" data-astro-cid-lihgpoae>forwarder-relay</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/fossil/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="fossil" data-astro-cid-lihgpoae>fossil</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github" data-astro-cid-lihgpoae>github</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-body-field/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-body-field" data-astro-cid-lihgpoae>github-body-field</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/github-rollup/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="github-rollup" data-astro-cid-lihgpoae>github-rollup</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gitlab/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gitlab" data-astro-cid-lihgpoae>gitlab</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/gmail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="gmail" data-astro-cid-lihgpoae>gmail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira" data-astro-cid-lihgpoae>jira</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/jira-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="jira-patch" data-astro-cid-lihgpoae>jira-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/local-tracker/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="local-tracker" data-astro-cid-lihgpoae>local-tracker</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-archive" data-astro-cid-lihgpoae>mail-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-patch/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-patch" data-astro-cid-lihgpoae>mail-patch</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/mail-source/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="mail-source" data-astro-cid-lihgpoae>mail-source</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maildir/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maildir" data-astro-cid-lihgpoae>maildir</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/osv/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="osv" data-astro-cid-lihgpoae>osv</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/people/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="people" data-astro-cid-lihgpoae>people</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/ponymail/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="ponymail" data-astro-cid-lihgpoae>ponymail</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/scan-format/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="scan-format" data-astro-cid-lihgpoae>scan-format</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker" data-astro-cid-lihgpoae>security-tracker</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sourcehut/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sourcehut" data-astro-cid-lihgpoae>sourcehut</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/tracker/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="tracker" data-astro-cid-lihgpoae>tracker</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/typed-decision/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="typed-decision" data-astro-cid-lihgpoae>typed-decision</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vcs/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vcs" data-astro-cid-lihgpoae>vcs</a></li></ul></details></li><li data-astro-cid-lihgpoae><details open data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 1.450rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Substrates (35)</span></summary><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/tools/adversarial-review/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="adversarial-review" data-astro-cid-lihgpoae>adversarial-review</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-guard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-guard" data-astro-cid-lihgpoae>agent-guard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/agent-isolation/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="agent-isolation" data-astro-cid-lihgpoae>agent-isolation</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/container-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="container-gateway" data-astro-cid-lihgpoae>container-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/contributor-metrics/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="contributor-metrics" data-astro-cid-lihgpoae>contributor-metrics</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dashboard-generator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dashboard-generator" data-astro-cid-lihgpoae>dashboard-generator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/dev/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="dev" data-astro-cid-lihgpoae>dev</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/egress-gateway/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="egress-gateway" data-astro-cid-lihgpoae>egress-gateway</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/maven-artifact-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="maven-artifact-verify" data-astro-cid-lihgpoae>maven-artifact-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/permission-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="permission-audit" data-astro-cid-lihgpoae>permission-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pilot-report-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pilot-report-validator" data-astro-cid-lihgpoae>pilot-report-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/pr-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="pr-management" data-astro-cid-lihgpoae>pr-management</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/preflight-audit/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="preflight-audit" data-astro-cid-lihgpoae>preflight-audit</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/privacy-llm/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="privacy-llm" data-astro-cid-lihgpoae>privacy-llm</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/probe-templates/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="probe-templates" data-astro-cid-lihgpoae>probe-templates</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-config/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-config" data-astro-cid-lihgpoae>release-config</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-management/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-management" data-astro-cid-lihgpoae>release-management</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/release-verify/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="release-verify" data-astro-cid-lihgpoae>release-verify</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/reproducible-archive/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="reproducible-archive" data-astro-cid-lihgpoae>reproducible-archive</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/sandbox-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="sandbox-lint" data-astro-cid-lihgpoae>sandbox-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/secret-prompt/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="secret-prompt" data-astro-cid-lihgpoae>secret-prompt</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-management/readme" aria-current="page" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-management" data-astro-cid-lihgpoae>security-management</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/security-tracker-stats-dashboard/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="security-tracker-stats-dashboard" data-astro-cid-lihgpoae>security-tracker-stats-dashboard</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/setup-preflight/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="setup-preflight" data-astro-cid-lihgpoae>setup-preflight</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-and-tool-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-and-tool-validator" data-astro-cid-lihgpoae>skill-and-tool-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-evals/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-evals" data-astro-cid-lihgpoae>skill-evals</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-reconciler-diff/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-reconciler-diff" data-astro-cid-lihgpoae>skill-reconciler-diff</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/skill-token-count/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="skill-token-count" data-astro-cid-lihgpoae>skill-token-count</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-inventory/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-inventory" data-astro-cid-lihgpoae>spec-inventory</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-loop/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-loop" data-astro-cid-lihgpoae>spec-loop</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-status-index/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-status-index" data-astro-cid-lihgpoae>spec-status-index</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/spec-validator/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="spec-validator" data-astro-cid-lihgpoae>spec-validator</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/symlink-lint/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="symlink-lint" data-astro-cid-lihgpoae>symlink-lint</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vendor-neutrality-score/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vendor-neutrality-score" data-astro-cid-lihgpoae>vendor-neutrality-score</a></li><li data-astro-cid-lihgpoae><a href="/docs/tools/vetted-ops/readme" class="block py-1 pr-2 capitalize" style="padding-left: 2.440rem" title="vetted-ops" data-astro-cid-lihgpoae>vetted-ops</a></li></ul></details></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>RFCs</span></summary><a href="/docs/rfcs/readme" aria-label="RFCs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0002" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0002 · Secure Agents setup" data-astro-cid-lihgpoae>0002 · Secure Agents setup</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0003" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0003 · Privacy in LLM routing" data-astro-cid-lihgpoae>0003 · Privacy in LLM routing</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0004" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0004 · Principles of interaction" data-astro-cid-lihgpoae>0004 · Principles of interaction</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0005" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0005 · Framework taxonomy" data-astro-cid-lihgpoae>0005 · Framework taxonomy</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0006" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0006 · Trusted skill sources" data-astro-cid-lihgpoae>0006 · Trusted skill sources</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0007" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0007 · Selective snapshot" data-astro-cid-lihgpoae>0007 · Selective snapshot</a></li><li data-astro-cid-lihgpoae><a href="/docs/rfcs/rfc-ai-0008" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="0008 · The coordinator role" data-astro-cid-lihgpoae>0008 · The coordinator role</a></li></ul></details></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>External Skill Sources</span></summary><a href="/docs/skill-sources/readme" aria-label="External Skill Sources overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/registry" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="registry" data-astro-cid-lihgpoae>registry</a></li><li data-astro-cid-lihgpoae><a href="/docs/skill-sources/authoring-a-source" class="block py-1 pr-2 capitalize" style="padding-left: 1.890rem" title="authoring a source" data-astro-cid-lihgpoae>authoring a source</a></li></ul></details></li><li data-astro-cid-lihgpoae><a href="/docs/utilities/readme" class="block py-1 pr-2 capitalize" style="padding-left: 1.340rem" title="Utilities" data-astro-cid-lihgpoae>Utilities</a></li><li data-astro-cid-lihgpoae><details data-astro-cid-lihgpoae><summary class="tree-summary flex items-center gap-1.5 cursor-pointer py-1 pr-2 select-none " style="padding-left: 0.900rem" data-astro-cid-lihgpoae><span class="tree-toggle flex-none -my-1 -ml-1 rounded py-1 pl-1 pr-0.5" aria-hidden="true" data-astro-cid-lihgpoae><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tree-chevron block" aria-hidden="true" data-astro-cid-lihgpoae="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="min-w-0 flex-1" data-astro-cid-lihgpoae>Designs</span></summary><a href="/docs/designs/readme" aria-label="Designs overview" class="block py-1 pr-2" style="padding-left: 1.890rem" data-astro-cid-lihgpoae>Overview</a><ul class="flex flex-col gap-0.5" data-astro-cid-lihgpoae><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-13-install-adopt-upgrade" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="install adopt upgrade" data-astro-cid-lihgpoae>install adopt upgrade</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-17-body-owned-config-layers" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="body owned config layers" data-astro-cid-lihgpoae>body owned config layers</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-20-reproducible-releases" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="reproducible releases" data-astro-cid-lihgpoae>reproducible releases</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-21-marketplace-reconciliation-tracking" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="marketplace reconciliation tracking" data-astro-cid-lihgpoae>marketplace reconciliation tracking</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-23-adversarial-review" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="adversarial review" data-astro-cid-lihgpoae>adversarial review</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-10-15-security-tracker-backends" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="security tracker backends" data-astro-cid-lihgpoae>security tracker backends</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-10-15-security-tracker-backends-plan" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="security tracker backends plan" data-astro-cid-lihgpoae>security tracker backends plan</a></li><li data-astro-cid-lihgpoae><a href="/docs/designs/2026-09-27-contributor-growth-calibration-and-screening" class="block py-1 pr-2 " style="padding-left: 1.890rem" title="contributor growth calibration and screening" data-astro-cid-lihgpoae>contributor growth calibration and screening</a></li></ul></details></li></ul></details></li></ul></nav></div></aside><main id="main-content" tabindex="-1" class="docs-main"><div class="docs-breadcrumb"><a href="/docs">Docs</a><span>/</span><span>tools</span><button class="button button-secondary button-small copy-page" data-markdown="/docs/tools/security-management/readme.md">Copy page</button></div><article class="prose docs-prose"><!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+<h1 id="security-management"><code>security-management</code></h1>
+<p><strong>Capability:</strong> substrate:analytics</p>
+<p><strong>Harness:</strong> agnostic</p>
+<p>The deterministic core of the <code>security-*</code> skills.
+Each skill family is a subcommand: <a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import/SKILL.md"><code>security-issue-import</code></a> (<code>issue-import</code>),
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-pr/SKILL.md"><code>security-issue-import-from-pr</code></a> (<code>issue-import-from-pr</code>)
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-md/SKILL.md"><code>security-issue-import-from-md</code></a> (<code>issue-import-from-md</code>)
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-via-forwarder/SKILL.md"><code>security-issue-import-via-forwarder</code></a> (<code>issue-import-via-forwarder</code>)
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-import-from-scan/SKILL.md"><code>security-issue-import-from-scan</code></a> (<code>issue-import-from-scan</code>)
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-triage/SKILL.md"><code>security-issue-triage</code></a> (<code>issue-triage</code>),
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-invalidate/SKILL.md"><code>security-issue-invalidate</code></a> (<code>issue-invalidate</code>),
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/cve-allocate/SKILL.md"><code>security-cve-allocate</code></a> (<code>cve-allocate</code>),
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-deduplicate/SKILL.md"><code>security-issue-deduplicate</code></a> (<code>issue-deduplicate</code>),
+<a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-sync/SKILL.md"><code>security-issue-sync</code></a> (<code>issue-sync</code>)
+and <a href="https://github.com/apache/magpie/blob/main/plugins/magpie-security/skills/issue-fix/SKILL.md"><code>security-issue-fix</code></a> (<code>issue-fix</code>).
+The tool takes what the agent saved — search results, the redacted report text, the confirmed plan — and decides or renders everything rule-shaped:
+the Step 1 pre-filter, the batched <code>threadId</code> dedup, the forwarder pre-screen, the tracker body and its inert report block, the rollup entry, the rejections-ledger record,
+the fix-already-public reply, the receipt-draft matrix, the confirmation-reply grammar and the recap.
+The agent keeps the judgement: classification, field extraction, third-party PII identification, fuzzy duplicates, prior rejections, canned-response choice and injection flagging.</p>
+<p><strong>It runs nothing.</strong>
+No command invokes <code>gh</code>, a mail backend, <code>pii-redact</code> or <code>pii-reveal</code>, posts, drafts or touches the network.
+Report text arrives already redacted, and redaction tokens (<code>N-…</code>, <code>E-…</code>) pass through unchanged.
+A render that would emit something the skill must refuse (a malformed report body, a rollup label holding <code>&lt;</code>, <code>&gt;</code> or <code>·</code>, a ledger record missing a key)
+exits <code>2</code> with <code>{"ok": false, "refused": "&lt;why&gt;"}</code>.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Runtime:</strong> Python 3.11+, stdlib only; run with <code>uv run --project &lt;framework&gt;/tools/security-management</code>.
+It imports three stdlib-only workspace members instead of copying their rules:
+<a href="https://github.com/apache/magpie/blob/main/tools/github-body-field/README.md"><code>github-body-field</code></a> (what a <code>### Field</code> section is) and
+<a href="https://github.com/apache/magpie/blob/main/tools/cve-tool-vulnogram/generate-cve-json/README.md"><code>generate-cve-json</code></a> (the bot/AI credit policy) and
+<a href="https://github.com/apache/magpie/blob/main/tools/vcs/README.md"><code>magpie-vcs</code></a> (the embargo scrub of public text).</li>
+<li><strong>CLIs:</strong> None.</li>
+<li><strong>Credentials / auth:</strong> None.</li>
+<li><strong>Network:</strong> None.</li>
+</ul>
+<h2 id="how-to-use">How to use</h2>
+<p>Untrusted text reaches the tool only through a file the agent wrote with its Write tool, never through argv:</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFB757">uv</span><span style="color:#ADDCFF"> run</span><span style="color:#91CBFF"> --project</span><span style="color:#FF9492"> &lt;</span><span style="color:#ADDCFF">framewor</span><span style="color:#F0F3F6">k</span><span style="color:#FF9492">&gt;</span><span style="color:#ADDCFF">/tools/security-management</span><span style="color:#ADDCFF"> security-management</span><span style="color:#ADDCFF"> issue-import</span><span style="color:#ADDCFF"> render-body</span><span style="color:#FF9492"> \</span></span>
+<span class="line"><span style="color:#91CBFF">  --input</span><span style="color:#FF9492"> &lt;</span><span style="color:#ADDCFF">scratc</span><span style="color:#F0F3F6">h</span><span style="color:#FF9492">&gt;</span><span style="color:#ADDCFF">/body-</span><span style="color:#FF9492">&lt;</span><span style="color:#ADDCFF">threadI</span><span style="color:#F0F3F6">d</span><span style="color:#FF9492">&gt;</span><span style="color:#ADDCFF">.json</span></span></code></pre>
+<p>Every command prints one JSON object; rendered text is in its <code>text</code> field.</p>
+<h2 id="shared-rules">Shared rules</h2>
+<p><code>security_management.shared</code> holds what every import skill applies; it has no CLI of its own.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Module</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>body</code></td>
+<td><code>inert_block</code>: the report text, line breaks normalised (other <code>splitlines</code> breaks refused), byte-exact inside a fence (except a line that would end a field under the body-field contract — <code>###</code> then a space, a tab or nothing, at column 0 or behind <code>&gt;</code>, list markers or indent, whatever the name — or that starts with <code>&lt;!--</code>, which gains a leading <code>\\</code> and is listed in <code>escaped_lines</code>) with info string <code>text</code> one backtick longer than its longest backtick run (at least three), so nothing in it renders and no line of it can close the block. <code>short_field</code>: a short field with headings demoted, every HTML opener escaped, images and active HTML defused, fence lines escaped. <code>verify</code>: the rendered body through github-body-field’s <code>normalise</code> — exactly the template fields once each, nothing to decide, nothing to rewrite. <code>render</code>: one <code>### &lt;heading&gt;</code> per field role, headings from <code>tracker.body_fields</code>, empty fields <code>_No response_</code>, <code>Severity</code> <code>Unknown</code>, the injection callout only when the model sets it.</td>
+</tr>
+<tr>
+<td class="table-label"><code>rollup</code></td>
+<td>Entry bodies at column 0, one-line values, the action label refused when it holds <code>&lt;</code>, <code>&gt;</code> or <code>·</code>, and handed back shell-quoted.</td>
+</tr>
+<tr>
+<td class="table-label"><code>refs</code></td>
+<td><code>bare_refs</code> / <code>linkify</code> for <code>#NNN</code> and <code>owner/repo#NNN</code> outside code spans (any backtick run), fences, links, autolinks and URLs, ported from <code>pr-management</code>’s <code>_BARE_REF</code>; <code>tracker_link</code> for a GitHub, Jira or local-files reference.</td>
+</tr>
+<tr>
+<td class="table-label"><code>titles</code></td>
+<td><code>strip_mail_prefixes</code>, <code>strip_pr_title</code>, <code>md_title</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>recipients</code></td>
+<td><code>security_cc</code>: the security CC of every draft, each key from the first layer that declares it.</td>
+</tr>
+<tr>
+<td class="table-label"><code>drafting</code></td>
+<td><code>choose</code>: Gmail or Maildir (the person over the project), then <code>backend</code>: <code>maildir</code> when configured, else <code>oauth_curl</code>, and <code>claude_ai_mcp</code> only without OAuth credentials and with no link in the body; <code>anchor</code>: what each backend attaches the draft by; <code>scan</code>: tracker references, the CVE-tool URL, bare references, re-opening phrases, CVSS and other ASF projects in a composed reporter draft.</td>
+</tr>
+<tr>
+<td class="table-label"><code>grammar</code></td>
+<td><code>parse_reply</code>: the confirmation grammar; anything unplaceable goes to <code>ambiguous_tokens</code> for the agent to ask back, conflicting dispositions hold their candidate out of every list, unscoped free text holds everything, and a negation confirms nothing.</td>
+</tr>
+<tr>
+<td class="table-label"><code>keyword</code></td>
+<td>The <code>tr -cd</code> allowlist for search keywords, read from a file, never starting with <code>-</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>fields</code></td>
+<td><code>read</code>: template fields of an existing tracker body through github-body-field (<code>normalise</code>, then <code>extract_field</code>); a field it will not decide on is <code>undecided</code>, never guessed or read as empty.</td>
+</tr>
+<tr>
+<td class="table-label"><code>threads</code></td>
+<td><code>classify</code>: the <em>Security mailing list thread</em> field as an import path (archive URL, Gmail-only, PR or markdown sentinel, indeterminate), the primary thread by the <code>tools/gmail/threading.md</code> relay signals, and the root <code>Message-ID</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>dispositions</code></td>
+<td>The six triage classes, the two proposal markers (<code>**Triage proposal**</code>, <code>**Proposed disposition: </code>) and <code>parse_time</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>numbered</code></td>
+<td><code>parse</code>: the numbered-proposal reply of <code>cve-allocate</code> and <code>issue-deduplicate</code> — <code>all</code>, a list (with a comment after a dash only when it names other items to hold them back), <code>cancel</code>; anything else is an edit, and nothing applies by default.</td>
+</tr>
+<tr>
+<td class="table-label"><code>rollup.notification_line</code></td>
+<td>The <em>Reporter notification</em> line (<code>notified</code>, <code>team_member</code>, <code>draft_pending</code> only once the draft is checked to be in Drafts, <code>omitted</code>).</td>
+</tr>
+<tr>
+<td class="table-label"><code>selectors</code></td>
+<td><code>issue_numbers</code>: <code>N</code>, <code>#N, #M</code>, <code>#N-#M</code>, <code>owner/repo#N</code>, an issue URL, refusing another repository; the CVE token rule.</td>
+</tr>
+<tr>
+<td class="table-label"><code>shell</code></td>
+<td><code>dq</code> / <code>w</code>, a copy of <code>release-management</code>’s.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="commands">Commands</h2>
+<h3 id="issue-import"><code>issue-import</code></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>governance --config &lt;security-intake-config.md&gt;</code></td>
+<td><code>reporter_acknowledgement_model</code>, <code>window_days</code>, <code>config_file_found</code>; <code>manual</code> / <code>90</code> when the file or the <code>disclosure_governance</code> block is absent, a <code>warnings</code> entry for a value outside the vocabulary.</td>
+</tr>
+<tr>
+<td class="table-label"><code>prefilter --threads F</code></td>
+<td>Per thread: <code>decision</code> (<code>keep</code> / <code>drop</code>), <code>rule</code> (1 GHSA relay, 2 CVE-tool bookkeeping, 3 anything else), <code>class</code>, <code>pretag</code>; <code>dropped</code> and <code>counts</code>. Every message must match rule 2 to drop; a missing subject or sender keeps; <code>named_thread_id</code> is never dropped.</td>
+</tr>
+<tr>
+<td><code>dedup-queries --thread-ids F [--tracker T]</code></td>
+<td><code>batches</code> of at most six ids, each a quoted phrase OR’d into <code>query</code>, and the shell-quoted <code>command</code>; ids are Gmail / PonyMail ids, maildir names or root <code>Message-ID</code>s, and any other id exits <code>2</code> with <code>rejected_ids</code>.</td>
+</tr>
+<tr>
+<td><code>dedup-attribute --thread-ids F --hits F</code></td>
+<td><code>tracked</code> (id → hits), <code>untracked</code>; at 100 hits <code>truncated</code>, no <code>untracked</code>, and <code>rerun</code> batches; exit <code>2</code> with <code>rejected_ids</code> as above.</td>
+</tr>
+<tr>
+<td><code>relay-prescreen --message F --forwarders F</code></td>
+<td><code>invoke_subskill</code>: false only when no enabled adapter’s <code>sender_pattern</code> / <code>preamble_match</code> (first 400 characters) matches; an unresolved or invalid pattern invokes.</td>
+</tr>
+<tr>
+<td><code>keyword --file F [--kind keywords|email-local]</code></td>
+<td><code>cleaned</code>, <code>empty</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>title --input F</code></td>
+<td><code>title</code>: the subject without its mail prefixes.</td>
+</tr>
+<tr>
+<td class="table-label"><code>linkify --input F</code></td>
+<td><code>text</code> with every bare reference linked into <code>repo</code>, and the <code>bare_refs</code> found.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-body --input F</code></td>
+<td>The body <code>text</code>, <code>sanitised_fields</code>, <code>fields</code> as github-body-field parses them, <code>fields_ok</code>, <code>extra_fields</code>, <code>reporter_credit_is_bot</code>, <code>bare_refs</code>; exit <code>2</code> with <code>malformed_indicator</code> for a stray line break, or when <code>verify</code> refuses the rendered body.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-rollup --input F</code></td>
+<td><code>label</code>, <code>label_shell</code>, <code>text</code>: the import entry, with the receipt line for a draft, a bundle, a converged disposition or a suppression, and the malformed-body note.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-ledger --input F</code></td>
+<td>The <code>&lt;!-- rejection v1 --&gt;</code> record; values on one line, <code>archive</code> <code>unresolved (archive lag)</code> when not given.</td>
+</tr>
+<tr>
+<td><code>render-fix-public-reply --input F</code></td>
+<td>The thank-without-credit reply, <code>merged on</code> / <code>opened on</code> per PR, one PR or a list.</td>
+</tr>
+<tr>
+<td class="table-label"><code>ack-decision --input F</code></td>
+<td><code>draft_created</code>, <code>draft_auto_ack_tagged</code>, <code>suppressed_reason</code>, <code>rollup_note</code>, <code>rollup_receipt</code>, <code>proposal_note</code>, <code>route</code>, <code>window_days</code> — the Step 7 item 4 matrix.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap --state F</code></td>
+<td><code>issues_created</code> (<code>{number, url}</code> on GitHub, <code>{id, url}</code> on Jira and local-files, per <code>platform</code>), <code>drafts_waiting</code> (a shared draft once), <code>skipped</code> (full <code>owner/repo#NNN</code>), <code>cve_tool_bookkeeping_dropped</code> (pre-filtered included), <code>text</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply --input F</code></td>
+<td><code>action</code>, <code>import_items</code>, <code>skip_items</code>, <code>reject_with_canned</code>, <code>reject_with_public_fix</code>, <code>edits</code>, <code>overrides</code>, <code>keep</code>, <code>non_import_confirmed</code>, <code>ambiguous_tokens</code>, <code>ambiguous_items</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-import-from-pr"><code>issue-import-from-pr</code></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>parse-ref --ref R --upstream U</code></td>
+<td><code>number</code> from <code>N</code>, <code>owner/repo#N</code> or the PR URL (trailing path ignored); exit <code>2</code> for another repository or free text.</td>
+</tr>
+<tr>
+<td class="table-label"><code>scope --files F --scope-config F</code></td>
+<td><code>scope</code> (or <code>mixed_scope_blocker</code>), <code>stop</code>, <code>detection</code> (<code>matched</code>, <code>mixed</code>, <code>unresolved</code>, <code>disabled</code>), <code>overlapping</code>, <code>mixed_scopes</code>, <code>sub_packages</code> (also as <code>affected_providers</code>), <code>packages</code>, <code>files_counted</code>, <code>test_files_stripped</code> (any <code>tests/</code> segment), <code>unmatched</code>, <code>matched</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>milestone-check --input F</code></td>
+<td><code>exists</code> (exact match only), <code>near_matches</code>, <code>blocker</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>title --input F</code></td>
+<td><code>title</code> without conventional-commit prefix, skip-ci markers and trailing <code>(#N)</code>; <code>too_short</code> under 25 characters.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-body --input F</code></td>
+<td>The body <code>text</code>: imported-from note over the PR body as an inert block (its references stay unlinked text), the mailing-thread sentinel, <em>PR with the fix</em>, <em>Remediation developer</em> (<code>_No response_</code> for a bot, <code>remediation_developer_is_bot</code>); <code>sanitised_fields</code>, <code>fields_ok</code>, <code>bare_refs</code>; exit <code>2</code> with <code>malformed_indicator</code> for a PR body that does not pair.</td>
+</tr>
+<tr>
+<td class="table-label"><code>labels --input F</code></td>
+<td><code>labels</code>: scope, <code>pr_open</code> / <code>pr_merged</code>, <code>security_marker</code> from <code>tracker.labels</code>; never <code>needs_triage</code>; <code>warnings</code> for a closed PR.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-rollup --input F</code></td>
+<td><code>label</code>, <code>label_shell</code>, <code>text</code>: the first rollup entry, column 0.</td>
+</tr>
+<tr>
+<td><code>dup-query --pr N --tracker T [--hits F]</code></td>
+<td>The search <code>query</code> and <code>command</code>; with <code>--hits</code>, <code>hits</code> with links, <code>duplicate</code>, <code>truncated</code> at 30 and its <code>warning</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap --input F</code></td>
+<td>The recap <code>text</code> and hand-off, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-import-from-md"><code>issue-import-from-md</code></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>parse &lt;file&gt; --upstream U</code></td>
+<td><code>findings[]</code> (<code>index</code>, <code>title</code>, <code>tracker_title</code>, <code>severity</code>, <code>category</code>, <code>repository</code>, <code>branch</code>, <code>date_created</code>, the section payloads, <code>has_*</code>, <code>warnings</code>), <code>warnings</code>, <code>total_findings</code>; exit <code>2</code> with <code>not-a-findings-file</code> without a <code># </code> heading, a <code>**Severity:**</code> line or a pair.</td>
+</tr>
+<tr>
+<td class="table-label"><code>keyword --file F [--tracker T]</code></td>
+<td><code>cleaned</code>, <code>empty</code> and the single-quoted <code>search_command</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-body --input F</code></td>
+<td>The body <code>text</code>: each section an inert block (exit <code>2</code> on a stray line break or a body <code>verify</code> refuses), the field mapping, the Recommended-fix <code>&lt;details&gt;</code>; <code>sanitised_fields</code>, <code>fields_ok</code>, <code>reporter_credit_is_bot</code>, <code>bare_refs</code>.</td>
+</tr>
+<tr>
+<td><code>render-rollup --input F --k K --n N</code></td>
+<td><code>label</code>, <code>label_shell</code>, <code>text</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-proposal --input F</code></td>
+<td>The proposal table, default disposition and reply forms, duplicates linked.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap --input F</code></td>
+<td>The recap <code>text</code> and hand-off.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-import-via-forwarder"><code>issue-import-via-forwarder</code></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>preflight --forwarders F --message F --framework D</code></td>
+<td><code>outcome</code> (<code>proceed</code>, <code>no-forwarder-config</code>, <code>abort</code> with exit <code>2</code>), <code>preflight_passed</code>, <code>error</code>, <code>note</code>; installed means a <code>tools/forwarder-relay/&lt;name&gt;/</code> directory or a <code>shipping</code> README row whose doc exists.</td>
+</tr>
+<tr>
+<td><code>detect --message F --forwarders F [--collaborators F]</code></td>
+<td>The first enabled adapter whose sender pattern or preamble regex (first 400 characters) matches: <code>match</code>, <code>sub_skill_applied</code>, <code>preamble_snippet</code>, <code>sender_matched</code>, <code>collaborator_warning</code>, <code>adapters</code>; exit <code>2</code> on an unresolved pattern.</td>
+</tr>
+<tr>
+<td class="table-label"><code>credit-kind --input F</code></td>
+<td><code>kind</code> (<code>tool</code> under the bot/AI policy, else the adapter’s <code>kind_hints</code>, else <code>human</code>), <code>is_bot</code>, <code>credit_unknown</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>first-name --input F</code></td>
+<td><code>first_name</code> of a handle or display name; <code>null</code> (generic salutation) for an address.</td>
+</tr>
+<tr>
+<td><code>route --mode M [--milestone K] --adapter F</code></td>
+<td><code>to_recipients</code> (first handle) and <code>fallback_recipients</code>, <code>addressing_block_emitted</code>, <code>question_mode</code>, <code>negative_space_suppressed</code> (a do-not-relay milestone in sync mode).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-import-from-scan"><code>issue-import-from-scan</code></h3>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>bucket-action --bucket B</code></td>
+<td><code>creates_tracker</code> (true only for <code>import-as-tracker</code>: Golden rule 3), <code>action</code> (<code>tracker</code>, <code>pr-or-skip</code>, <code>none</code>), <code>route</code>.</td>
+</tr>
+<tr>
+<td><code>render-report --findings F --buckets F [--title T]</code></td>
+<td>The report <code>text</code> (distribution line, a section per bucket, a row per finding; for several scans the outcome table, percentages and severity vs disposition), <code>distribution</code>, <code>trackers_possible</code>; a by-design, duplicate or already-fixed row without grounding is refused.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-decision --input F</code></td>
+<td><code>action</code> (<code>apply</code>, <code>skip</code>, <code>cancel</code>, <code>ambiguous</code>), <code>confirmed</code> (each with its bucket’s <code>creates_tracker</code> and <code>action</code>), <code>skipped</code>, <code>ambiguous_tokens</code>; an ambiguous reply holds everything.</td>
+</tr>
+<tr>
+<td><code>scrub --text F --tracker T [--allowed-cves F]</code></td>
+<td><code>clean</code> and <code>hits</code> (<code>private-tracker-ref</code>, <code>cve-id</code>, <code>embargo-term</code>, <code>bare-ref</code>, with line); the text is never rewritten.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-triage"><code>issue-triage</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>selector</code></td>
+<td><code>action</code> (<code>list_query</code>, <code>verbatim</code>, <code>cve_search</code>; <code>error</code> exits <code>2</code>), <code>issue_numbers</code>, <code>scope_label</code>, <code>cve_token</code>, <code>retriage</code>, <code>no_preflight</code>, <code>explicit</code>, and the plain <code>gh</code> <code>command</code> (<code>--limit 1000</code>; <code>--retriage</code> drops the <code>needs triage</code> filter).</td>
+</tr>
+<tr>
+<td class="table-label"><code>queue</code></td>
+<td><code>stop</code> (<code>empty</code>, <code>limit</code> at 1000, <code>ask</code> for a CVE on several trackers, <code>confirm</code> for <code>--retriage</code> over 50 unless <code>confirmed</code>), <code>echo</code>, <code>numbers</code>, and <code>batches</code> of at most 20 aliased issues (<code>query</code>, <code>file</code>, <code>command</code> as <code>-F query=@file</code>).</td>
+</tr>
+<tr>
+<td class="table-label"><code>preflight</code></td>
+<td>The four-rule skip over <code>trackers</code> or raw <code>responses</code>: <code>kept</code>, <code>skipped</code> (date, class, rule), <code>mail_checks</code> (rule 4 still to read), <code>explicit_notes</code>, <code>missing_numbers</code>, <code>all_skipped</code>, <code>disabled</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>precedent-signal</code></td>
+<td><code>disposition_signal</code> from the rated precedents, <code>budget_exhausted</code>, <code>trust_boundary_load_bearing</code>, the <em>Direct precedent</em> <code>citations</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>mentions</code></td>
+<td><code>handles</code> (PR author, reviewer, topic owners, scope default only as fallback; cap 3; roster only; never the viewer), <code>dropped</code>, <code>routing_fallback</code>, <code>fallback_note</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-proposal</code></td>
+<td>The comment <code>text</code> (markers, class line, severity, fix shape, class additions incl. the FIX-ALREADY-PUBLIC reply draft, action items, mention line, names scrubbed, references linked), <code>file</code>, <code>command</code>, <code>unlinked_cves</code>; refuses an unknown class, a CVSS severity, more than 3 handles or one off the roster, an INFO-ONLY heading not in the list, a PROBABLE-DUP without kept tracker.</td>
+</tr>
+<tr>
+<td class="table-label"><code>scrub</code></td>
+<td><code>text</code> with bare display names as <code>@</code>-handles (outside code and URLs) and references linked, <code>replacements_made</code>, <code>linked_refs</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td><code>action</code> (<code>post</code>, <code>cancel</code>, <code>ambiguous</code>), <code>post_items</code>, <code>post_now</code>, <code>skip_items</code>, <code>edits</code>, <code>reclassifications</code>, <code>redraft_items</code>, <code>force_triage</code>, <code>ambiguous_tokens</code>, <code>ambiguous_items</code>; nothing posts by default.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td><code>distribution</code> (six keys), <code>trackers</code>, <code>next_steps</code> by class, <code>next_step_notes</code>, <code>skipped</code>, <code>sync_note</code>, <code>text</code>, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-invalidate"><code>issue-invalidate</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>selector</code></td>
+<td><code>mode</code> (<code>single</code>, <code>bulk</code>, <code>proposed</code>), <code>numbers</code>, the <code>gh issue view</code> / <code>invalidate proposed</code> list <code>command</code>, and for bulk the aliased <code>batches</code> with thumbs-up reactions; another repository exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>consensus</code></td>
+<td><code>agreed</code> (a roster member’s INVALID proposal with a thumbs-up or acknowledgement from another roster member), <code>awaiting</code> with the recap note, <code>stop</code> at the 1000 cap.</td>
+</tr>
+<tr>
+<td class="table-label"><code>hard-stops</code></td>
+<td><code>verdict</code> (<code>proceed</code>, <code>noop</code>, <code>stop</code>, <code>escalate</code>, <code>probe</code>, <code>ask</code>), <code>cve_id</code>, <code>message</code> from state, labels, the <em>CVE tool link</em> field and the generic CVE state.</td>
+</tr>
+<tr>
+<td class="table-label"><code>import-path</code></td>
+<td><code>import_path</code>, <code>email_draft_step</code>, <code>thread_id</code> (field, else the rollup provenance), <code>thread_source</code>, <code>secondary_threads</code>, <code>root_message_id</code>, <code>reporter_credit</code>; an ambiguous field exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>labels</code></td>
+<td><code>labels_to_add</code> (<code>invalid</code>), <code>labels_to_remove</code> (needs triage, scope, <code>pr created</code> / <code>pr merged</code> when set), <code>security_issue_stays</code>, the <code>gh issue edit</code> <code>command</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>board</code></td>
+<td>The introspection query <code>file</code> and <code>command</code>; given <code>items</code>, the <code>archiveProjectV2Item</code> mutation or the <em>not on the board</em> note.</td>
+</tr>
+<tr>
+<td class="table-label"><code>draft-plan</code></td>
+<td><code>action</code> (<code>skip</code>, <code>ask</code>, <code>surface_existing</code>, <code>blocked</code>, <code>create</code>), <code>notification_case</code>, and for a draft <code>to</code>, <code>cc</code>, <code>subject</code> (<code>Re: &lt;root subject&gt;</code>), <code>backend</code>, <code>anchor</code>; links without OAuth credentials exit <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>check-draft</code></td>
+<td><code>clean</code> and <code>hits</code>: tracker reference, CVE-tool URL, bare reference, re-opening phrase, CVSS, other ASF projects, a duplicate’s missing canonical CVE.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-close</code></td>
+<td>The brief closing comment <code>text</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-rollup</code></td>
+<td><code>label</code>, <code>label_shell</code>, <code>text</code> (at most 5 quotes, the canned link, exactly one Reporter-notification line), <code>quotes_dropped</code>, <code>needs_amend</code>, <code>bare_refs</code>; no notification case exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td><code>action</code> (<code>apply</code>, <code>apply_silent</code>, <code>replace_email_body</code>, <code>repick_canned</code>, <code>cancel</code>, <code>ambiguous</code>), <code>email_body_override</code>, <code>canned_section_override</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>apply-plan</code></td>
+<td>The 6a-6g <code>steps</code> in order, with file paths and commands, and the label plan.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td>The recap <code>text</code> with the hand-off line, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cve-allocate"><code>cve-allocate</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>selector</code></td>
+<td><code>issue</code>, <code>cve_override</code>, <code>resume_step</code> (<code>4</code> with an override) and the Step 1 <code>commands</code>; a malformed CVE token, two CVE IDs, two trackers or another repository exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>blockers</code></td>
+<td><code>verdict</code> (<code>proceed</code>, <code>blocked</code>), <code>blockers</code>, <code>warnings</code> (<code>needs triage</code>, only when no hard blocker fired), <code>existing_cve</code>, <code>already_wired</code>, <code>scope_label</code>; empty <code>scope_labels</code> exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>preflight</code></td>
+<td><code>path</code> (<code>api</code>, <code>recipe</code>, or <code>null</code> with the next check <code>command</code>), <code>reason</code>, <code>offer_setup</code>, <code>setup_command</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>title</code></td>
+<td><code>original_title</code>, <code>normalized_title</code>, <code>word_count</code>, <code>changed</code>, <code>over_strip_warning</code> (fewer than 3 words).</td>
+</tr>
+<tr>
+<td class="table-label"><code>recipe</code></td>
+<td><code>path</code> (<code>api</code>, <code>recipe</code>, <code>relay</code>), <code>text</code>, the <code>vulnogram-api-allocate</code> <code>command</code> with the title shell-quoted, <code>bare_refs</code>; an unanswered authorisation question exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>allocate-result</code></td>
+<td><code>next</code> (<code>step-4</code>, <code>stop</code>, <code>setup</code>, <code>check-records</code>, <code>recipe</code>), <code>cve_id</code>, <code>message</code>, <code>rerun_allocate</code> (true only after an expired token).</td>
+</tr>
+<tr>
+<td class="table-label"><code>cve</code></td>
+<td><code>cve_id</code> and <code>record_url</code> from the user’s paste-back; none, a malformed token or two IDs exit <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>draft-plan</code></td>
+<td><code>action</code> (<code>skip</code>, <code>ask</code>, <code>surface_existing</code>, <code>blocked</code>, <code>create</code>), <code>notification</code> (<code>omitted</code>, <code>team_member</code>, <code>notified</code>, <code>draft_pending</code>) and for a draft <code>to</code>, <code>cc</code>, <code>subject</code>, <code>backend</code>, <code>anchor</code>, <code>secondary_threads</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>check-draft</code></td>
+<td><code>clean</code> and <code>hits</code>: a missing CVE ID, the CVE-tool URL, a tracker reference, a bare reference, CVSS, other ASF projects.</td>
+</tr>
+<tr>
+<td class="table-label"><code>proposal</code></td>
+<td>The numbered <code>items</code> (5 only when a draft is created), <code>proposal_items_count</code>, the <code>cve_tool_link_value</code>, <code>notes</code>, <code>text</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-rollup</code></td>
+<td><code>label</code> (<code>CVE allocated (&lt;CVE-ID&gt;)</code>), <code>label_shell</code>, <code>text</code>, <code>needs_amend</code>, <code>bare_refs</code>; a draft id not checked against Drafts exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td><code>action</code> (<code>apply</code>, <code>cancel</code>, <code>edit</code>, <code>ambiguous</code>), <code>items_applied</code>, <code>items_skipped</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>apply-plan</code></td>
+<td>The confirmed items’ <code>steps</code> in order, with file paths and commands, per backend.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td>The recap <code>text</code>, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-deduplicate"><code>issue-deduplicate</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>selector</code></td>
+<td><code>keep</code>, <code>drop</code> (kept first) and the two Step 1 reads; one tracker, three, a range or another repository exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>classify</code></td>
+<td><code>verdict</code> (<code>proceed</code>, <code>blocked</code>, <code>probe</code>), <code>blockers</code> (<code>scope_unclear</code>, <code>scope_mismatch</code>, <code>closed_tracker</code>, <code>already_duplicate</code>, <code>cve_on_drop</code>, <code>cve_public</code>, <code>drop_further_along</code>), <code>keep_cve</code>, <code>retract</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>fields</code></td>
+<td>Both sides’ template fields (the CVE JSON attachment cut off), <code>has_cve_json_attachment</code>, labels, milestone, <code>cwe_conflict</code>, <code>severity_propagation_risk</code>; an undecided field exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>merge-body</code></td>
+<td>The kept body rewritten field by field (<code>replace_field</code>), <code>changed_fields</code>, <code>blockers</code> (a CWE conflict), <code>scores_removed</code>, <code>severity_note</code>, <code>tool_credits</code>, <code>skipped_credits</code>; a missing headline, analysis or needed merged value exits <code>2</code>.</td>
+</tr>
+<tr>
+<td><code>render-rollup-kept</code>, <code>render-rollup-dropped</code></td>
+<td><code>label</code>, <code>label_shell</code>, <code>text</code>, <code>needs_amend</code>, <code>bare_refs</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>proposal</code></td>
+<td>The numbered <code>items</code> (7 only with two CVEs), <code>blocked</code>, <code>text</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td><code>action</code> (<code>apply</code>, <code>cancel</code>, <code>edit</code>, <code>ambiguous</code>), <code>items_applied</code>, <code>items_skipped</code>, <code>note</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>apply-plan</code></td>
+<td>The confirmed items’ <code>steps</code> in order, per backend; an open blocker or the same tracker twice exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td>The recap <code>text</code>, <code>blockers</code>, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-sync"><code>issue-sync</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>selector</code></td>
+<td><code>queries</code> (each with <code>id</code>, <code>kind</code>, <code>command</code>, <code>limit</code>), explicit <code>numbers</code>, <code>searched_cve_ids</code>, <code>no_preflight</code>; a malformed <code>CVE-…</code> token sets <code>error: invalid_cve_token</code> and searches nothing.</td>
+</tr>
+<tr>
+<td class="table-label"><code>resolve</code></td>
+<td><code>resolved</code> (ascending; <code>rejections-ledger</code> dropped, closed <code>announced</code> cut to 90 days, a CVE kept only where its <em>CVE tool link</em> names it), <code>explicit</code>, <code>title_matches</code> to confirm, <code>warnings</code> for a capped list, the <code>echo</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>preflight-query</code></td>
+<td>One aliased GraphQL read per 50 trackers: <code>file</code>, <code>query</code>, <code>command</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>preflight</code></td>
+<td>Per tracker <code>decision</code> and <code>rule</code>, <code>dispatched</code>, <code>urgent</code>, <code>skipped</code>, the <em>Pre-flight skipped</em> text; explicit trackers and <code>--no-preflight</code> are never skipped.</td>
+</tr>
+<tr>
+<td class="table-label"><code>bucket</code></td>
+<td><code>cve_affecting</code>, <code>non_cve_affecting</code>, <code>walk_order</code>, <code>review_ready_push</code> and its bucket.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-bulk-reply</code></td>
+<td><code>action</code> (<code>apply</code>, <code>force_sync</code>, <code>cancel</code>, <code>none</code>, <code>ambiguous</code>), <code>apply</code> per tracker, <code>edits</code>, <code>force_sync</code>, <code>skip</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td>The single-tracker form through <code>shared.numbered</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>check</code></td>
+<td><code>clean</code> and <code>violations</code> (<code>surface</code>, <code>guardrail</code>, <code>evidence</code>) for reporter CVSS, other ASF projects, bare CVE IDs or the CVE-tool URL in an email, and bare <code>#NNN</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>security-cc</code></td>
+<td><code>security_cc</code>, <code>cc_fallback</code>, <code>warning</code> and <code>warning_text</code>, <code>draft_blocked</code>, <code>cc</code>, <code>search_list</code>, through the project / organization / framework layers.</td>
+</tr>
+<tr>
+<td class="table-label"><code>draft-backend</code></td>
+<td><code>backend</code> (<code>maildir</code>, <code>oauth_curl</code>, <code>claude_ai_mcp</code>), <code>decided_by</code> (<code>user.md</code>, <code>project.md</code>, <code>default</code>); no credential with links in the body exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>ghsa-route</code></td>
+<td><code>access_tier</code>, <code>action</code>, <code>channel</code>, and for an admin hand-off the draft tool, addressee, thread, rollup marker and three parts.</td>
+</tr>
+<tr>
+<td class="table-label"><code>push-decision</code></td>
+<td><code>action</code> (<code>skip</code>, <code>block</code>, <code>hand-off</code>, <code>push</code>, <code>pending</code> with the <code>next</code> command or gate), <code>gate_failed</code>, <code>handoff_variant</code>, <code>state_advance</code>, <code>recap_blocker</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>disclosure</code></td>
+<td><code>issue_age_days</code>, <code>overdue_for_disclosure</code>, <code>approaching_window_end</code>, <code>grace_period_expired</code>, <code>distributor_notify_pending</code>, <code>expected_disclosure_by</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>staleness</code></td>
+<td><code>stale</code> and <code>days</code>: the team’s latest message older than the timeout with no reporter reply since.</td>
+</tr>
+<tr>
+<td class="table-label"><code>closed-announced</code></td>
+<td><code>cve_org</code> (<code>notify</code>, <code>already_notified</code>, <code>wait</code>, <code>blocker</code>, <code>retry</code>, <code>skip</code>), <code>security_pages_reminder_pending</code>, <code>advisory_records</code> and its next step, <code>blockers</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>release-vote</code></td>
+<td><code>release_vote_in_progress</code> and <code>release_vote_thread_url</code> for an open <code>[VOTE]</code> matching the fix-PR milestone.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td>The recap <code>text</code>, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="issue-fix"><code>issue-fix</code></h3>
+<p>Every command takes <code>--input F</code>, a JSON file.</p>
+<table tabindex="0">
+<thead>
+<tr>
+<th class="table-label">Command</th>
+<th>Prints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="table-label"><code>flow</code></td>
+<td><code>flow</code> (<code>pull-request</code>, <code>patch-then-commit</code>, <code>stop</code>), <code>follow_subversion_flow</code>, <code>open_pr</code>, from <code>magpie-vcs fix-flow</code>’s exit and JSON.</td>
+</tr>
+<tr>
+<td class="table-label"><code>scrub</code></td>
+<td>Per surface (<code>branch</code>, <code>title</code>, <code>body</code>, <code>commit_message</code>, <code>newsfragment</code>, <code>comment</code>) <code>valid</code>, <code>terms</code> and <code>hits</code>; <code>clean</code>, <code>forbidden_terms_found</code>; for a newsfragment <code>include_newsfragment</code> (false) and <code>security_framing_violation</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>backport</code></td>
+<td><code>backport_needed</code> and <code>backport_labels</code> for the milestone against the next main release, plus confirmed extra lines.</td>
+</tr>
+<tr>
+<td class="table-label"><code>parse-reply</code></td>
+<td>The plan confirmation (items 1–7) through <code>shared.numbered</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>review-plan</code></td>
+<td><code>run</code>, <code>skip_notice</code> (<code>silent</code>, <code>one-line</code>), the title and body file passed, and the <code>adversarial-review</code> command.</td>
+</tr>
+<tr>
+<td class="table-label"><code>svn-share</code></td>
+<td>The three private proposals, <code>attach_via</code>, <code>public_surface_used</code> (false), <code>next</code> (<code>stop-await-review</code>).</td>
+</tr>
+<tr>
+<td class="table-label"><code>svn-gate</code></td>
+<td><code>action</code> (<code>ask</code>, <code>stop</code>, <code>run-propose-commit</code>, <code>revise</code>, <code>await-confirmation</code>), the prefixed commands; a <code>commit</code> / <code>new-branch</code> without <code>--scrub</code> exits <code>2</code>.</td>
+</tr>
+<tr>
+<td class="table-label"><code>render-recap</code></td>
+<td>The recap <code>text</code>, <code>bare_refs</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tests">Tests</h2>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFB757">uv</span><span style="color:#ADDCFF"> run</span><span style="color:#91CBFF"> --directory</span><span style="color:#ADDCFF"> tools/security-management</span><span style="color:#ADDCFF"> pytest</span><span style="color:#91CBFF"> -q</span></span></code></pre>
+<p>The cases of the retired model-graded <code>security-issue-import</code> suites <code>step-0-preflight</code>, <code>step-6-confirm</code> and <code>step-7-apply</code>
+are pytest cases named after each former case, in <code>tests/test_issue_import.py</code> and <code>tests/test_grammar.py</code>.
+The cases of <code>security-issue-import-from-pr/step-2-scope-detection</code> are in <code>tests/test_issue_import_from_pr.py</code>,
+those of <code>security-issue-import-from-md/step-1-parse-findings</code> (cases 1–3) and <code>step-2-duplicate-guard</code> (case 1) in <code>tests/test_issue_import_from_md.py</code>,
+and those of <code>security-issue-import-via-forwarder/step-0-preflight</code>, <code>step-1-detect-adapter</code> (cases 1, 2, 3, 6) and <code>step-3-route-drafts</code> in <code>tests/test_issue_import_via_forwarder.py</code>.
+<code>tests/test_issue_import_from_scan.py</code> pins the <code>security-issue-import-from-scan</code> bucket rule the <code>step-c-bucket</code> model eval grades.
+<code>tests/test_issue_triage.py</code> holds the cases of the retired <code>security-issue-triage</code> suites <code>step-1-selector</code>, <code>step-5-confirm</code> and <code>step-7-recap</code>, and cases 1–2 of <code>step-6-body-scrub</code>;
+it pins the <code>step-26-precedent-search</code> signal rule, which stays a model eval.
+<code>tests/test_issue_invalidate.py</code> holds the cases of the retired <code>security-issue-invalidate</code> suites <code>step-2-import-path</code>, <code>step-5a-labels</code>, <code>step-5b-closing-comment</code>, <code>step-5d-email-draft</code>, <code>step-5e-rollup-entry</code>, <code>step-5f-confirm</code> and <code>step-7-recap</code>.
+<code>tests/test_cve_allocate.py</code> holds the cases of the retired <code>security-cve-allocate</code> suites <code>step-1-blocker-checks</code>, <code>step-2-title-normalize</code>, <code>step-3-allocation-recipe</code>, <code>step-4-propose-updates</code>, <code>step-5-confirm</code> and <code>step-7-recap</code>.
+<code>tests/test_issue_deduplicate.py</code> holds the cases of the retired <code>security-issue-deduplicate</code> suites <code>step-1-classify</code>, <code>step-2-extract-fields</code>, <code>step-3-merge-body</code>, <code>step-4-rollup-entries</code>, <code>step-5-confirm</code> and <code>step-6-recap</code>.
+<code>tests/test_issue_sync_state.py</code> pins the <code>security-issue-sync</code> Step 1 observations;
+<code>tests/test_issue_sync.py</code> and <code>tests/test_issue_sync_rules.py</code> hold the cases of its retired suites <code>step-bulk-selectors</code>, <code>step-bulk-orchestration</code>, <code>step-3-confirm</code>, <code>step-6-recap</code>, <code>step-guardrails</code>, <code>step-security-cc</code>, <code>step-draft-backend</code>, <code>step-ghsa-access-tier</code> and <code>step-5b-push-decision</code>.
+<code>tests/test_issue_fix.py</code> holds the cases of the retired <code>security-issue-fix</code> suites <code>step-0-fix-flow</code>, <code>step-5a-branch-name</code>, <code>step-5c-title-check</code>, <code>step-5e-backport</code>, <code>step-5f-newsfragment</code>, <code>step-6-confirm</code> and <code>step-11-recap</code>, and pins the deterministic parts of steps 7, 8 and 9.
+<code>tests/test_body.py</code> checks that the <code>tracker-body-template.md</code> files of the sibling import skills carry exactly the rendered headings.</p>
+</article></main><aside class="docs-toc" aria-label="On this page"><span class="eyebrow">On this page</span><nav><ul><li><a href="#prerequisites" style="padding-left: 0rem">Prerequisites</a></li><li><a href="#how-to-use" style="padding-left: 0rem">How to use</a></li><li><a href="#shared-rules" style="padding-left: 0rem">Shared rules</a></li><li><a href="#commands" style="padding-left: 0rem">Commands</a></li><li><a href="#issue-import" style="padding-left: 0.75rem">issue-import</a></li><li><a href="#issue-import-from-pr" style="padding-left: 0.75rem">issue-import-from-pr</a></li><li><a href="#issue-import-from-md" style="padding-left: 0.75rem">issue-import-from-md</a></li><li><a href="#issue-import-via-forwarder" style="padding-left: 0.75rem">issue-import-via-forwarder</a></li><li><a href="#issue-import-from-scan" style="padding-left: 0.75rem">issue-import-from-scan</a></li><li><a href="#issue-triage" style="padding-left: 0.75rem">issue-triage</a></li><li><a href="#issue-invalidate" style="padding-left: 0.75rem">issue-invalidate</a></li><li><a href="#cve-allocate" style="padding-left: 0.75rem">cve-allocate</a></li><li><a href="#issue-deduplicate" style="padding-left: 0.75rem">issue-deduplicate</a></li><li><a href="#issue-sync" style="padding-left: 0.75rem">issue-sync</a></li><li><a href="#issue-fix" style="padding-left: 0.75rem">issue-fix</a></li><li><a href="#tests" style="padding-left: 0rem">Tests</a></li></ul></nav></aside></div><footer data-preview-src="src/components/landing/SiteFooter.tsx:26" class="site-footer"><div data-preview-src="src/components/landing/SiteFooter.tsx:26" class="container footer-grid"><div data-preview-src="src/components/landing/SiteFooter.tsx:27" class="footer-intro"><a data-preview-src="src/components/landing/SiteFooter.tsx:27" class="brand-lockup" href="/" aria-label="Apache Magpie home"><img data-preview-src="src/components/landing/SiteFooter.tsx:27" class="official-wordmark" src="/wordmark.svg" alt="Apache Magpie" width="160" height="45"/></a><span data-preview-src="src/components/landing/SiteFooter.tsx:27" class="footer-asf">An Apache Software Foundation project.</span></div><div data-preview-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-preview-src="src/components/landing/SiteFooter.tsx:28">Explore</h2><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/docs" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open footer-link-icon" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>Documentation</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/resources"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass footer-link-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>Learning guides</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/architecture"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-branch footer-link-icon" aria-hidden="true"><path d="M15 6a9 9 0 0 0-9 9V3"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle></svg>Architecture</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/tools"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench footer-link-icon" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></svg>Tools</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/downloads"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check footer-link-icon" aria-hidden="true"><path d="M12 22V12"></path><path d="m16 17 2 2 4-4"></path><path d="M21 11.127V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l1.32-.753"></path><path d="M3.29 7 12 12l8.71-5"></path><path d="m7.5 4.27 8.997 5.148"></path></svg>Downloads</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="/brand"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks footer-link-icon" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg>Brand assets</a></div><div data-preview-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-preview-src="src/components/landing/SiteFooter.tsx:28">Take part</h2><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Contributing</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://lists.apache.org/list.html?dev@magpie.apache.org" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Mailing list</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://discord.gg/bfVyXTgak" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/discord.svg" alt="" aria-hidden="true" width="16" height="16"/>Discord</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.linkedin.com/company/apache-magpie/" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/service-logos/linkedin.svg" alt="" aria-hidden="true" width="16" height="16"/>LinkedIn</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/issues" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Issue tracker</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://github.com/apache/magpie/releases" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/github.svg" alt="" aria-hidden="true" width="16" height="16"/>Changelog</a></div><div data-preview-src="src/components/landing/SiteFooter.tsx:28" class="footer-column"><h2 data-preview-src="src/components/landing/SiteFooter.tsx:28">Apache</h2><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>The Foundation</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/licenses/" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>License</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/events/current-event" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Events</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/security/" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Security</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Privacy</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Sponsorship</a><a data-preview-src="src/components/landing/SiteFooter.tsx:31" href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noreferrer"><img data-preview-src="src/components/landing/SiteFooter.tsx:33" class="footer-link-logo" src="/vendor-logos/oak.svg" alt="" aria-hidden="true" width="16" height="16"/>Thanks</a></div></div><div data-preview-src="src/components/landing/SiteFooter.tsx:37" class="container footer-bottom"><p data-preview-src="src/components/landing/SiteFooter.tsx:37">© 2026 The Apache Software Foundation. Licensed under Apache 2.0.</p><p data-preview-src="src/components/landing/SiteFooter.tsx:37">Apache <strong data-preview-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, <strong data-preview-src="src/components/landing/BrandName.tsx:2" class="brand-name">Magpie</strong>, and Apache are trademarks of The Apache Software Foundation.</p></div></footer><script type="module">var e=document.querySelector(`.docs-menu-toggle`),t=document.querySelector(`.docs-sidebar`),n=[...document.querySelectorAll(`.docs-main, .docs-toc, .site-footer`)],r=()=>{t.classList.remove(`is-open`),e.setAttribute(`aria-expanded`,`false`),document.body.classList.remove(`docs-navigation-open`),n.forEach(e=>{e.inert=!1})};e.addEventListener(`click`,()=>{t.classList.contains(`is-open`)?r():(t.classList.add(`is-open`),e.setAttribute(`aria-expanded`,`true`),document.body.classList.add(`docs-navigation-open`),n.forEach(e=>{e.inert=!0}),t.querySelector(`a`)?.focus())}),document.querySelector(`[data-search-open]`)?.addEventListener(`click`,r),matchMedia(`(min-width: 801px)`).addEventListener(`change`,e=>{e.matches&&r()}),document.addEventListener(`keydown`,n=>{if(n.key!==`Tab`||!t.classList.contains(`is-open`))return;let r=[e,...t.querySelectorAll(`a, summary, button`)].filter(e=>e.getClientRects().length>0),i=r[0],a=r[r.length-1];n.shiftKey&&document.activeElement===i?(n.preventDefault(),a.focus()):!n.shiftKey&&document.activeElement===a&&(n.preventDefault(),i.focus())}),document.addEventListener(`keydown`,n=>{n.key===`Escape`&&t.classList.contains(`is-open`)&&(r(),e.focus())}),t.querySelectorAll(`a`).forEach(e=>e.addEventListener(`click`,r)),document.querySelector(`.copy-page`)?.addEventListener(`click`,async e=>{let t=e.currentTarget;try{let e=await fetch(t.dataset.markdown);if(!e.ok)throw Error(`Unavailable`);await navigator.clipboard.writeText(await e.text()),t.textContent=`Copied ✓`}catch{t.textContent=`Could not copy`}setTimeout(()=>{t.textContent=`Copy page ⧉`},2200)});var i=[...document.querySelectorAll(`.docs-toc nav a`)],a=new IntersectionObserver(e=>{for(let t of e)t.isIntersecting&&i.forEach(e=>{let n=decodeURIComponent(e.hash.slice(1))===t.target.id;e.classList.toggle(`active`,n),n?e.setAttribute(`aria-current`,`location`):e.removeAttribute(`aria-current`)})},{rootMargin:`-140px 0px -60% 0px`});i.forEach(e=>{let t=document.getElementById(decodeURIComponent(e.hash.slice(1)));t&&a.observe(t)});</script><script>
+    (() => {
+      const nav = document.getElementById("docs-nav-scroll");
+      if (!nav) return;
+      for (const link of nav.querySelectorAll("summary a[href]")) {
+        link.addEventListener("click", (event) => {
+          const branch = link.closest("details");
+          if (!branch) return;
+          const plainClick =
+            event.button === 0 &&
+            !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          if (plainClick) {
+            event.preventDefault();
+            branch.open = true;
+            window.location.href = link.href;
+          } else {
+            setTimeout(() => { branch.open = true; }, 0);
+          }
+        });
+      }
+    })();
+  </script><script>
+    (() => {
+      const scroller = document.getElementById("docs-nav-scroll");
+      const active = scroller?.querySelector('[aria-current="page"]');
+      if (!scroller || !active) return;
+      const target =
+        active.offsetTop - scroller.clientHeight / 2 + active.offsetHeight / 2;
+      scroller.scrollTop = Math.max(0, target);
+    })();
+  </script><a href="https://github.com/apache/magpie/edit/main/docs/tools/security-management/readme.md" target="_blank" rel="noopener noreferrer" class="suggest-change" aria-label="Suggest a change to this page on GitHub" data-astro-cid-z4jru4n3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-z4jru4n3><path d="M12 20h9" data-astro-cid-z4jru4n3></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-astro-cid-z4jru4n3></path></svg><span class="suggest-change-label" data-astro-cid-z4jru4n3>Suggest a change</span></a><script type="module">function e(){let e=document.querySelector(`main`);if(!e)return;let t=[...e.querySelectorAll(`section[id]`)].filter(e=>!e.matches(`[role="tabpanel"]`)&&!e.parentElement?.closest(`section[id]`)),n=e.querySelector(`.docs-prose`)?[...e.querySelectorAll(`.docs-prose :is(h2,h3)[id]`)]:t;if(!n.length)return;let r=!1,i=!1,a=()=>{r=!0},o=()=>{r=!1};window.addEventListener(`wheel`,a,{passive:!0}),window.addEventListener(`touchmove`,a,{passive:!0}),document.addEventListener(`pointerdown`,a,{passive:!0}),document.addEventListener(`keydown`,e=>{let t=e.target;t instanceof Element&&t.closest(`input,textarea,select,[contenteditable="true"]`)||[`ArrowUp`,`ArrowDown`,`PageUp`,`PageDown`,`Home`,`End`,` `].includes(e.key)&&a()}),document.addEventListener(`click`,e=>{e.target instanceof Element&&e.target.closest(`a[href]`)&&o()}),window.addEventListener(`hashchange`,o),window.addEventListener(`popstate`,o),window.addEventListener(`pageshow`,o),window.addEventListener(`scroll`,()=>{r&&!i&&(i=!0,requestAnimationFrame(()=>{if(i=!1,!r)return;let e=document.querySelector(`.site-header`)?.getBoundingClientRect().bottom??0,t=Math.max(0,e)+24,a;for(let e of n)window.scrollY>0&&e.getClientRects().length&&e.getBoundingClientRect().top<=t&&(a=e);let o=new URL(window.location.href),s=null;try{s=document.getElementById(decodeURIComponent(o.hash.slice(1)))}catch{}if(a&&s&&a.contains(s))return;let c=a?`#${a.id}`:``;o.hash!==c&&(o.hash=c,history.replaceState(history.state,``,o))}))},{passive:!0})}function t(){let e=document.createElement(`div`);e.className=`copy-link-status`,e.setAttribute(`role`,`status`),document.body.append(e);let t;document.addEventListener(`click`,async n=>{if(n.button||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey)return;let r=n.target instanceof Element?n.target.closest(`.section-heading > a[href]`):null;if(r){try{await navigator.clipboard.writeText(r.href),e.textContent=`Link copied`}catch{e.textContent=`Copy the link from the address bar`}clearTimeout(t),t=setTimeout(()=>{e.textContent=``},2e3)}});let n=document.querySelector(`.home-navigation`);if(!n)return;let r=n.querySelector(`summary`);n.addEventListener(`click`,e=>{let t=e.target instanceof Element?e.target.closest(`a[href]`):null;if(t&&(n.open=!1,!(e instanceof MouseEvent&&(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey))&&t.getAttribute(`href`)?.startsWith(`#`))){let e=document.getElementById(t.hash.slice(1));e?.setAttribute(`tabindex`,`-1`),e?.focus({preventScroll:!0})}}),document.addEventListener(`click`,e=>{e.target instanceof Node&&!n.contains(e.target)&&(n.open=!1)}),document.addEventListener(`keydown`,e=>{e.key===`Escape`&&n.open&&(n.open=!1,r?.focus({preventScroll:!0}))})}e(),t();var n=document.querySelector(`.theme-toggle`),r=()=>{let e=document.documentElement.dataset.theme===`dark`;n?.setAttribute(`aria-pressed`,String(e)),n?.setAttribute(`aria-label`,`Switch to ${e?`light`:`dark`} mode`)};n?.addEventListener(`click`,()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme===`dark`?`light`:`dark`;try{localStorage.setItem(`magpie-theme`,document.documentElement.dataset.theme)}catch{}r()}),r();</script><!-- asf-preview-overlay -->
+<script src="/_preview/html2canvas-pro.min.js"></script>
+<script src="/_preview/review.js"></script>
+</body></html>
