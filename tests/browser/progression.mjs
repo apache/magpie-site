@@ -45,19 +45,34 @@ export function criticalProgressionTests() {
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.goto('/');
     await expect(page.locator('astro-island[ssr][client=load]')).toHaveCount(0);
-    for (const [controls,active] of [
-      ['.reel-dot','#hero-question > [aria-hidden=false]'],
-      ['.security-workbench [role=tab]','.security-prompts > [aria-hidden=false]'],
+    // Record every transition as it starts, rather than polling for one: a
+    // 150-400ms transition can start and end between two polls on a slow
+    // runner, or start after a short poll has given up.
+    await page.evaluate(() => {
+      window.startedTransitions = [];
+      document.addEventListener('transitionrun', event => {
+        for (const animation of event.target.getAnimations()) {
+          if (animation.transitionProperty === event.propertyName) window.startedTransitions.push({target:event.target, property:animation.transitionProperty, duration:animation.effect.getTiming().duration});
+        }
+      }, {capture:true});
+    });
+    const opacityTransitions = active => page.evaluate(active => window.startedTransitions.filter(t => t.target.matches(active) && t.property === 'opacity').map(t => ({property:t.property, duration:t.duration})), active);
+    for (const [controls,active,state] of [
+      ['.reel-dot','#hero-question > [aria-hidden=false]','aria-pressed'],
+      ['.security-workbench [role=tab]','.security-prompts > [aria-hidden=false]','aria-selected'],
     ]) {
       await page.locator(controls).first().click();
+      await page.evaluate(() => { window.startedTransitions = []; });
       await page.locator(controls).nth(1).click();
-      // Poll until the CSS transition is in progress, then verify its duration.
-      await expect.poll(async () => {
-        const transitions = await page.locator(active).evaluate(el => el.getAnimations().map(a => ({property:a.transitionProperty,duration:a.effect.getTiming().duration})));
-        return transitions.filter(t => t.property === 'opacity' && t.duration >= 150 && t.duration <= 400).length;
-      }, {timeout:500}).toBeGreaterThan(0);
+      await expect.poll(async () => (await opacityTransitions(active)).filter(t => t.duration >= 150 && t.duration <= 400).length).toBeGreaterThan(0);
       await page.emulateMedia({reducedMotion:'reduce'});
+      await page.evaluate(() => { window.startedTransitions = []; });
       await page.locator(controls).nth(2).click();
+      // Check once the new content is showing, not while the previous change
+      // may still be fading: nothing may start for it.
+      await expect(page.locator(controls).nth(2)).toHaveAttribute(state,'true');
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      expect(await opacityTransitions(active)).toEqual([]);
       expect(await page.locator(active).evaluate(el => el.getAnimations().length)).toBe(0);
       await page.emulateMedia({reducedMotion:'no-preference'});
     }
@@ -83,7 +98,17 @@ export function criticalProgressionTests() {
           const r = el.getBoundingClientRect();
           return (Math.min(innerHeight,r.bottom)-Math.max(80,r.top))/Math.min(innerHeight-80,r.height);
         })).toBeGreaterThan(.5);
-        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        // Read the selection only once scrolling has stopped: on a slow runner
+        // the wheel scroll can still be landing when the widget is in view,
+        // and in a scroll-driven sequence it moves the selection as it lands.
+        await page.evaluate(() => new Promise(resolve => {
+          let last = scrollY, still = 0;
+          const frame = () => {
+            if (scrollY === last) still += 1; else { still = 0; last = scrollY; }
+            if (still >= 10) resolve(); else requestAnimationFrame(frame);
+          };
+          requestAnimationFrame(frame);
+        }));
         const before = await controls.evaluateAll((nodes,attribute) => nodes.findIndex(el => el.getAttribute(attribute) === 'true'),attribute);
         const next = (before+1) % await controls.count();
         await page.keyboard.press('ArrowRight');
@@ -209,8 +234,11 @@ export function criticalProgressionTests() {
     });
   });
 
+  // One scene's stage controls, three ways: each its own test, so none of them
+  // runs the whole sequence alone, which on the dev server on a one-CPU runner
+  // took up to two minutes and ran out of time.
   for (const [selector,name] of [['.software-lifecycle','Software lifecycle phases'],['.security-walkthrough','Security lifecycle phases']]) {
-    test(`critical progression: ${name}, all controls, keyboard, scroll and responsive modes`, async ({page}) => {
+    const open = async page => {
       await page.setViewportSize({width:1524,height:1495});
       await page.emulateMedia({reducedMotion:'no-preference'});
       await page.goto('/');
@@ -237,6 +265,11 @@ export function criticalProgressionTests() {
           await expect(scene.locator('.sequence-navigation-middle a')).toContainText((await tabs.nth(index).innerText()).replace(/^\d+\s*/, '').trim().toLowerCase());
         }
       };
+      return {scene, tabs, count, selected};
+    };
+
+    test(`critical progression: ${name}, all controls and keyboard`, async ({page}) => {
+      const {scene, tabs, count, selected} = await open(page);
       for (let i=0;i<count;i++) { await tabs.nth(i).click(); await selected(i); }
       await tabs.last().press('Home'); await selected(0); await expect(tabs.first()).toBeFocused();
       for (let i=1;i<count;i++) { await page.keyboard.press('ArrowRight'); await selected(i); await expect(tabs.nth(i)).toBeFocused(); }
@@ -259,6 +292,10 @@ export function criticalProgressionTests() {
       for (let i=1;i<count;i++) { await next.click(); await selected(i); }
       await expect(next).toBeDisabled();
       for (let i=count-2;i>=0;i--) { await previous.click(); await selected(i); }
+    });
+
+    test(`critical progression: ${name}, wheel scrolling`, async ({page}) => {
+      const {tabs, count, selected} = await open(page);
       // Actual wheel scrolling must reveal every stage, then reverse cleanly.
       await tabs.first().click();
       const start = await page.evaluate(() => scrollY);
@@ -270,6 +307,10 @@ export function criticalProgressionTests() {
       await page.mouse.move(1500,800);
       for (let i=1;i<count;i++) { await page.mouse.wheel(0,step); await selected(i); }
       for (let i=count-2;i>=0;i--) { await page.mouse.wheel(0,-step); await selected(i); }
+    });
+
+    test(`critical progression: ${name}, responsive modes`, async ({page}) => {
+      const {scene, tabs, count, selected} = await open(page);
       for (const mode of [{width:320,height:900,motion:'no-preference'},{width:1524,height:500,motion:'no-preference'},{width:1524,height:1495,motion:'reduce'}]) {
         await page.setViewportSize({width:mode.width,height:mode.height});
         await page.emulateMedia({reducedMotion:mode.motion});
@@ -293,5 +334,4 @@ export function criticalProgressionTests() {
       }
     });
   }
-
 }
