@@ -155,35 +155,32 @@ bot's arming comment); the next scheduled run retires it.
 
 ## Agent-assisted contribution (apache-magpie)
 
-This repo adopts the
-[`apache/magpie`](https://github.com/apache/magpie) framework via a snapshot
-mechanism, making its maintainer-facing agent skills available in harnesses
-such as Claude Code.
+This repo adopts the [`apache/magpie`](https://github.com/apache/magpie)
+framework through its plugin marketplace, making its maintainer-facing agent
+skills available in harnesses such as Claude Code. Nothing from the framework
+is vendored or snapshotted here.
 
-The framework is **not** vendored — it lives as a gitignored snapshot under
-`.apache-magpie/`, fetched on demand from the version pinned in the committed
-[`.apache-magpie.lock`](.apache-magpie.lock). The only framework artefact
-committed to this repo is the `setup` skill at
-[`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/); everything else
-is a gitignored symlink the setup skill wires up.
+The committed [`.apache-magpie.lock`](.apache-magpie.lock) records the
+project's floor: a minimum Magpie version and the plugins every contributor
+gets — `magpie-setup`, `magpie-utilities`, `magpie-agent-guard` and
+`magpie-vetted-ops`. The committed `.claude/settings.json` is derived from it,
+so when you open and trust this repo in Claude Code it offers the
+`apache-magpie` marketplace and those plugins; there is no install step. The
+floor is a minimum, not a pin: a newer Magpie is fine, and an older one is
+brought up to it by any skill's pre-flight.
 
-This site currently wires the framework's always-on **`setup-*`** (secure-agent
-setup, status, upstream-fix) and **`list-*`** (skill discovery) families. The
-opt-in families (`pr-management`, `security`, `issue`) are not installed; add
-them later by re-running `/magpie-setup`.
+Other families (`repo-health`, `release-management`, …) are not part of the
+floor; install the ones you need for yourself:
 
-A fresh clone needs the snapshot populated before any framework skill is
-invocable. In your agent harness, run:
+    /plugin install magpie-repo-health@apache-magpie
 
-    /magpie-setup
+Configure Magpie for yourself with `/magpie-setup:setup config` (personal
+files go in the gitignored `.apache-magpie-local/`) and check a checkout with
+`/magpie-setup:setup verify`.
 
-(or follow [`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/)) to
-fetch the snapshot per the committed lock, scaffold the gitignored symlinks, and
-install the post-checkout hook that re-creates them on each worktree checkout.
-
-Adopter-specific modifications to framework workflows live in
-[`.apache-magpie-overrides/`](.apache-magpie-overrides/) (committed) — never
-edit the snapshot directly. Framework changes go via PR to
+The project's configuration and any modifications to framework workflows live
+in [`.apache-magpie-overrides/`](.apache-magpie-overrides/) (committed) —
+never edit the installed plugins. Framework changes go via PR to
 [`apache/magpie`](https://github.com/apache/magpie).
 
 ## License
