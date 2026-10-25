@@ -1,0 +1,139 @@
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Apache Magpie website — remediation PR workflow specifics](#apache-magpie-website--remediation-pr-workflow-specifics)
+  - [Upstream repository](#upstream-repository)
+  - [Toolchain](#toolchain)
+  - [Backport labels](#backport-labels)
+  - [Commit trailer](#commit-trailer)
+  - [PR title / body scrubbing](#pr-title--body-scrubbing)
+  - [PR creation convention](#pr-creation-convention)
+  - [Private-PR fallback](#private-pr-fallback)
+  - [Subversion projects](#subversion-projects)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+# Apache Magpie website — remediation PR workflow specifics
+
+Project-specific mechanics of how the `security-issue-fix` skill
+opens a public fix PR on the project's `<upstream>` repository. Only
+the bits that are **specific to this project** live here; the
+generic flow (clone → branch → commit → push → `gh pr create --web`)
+is described in the
+[`security-issue-fix`](../../../skills/security-issue-fix/SKILL.md)
+skill itself.
+
+## Upstream repository
+
+| Key | Value |
+|---|---|
+| Upstream repo | `apache/magpie-site` |
+| Upstream URL | https://github.com/apache/magpie-site |
+| Upstream `AGENTS.md` | https://github.com/apache/magpie-site/blob/main/AGENTS.md |
+| Contributing docs root | https://github.com/apache/magpie-site/blob/main/README.md |
+| Gen-AI disclosure reference | TODO: URL + anchor in the project's contributing docs |
+| Public security policy | TODO |
+
+The authoritative configuration for the upstream repository is in
+[`project.md`](project.md); this file reiterates the same values for
+convenience.
+
+## Toolchain
+
+- Node.js `>=22.12.0` (`package.json` → `engines`), TypeScript, Astro + React + Tailwind.
+- `npm` (`npm install` / `npm ci`).
+- Checks: `npm run check:fast` during development, `npm run check` before completion;
+  Playwright browser tests; `prek` pre-commit / pre-push hooks.
+
+The `security-issue-fix` skill assumes a clean clone of `<upstream>`
+reachable from the agent's working directory (path from
+`.apache-magpie-overrides/user.md → environment.upstream_clone`), with a remote named
+for the user's GitHub fork that `gh pr create` can push to.
+
+## Backport labels
+
+TODO: list the project's `backport-to-<branch>` labels and the
+default policy. Most projects need only one or two.
+
+## Commit trailer
+
+Which trailer an AI-assisted commit carries is set in
+[`commit-attribution.toml`](commit-attribution.toml) — `generated-by`,
+`assisted-by`, `co-authored-by`, `none`, `custom`, or `contributor-choice`
+— and resolved per
+[`docs/setup/commit-attribution.md`](../../../docs/setup/commit-attribution.md).
+`setup adopt` asks for it.
+
+TODO (optional): anything the project adds to the trailer beyond the
+convention's default wording, e.g. a URL to its Gen-AI disclosure anchor.
+Put the full wording in the `template` key of `commit-attribution.toml`.
+
+## PR title / body scrubbing
+
+Every public surface (commit message, branch name, PR title, PR
+body, newsfragment) must be grep-checked for leakage of:
+
+- `CVE-` (the CVE ID),
+- TODO: the tracker repo slug of this project,
+- `vulnerability`, `security fix`.
+
+A leaked CVE or tracker-repo reference in a public PR breaks the
+disclosure coordination; the skill refuses to push if the scrubbing
+grep fails.
+
+## PR creation convention
+
+Always open PRs with `gh pr create --web` so the human reviewer can
+check the title, body, and the Gen-AI disclosure in the browser
+before submission. Pre-fill `--title` and `--body` (including the
+Gen-AI disclosure block) so the reviewer only needs to review, not
+edit.
+
+When a fix is split into several dependent PRs and the contributor
+has write access to the upstream repository
+(`gh api repos/<upstream> --jq .permissions.push` is `true`), stack
+them with GitHub's stacked PRs: suggest the contributor install the
+[`github/gh-stack`](https://gh.io/stacks) extension
+(`gh extension install github/gh-stack`) if `gh extension list`
+does not show it, push every branch of the stack to the upstream
+repository — never the fork, since each PR's base is the previous
+PR's branch — open each PR with `gh pr create --repo <upstream>
+--base <previous branch> --web`, then run `gh stack link <bottom-PR>
+… <top-PR>`. Without write access, open the PRs from the fork against
+the default branch, each with a "Depends on #N" line. Never let
+`gh stack` generate PR titles or bodies.
+
+## Private-PR fallback
+
+The exceptional private-PR path (target branch `main` of the
+tracker repo; CI does not run; static checks and tests run manually
+by the PR author) is described in Step 9 of
+[`../../README.md`](../../../README.md). TODO: note any
+project-specific deviation from the generic process.
+
+## Subversion projects
+
+Only for a project whose code lives in Subversion
+(*Tools enabled → Source control* is `asf-svn` or `svn` in
+[`project.md`](project.md)). There is no fork and no PR: the skill
+shares the fix as a private patch (tracker attachment and a draft on
+the security list), and commits it only once the team clears it,
+because on Subversion the commit is the publication. The generic flow is in
+[`subversion-flow.md`](../../../skills/security-issue-fix/subversion-flow.md).
+
+| Key | Value |
+|---|---|
+| Release lines | TODO: e.g. `trunk` plus `branches/<x.y>.x` |
+| When a fix may be committed | TODO: e.g. "once the team has reviewed the patch", or "shortly before the release that carries it" |
+| Backport convention | TODO: e.g. `svn merge -c <rev>` after a vote in the line's `STATUS` file |
+| `commit_url_template` | TODO: e.g. `https://svn.apache.org/r{rev}` |
+
+The PR-specific sections above (backport labels, PR creation) do not
+apply to a Subversion project.

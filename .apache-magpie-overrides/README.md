@@ -11,6 +11,7 @@ before executing default behaviour. See
 [`docs/setup/agentic-overrides.md`](https://github.com/apache/magpie/blob/main/docs/setup/agentic-overrides.md)
 in the framework for the full contract.
 
-**Hard rule**: never modify the snapshot under
-`.apache-magpie/`. Local mods go here.
+**Hard rule**: never modify the installed framework plugins.
+Project-wide mods go here; personal ones go in the gitignored
+`.apache-magpie-local/`.
 Framework changes go via PR to `apache/magpie`.

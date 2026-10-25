@@ -179,22 +179,24 @@ issue #10.)
 ## apache-magpie framework
 
 This repo adopts the [`apache/magpie`](https://github.com/apache/magpie)
-framework via the snapshot mechanism. Framework skills are gitignored symlinks
-into the `.apache-magpie/` snapshot directory; only the `setup` skill is
-committed (as `.agents/skills/magpie-setup/`). This site wires the always-on
-`setup-*` and `list-*` families; the opt-in families (`pr-management`,
-`security`, `issue`) are not installed.
-
-A fresh clone needs the snapshot populated before any framework skill is
-invocable. Run `/magpie-setup` (or follow
-[`.agents/skills/magpie-setup/`](.agents/skills/magpie-setup/)) to fetch it per
-the committed [`.apache-magpie.lock`](.apache-magpie.lock). The
+framework through its plugin marketplace. Nothing from the framework is
+vendored or snapshotted here: the committed
+[`.apache-magpie.lock`](.apache-magpie.lock) records the floor (a minimum
+version and the plugins every contributor gets — `magpie-setup`,
+`magpie-utilities`, `magpie-agent-guard`, `magpie-vetted-ops`), and the
+committed `.claude/settings.json` is derived from it so Claude Code offers
+those plugins when the repo is trusted. Other families (`repo-health`,
+`release-management`, …) are installed per maintainer, not committed. The
 contributor-facing summary lives in the
 [Agent-assisted contribution section of `README.md`](README.md#agent-assisted-contribution-apache-magpie).
 
-Adopter-specific modifications to framework-skill workflows live in
-[`.apache-magpie-overrides/`](.apache-magpie-overrides/) — never edit the
-snapshot directly. Framework changes go via PR to
+Edit the floor only through `/magpie-setup:setup adopt`; check a checkout with
+`/magpie-setup:setup verify`.
+
+Project-wide modifications to framework-skill workflows and the project's
+configuration live in [`.apache-magpie-overrides/`](.apache-magpie-overrides/);
+personal configuration goes in the gitignored `.apache-magpie-local/`. Never
+edit the installed plugins. Framework changes go via PR to
 [`apache/magpie`](https://github.com/apache/magpie).
 
 ## Design documents
