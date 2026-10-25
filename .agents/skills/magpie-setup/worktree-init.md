@@ -3,6 +3,32 @@
 
 # worktree-init — share the main checkout's snapshot from a worktree
 
+> **On the recommended path, a worktree needs nothing.** A marketplace
+> install keeps its plugin state in one user-scope store, and everything
+> `adopt` writes — the floor lock, the derived wiring, the project's
+> configuration — is **committed**, so git checks it out into every
+> worktree by itself.
+>
+> This sub-action exists for what is **gitignored**, and therefore exists
+> per working directory rather than arriving with the checkout:
+>
+> | You have | A worktree needs |
+> |---|---|
+> | Marketplace install, repo adopted | nothing from the framework — the plugins are user-scope and everything `adopt` commits is checked out by git |
+> | Marketplace install, configured with [`config`](config.md) | nothing — the personal layer is found from the worktree by itself (Step 0b) |
+> | Pinned snapshot install, adopted or not | the snapshot link *and* the per-worktree skill symlinks — Steps 1 and 1b. Both are gitignored, so git brings neither |
+> | Self-adoption in the framework checkout | neither of those: here `skills/` and its relays are committed, so the checkout already has them |
+> | **Any of the above, under the secure sandbox** | this worktree's absolute path in its own gitignored `.claude/settings.local.json` — Step 1c |
+>
+> Two consequences worth stating plainly. **Adoption needs nothing here:**
+> the floor lock, the derived wiring and the project's configuration are
+> all committed, so a worktree of an adopted repo has them already. And
+> the last row applies whatever you installed — which is why running this
+> in a new worktree is worth it even when the first four rows say no.
+>
+> Run it when unsure: it reports what it found and changes nothing it
+> does not have to.
+
 `adopt` and `upgrade` are **main-checkout-only**. A new git
 worktree of an already-adopted tracker repo gets the framework
 state by **symlinking** its `.apache-magpie/` directory to the
@@ -30,7 +56,7 @@ has the right symlink is a no-op.
 
    > *"You appear to be in the main checkout (`<path>`).
    > `worktree-init` only runs in a worktree. Use
-   > `/magpie-setup` (or `/magpie-setup upgrade`) here
+   > `setup` (or `setup upgrade`) here
    > instead."*
 
 2. **Resolve the main checkout's path.** Take
@@ -44,7 +70,7 @@ has the right symlink is a no-op.
    stop:
 
    > *"The main checkout at `<main>` is not adopted yet. From
-   > the main checkout: `cd <main> && /magpie-setup`. Re-run
+   > the main checkout: `cd <main> && setup`. Re-run
    > `worktree-init` here once that is complete."*
 
 4. **Inspect the worktree's `<snapshot-dir>` state.** Four
@@ -57,6 +83,46 @@ has the right symlink is a no-op.
    | Symlink to **something else** | Step 1 with a move-aside warning. The skill backs the existing link up, names what it pointed at, and asks the user to confirm before replacing. |
    | Regular directory (per-worktree snapshot from before this convention) | Step 1 with a move-aside warning. Back up the directory to `.apache-magpie.bak.<timestamp>` and create the symlink. **Do not** `rm -rf` without confirmation — the directory may hold uncommitted local edits the operator wants to preserve before the framework standardised on snapshot-from-main. |
 
+## Step 0a — Is there anything to do at all?
+
+Before either link, work out whether this worktree needs one:
+
+- **No `.apache-magpie/` in the main checkout** → no snapshot to share;
+  this is a marketplace install. Skip Step 1.
+Personal configuration never needs a link (Step 0b), so the snapshot is
+the only thing this step can find to share.
+
+If there is no snapshot there is nothing to link — say so:
+*"nothing to link: the plugins are user-scope and the project's
+configuration is committed."* That is the expected outcome on the
+recommended path, and reporting it as a finished state is the point. Do
+not treat it as a failed run, and do not go looking for something to
+create.
+
+**Then carry on to Step 1c anyway.** The sandbox allowlist is
+per-worktree whatever the install method is, and it is the one thing a
+marketplace-installed, fully adopted repo still needs here. Skipping to
+the end because the links were unnecessary is how a worktree ends up
+unable to read its own files.
+
+## Step 0b — Personal configuration needs no link
+
+A worktree finds the personal configuration on its own, so this step
+creates nothing:
+
+- **Not adopted** → the personal layer is `<git-common-dir>/apache-magpie/`,
+  inside the git directory every worktree of the clone shares.
+- **Adopted** → `.apache-magpie-local/` is gitignored, so a fresh
+  worktree has none, and every skill falls back to the main checkout's,
+  file by file; `config` run from the worktree writes there too. A file
+  the worktree keeps in its own `.apache-magpie-local/` wins over the
+  main checkout's, which is how one worktree holds a value of its own.
+
+Report which of the two applies, in one line.
+A worktree that still carries a `.apache-magpie-local` **symlink** from an
+earlier version of this step keeps working; say it is no longer needed
+and offer to remove it, never remove it unasked.
+
 ## Step 1 — Create the snapshot symlink
 
 ```bash
@@ -65,7 +131,7 @@ ln -s <main>/.apache-magpie <worktree>/.apache-magpie
 
 **Trusted external skill sources.** If the main checkout has a
 `.apache-magpie-sources/` directory (the adopter trusts at least
-one [external source](../../docs/skill-sources/README.md)), share
+one [external source](../../../../docs/skill-sources/README.md)), share
 it the same way so this worktree's source-skill symlinks resolve
 against one snapshot on disk:
 
@@ -101,10 +167,11 @@ Compose the **effective family set** for this worktree:
 - **Opt-in families** the project recorded — read from
   `<main>/.apache-magpie.lock` (the committed lock; the
   worktree shares it via git).
-- **Always-on families** — every `setup-*` skill in the
+- **Always-on families** — every `family: setup` skill in the
   snapshot *except* `setup` itself, and every
-  `list-*` skill, per
-  [`SKILL.md` Golden rule 8](SKILL.md#golden-rules). These
+  `family: utilities` skill, per
+  [`SKILL.md` Golden rule 8](SKILL.md#golden-rules) (read the
+  `family:` frontmatter key, not the name prefix). These
   are added unconditionally, never read from the lock.
 
 Wiring follows the **canonical-plus-relay** model
@@ -149,7 +216,7 @@ Defensive against
 `sandbox.filesystem.allowRead: ["."]` does not in practice cover
 the worktree's working dir, so reads under this worktree fail
 under the sandbox until an explicit absolute path is added. See
-[`setup-isolated-setup-install/SKILL.md` → Step P](../setup-isolated-setup-install/SKILL.md#step-p--project-root-coverage-in-the-sandbox-allowlists)
+[`setup-isolated-setup-install/SKILL.md` → Step P](../isolated-setup-install/SKILL.md#step-p--project-root-coverage-in-the-sandbox-allowlists)
 for the underlying rationale.
 
 If `~/.claude/scripts/sandbox-add-project-root.sh` is installed,
@@ -181,57 +248,54 @@ one-line recap row for the Step 2 summary:
 
 - ✓ already covered, OR
 - + added `<worktree-path>`, OR
-- ⚠ helper not installed — `/magpie-setup-isolated-setup-install` to wire it up.
+- ⚠ helper not installed — `setup-isolated-setup-install` to wire it up.
 
 `worktree-init` does **not** fail when the helper is absent;
 secure-agent isolation is independent of framework adoption.
 
-## Step 1d — Seed the worktree's agent-guard PreToolUse hook
+## Step 1d — agent-guard needs nothing here
 
-The committed `.claude/settings.json` wires the deterministic
-guard ([`tools/agent-guard`](../../tools/agent-guard/README.md))
-at `$CLAUDE_PROJECT_DIR/.claude/hooks/agent-guard.py` — a
-**per-worktree** path. The script + its `guards.d/` are
-adopter-installed local files synced into the **main** checkout by
-[`adopt.md` Step 12 pass 1](adopt.md#step-12--post-install-sync--worktree-propagation--sandbox-allowlist--sanity-check)
-/ [`upgrade.md` Step 6b](upgrade.md#step-6b--sync-locally-installed-hooks-and-configuration)
-and **gitignored** ([`adopt.md` Step 7](adopt.md#step-7--gitignore-entries-fresh-only)).
-Because they are gitignored, no worktree inherits them via git —
-every worktree starts without the script and would run with the
-guard **silently inactive** until seeded.
+Nothing to do. This step is retained only to say so, because
+earlier versions of the framework seeded a per-worktree copy of
+the guard here and operators may still expect it.
 
-This is the agent-driven counterpart of the
-[post-checkout hook's agent-guard seeding](adopt.md#step-10--worktree-aware-post-checkout-hook-fresh-only):
-the git hook covers `git worktree add`, this step covers worktrees
-that pre-date the hook or where its best-effort copy did not run.
+The deterministic guard
+([`tools/agent-guard`](../../../../tools/agent-guard/README.md)) runs
+from wherever it is installed **once**, never from a per-worktree
+copy:
 
-Seed from the main checkout's already-synced copy — a plain file
-copy, the same `<main>` resolved in Step 0:
+- **Plugin install** (`magpie-agent-guard`) — the plugin's
+  `hooks/hooks.json` registers the `PreToolUse` hook and resolves the engine
+  with `${GROK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}`.
+  Nothing is repository-local, so a worktree is covered the moment it exists.
+- **Snapshot install** — the `settings.local.json` wiring resolves
+  the engine inside the snapshot
+  (`$CLAUDE_PROJECT_DIR/.apache-magpie/tools/agent-guard/src/agent_guard/__init__.py`),
+  and Step 1 above already points this worktree's `.apache-magpie/`
+  at the main checkout's. The path therefore resolves here with no
+  further work.
+- **User-scope secure setup** — `~/.claude/scripts/agent-guard.py`,
+  wired from `~/.claude/settings.json`, is repository-independent
+  by construction.
 
-```bash
-# Only when the main has a guard and this worktree has none — never
-# overwrite a copy the worktree already carries (worktree-local guards).
-if [ -f "<main>/.claude/hooks/agent-guard.py" ] &&
-   [ ! -f "<worktree>/.claude/hooks/agent-guard.py" ]; then
-  mkdir -p "<worktree>/.claude/hooks/guards.d"
-  cp "<main>/.claude/hooks/agent-guard.py" "<worktree>/.claude/hooks/agent-guard.py"
-  cp "<main>/.claude/hooks/guards.d/"*.py "<worktree>/.claude/hooks/guards.d/" 2>/dev/null || true
-fi
-```
+Skill-owned guards need no seeding either: the engine scans every
+`skills/<skill>/guards` in the framework tree it runs from, so they
+are live wherever the framework is.
 
-Idempotent: a no-op when the worktree already has the script, and
-a no-op when the main has no agent-guard yet (an adopter who has
-not run the Step 12 / Step 6b sync). Surface a one-line recap row
-for Step 2:
+Surface one recap row for Step 2: `✓ agent-guard runs from the
+install, nothing seeded per worktree`.
 
-- ✓ already present, OR
-- + seeded from `<main>` (script + N guards), OR
-- ⚠ main has no agent-guard yet — run `/magpie-setup` (or
-  `/magpie-setup upgrade`) from the main checkout to sync it.
+## Step 1e — The worktree's own local agent settings
 
-`worktree-init` does **not** fail when the main carries no
-agent-guard; the guard is an opt-in adopter-side file, and the
-worktree's framework-skill symlinks are usable without it.
+`.claude/settings.local.json` is per worktree, and the committed
+`.claude/settings.json` holds only the shared floor; without the local file
+`gh` loses its sandbox exclusion and every read-only allow prompts. Run
+[`setup upgrade` → Reconcile the local agent settings](upgrade.md#reconcile-the-local-agent-settings)
+for this worktree: the template and registry entries only. Do not copy the
+main checkout's `.claude/settings.local.json`: it holds that checkout's own
+absolute paths (Step 1c writes this worktree's), and copying them would let
+this worktree's sandbox write to the main checkout. As there, stage the
+result and hand the user the copy command.
 
 ## Step 2 — Recap
 
@@ -246,8 +310,10 @@ Print a short summary:
   pair, any present holdout), split into *opt-in* and
   *always-on*, with per-skill ✓ / + / ↻ counts.
 - The sandbox-allowlist recap row from Step 1c.
-- The agent-guard recap row from Step 1d (✓ already present /
-  + seeded / ⚠ main has no agent-guard yet).
+- The local-settings recap row from Step 1e: staged with the copy
+  command given, or nothing to add.
+- The agent-guard recap row from Step 1d (always ✓ — the guard
+  runs from the install, not from a per-worktree copy).
 - A reminder: `upgrade` from the main, not from the worktree.
 
 ## Inputs
@@ -273,13 +339,13 @@ different overrides. Symlinking it would conflate branches.
   refreshed snapshot immediately.
 - **Auto-running on `git worktree add`.** Adopters who want
   automatic worktree initialisation can wrap `git worktree add`
-  with a script that calls `/magpie-setup worktree-init` —
+  with a script that calls `setup worktree-init` —
   the framework does not install that wrapper.
 
 ## Failure modes
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Step 0 step 3 stops with "main checkout not adopted" | The main has never run `adopt`. | `cd <main> && /magpie-setup`, then re-run `worktree-init` here. |
+| Step 0 step 3 stops with "main checkout not adopted" | The main has never run `adopt`. | `cd <main> && setup`, then re-run `worktree-init` here. |
 | `worktree-init` runs but skills still fail to resolve | The per-target `magpie-<skill>` symlinks (in `.agents/skills/`, the `.claude/`/`.github/` pair, or a holdout) are missing from this worktree's commit (the worktree was branched from before `adopt` ran on main). | Re-run `worktree-init` from main's `adopt` flow afterwards, or `git merge` / `git rebase` the branch carrying the symlink commits. |
 | `<snapshot-dir>` is a regular directory and `--force` is not passed | A previous worktree snapshot is still on disk. | Re-run the skill, accept the move-aside prompt, then optionally inspect `.apache-magpie.bak.<timestamp>` for any non-snapshot content before deleting. |

@@ -41,13 +41,12 @@ pnpm-debug.log*
 CLAUDE.md
 **/settings.local.json
 **/scheduled_tasks.lock
-.apache-magpie/
 docs/superpowers/
 .subframe/
 
 # Magpie — gitignored snapshot of the framework, refreshed
 # by /magpie-setup upgrade. Build artefact, not source.
-/.apache-magpie/
+/.apache-magpie
 
 # Per-machine local-pin file. Records what THIS machine fetched and
 # when. Compared against the committed .apache-magpie.lock to

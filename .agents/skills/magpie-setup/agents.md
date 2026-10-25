@@ -22,12 +22,16 @@ go"*, never as *"what files contain"*.
 
 | Target id | Project skills dir | Kind | Reads it |
 |---|---|---|---|
-| `universal` | `.agents/skills/` | universal **(canonical)** | Codex, Cursor, Gemini CLI, GitHub Copilot, OpenCode, Cline, Zed, Warp, Amp, and the rest of the cluster that converged on the shared path |
+| `universal` | `.agents/skills/` | universal **(canonical)** | Codex, Cursor, Gemini CLI, GitHub Copilot, Goose, Junie, OpenCode, Cline, Zed, Warp, Amp, and the rest of the cluster that converged on the shared path |
 | `claude-code` | `.claude/skills/` | native (relay) | Claude Code |
 | `github` | `.github/skills/` | native (relay) | GitHub's skill loader |
 | `windsurf` | `.windsurf/skills/` | native (relay) | Windsurf |
-| `goose` | `.goose/skills/` | native (relay) | Goose |
 | `kiro` | `.kiro/skills/` | native (relay) | Kiro CLI |
+| `grok` | `.grok/skills/` | native (relay) | Grok (xAI) |
+
+Grok reads project skills from `.grok/skills/` only; it reads `.agents/skills/` at user scope (`~/.agents/skills/`), not in the project.
+It also reads Claude Code skills and instruction files, so an adopted repo's `.claude/skills/` relays reach it even without the `grok` row.
+Source: [Grok skills, plugins and marketplaces](https://docs.x.ai/build/features/skills-plugins-marketplaces).
 
 The table is **extensible**: a new agent that wants framework
 skills is one new row (`id`, project dir, kind), nothing else —
@@ -41,8 +45,8 @@ directory, add a row, never a forked skill.
 skill. Its `magpie-<skill>` entries are the links that resolve to
 the actual skill source — the gitignored snapshot
 (`.apache-magpie/skills/<skill>/`) for a normal adopter, or the
-in-repo `../../skills/<skill>/` source for the framework's own
-[local self-adoption](adopt.md#local-self-adoption-methodlocal).
+in-repo `../../plugins/<family>/skills/<alias>` (`<alias>` = the skill's frontmatter `name:`) source for the framework's own
+[local self-adoption](install.md#local-self-adoption-methodlocal).
 
 This is the load-bearing move for neutrality on two fronts:
 
@@ -119,7 +123,7 @@ always wires the `magpie-*` set the same way: canonical in
 Every adoption rule is "canonical link, then relays", not
 "per-target independent link":
 
-- **`magpie-` prefix** ([`SKILL.md` Golden rule 6](SKILL.md#golden-rules))
+- **`magpie-` prefix** ([`snapshot-model.md` Golden rule 6](snapshot-model.md#the-golden-rules-that-bind-only-here))
   — unchanged. Every framework skill is `magpie-<skill>` in
   *every* active target dir, so it never collides with an
   adopter's own skills regardless of agent.
@@ -129,24 +133,24 @@ Every adoption rule is "canonical link, then relays", not
   committed bootstrap (`magpie-setup`) tracked; the glob ignores
   the rest (the canonical links target the gitignored snapshot, so
   the relays that follow them dangle on a fresh clone). See
-  [`adopt.md` Step 7](adopt.md#step-7--gitignore-entries-fresh-only).
+  [`install.md` Step 7](install.md#step-7--gitignore-entries-fresh-only).
 - **Symlink wiring** — the canonical `magpie-<n>` →
   snapshot/source link is created once in `.agents/skills/`; every
   other active target (`claude-code`, `github`, `windsurf`,
   `goose`, …) gets a per-skill relay `magpie-<n>` →
   `../../.agents/skills/magpie-<n>`. See
-  [`adopt.md` Step 8](adopt.md#step-8--wire-up-the-framework-skill-symlinks).
-- **Committed bootstrap** ([`SKILL.md` Golden rule 6](SKILL.md#golden-rules))
+  [`install.md` Step 8](install.md#step-8--wire-up-the-framework-skill-symlinks).
+- **Committed bootstrap** ([`snapshot-model.md` Golden rule 6](snapshot-model.md#the-golden-rules-that-bind-only-here))
   — the one committed framework artefact, `magpie-setup`, lives at
   the **canonical** `.agents/skills/magpie-setup/` (a committed
   copy for adopters; a committed symlink under self-adoption).
   `.claude`/`.github` carry a committed relay symlink to it.
 - **Local self-adoption** (framework checkout) — canonical
-  committed symlinks into `../../skills/<skill>/` in
+  committed symlinks into `../../plugins/<family>/skills/<alias>` (`<alias>` = the skill's frontmatter `name:`) in
   `.agents/skills/`, plus committed relays into
   `../../.agents/skills/magpie-<skill>` in every other active
   target. See
-  [`adopt.md` → Local self-adoption](adopt.md#local-self-adoption-methodlocal).
+  [`install.md` → Local self-adoption](install.md#local-self-adoption-methodlocal).
 - **`unadopt` / `worktree-init`** — every active target dir is
   torn down / propagated uniformly. Removing only `.claude` +
   `.github` would orphan the canonical `.agents/skills/magpie-*`

@@ -4,3 +4,14 @@
 method: git-branch
 url:    https://github.com/apache/magpie.git
 ref:    main
+
+reconciled:
+  version: 0.9.0.dev202610250024
+  at:      2026-10-25
+  skills:
+    audit-finding-fix:         sha256:a31ea1f8e96846eb
+    dependency-audit:          sha256:19ba62ec34a55604
+    fix-workflow:              sha256:cdd7487f53514882
+    flaky-test-triage:         sha256:eda3c3891897f08d
+    license-compliance-audit:  sha256:b40b2993e5f18f54
+    workflow-security-audit:   sha256:e50eafff464d131a
