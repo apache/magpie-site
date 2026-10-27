@@ -41,7 +41,7 @@ const HEADER = `# ${SITE_NAME}
 > ${SITE_DESCRIPTION}
 
 Apache Magpie is a set of agent skills (recipes) that maintainers run inside
-their own agent harness: Claude Code, Codex, Copilot, Gemini, Cursor and
+their own agent harness: Claude Code, Codex, Copilot, Antigravity, Cursor and
 others. It is not a hosted service. There is no HTTP API, no OpenAPI spec and
 nothing to call on this domain; integrate by installing the skills from the
 source repository, or through an agent marketplace.

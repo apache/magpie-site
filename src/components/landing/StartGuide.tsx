@@ -3,7 +3,7 @@ import { Check, Copy, ChevronDown } from "lucide-react";
 import { withBase } from "@/ui/lib/utils";
 
 // The agents' own marks, as the home page shows them.
-const AGENT_LOGOS: Record<string, string> = { claude: "claude.png", codex: "openai.png", gemini: "gemini.ico", cursor: "cursor.svg", copilot: "copilot.svg" };
+const AGENT_LOGOS: Record<string, string> = { claude: "claude.png", codex: "openai.png", antigravity: "antigravity.ico", cursor: "cursor.svg", copilot: "copilot.svg" };
 
 export type InstallOption = { id: string; name: string; where: string; commands: string; detail: string; guide: string; verify: string };
 function CopyText({ text, label }: { text: string; label: string }) {
