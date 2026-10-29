@@ -1,0 +1,272 @@
+# Prerequisite: install Magpie from your agent's marketplace
+
+Rendered page: https://magpie.apache.org/docs/setup/marketplace-install/
+
+Source: https://github.com/apache/magpie/blob/main/docs/setup/marketplace-install.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+You do this **once per machine**, for whichever agent you use. It writes
+nothing to any repository, your teammates are unaffected, and every other page
+in this documentation assumes it is done.
+
+Every path below uses the [`apache/magpie`](https://github.com/apache/magpie)
+repository directly as the marketplace. No vendor directory, no account, no
+registry sits in between.
+
+## The recommended baseline
+
+Install `magpie-setup`, `magpie-vetted-ops` and `magpie-utilities`, plus `magpie-agent-guard` where your agent's marketplace offers it:
+
+| Plugin | Why |
+|---|---|
+| `magpie-setup` | **Install this one first — nothing else installs without it.** It installs, upgrades, configures and adopts the framework, and carries the secure-isolation skills that sandbox your agent. |
+| `magpie-vetted-ops` | **Always installed.** The dispatcher the family skills run their GitHub reads and writes through: fixed, checked operations instead of free-form `gh` commands. Not a family and no skills of its own, so it adds no always-on context. |
+| `magpie-agent-guard` | The deterministic pre-execution guard — a hook that inspects each shell command before it runs and denies the dangerous shapes outright. Not a family; a safety net under everything else. |
+| `magpie-utilities` | `list-skills` and the rest of the small tools you reach for when you want to know what is actually installed. |
+
+These four are exactly the **floor** a Claude Code project commits when it adopts Magpie.
+Taking the available baseline plugins yourself is taking what a project would recommend to every contributor.
+Then add families against a problem you have today —
+[What each family solves](/docs/quick-start/families) is the menu — and run the
+[secure-agent setup](/docs/quick-start#step-3--isolate--guard), which is
+part of setting up rather than a later hardening pass.
+
+## Claude Code
+
+Add the marketplace, then install the baseline and whichever families you want:
+
+```text
+/plugin marketplace add apache/magpie
+/plugin install magpie-setup@apache-magpie
+/plugin install magpie-vetted-ops@apache-magpie
+/plugin install magpie-agent-guard@apache-magpie
+/plugin install magpie-utilities@apache-magpie
+/plugin install magpie-pr-management@apache-magpie
+```
+
+The pattern is `/plugin install magpie-<family>@apache-magpie`. Confirm what
+landed with `/plugin`.
+
+To track a released version instead of `main`, add the marketplace from a tag:
+`/plugin marketplace add apache/magpie@0.2.0`.
+
+**Turn auto-update on — it is off by default here.** Claude Code enables
+auto-update for its own official marketplaces, but *third-party* marketplaces,
+which `apache-magpie` is, start with it **disabled**. Left alone, your installed
+copy never moves: `claude plugin update` answers *"already at the latest
+version"* however far ahead `main` has gone, because the check compares version
+strings and nothing refreshed the catalogue. Enable it once:
+
+1. run `/plugin`
+2. go to **Marketplaces**
+3. select **apache-magpie**
+4. choose **Enable auto-update**
+
+Claude Code then refreshes the catalogue and updates installed plugins in the
+background shortly after each session starts, and tells you to run
+`/reload-plugins` if anything moved. Administrators can turn it on for everyone
+by setting `"autoUpdate": true` on the marketplace's `extraKnownMarketplaces`
+entry in managed settings.
+
+If you would rather stay manual, the equivalent is two commands, and the first
+is the one people forget:
+
+```bash
+claude plugin marketplace update apache-magpie
+claude plugin update magpie-setup@apache-magpie
+```
+
+Updating brings in the new skills.
+It does not check your project against them.
+Magpie does that when you next run a skill:
+each skill checks whether it changed since the project was last reconciled,
+and the first run after an upgrade proposes any fixes your configuration or overrides now need.
+To run the whole check at once, use `/magpie-setup:setup reconcile`.
+See [Reconciliation when a skill first runs after an upgrade](/docs/setup/marketplace#reconciliation-when-a-skill-first-runs-after-an-upgrade).
+
+**After `magpie-setup` is in, you never have to type these again.** Ask for
+the rest in plain language and the setup skill runs the installs for you:
+
+> install the Magpie families for PR review and release management
+
+or call it by name — `/magpie-setup:install`. Both take you through the same
+picker and the same install. The commands above are the bootstrap, needed only
+because nothing is installed yet to hear the request.
+
+## OpenAI Codex CLI
+
+```bash
+codex plugin marketplace add apache/magpie
+codex plugin add magpie-setup@apache-magpie
+codex plugin add magpie-utilities@apache-magpie
+```
+
+`magpie-setup` and `magpie-vetted-ops` install by default when you add the marketplace, so their lines are only needed if you removed them.
+`magpie-utilities` is not installed by default, so add it explicitly.
+`magpie-agent-guard` is not listed in [Magpie's Codex marketplace](https://github.com/apache/magpie/blob/main/.agents/plugins/marketplace.json).
+Add further families the same way.
+Verify with `/plugins` inside Codex, or `codex plugin list` from the shell.
+
+Codex has no auto-update setting for marketplaces, so refreshing is a manual
+step — `codex plugin marketplace upgrade apache-magpie` re-pulls the Magpie Git snapshot.
+Run it when you want the newer skills; nothing moves on its own.
+
+Once the baseline is in, ask for the rest in plain language — *install the
+Magpie families for PR review* — or invoke the skill by name.
+
+## VS Code / GitHub Copilot
+
+Point VS Code's plugin install at the repository URL — it clones the repo and
+loads Magpie as an [Agent Plugins 1.0](https://agent-plugins.org/specification)
+package:
+
+```text
+https://github.com/apache/magpie
+```
+
+You can also add `apache/magpie` as a plugin marketplace and install
+individual families from it.
+
+## Grok Build
+
+Grok Build reads Claude-compatible marketplaces, plugins, and hooks.
+When `magpie-agent-guard` is installed from the Apache Magpie marketplace, Grok can use the plugin's bundled `PreToolUse` hook and executable directly.
+Do not create an `.apache-magpie/` snapshot or a second project hook merely to reach the marketplace-installed guard.
+
+The plugin hook uses the existing `Bash` matcher.
+The shared dispatcher selects the Grok adapter automatically from Grok's camelCase hook payload shape.
+
+Verify the loaded hook with:
+
+```bash
+grok inspect --json
+```
+
+Then exercise one harmless allow and one known Magpie denial.
+Project-hook trust remains an explicit operator action whenever a repository-local `.grok/hooks/` hook is used.
+
+See [the Grok adapter](/docs/adapters/grok).
+
+## Google Antigravity
+
+Antigravity replaced Gemini CLI, which Google retired for individual accounts
+on 2026-06-18. Install Magpie as an Antigravity plugin from the CLI:
+
+```bash
+agy plugin install https://github.com/apache/magpie
+```
+
+The repository root is the plugin: Antigravity reads the root `plugin.json`
+and the skills under `skills/`, so the whole framework arrives as one plugin
+and there is nothing further to pick. Plugins installed in the Antigravity App
+sync to the CLI. Verify with `agy plugin list`, or `/plugin` inside a session;
+every skill is also a slash command (`/magpie-setup`). To refresh, run the same
+install command again.
+
+Coming from Gemini CLI with the old Magpie extension installed?
+`agy plugin import gemini` converts it, but a fresh install from the
+repository URL is simpler and carries the current layout.
+
+From then on, ask in plain language — *set up Magpie for this project* — or
+name the skill: `Use the magpie-setup skill.`
+
+## Cursor
+
+Cursor reads the repository's Agent Plugins 1.0 manifest. Add Magpie through
+Cursor's plugin/skill install flow (Customize → Plugins/Skills) pointing at
+`github.com/apache/magpie`.
+
+## microsoft/apm
+
+From your project root:
+
+```bash
+apm install apache/magpie
+```
+
+`apm` deploys the skills into each supported agent's directory and writes an
+`apm.lock.yaml`; commit it to pin the resolved commit. There is no auto-update
+here by design — the lockfile is the point. Move deliberately by re-running
+`apm install` and committing the changed lockfile.
+
+## Kiro CLI
+
+Kiro has **no marketplace**: it installs skills one at a time from a GitHub
+subdirectory. Point its *install from GitHub* at the skill you want, on a
+pinned tag:
+
+```text
+https://github.com/apache/magpie/tree/0.2.0/skills/setup
+```
+
+Pin a tag rather than tracking `main` — without a marketplace there is no
+update command later, so what you install is what you keep until you install
+again. [The Kiro harness guide](/docs/adapters/kiro) covers the guard hook and
+the rest of the wiring.
+
+## Pi
+
+Pi has no marketplace; it installs packages from git, npm or a local path.
+The repository root is a Pi package (its `package.json` carries a `pi` key),
+so one command, run once per user, installs the skills together with Magpie's
+secure setup for Pi — the action guard, the permission rules and the OS sandbox
+for bash:
+
+```bash
+pi install git:github.com/apache/magpie
+```
+
+Install it for the user, never per project: do not add `-l`. Verify with
+`pi list`; every skill is also a `/skill:<name>` command. Refresh with
+`pi update --extensions`, and remove everything with
+`pi remove git:github.com/apache/magpie`.
+[The Pi harness guide](/docs/adapters/pi) covers what the extension enforces
+and how to verify it.
+
+## Goose
+
+Goose has no marketplace; `goose plugin install` takes a git URL.
+The repository root is a Goose plugin (`.goose-plugin/plugin.json` lists the
+family skill directories, and `hooks/hooks.json` registers Magpie's guard
+hook), so one command, run once per user, installs the skills as
+`magpie:<skill>` together with the hook. A second one installs the sandbox
+runtime from the committed lockfile into the plugin:
+
+```bash
+goose plugin install https://github.com/apache/magpie
+npm ci --omit=dev --legacy-peer-deps --ignore-scripts --prefix ~/.agents/plugins/magpie
+```
+
+Install it for the user, never into a project's `.agents/plugins/`. Start
+Goose through `agent-iso goose`, which runs the whole process in the sandbox
+in approve mode. Verify with `goose skills list`. Refresh with
+`goose plugin update magpie` followed by the same `npm ci` (the update drops
+`node_modules`), and remove everything by deleting `~/.agents/plugins/magpie/`.
+[The Goose harness guide](/docs/adapters/goose) covers what the hook and the
+sandbox enforce and how to verify them.
+
+## JetBrains IDEs
+
+Nothing extra to install. A JetBrains IDE hosts an agent rather than
+distributing skills itself, so you run the install above for the agent you use
+inside it — with the Claude Code plugin for JetBrains, the Claude Code commands
+from the IDE's Claude Code window.
+
+You only do it once: Claude Code keeps plugin state in a single user-scope
+store, so a marketplace added in the terminal is already there in the IDE.
+
+## Where to go next
+
+- [**Quick start**](/docs/quick-start) — what to run once the plugins are in.
+- [**The Apache Magpie Marketplace**](/docs/setup/marketplace) — the reference behind
+  these commands: which families to pick, how the manifests work, versioning,
+  what is verified against a live client and what is not, and the OpenCode
+  path, which installs skills directly rather than through a marketplace.
+- [**Prerequisites for running framework skills**](/docs/quick-start/prerequisites)
+  — what individual skills need at run time (a tracker, a mail backend, and so
+  on). Separate from this page, and needed only for the skills that use them.

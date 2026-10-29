@@ -1,0 +1,109 @@
+# Apache Software Foundation repository configuration.
+# https://cwiki.apache.org/confluence/display/INFRA/Git+-+.asf.yaml+features
+#
+# The `github:` block below is applied from the default branch (main).
+# The `publish:` block is what serves the website: CI builds the site and
+# force-pushes the generated output (this file included) to the `publish`
+# branch. The `.asf.yaml` on that branch carries `whoami: publish`, which
+# matches the branch name (the asfyaml multi-tenancy guard), so ASF infra
+# publishes it. The hostname is INFERRED from the repository name
+# (magpie-site -> magpie.apache.org) and must NOT be set explicitly: asfyaml
+# forbids naming your own $project.apache.org via the `hostname` field
+# ("It has to be inferred to prevent abuse").
+
+github:
+  description: "Website for Apache Magpie — agent-assisted repository maintainership and development."
+  homepage: https://magpie.apache.org/
+  labels:
+    - apache
+    - magpie
+    - website
+    - astro
+  features:
+    issues: true
+
+  # Squash is the only merge button: every pull request lands on main as a
+  # single commit, so the history stays one-change-per-commit and bisectable.
+  # Rebase and plain merge commits are off.
+  enabled_merge_buttons:
+    squash: true
+    merge: false
+    rebase: false
+
+  # Branch protection for main, as rulesets: only a ruleset can name who may
+  # bypass the required checks (as apache/infrastructure-actions does). Classic
+  # protection is not used; "main history" keeps main from being force-pushed
+  # or deleted instead.
+  # Only checks that run on EVERY pull request may be listed here: a required
+  # context whose workflow does not trigger is never reported, and the pull
+  # request blocks forever with nothing to re-run. ci-passed is build.yml's
+  # last job, which always runs and fails when any job before it failed or was
+  # cancelled. A job skipped because a need failed would otherwise count as
+  # passing, and so would the browser suites a PR skips when it changes
+  # neither the site nor the tests.
+  #
+  # Deliberately NOT required:
+  #   asf-allowlist-check - path-filtered to .github/**, so it is absent on
+  #                         any pull request that does not touch a workflow.
+  #   deploy              - gated to refs/heads/main; never runs on a PR.
+  #   publish             - PR previews: workflow_run / issue_comment /
+  #                         workflow_dispatch; never a pull request check.
+  #   signal              - preview-signal.yml; runs only on some PR events.
+  #
+  # The bypass names repository roles, not a team: GitHub refused the
+  # magpie-committers team ("must be part of the ruleset source or owner
+  # organization"). Raw payload syntax, as roles have no convenience key.
+  rulesets:
+    # Nobody bypasses this one: main is never force-pushed or deleted. #246
+    # created it; it is listed here again so that .asf.yaml manages it, and
+    # matches it exactly, so applying it changes nothing on GitHub.
+    - name: "main history"
+      branches:
+        includes:
+          - "main"
+      restrict_deletion: true
+      restrict_force_push: true
+
+    - name: "Required checks"
+      target: branch
+      enforcement: active
+      conditions:
+        ref_name:
+          include:
+            - "~DEFAULT_BRANCH"
+          exclude: []
+      bypass_actors:
+        # Repository admins (ASF Infra), always.
+        - actor_id: 5
+          actor_type: RepositoryRole
+          bypass_mode: always
+        # Write access, on pull requests only: a committer can merge past the
+        # checks, e.g. when a browser shard timed out on a slow runner, but
+        # never push past them (gh pr merge --admin).
+        - actor_id: 4
+          actor_type: RepositoryRole
+          bypass_mode: pull_request
+      rules:
+        - type: required_status_checks
+          parameters:
+            # Not strict: main moves quickly, and requiring every branch to be
+            # up to date would mean rebasing each PR whenever anything merges.
+            strict_required_status_checks_policy: false
+            # No integration_id: leaving it out means any source, and a
+            # string one, which is what .asf.yaml would pass, is rejected.
+            required_status_checks:
+              - context: ci-passed
+
+  pull_requests:
+    # A pull request merges itself once ci-passed is green, or is bypassed.
+    allow_auto_merge: true
+    allow_update_branch: true
+
+notifications:
+  commits: commits@magpie.apache.org
+  issues: commits@magpie.apache.org
+  pullrequests: commits@magpie.apache.org
+  discussions: dev@magpie.apache.org
+
+publish:
+  whoami: publish

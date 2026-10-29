@@ -1,0 +1,294 @@
+# setup-preflight
+
+Rendered page: https://magpie.apache.org/docs/tools/setup-preflight/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/tools/setup-preflight/readme.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+**Capability:** substrate:setup
+
+**Harness:** agnostic
+
+Resolve a project's Magpie setup state, and one skill's fingerprint,
+into a machine-readable verdict.
+
+Every framework skill has to answer the same question before it runs:
+*is this project set up for the framework version now installed?* That
+question used to be answered by prose the agent re-read on every
+invocation of every skill. Most of it was not judgement at all — read a
+lock, compare two hashes, order two versions, subtract two dates — so it
+is answered here instead, once, deterministically, and testably.
+
+What stays prose is what a model is actually for: which proposal to make,
+how to word it, and the prohibitions. Those live in each skill's
+`preflight-detail.md`, and a finding names the section that applies.
+
+## Prerequisites
+
+- **Runtime** — Python 3.11+. Standard library only, deliberately: the
+  module is copied into the user's personal configuration layer and run
+  with bare `python3`, where nothing else is available.
+- **CLIs** — none required. The running harness's own listing command
+  (detected from its environment markers, e.g. `claude plugin list
+  --json` under Claude Code) is consulted when present; its absence or
+  the absence of any harness marker is a supported state, not an error.
+- **Credentials / auth** — none.
+- **Network** — none. Every input is a file in the project.
+- **Optional** — `--plugin-list` accepts a listing the caller already
+  read, so the tool never has to shell out.
+
+## Why it is installed into the project
+
+The obvious home is the plugin, and it does not work. Under the sandbox
+the framework itself recommends, `~/.claude/plugins/cache/` is
+read-denied, so a script shipped in the plugin can be read by the agent's
+file tool but never *executed* by a shell — and a sandboxed marketplace
+install is exactly the environment the reconciliation check was written
+for. So `/magpie-setup:setup config` copies this module under the
+per-user `~/.cache/apache-magpie/preflight/`, with or without version
+control, and `/magpie-setup:setup upgrade` refreshes that copy against the
+framework version now installed. Where exactly depends on where the copy
+comes from (`layers.checker_install_dir`):
+
+- **From a known framework location** (`layers.framework_roots`, resolved,
+  and never inside the project) — a harness's plugin install, or the framework copy
+  under the user's home — it goes in the shared `checker_dir` itself and
+  serves every project without a copy of its own. The last `config` or
+  `upgrade` from a plugin decides its version; it reads each project's own
+  lock and configuration, so it serves projects pinned to different versions.
+- **From anywhere else** — a pinned snapshot at `<project>/.apache-magpie/`,
+  which a tarball can carry as easily as a real install, or any other
+  directory, since the rule fails closed — it goes in `projects/<key>/`
+  (`layers.project_checker_home`), where `<key>` is the first 16 hex digits
+  of the SHA-256 of the project root's resolved path, and serves that
+  project alone. Code from inside one tree never reaches the shared
+  directory, so a crafted tree can run nothing in any other project.
+  Symlinks are resolved on both sides before the comparison.
+  Beside it, `root-id` records the resolved root's `st_dev` and `st_ino`
+  (`layers.record_root_identity`): the path outlives the project, so the
+  block and `layers.import_dir` use the copy only while the tree at that
+  path is the one it was installed for, and otherwise fall back to the
+  shared copy.
+
+`uninstall` removes a project's own `projects/<key>/` copy with its
+snapshot; it never touches the shared copy, which serves other projects.
+
+**Pre-flight imports the checker only from outside the opened project.**
+Every skill runs it as
+
+```bash
+PYTHONPATH="$(python3 -I -c 'import hashlib,os,sys;h,d,m,i=sys.argv[1:];r=os.path.realpath(os.curdir);s=os.stat(r);p=os.path.join(h,d,hashlib.sha256(r.encode()).hexdigest()[:16]);f=os.path.join(p,i);print(p if os.path.isdir(os.path.join(p,m)) and os.path.isfile(f) and open(f).read().split()==[str(s.st_dev),str(s.st_ino)] else h)' "$HOME/.cache/apache-magpie/preflight" projects setup_preflight root-id)" \
+  python3 -P -m setup_preflight …
+```
+
+The first `python3 -I` picks the directory — this project's own when it
+holds a checker, else the shared one (`layers.import_dir`) — with the
+standard library alone: `-I` keeps the working directory, `PYTHONPATH` and
+the user site off `sys.path`, so choosing never runs project code. Then
+`-P` (Python 3.11+) keeps the working directory off `sys.path` for the
+checker itself, and no directory inside the project is on `PYTHONPATH` —
+not the gitignored `.apache-magpie-local/` of an adopted project, which a
+repository can still force-add, not the legacy in-tree one of an
+unadopted project, and not the project's `.git/` or `.svn/` either. A git
+commit cannot carry a `.git/`, but a Subversion checkout versions one like
+any directory, and a tarball can carry a `.git/` or a `.svn/` (with its
+`wc.db`) that `git` and `layers.py` accept as real. Otherwise a project
+that shipped a `setup_preflight/` package would have its code run by every
+skill's pre-flight before any confirmation, and opening it would be enough
+to run its code. The personal *configuration* still lives where
+`layers.py` says; only the executable lives outside every project.
+
+The key is computed in the block rather than in a bootstrap module because
+a bootstrap would itself have to live in the shared directory, which a
+snapshot-only machine never fills; the one-liner needs nothing installed.
+
+That has a consequence worth stating plainly: pre-flight may run `config`
+unattended, so an unattended run can place an executable under the
+user's `~/.cache/apache-magpie/preflight/`. It is framework code of the
+same provenance as the framework the adopter installed, it is never
+committed, and it is per-user — but it is a step beyond writing
+configuration files.
+
+## Invocation
+
+```bash
+PYTHONPATH="<checker_dir>" python3 -P -m setup_preflight \
+    --skill magpie-pr-management-triage \
+    --hash sha256:9f1c4e… \
+    --requires pr-management-config.md
+```
+
+In the framework checkout, the same thing through the workspace:
+
+```bash
+uv run --directory tools/setup-preflight --project . setup-preflight --skill … --hash …
+```
+
+## Output
+
+```json
+{ "verdict": "ok" }
+```
+
+…or a list of findings, each naming its scope and the
+`preflight-detail.md` section whose rules apply:
+
+```json
+{
+  "verdict": "action",
+  "findings": [
+    { "scope": "project", "code": "below-floor",       "section": "step-3", "facts": {…} },
+    { "scope": "skill",   "code": "fingerprint-moved", "section": "step-4", "facts": {…} }
+  ]
+}
+```
+
+**Exit status is 0 whenever a verdict was reached**, findings included. A
+finding is the answer, not a failure. A non-zero exit means the check
+could not run, and the caller falls back to the detail file rather than
+assuming the project is fine.
+
+### The scopes
+
+**`project`** findings are true of the checkout and identical for every
+skill invoked in it — the lock, snapshot drift, the marketplace floor.
+They are memoised in `<personal-layer>/.preflight-cache.json`, keyed
+on the lock files' identity and the plugin listing and expiring after 15
+minutes, so the second and later skills in a session pay only for their
+own fingerprint comparison.
+
+**`skill`** findings differ per skill: its fingerprint against the
+reconciliation stamp, and whether its `requires_config:` entries resolve.
+
+**`family`** findings are about the invoking skill as a Magpie skill and as a member of its family.
+Today there is one: `welcome`, a first-run welcome guide, with its rules in the `welcome` section.
+`setup_preflight/guides/general.md` is due on the first run of any Magpie skill,
+and `guides/<family>.md` (today `security`) on the first run of a skill in that family.
+At most one guide per run: a first showing beats a repeat, and between equals the general guide goes first,
+so the family guide's first showing comes on the run after the general one.
+`facts.family` names the guide (`general` or the family) and `facts.guide` carries it,
+so the agent shows it without another read;
+the general guide's list of family guides is generated from the files in `guides/`.
+The family comes from `families.py`, a map of every skill's frontmatter `family:`
+generated by `python3 -m setup_preflight.welcome write-constant`
+and kept current by `check-family-plugins` (`--fix` regenerates it),
+because a marketplace install's copy of this package has no skills to read.
+The user's answer is recorded under `welcome.<guide>` (`welcome.general`, `welcome.security`) in the personal layer's `reconciled.json`:
+
+| Choice | Shown again |
+|---|---|
+| `seen` (Continue, or no answer) | on the next run, three recorded showings in all |
+| `dismiss` | after the framework version changes |
+| `never` | after `enable` |
+
+The version is the `magpie-setup` plugin's, read beside this package,
+in the project's framework tree or in its pinned snapshot;
+the personal-layer copy of a marketplace install has no manifest,
+so there it is a fingerprint of this package, which `/magpie-setup:setup upgrade` refreshes.
+The finding is skipped where there is no personal layer to record into,
+`--no-welcome` leaves it out, and a personal layer holding nothing but that record
+does not make the project count as configured.
+
+```bash
+python3 -m setup_preflight.welcome list
+python3 -m setup_preflight.welcome show   --family general [--color[=auto|always|never]]
+python3 -m setup_preflight.welcome record --family security --choice seen|dismiss|never
+python3 -m setup_preflight.welcome enable --family security
+```
+
+`show --color` renders the guide for a terminal, in colour only on a tty;
+`--color=always` colours off a tty too (an agent's `!` shell command);
+`NO_COLOR` turns colour off either way.
+The [`welcome-guide`](https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/welcome-guide/SKILL.md) skill
+(`/magpie-setup:welcome-guide [<family>]`) is the user-facing way to run `show` and `enable`.
+
+**`machine`** findings are about the isolated (secure agent) setup on
+this machine, reported only where it is used: `isolated-setup-changed`
+when the fingerprint of the secure-setup files differs from the one the
+last `setup-isolated-setup-update` run recorded, and
+`isolated-setup-update-due` when that run or its last reminder is older
+than `isolated_setup_update_interval_days` (default 7). The fingerprint
+is computed from the framework source when the checkout has it, and
+otherwise read from the generated `isolated_fingerprint.py`, which the
+`isolated-setup-fingerprint` prek hook keeps current.
+`python3 -m setup_preflight.isolated record-update | record-reminder`
+writes the stamp.
+
+**`end-of-run`** is the periodic `/magpie-setup:setup verify` suggestion, which
+is settled when the run finishes rather than before it starts.
+
+## Two rules that are the reason this is code
+
+**Unknown is never absent.** A plugin listing that could not be read is
+`None`, not `{}`. Inside a sandboxed session the plugin cache is
+read-denied and the running harness's own listing prints `[]`, which
+reads exactly like "nothing installed"; acting on it would propose
+installing a project's entire floor on every sandboxed run. An empty
+*parsed* listing is treated as unknown for the same reason — it is
+indistinguishable from the denied case.
+
+**A dev build is a version like any other.** Nothing strips or rounds a
+`.devN` segment. `0.2.0.dev202609110041` is below `0.2.0`, and `0.10.0`
+is above `0.9.0` — the two orderings a string comparison gets wrong in
+opposite directions.
+
+## Delegation
+
+`delegation.py` resolves which skill does a Magpie skill's work when the
+project [delegates it to its own skill](https://github.com/apache/magpie/blob/main/docs/setup/agentic-overrides.md#delegate-to-the-projects-own-skill):
+it reads the `delegate:` frontmatter block from `<override-name>.md` along
+the override chain, the first layer that declares one winning, and
+validates it strictly — an unknown key, a malformed line, a missing or
+out-of-repository project skill, a Magpie skill named as the delegate, or a
+merge that would `skip:` a pre-flight, golden-rule, confirmation, scrub or
+privacy step is **refused whole**, and the framework default runs.
+
+The pre-flight runs it on every invocation, uncached (it reads a handful of
+small files), and adds **`skill`**-scope findings, all naming `step-13`:
+
+- `delegated` — the invoked skill is delegated; `facts` is the resolution;
+- `delegate-refused` — its delegate was declared and refused, with `reason`;
+- `handoff-delegates` — the other delegated skills it may hand off to.
+
+None appear when nothing is delegated, so the ordinary verdict stays `ok`.
+The pre-flight passes a frontmatter `name:`; override files carry the
+`skills/<name>` entry's name. `skill_names.py` maps one to the other and is
+generated: `python3 -m setup_preflight.delegation write-names` rewrites it,
+and a test fails when it is stale.
+
+```bash
+python3 -m setup_preflight.delegation resolve security-issue-triage
+python3 -m setup_preflight.delegation list
+python3 -m setup_preflight.delegation render --skill security-issue-triage \
+    --delegate triage-reports --mode merge --step "magpie:Step 1 — Gather" --step "project:Reproduce"
+```
+
+### Discovery
+
+`discovery.py` is the deterministic half of
+[`setup delegate`](https://github.com/apache/magpie/blob/main/plugins/magpie-setup/skills/setup/delegates.md):
+it lists the project's own skills (`.claude/skills/`, `.agents/skills/`,
+`.github/skills/`, never `magpie-*` links or anything resolving outside the
+repository), scores each against Magpie's skills by set overlap of names,
+`description` + `when_to_use`, and step headings, and drafts a merged step
+list from the two skills' headings. It writes nothing, and project skill
+text is only tokenised and quoted.
+
+```bash
+python3 -m setup_preflight.discovery --project-root . --magpie-skills .apache-magpie/skills
+python3 -m setup_preflight.discovery --project-root . --magpie-catalogue <file.json>
+```
+
+## Tests
+
+```bash
+uv run --directory tools/setup-preflight --project . python -m pytest
+```
+
+Each test is named for the rule it pins. A failure is a change to what
+every skill does before it runs, not merely a refactor.
