@@ -167,7 +167,7 @@ jobs:
       # the published site is rebuilt annotated on purpose.
       - name: Switch on source annotation
         id: annotate
-        uses: apache/infrastructure-actions/website-comment/preview-annotate@65a538352531210f043ebee7cb6f87d3773a73e2 # preview-annotate/v1.0.0
+        uses: apache/infrastructure-actions/website-comment/preview-annotate@9ef89ae3b50c5a404b06e200efaa6143dad61d83 # preview-annotate/v1.1.0
         with:
           generator: astro
           production-output: dist
