@@ -41,7 +41,7 @@
     "@types/react-dom": "^19.3.0",
     "cheerio": "^1.2.0",
     "html-validate": "^11.17.0",
-    "knip": "^6.42.1",
+    "knip": "^6.43.0",
     "lucide-react": "^1.61.0",
     "postcss": "^8.5.31",
     "postcss-selector-parser": "^7.1.7",
