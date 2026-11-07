@@ -12,7 +12,7 @@
 .docs-sidebar nav a[aria-current=page] { background:var(--surface); color:var(--blue); }
 .docs-main { padding:var(--space-8) 0 var(--space-20); min-width:0; }
 .docs-main > :is(.docs-breadcrumb,.docs-prose) { width:100%; max-width:740px; margin-inline:auto; }
-.docs-breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:12px; font-size:.8125rem; color:var(--muted); margin-bottom:var(--space-8); text-transform:capitalize; }
+.docs-breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:12px; font-size:.8125rem; color:var(--muted); margin-bottom:var(--space-8); }
 .docs-breadcrumb a { color:var(--muted); text-decoration:none; }
 .copy-page { margin-left:auto; text-transform:none; }
 .docs-prose { font-size:var(--text-reading); overflow-wrap:anywhere; line-height:var(--leading-body); }

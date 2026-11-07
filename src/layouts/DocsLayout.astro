@@ -56,14 +56,14 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
   // into Education. See NESTED_GROUPS.
   "education/training": { label: "Training", order: 1.5 },
   setup: { label: "Setup", order: 2 },
-  security: { label: "Security", order: 3 },
-  "pr-management": { label: "PR Management", order: 4 },
+  security: { label: "Security reports", order: 3 },
+  "pr-management": { label: "Pull requests", order: 4 },
   "issue-management": { label: "Issue Management", order: 5 },
-  "repo-health": { label: "Repo Health", order: 6 },
-  "release-management": { label: "Release Management", order: 7 },
+  "repo-health": { label: "Repository maintenance", order: 6 },
+  "release-management": { label: "Releases", order: 7 },
   mentoring: { label: "Mentoring", order: 8 },
-  "contributor-growth": { label: "Contributor Growth", order: 9 },
-  pairing: { label: "Pairing", order: 10 },
+  "contributor-growth": { label: "Committer readiness and onboarding", order: 9 },
+  pairing: { label: "Local code review", order: 10 },
   adapters: { label: "Adapters", order: 11 },
   tools: { label: "Tools", order: 12 },
   rfcs: { label: "RFCs", order: 13 },
@@ -71,7 +71,7 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
   // name, which renders lowercase in the sidebar (section headings, unlike
   // page links, are not title-cased by CSS).
   "skill-sources": { label: "External Skill Sources", order: 14 },
-  utilities: { label: "Utilities", order: 15 },
+  utilities: { label: "Skill tools", order: 15 },
   designs: { label: "Designs", order: 16 },
 };
 
@@ -104,6 +104,7 @@ const lastSeg = (id: string) => id.split("/").pop()!.replace(/\.md$/, "");
 const pageLabel = (entry: { id: string; data: { title?: string } }) => {
   const seg = lastSeg(entry.id);
   if (seg === "index" || seg === "readme") return "Overview";
+  if (entry.id.replace(/\.md$/, "") === "setup/agentic-overrides") return "Project rules";
   return entry.data.title ?? prettify(seg);
 };
 // RFC nav labels: a bit more than the bare number, but short enough to fit the
@@ -290,6 +291,7 @@ for (const entry of all) {
   // sidebar's title-casing. RFC and lesson labels are titles, so "Secure Agents
   // setup" does not become "Secure Agents Setup".
   const raw =
+    slug === "setup/agentic-overrides" ||
     (H1_LABEL_SECTIONS.has(groupKey) && h1Fit(entry) !== null) ||
     !!lesson ||
     groupKey === "rfcs" ||
@@ -399,7 +401,7 @@ for (const g of sortedGroups) {
   const href = g.name === "_root" ? undefined : built.href;
   const isCurrent =
     g.name === "_root" ? false : href === currentSlug;
-  sectionNodes.set(g.name, { label: g.label, children, href, isCurrent });
+  sectionNodes.set(g.name, { label: g.label, rawLabel: !!GROUP_META[g.name], children, href, isCurrent });
 }
 
 // Super-categories: a shallow top level so the ~15 sections aren't all at the
@@ -459,6 +461,8 @@ const finalize = (node: BuildNode): { order: number; hasCurrent: boolean } => {
 for (const cat of navTree) finalize(cat);
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const currentGroup = currentSlug.split('/')[0];
+const currentGroupLabel = GROUP_META[currentGroup]?.label;
 ---
 
 <BaseLayout title={title ? `${title} — Apache Magpie Docs` : "Apache Magpie Docs"} editUrl={editUrl}>
@@ -473,7 +477,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       </div>
     </aside>
     <main id="main-content" tabindex="-1" class="docs-main">
-      <div class="docs-breadcrumb"><a href={`${base}/docs`}>Docs</a><span>/</span><span>{currentSlug ? currentSlug.split('/')[0].replaceAll('-', ' ') : 'Introduction'}</span>{currentSlug && <button class="button button-secondary button-small copy-page" data-markdown={`${base}/docs/${currentSlug}.md`}>Copy page</button>}</div>
+      <div class="docs-breadcrumb"><a href={`${base}/docs`}>Docs</a><span>/</span><span class:list={{capitalize: !currentGroupLabel}}>{currentGroupLabel ?? (currentSlug ? prettify(currentGroup) : 'Introduction')}</span>{currentSlug && <button class="button button-secondary button-small copy-page" data-markdown={`${base}/docs/${currentSlug}.md`}>Copy page</button>}</div>
       <article class="prose docs-prose"><slot /></article>
     </main>
     <aside class="docs-toc" aria-label="On this page">

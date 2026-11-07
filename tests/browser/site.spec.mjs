@@ -232,7 +232,7 @@ test('all process families share mating puzzle edges across responsive layouts',
   await page.goto('/');
   for (const width of [375,1000,1524]) {
     await page.setViewportSize({width,height:1000});
-    if(width>1100) await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Review',exact:true}).click();
+    if(width>1100) await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name:'Pull request review',exact:true}).click();
     for (const selector of ['.reel-slide:not([inert]) .reel-flow','.lifecycle-detail .lifecycle-flow','.card-flow']) {
       for (const flow of await page.locator(selector).all()) {
         await expect(flow).toHaveClass(/puzzle-flow/);
@@ -296,6 +296,32 @@ test('homepage growth, protection layers and learning paths', async ({ page }) =
   await expect(dataLink.locator('.cta-arrow')).toHaveCount(1);
 });
 
+test('Grow offers both contributor families on desktop and mobile', async ({ page }) => {
+  await page.goto('/');
+  for (const width of [1440, 375]) {
+    await page.setViewportSize({width, height:1000});
+    let links;
+    if (width > 1100) {
+      await page.getByRole('tab', {name:'Grow', exact:true}).click();
+      links = page.locator('.software-lifecycle .sequence-navigation-middle');
+    } else {
+      const row = page.locator('.software-lifecycle .mobile-workflow').filter({has:page.locator('summary strong', {hasText:'Grow'})});
+      await row.locator('summary').click();
+      links = row.locator('.mobile-workflow-body');
+    }
+    for (const [name, href] of [
+      ['Mentoring', '/docs/mentoring/readme'],
+      ['Committer readiness and onboarding', '/docs/contributor-growth/readme'],
+    ]) {
+      const link = links.getByRole('link', {name, exact:true});
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', href);
+      await expect(link).toHaveAttribute('target', '_blank');
+    }
+    await expect.poll(() => page.evaluate(measureLayout)).toEqual([]);
+  }
+});
+
 // One test per viewport and theme. Each captures every homepage section and its
 // interactive states, which as a single test overran the per-test timeout on a
 // one-CPU runner; split, the shards can also spread them.
@@ -340,7 +366,7 @@ for (const width of [375,1440,1524]) for (const theme of ['light','dark']) {
       await checkLayout(page);
       await page.locator('.hero').screenshot({path:`.builds/visual/home-hero-${name}-${width}-${theme}.png`,style:'.site-header, .site-header *, .skip-link { visibility:hidden; }'});
     }
-    for (const name of ['Review','Grow']) {
+    for (const name of ['Pull request review','Grow']) {
       if(width<=1100) await page.locator('.software-lifecycle .mobile-workflow > summary').filter({has:page.locator('strong',{hasText:name})}).click();
       else await page.getByRole('tablist',{name:'Software lifecycle phases',exact:true}).getByRole('tab',{name,exact:true}).click();
       await checkLayout(page);

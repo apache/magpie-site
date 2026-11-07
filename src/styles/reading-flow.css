@@ -44,7 +44,7 @@
 .sequence-container { width:min(calc(var(--content-width) + 2 * 44px + 2 * var(--space-4)),calc(100% - 2 * var(--page-gutter))); }
 .sequence-body { display:grid; grid-template-columns:44px minmax(0,1fr) 44px; align-items:center; gap:var(--space-4); }
 .sequence-content { min-width:0; }
-.sequence-navigation-middle { min-width:0; display:flex; justify-content:center; margin-top:var(--heading-gap); }
+.sequence-navigation-middle { min-width:0; display:flex; flex-wrap:wrap; gap:var(--space-4); justify-content:center; margin-top:var(--heading-gap); }
 .example-navigation { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; }
 .example-navigation button { display:grid; place-items:center; min-height:44px; color:var(--blue); border:0; background:transparent; padding:10px; border-radius:var(--radius-control); }
 .example-navigation button:hover { background:var(--surface); }

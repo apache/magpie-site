@@ -261,8 +261,20 @@ export function criticalProgressionTests() {
           const panel = scene.locator('[role=tabpanel]:not([inert])');
           expect(await panel.locator('.workflow-card').evaluateAll(nodes => nodes.map(el => el.dataset.cardTone))).toEqual(['manual','prepared','result']);
           await expect(panel.locator('.card-badge')).toHaveCount(3);
-          await expect(scene.locator('.sequence-navigation-middle a')).toHaveAttribute('target','_blank');
-          await expect(scene.locator('.sequence-navigation-middle a')).toContainText((await tabs.nth(index).innerText()).replace(/^\d+\s*/, '').trim().toLowerCase());
+          const destinations = [
+            [['Triage issues','/docs/issue-management/readme#triage-issues']],
+            [['Reproduce and fix an issue','/docs/issue-management/readme#reproduce-and-fix-an-issue']],
+            [['Review a pull request','/docs/pr-management/readme#review-a-pull-request']],
+            [['Prepare an ASF release','/docs/release-management/readme']],
+            [['Audit and fix repository problems','/docs/repo-health/readme']],
+            [['Mentoring','/docs/mentoring/readme'],['Committer readiness and onboarding','/docs/contributor-growth/readme']],
+          ][index];
+          const links = scene.locator('.sequence-navigation-middle a');
+          await expect(links).toHaveText(destinations.map(([label])=>label));
+          for (const [position,[,href]] of destinations.entries()) {
+            await expect(links.nth(position)).toHaveAttribute('target','_blank');
+            await expect(links.nth(position)).toHaveAttribute('href',href);
+          }
         }
       };
       return {scene, tabs, count, selected};
@@ -285,7 +297,7 @@ export function criticalProgressionTests() {
       await page.keyboard.press('ArrowRight'); await selected(0);
       await expect(tabs.first()).toBeFocused();
       await page.keyboard.press('Shift+ArrowRight'); await selected(0);
-      const controlName = selector === '.security-walkthrough' ? 'security stage' : 'skill family';
+      const controlName = selector === '.security-walkthrough' ? 'security stage' : 'workflow';
       const previous = scene.getByRole('button',{name:`Previous ${controlName}`,exact:true});
       const next = scene.getByRole('button',{name:new RegExp(`^Next ${controlName}`)});
       await expect(previous).toBeDisabled();
