@@ -12,7 +12,7 @@ export default function HomeNavigation({ homepage = true }: { homepage?: boolean
       <a href={section("airflow")}>Who’s using Magpie</a>
       <a href={section("how-it-works")}>Skills for everyday work</a>
       <a href={section("agent-isolation")}>Agent isolation</a>
-      <a href={section("project-rules")}>Your project’s rules</a>
+      <a href={section("project-rules")}>Project rules</a>
       <a href={section("learning")}>Learning guides</a>
       <a href={section("get-started")}>Try Magpie</a>
       <a className="home-start-link" href={withBase("/start")} target="_blank" rel="noreferrer">Get started</a>
