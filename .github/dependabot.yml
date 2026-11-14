@@ -32,9 +32,9 @@ updates:
         update-types:
           - version-update:semver-major
       # satteri's plugin types must match the copy @astrojs/markdown-satteri
-      # uses, which is `^0.10.5` as of its latest release (0.4.6). A newer minor
+      # uses, which is `^0.11.6` as of its latest release (0.4.7). A newer minor
       # installs a second copy and `astro check` rejects our plugins in
-      # astro.config.mjs, so we stay on 0.10 until upstream catches up.
+      # astro.config.mjs, so we stay on 0.11 until upstream catches up.
       - dependency-name: satteri
         update-types:
           - version-update:semver-minor
