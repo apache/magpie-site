@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+  GENERATED FILE - do not edit.
+
+  Written by tools/dev/render-wizard.py. Illustrative of the shape of a
+  run, not a recording of one.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 685 688"
+     width="685" height="688" role="img"
+     data-magpie-generated="render-wizard"
+     aria-label="An animated marketplace install: adding apache-magpie, then installing magpie-setup and one family, with nothing written to the repository">
+  <title>Step 1 — install from the marketplace</title>
+  <desc>Illustrative animation of the marketplace install step. Not a recording.</desc>
+  <rect width="685" height="688" rx="10" fill="#1d1f21"/>
+  <rect x="0" y="0" width="685" height="34" rx="10" fill="#2b2e31"/>
+  <rect x="0" y="24" width="685" height="10" fill="#2b2e31"/>
+  <circle cx="22" cy="17" r="6" fill="#3f4448"/>
+  <circle cx="44" cy="17" r="6" fill="#3f4448"/>
+  <circle cx="66" cy="17" r="6" fill="#3f4448"/>
+  <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="17" xml:space="preserve">
+    <text x="26" y="80" fill="#8abeb7" opacity="0">&gt; /plugin marketplace add apache/magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0000;0.0010;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="128" fill="#7f9f7f" opacity="0">  ✓ apache-magpie added<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0420;0.0430;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="176" fill="#8abeb7" opacity="0">&gt; /plugin install magpie-setup@apache-magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.0841;0.0851;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="200" fill="#7f9f7f" opacity="0">  ✓ magpie-setup          install this one first - nothing<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1261;0.1271;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="224" fill="#8a8f94" opacity="0">                          else installs or upgrades without it<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1681;0.1691;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="272" fill="#8abeb7" opacity="0">&gt; /plugin install magpie-vetted-ops@apache-magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2102;0.2112;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="296" fill="#7f9f7f" opacity="0">  ✓ magpie-vetted-ops     always - the skills run their GitHub<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2522;0.2532;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="320" fill="#8a8f94" opacity="0">                          operations through it<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2942;0.2952;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="368" fill="#8abeb7" opacity="0">&gt; /plugin install magpie-agent-guard@apache-magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3363;0.3373;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="392" fill="#7f9f7f" opacity="0">  ✓ magpie-agent-guard    denies dangerous shell shapes before<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3783;0.3793;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="416" fill="#8a8f94" opacity="0">                          they run<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4204;0.4214;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="464" fill="#8abeb7" opacity="0">&gt; /plugin install magpie-utilities@apache-magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4624;0.4634;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="488" fill="#7f9f7f" opacity="0">  ✓ magpie-utilities      list-skills, and the small tools<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5044;0.5054;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="536" fill="#8abeb7" opacity="0">&gt; /plugin install magpie-pr-management@apache-magpie<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5465;0.5475;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="560" fill="#7f9f7f" opacity="0">  ✓ magpie-pr-management  the family you picked<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.5885;0.5895;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="608" fill="#8a8f94" opacity="0">  The first four are the baseline - the same set a project<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.6305;0.6315;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="632" fill="#8a8f94" opacity="0">  commits when it adopts. Nothing was written to this<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.6726;0.6736;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <text x="26" y="656" fill="#8a8f94" opacity="0">  repository, and your teammates are unaffected.<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7146;0.7156;1" dur="9.0s" repeatCount="indefinite"/></text>
+    <rect x="26" y="643" width="10" height="17" fill="#c5c8c6"><animate attributeName="opacity" values="1;1;0;0;1" dur="1.2s" repeatCount="indefinite"/></rect>
+  </g>
+</svg>

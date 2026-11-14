@@ -1,0 +1,116 @@
+# Local code review
+
+Rendered page: https://magpie.apache.org/docs/pairing/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/pairing/README.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<a id="agentic-pairing-skill-family"></a>
+> **Scope.** Works on any project, ASF or not — no
+> Apache-Software-Foundation-specific assumptions baked in.
+
+Developer-side pre-flight review skills that run in the maintainer's or
+contributor's **own** dev loop — after local changes are ready but before
+opening a PR. The family absorbs mechanical implementation-detail review
+so the eventual human-to-human conversation between contributor and
+maintainer stays on design, reasoning, and the trade-offs the project
+cares about.
+
+**Mentorship is intrinsic.** Agentic Pairing skills are not a replacement for
+human code review; they are a pre-flight filter that separates
+implementation-detail nits (formatting, convention violations, obvious
+logical gaps) from the design-level conversation the project's
+contributor-to-committer path is built on.
+
+**No state changes.** Every skill in this family reads local git state
+and returns a structured report. No PR is opened, no GitHub write
+happens, no comment is posted, and the working tree is never mutated.
+
+---
+
+> [!TIP]
+> **Why this family**
+> - Review your own diff before a maintainer spends their time on it
+> - Findings split into blocking and non-blocking, so the nits do not drown the real problems
+> - Nothing is sent, posted, or merged — the report is the output
+
+## Install & first runs
+
+[Install & first runs](/docs/pairing/install) has the install command for this family,
+the files to configure before the first run, and the skills to try first.
+
+## Skills
+
+| Skill | Purpose | Status |
+|---|---|---|
+| [`pairing-self-review`](https://github.com/apache/magpie/blob/main/plugins/magpie-pairing/skills/self-review/SKILL.md) | Structured pre-flight self-review of local changes against a configurable base. Single-pass: correctness, security, and conventions in one report. | experimental |
+| [`pairing-multi-agent-review`](https://github.com/apache/magpie/blob/main/plugins/magpie-pairing/skills/multi-agent-review/SKILL.md) | Fan the same diff through three independent axis-focused passes (correctness, security, conventions); merge findings with deduplication and severity ranking. Higher confidence than a single pass; each axis is isolated so findings cannot cross-contaminate. | experimental |
+
+### When to use which
+
+- **`pairing-self-review`** — the default quick check. Fast, single
+  context, covers correctness + security + conventions.
+- **`pairing-multi-agent-review`** — when you want adversarial
+  independence between review axes. Each pass cannot see the others'
+  findings, so a security issue buried in a conventions sweep cannot
+  get lost. Use for changes touching security-sensitive paths or for
+  the final check before a high-stakes PR.
+
+Both skills are read-only / hand-back and produce the same structured
+report format, so you can switch between them without changing your
+workflow.
+
+---
+
+## Relationship to `pr-management-code-review`
+
+`pairing-self-review` and `pairing-multi-agent-review` run **before** a
+PR is open. Once a PR is open and you want a maintainer-side deep code
+review of an incoming contribution, use
+[`pr-management-code-review`](https://github.com/apache/magpie/blob/main/plugins/magpie-pr-management/skills/code-review/SKILL.md)
+instead.
+
+---
+
+## Adopter contract
+
+The Agentic Pairing skills read local git state and write nothing: no PR is
+opened, no comment posted, and the working tree is never mutated. They resolve
+`<upstream>` and `<project-config>` placeholders when the project defines
+them, and run without either.
+
+## Status
+
+**Experimental.** Both `pairing-self-review` and
+`pairing-multi-agent-review` are shipped and validate under
+`skill-and-tool-validate`. No adopter-pilot evaluation has run yet;
+shape may change between framework versions.
+
+To provide pilot feedback, copy
+[`docs/pilot-report-template.md`](/docs/pilot-report-template) into your
+project notes, fill in each section, and optionally validate the filled-in
+report with:
+
+```bash
+uv run --project tools/pilot-report-validator pilot-report-validate <your-report.md>
+```
+
+---
+
+## Cross-references
+
+- [`MISSION.md` § Agentic Pairing](https://github.com/apache/magpie/blob/main/MISSION.md#technical-scope) — mode
+  rationale, sequencing constraints relative to Agentic Autonomous.
+- [`docs/modes.md` § Pairing](/docs/modes#pairing) — implementation
+  status and mode-lifecycle stage.
+- [`docs/modes.md` § Mode lifecycle](/docs/modes#mode-lifecycle) — how
+  a mode moves from `experimental` to `stable`.
+- [`projects/_template/README.md`](https://github.com/apache/magpie/blob/main/plugins/magpie-setup/templates/README.md) —
+  adopter scaffold index.
+- [Project rules](/docs/setup/agentic-overrides) —
+  the override mechanism every skill in this family supports.
