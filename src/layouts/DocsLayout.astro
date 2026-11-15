@@ -64,7 +64,7 @@ const GROUP_META: Record<string, { label: string; order: number }> = {
   mentoring: { label: "Mentoring", order: 8 },
   "contributor-growth": { label: "Committer readiness and onboarding", order: 9 },
   pairing: { label: "Local code review", order: 10 },
-  adapters: { label: "Adapters", order: 11 },
+  adapters: { label: "Harness Adapters", order: 11 },
   tools: { label: "Tools", order: 12 },
   rfcs: { label: "RFCs", order: 13 },
   // Without an entry here a section falls back to its prettified directory
@@ -367,8 +367,12 @@ const buildSection = (
         node.isCurrent = item.slug === currentSlug;
       } else if (!node.label) {
         // Directory node: keep the raw segment for tool names (recognisable
-        // identifiers); prettify everything else.
-        node.label = group.name === "tools" ? seg : prettify(seg);
+        // identifiers); prettify everything else and capitalise it, since a
+        // folder's summary is not title-cased by CSS the way page links are
+        // (adapters/harnesses/ reads "Harnesses", not "harnesses").
+        node.label = group.name === "tools"
+          ? seg
+          : prettify(seg).replace(/^./, (c) => c.toUpperCase());
       }
       parent = node;
       siblings = node.children!;
