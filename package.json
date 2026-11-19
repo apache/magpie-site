@@ -26,12 +26,12 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
-    "astro": "^7.4.10"
+    "astro": "^7.4.11"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@astrojs/markdown-satteri": "0.4.8",
-    "@astrojs/react": "^7.1.7",
+    "@astrojs/markdown-satteri": "0.4.9",
+    "@astrojs/react": "^7.1.8",
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.65.0",
@@ -41,8 +41,8 @@
     "@types/react-dom": "^19.3.0",
     "cheerio": "^1.2.0",
     "html-validate": "^11.21.0",
-    "knip": "^6.45.0",
-    "lucide-react": "^1.71.0",
+    "knip": "^6.45.1",
+    "lucide-react": "^1.72.0",
     "postcss": "^8.5.32",
     "postcss-selector-parser": "^7.1.8",
     "react": "^19.3.1",
@@ -50,6 +50,6 @@
     "satteri": "0.11.7",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "vite": "^8.3.7"
+    "vite": "^8.3.8"
   }
 }
