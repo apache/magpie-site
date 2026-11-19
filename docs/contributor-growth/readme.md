@@ -1,0 +1,174 @@
+# Committer readiness and onboarding
+
+Rendered page: https://magpie.apache.org/docs/contributor-growth/readme/
+
+Source: https://github.com/apache/magpie/blob/main/docs/contributor-growth/README.md
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<!-- SPDX-License-Identifier: Apache-2.0
+     https://www.apache.org/licenses/LICENSE-2.0 -->
+
+<a id="contributor-growth-skill-family"></a>
+> **Scope — `organization: ASF` · 🪶 ASF-specific.** This family encodes Apache Software
+> Foundation processes (the contributor-to-committer path) and assumes an ASF
+> adopter profile by default. Non-ASF projects can still adopt it through the
+> adapter/config layer, but it carries ASF assumptions the generic families do not.
+
+This plugin contains nine maintainer-facing skills for contributor activity,
+nomination evidence, identity mapping, and committer onboarding. Newcomer
+welcomes, good-first-issue authoring, and backlog curation live in the separate
+`magpie-mentoring` plugin.
+
+Why a framework skill family? The contributor-to-committer path is one
+of the highest-leverage levers an open-source project has for long-term
+health — lowering onboarding friction and shortening the time from first
+PR to committer status keeps the contributor pipeline healthy. These
+skills were designed independently but cover a contiguous path; grouping
+them makes the adopter configuration and the evaluation story coherent.
+
+> [!TIP]
+> **Why this family**
+> - A nomination brief built from a year of evidence rather than a recent impression
+> - The post-vote checklist, from ICLA to welcome mail, with the steps that need a PMC chair marked
+> - It names what GitHub cannot see — mailing lists, release votes, mentoring — instead of quietly scoring without them
+
+## Surface information, never rank
+
+The skills that look at people — `activity-sweep`, `calibrate`, `candidate-screen`, `contributor-to-committer` and `nomination` — only surface information.
+The decision about who is nominated, and when, is always made by PMC members.
+
+- **Never a ranking.**
+  No skill orders people by any measure, scores them against each other, or picks a "top" few.
+  Every list of people is in alphabetical order of GitHub handle, compared case-insensitively.
+- **Never a verdict.**
+  No skill says or suggests whether someone is ready, close, or not ready to be nominated.
+  Counts are shown next to the project's reference levels as plain numbers, without a status, a band or a recommendation.
+  `candidate-screen` goes further: it uses the reference levels only to pre-filter out the long tail, and shows everyone else's data with no reference levels at all.
+- **Deliberately more, not fewer.**
+  A list of likely candidates includes more people than the PMC would consider, on purpose, so that nobody is overlooked.
+  `calibrate` sets its reference levels well below what the project has actually elected — by default three quarters of it (`calibration_relaxation`, `0.75`) — to make that true.
+  Appearing on a list means only that someone's details are worth a look.
+- **A report is a list and a summary.**
+  A report lists the people it covers, alphabetically, each linked to their details, followed by a paragraph or two summarising what was found.
+  The summary describes the findings; it does not judge or recommend anyone.
+
+Every brief and report these skills produce says this at the top.
+
+## Install & first runs
+
+[Install & first runs](/docs/contributor-growth/install) has the install command for this family,
+the files to configure before the first run, and the skills to try first.
+
+## Why the configuration is personal
+
+This family is **personal-recommended and not adoptable by default.**
+Install it for yourself — user scope, or install-only in this repository — on the machine of each maintainer who runs these skills.
+`/magpie-setup:setup adopt` leaves it out of the committed floor unless a maintainer explicitly insists and accepts the risk below, and records that acceptance in `.apache-magpie.lock`.
+
+The reason is gaming.
+Committer thresholds, nomination criteria, calibration floors, sentiment caps and the identity map are the project's private judgement about people.
+Committed to the repository, they become a public checklist:
+a contributor can point at a threshold and demand a nomination, and every later edit to it becomes a negotiation rather than a decision.
+
+So the five files this family adds — `committer-onboarding-config.md`, `committer-readiness.md`, `contributor-identities.md`, `contributor-nomination-config.md` and `contributor-sentiment-config.md` — always live in your personal layer, even in a project that has adopted Magpie and even when the family itself is in the floor:
+`<git-common-dir>/apache-magpie/` when Magpie is only installed, `.apache-magpie-local/` when the project has adopted it.
+Never commit them to `.apache-magpie-overrides/`;
+`adopt` does not promote or scaffold them there, and the skill validator warns when it finds one.
+`contributor-calibrate` writes its floors to the personal layer and never offers the committed one.
+Maintainers who want the same numbers share them the way they share the deliberation itself, on the private list.
+
+## Stage coverage
+
+| Stage | Skill | What it does |
+|---|---|---|
+| **Activity tracking** | [`contributor-activity-sweep`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/activity-sweep/SKILL.md) | Produces a read-only GitHub activity card (PRs authored, code reviews, issues, comments) over a configurable window. |
+| **Calibration** | [`contributor-calibrate`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/calibrate/SKILL.md) | Derives committer and PMC reference levels from the project's own past nomination decisions on the private list, deliberately relaxed well below what the project elected; proposes a config diff holding numbers only, with nothing about any nominee leaving the session. |
+| **Candidate screening** | [`contributor-candidate-screen`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/candidate-screen/SKILL.md) | Pre-filters out the long tail of recent contributors, then shows the activity data of everyone else — deliberately more people than the PMC would consider, never scored or compared with thresholds — and writes a report to a repository the GitHub API reports as private, after the maintainer has read it: a Headline split by target (committer / PMC) with one phrase per person, each full section linked to its detail, and a paragraph or two summarising the findings. Never a ranking, never a verdict. |
+| **Activity vs. reference** | [`contributor-to-committer`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/contributor-to-committer/SKILL.md) | Shows a contributor's activity next to the project's committer or PMC reference levels, as plain numbers with the difference, and a short factual summary. No status, band, or readiness verdict. Read-only; never opens a nomination thread. |
+| **Identity mapping** | [`contributor-identity-map`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/identity-map/SKILL.md) | Maps any contributor's GitHub handle to their Slack, Discord, Matrix, mailing-list, and social-media handles; infers from the sources the session can reach and records only the mappings a maintainer confirms. Used by `committer-onboarding` and `contributor-nomination`. |
+| **Nomination brief** | [`contributor-nomination`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/nomination/SKILL.md) | Assembles evidence for a committer or PMC discussion: activity breadth, consistency, vendor-neutrality context, and factual narrative prose. Never rates the contributor or says whether they are ready. Read-only; never posts to any list. |
+| **Sentiment analysis** | [`contributor-sentiment`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/sentiment/SKILL.md) | Analyse contributor sentiment signals (issue tone, PR abandonment, response-time frustration) to surface early-warning indicators of contributor disengagement. Read-only. |
+| **Onboarding concierge** | [`onboarding-concierge`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/onboarding-concierge/SKILL.md) | Interactive first-session guide for new contributors: walks through repo setup, points to good first issues, introduces project conventions and communication channels. |
+| **Post-vote onboarding** | [`committer-onboarding`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/committer-onboarding/SKILL.md) | Walks the nominator through ICLA check, account provisioning, permissions grant, and the welcome announcement for committer and PMC promotions at ASF TLPs and podlings. |
+
+Every stage is read-only on governance artefacts or propose-before-post:
+no skill modifies a roster, posts an announcement, or files an issue
+without explicit maintainer confirmation.
+
+Related newcomer mentoring skills are installed by `magpie-mentoring`, not
+this plugin: [`mentoring-welcome`](https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/welcome/SKILL.md),
+[`good-first-issue-author`](https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/good-first-issue-author/SKILL.md),
+and [`good-first-issue-sweep`](https://github.com/apache/magpie/blob/main/plugins/magpie-mentoring/skills/good-first-issue-sweep/SKILL.md).
+See the [mentoring overview](/docs/mentoring/readme) for their purpose and
+installation instructions.
+
+## Skills
+
+| Skill | Mode | Status |
+|---|---|---|
+| [`contributor-sentiment`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/sentiment/SKILL.md) | Triage | experimental |
+| [`onboarding-concierge`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/onboarding-concierge/SKILL.md) | Mentoring | experimental |
+| [`contributor-activity-sweep`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/activity-sweep/SKILL.md) | Triage | experimental |
+| [`contributor-identity-map`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/identity-map/SKILL.md) | Triage | experimental |
+| [`contributor-to-committer`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/contributor-to-committer/SKILL.md) | Mentoring | experimental |
+| [`contributor-nomination`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/nomination/SKILL.md) | Triage | experimental |
+| [`contributor-calibrate`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/calibrate/SKILL.md) | Triage | experimental |
+| [`contributor-candidate-screen`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/candidate-screen/SKILL.md) | Triage | experimental |
+| [`committer-onboarding`](https://github.com/apache/magpie/blob/main/plugins/magpie-contributor-growth/skills/committer-onboarding/SKILL.md) | Triage | experimental |
+
+All nine skills installed by this plugin are `experimental`.
+No adopter has run the full contributor-to-committer path under evaluation conditions yet.
+
+## Family boundary
+
+This family sits alongside two related skill families with separate scopes:
+
+- [`docs/mentoring/README.md`](/docs/mentoring/readme) describes the separate
+  `magpie-mentoring` plugin for newcomer welcomes, good-first-issue authoring,
+  and backlog curation. Its skills are not installed by `magpie-contributor-growth`.
+- [`docs/issue-management/README.md`](/docs/issue-management/readme) —
+  general-issue triage and fix workflow. The contributor-growth family
+  reads GitHub activity data about contributors, not issue content; the
+  two families use different query surfaces and produce different
+  artefacts (activity cards and nomination briefs vs. issue disposition
+  proposals).
+
+Skills in this family propose every state-changing action for human
+sign-off. `committer-onboarding` emits paste-ready command recipes the
+nominator executes as themselves; no skill submits an ICLA form, invites
+an account, or modifies repository permissions without the nominator's
+direct action.
+
+## Status
+
+**Experimental.** All nine installed skills are on main with eval suites.
+No adopter has run the full contributor-to-committer path end-to-end under
+evaluation conditions.
+
+PMC-member promotion is covered: `contributor-nomination` takes
+`target:pmc`, and `committer-onboarding` handles the `committer-to-pmc` and
+`direct-to-pmc` scenarios.
+
+Not built yet: **emeritus / inactive-committer handling and contributor
+offboarding.** These involve project-level governance decisions (roster
+policy, access removal, farewell communication norms), so the
+[proposed spec](https://github.com/apache/magpie/blob/main/tools/spec-loop/specs/contributor-offboarding.md)
+requires every policy knob to be configured before anything runs, and keeps
+the read-only inactivity report and the emeritus move strictly apart.
+
+## Cross-references
+
+- [`docs/modes.md` § Triage](/docs/modes#triage) — mode taxonomy the
+  three Agentic Triage-mode family skills declare against.
+- [`docs/modes.md` § Mentoring](/docs/modes#mentoring) — mode taxonomy
+  the three Agentic Mentoring-mode family skills declare against.
+- [`docs/mentoring/README.md`](/docs/mentoring/readme) — the Agentic Mentoring
+  mode family overview, which cross-references `mentoring-welcome`,
+  `good-first-issue-author`, and `good-first-issue-sweep`.
+- [`projects/_template/README.md`](https://github.com/apache/magpie/blob/main/plugins/magpie-setup/templates/README.md) —
+  adopter scaffold index, with a purpose line for every file the table under
+  *Before the first run* links.
+- [Project rules](/docs/setup/agentic-overrides) —
+  the override mechanism every skill in this family supports.
