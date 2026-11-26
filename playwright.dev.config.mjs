@@ -11,6 +11,7 @@ export default defineConfig({
   webServer:{
     command:'npm run dev -- --ignore-lock --port 4399 --host 127.0.0.1',
     url:'http://127.0.0.1:4399', reuseExistingServer:false, timeout:120000,
-    env:{ASTRO_DEV_BACKGROUND:'1', MAGPIE_CACHE_DIR:`node_modules/.cache/magpie-dev-${randomUUID()}`},
+    // MAGPIE_DEV_TOOLBAR=0: see devToolbar in astro.config.mjs.
+    env:{ASTRO_DEV_BACKGROUND:'1', MAGPIE_DEV_TOOLBAR:'0', MAGPIE_CACHE_DIR:`node_modules/.cache/magpie-dev-${randomUUID()}`},
   },
 });
