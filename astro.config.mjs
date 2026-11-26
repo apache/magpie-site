@@ -55,6 +55,11 @@ export default defineConfig({
   base,
   redirects,
   cacheDir: `${cache}/astro`,
+  // The dev test server (playwright.dev.config.mjs) sets MAGPIE_DEV_TOOLBAR=0.
+  // Its tests install Playwright's fake clock, whose stand-in `performance`
+  // has no addEventListener, and Astro's toolbar calls it on load (7.4.13+),
+  // so every faked page would throw. Interactive dev keeps the toolbar.
+  devToolbar: { enabled: process.env.MAGPIE_DEV_TOOLBAR !== '0' },
   markdown: {
     shikiConfig: { theme:'github-dark-high-contrast' },
     processor: satteri({ mdastPlugins: [markdownSemantics], hastPlugins: [callouts, projectFiles, taskLabels, tableLabels] }),
