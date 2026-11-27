@@ -102,6 +102,16 @@ test('markdown transform preserves examples, labels tasks and gives one document
   assert.match(result.html, /<label><input/);
   assert.match(result.html, /Review the code<\/label>/);
 });
+test('bare placeholder tags render as text; real HTML elements stay elements', () => {
+  // The exact upstream line that broke the build: unknown bare tags in prose.
+  const prose = markdownToHtml('Leaves a plain *"Waiting <d> days since <release> shipped"* line.\n', { mdastPlugins:[markdownSemantics] });
+  assert.match(prose.html, /Waiting &lt;d&gt; days since &lt;release&gt; shipped/);
+  const multiword = markdownToHtml('Listed as <tracker title> and <link>.\n', { mdastPlugins:[markdownSemantics] });
+  assert.match(multiword.html, /&lt;tracker title&gt; and &lt;link&gt;/);
+  const real = markdownToHtml('Press <kbd>Enter</kbd> or <span class="x">go</span>.\n', { mdastPlugins:[markdownSemantics] });
+  assert.ok(real.html.includes('<kbd>Enter</kbd>'));
+  assert.ok(real.html.includes('<span class="x">go</span>'));
+});
 test('only the known upstream unmatched authoring wrapper is removed', () => {
   const known = markdownToHtml('# SVN source-release runbook (signed archive)\n\nText\n</content>', { mdastPlugins:[markdownSemantics] });
   assert.ok(!known.html.includes('</content>'));
